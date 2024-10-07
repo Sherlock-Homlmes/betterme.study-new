@@ -1,0 +1,17 @@
+client:
+--- BUGS ---
+- onboard light/dark theme fix
+--- FEATURES ---
+--- REFACTOR ---
+
+server:
+--- BUGS ---
+--- FEATURES ---
+--- REFACTOR ---
+- redesign models
+
+others:
+--- BUGS ---
+--- FEATURES ---
+- pre-commit style code check
+- CI

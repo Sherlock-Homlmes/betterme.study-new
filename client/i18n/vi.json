@@ -1,0 +1,372 @@
+{
+  "support": {
+    "source": "View on GitHub",
+    "support": "Buy the author a coffee",
+    "share": {
+      "twitter": "Follow the app on Twitter",
+      "facebook": "Share the app on Facebook",
+      "reddit": "Share the app on Reddit"
+    }
+  },
+  "section": {
+    "work": "Làm việc",
+    "shortpause": "Nghỉ ngắn",
+    "longpause": "Nghỉ dài",
+    "wait": "Đang chờ"
+  },
+  "controls": {
+    "play": "Bắt đầu hoặc tạm dừng bộ hẹn giờ",
+    "stop": "Đặt lại bộ hẹn giờ",
+    "advance": "Chuyển sang phần tiếp theo"
+  },
+  "appbar": {
+    "settings": "Mở cài đặt",
+    "todo": "Mở danh sách nhiệm vụ"
+  },
+  "timer": {
+    "approximate": {
+      "hours": "giờ",
+      "minutes": "phút"
+    }
+  },
+  "settings": {
+    "heading": "Cài đặt",
+    "tabs": {
+      "main": "Chính",
+      "timer": "Lịch trình",
+      "display": "Hiển thị",
+      "audio": "Âm thanh",
+      "about": "Giới thiệu"
+    },
+    "buttons": {
+      "close": "Đóng",
+      "reset": "Đặt lại"
+    },
+    "reset": {
+      "title": "Đặt lại cài đặt",
+      "confirm": "Đặt lại",
+      "cancel": "Hủy"
+    },
+    "manage": {
+      "buttons": {
+        "save": "Lưu",
+        "load": "Tải"
+      }
+    },
+    "scheduleMinTime": "Thời gian tối thiểu cho phép là 5 giây",
+    "about": {
+      "madeby": "Được tạo bởi Imre Gera",
+      "source": "Mã nguồn",
+      "support": "Ủng hộ dự án",
+      "supportBody": "Tôi phát triển FocusTide trong thời gian rảnh rỗi. Điều đó sẽ có ý nghĩa rất lớn đối với tôi nếu bạn có thể giúp tôi tiếp tục làm việc trên nó!",
+      "mobileSupport": "Do những quy định được áp dụng bởi Google Play Store, tôi không thể hiển thị cho bạn bất kỳ liên kết nào bên trong ứng dụng di động để quyên góp cho dự án.",
+      "share": "hoặc chia sẻ ứng dụng trên mạng xã hội:"
+    },
+    "values": {
+"manage": {
+      "_title": "Quản lý cài đặt",
+      "_description": "Tải xuống cài đặt hiện tại hoặc tải chúng từ một tệp"
+    },
+    "mobile": {
+      "notifications": {
+        "sectionOver": {
+          "_title": "Thông báo kết thúc phần",
+          "_description": "Hiển thị thông báo khi một phần kết thúc"
+        },
+        "persistent": {
+          "_title": "Thông báo liên tục",
+          "_description": "Hiển thị tiến trình của bộ hẹn giờ hiện tại"
+        }
+      }
+    },
+    "lang": {
+      "_title": "Ngôn ngữ",
+      "_description": ""
+    },
+    "eventLoggingEnabled": {
+      "_title": "Kích hoạt ghi nhật ký sự kiện",
+      "_description": ""
+    },
+    "currentTimer": {
+      "_title": "Kiểu bộ hẹn giờ",
+      "_description": "",
+      "_values": {
+        "traditional": "Truyền thống",
+        "approximate": "Xấp xỉ",
+        "percentage": "Phần trăm"
+      },
+      "_valueDescription": {
+        "traditional": "12:34",
+        "approximate": "13 phút",
+        "percentage": "50%"
+      }
+    },
+    "adaptiveTicking": {
+      "enabled": {
+        "_title": "Kích hoạt tích tắc thích ứng",
+        "_description": "Bộ hẹn giờ sẽ tích tắc ít thường xuyên hơn khi ở chế độ nền"
+      }
+    },
+    "sectionEndAction": {
+      "_title": "Hành vi kết thúc phần",
+      "_description": "Điều gì sẽ xảy ra khi bộ hẹn giờ hết thời gian",
+      "_values": {
+        "continue": "Tiếp tục",
+        "stop": "Dừng",
+        "skip": "Tiến"
+      },
+      "_valueDescription": {
+        "continue": "Tiếp tục tích tắc",
+        "stop": "Dừng bộ hẹn giờ",
+        "skip": "Bắt đầu phần tiếp theo"
+      }
+    },
+    "schedule": {
+      "longPauseInterval": {
+        "_title": "Khoảng thời gian nghỉ dài",
+        "_description": ""
+      },
+      "numScheduleEntries": {
+        "_title": "Số mục trong lịch trình",
+        "_description": ""
+      },
+      "visibility": {
+        "enabled": {
+          "_title": "Hiển thị lịch trình",
+          "_description": ""
+        },
+        "showSectionType": {
+          "_title": "Hiển thị loại phần trong lịch trình",
+          "_description": "Hiển thị loại phần hiện tại bên dưới lịch trình"
+        }
+      },
+      "lengths": {
+        "_title": "Thiết lập trước lịch trình",
+        "_description": "",
+        "_values": {
+          "default": "Mặc định",
+          "debug": "Gỡ lỗi",
+          "custom": "Tùy chỉnh"
+        },
+        "_valueDescription": {
+          "default": "25 phút làm việc, 5 phút nghỉ",
+          "debug": "Cho mục đích gỡ lỗi",
+          "custom": "Đã được thiết lập bởi bạn"
+        },
+        "work": {
+          "_title": "Làm việc",
+          "_description": ""
+        },
+        "shortpause": {
+          "_title": "Nghỉ",
+          "_description": ""
+        },
+        "longpause": {
+          "_title": "Nghỉ dài",
+          "_description": ""
+        }
+      }
+    },
+    "performance": {
+      "showProgressBar": {
+        "_title": "Hiển thị thanh tiến trình",
+        "_description": "Hiển thị tiến độ phía sau bộ hẹn giờ"
+      }
+    },
+    "permissions": {
+      "audio": {
+        "_title": "Phát âm thanh",
+        "_description": "Cho phép ứng dụng phát ra âm thanh khi một phần kết thúc"
+      },
+      "notifications": {
+        "_title": "Quyền thông báo",
+        "_description": "Cho phép ứng dụng gửi cho bạn thông báo khi một phần kết thúc"
+      }
+    },
+    "audio": {
+      "volume": {
+        "_title": "Âm lượng",
+        "_description": ""
+      },
+      "soundSet": {
+        "_title": "Bộ âm thanh",
+        "_description": "Âm thanh được sử dụng cho thông báo",
+        "_values": {
+          "musical": "Âm nhạc"
+        },
+        "_valueDescription": {
+          "musical": "Âm thanh mặc định"
+        }
+      }
+    },
+    "timerControls": {
+      "enableKeyboardShortcuts": {
+        "_title": "Kích hoạt phím tắt",
+        "_description": "Bắt đầu/tạm dừng bộ hẹn giờ bằng phím cách"
+      }
+    },
+    "tasks": {
+      "enabled": {
+        "_title": "Kích hoạt danh sách nhiệm vụ",
+        "_description": "Quản lý công việc của bạn ngay từ ứng dụng"
+      },
+      "maxActiveTasks": {
+        "_title": "Số lượng nhiệm vụ hoạt động tối đa để hiển thị",
+        "_description": "Bạn chỉ thấy tối đa số lượng nhiệm vụ hoạt động này"
+      },
+      "removeCompletedTasks": {
+        "_title": "Xóa nhiệm vụ đã hoàn thành",
+        "_description": "Các nhiệm vụ đã hoàn thành sẽ được xóa khi một phần mới bắt đầu"
+      }
+    },
+    "pageTitle": {
+      "useTickEmoji": {
+        "_title": "Sử dụng biểu tượng tích trong tiêu đề",
+        "_description": "Hiển thị ✔ thay vì \"đã hoàn thành\""
+      }
+    },
+    "visuals": {
+      "theme": {
+        "_title": "Thiết lập chủ đề",
+        "_description": "Chọn một bộ màu phần được xác định trước hoặc thiết lập của riêng bạn",
+        "custom": "Tùy chỉnh"
+      },
+      "darkMode": {
+        "_title": "Kích hoạt chế độ tối",
+        "_description": "Ít sáng hơn, vẫn hiệu quả như vậy"
+      }
+    },
+    "reset": {
+      "_title": "Đặt lại cài đặt",
+      "_description": "Tất cả cài đặt sẽ được đặt lại sau khi ứng dụng được tải lại"
+    }
+    }
+  },
+  "notification": {
+    "action": {
+      "ready": "Bắt đầu thôi!"
+    },
+    "work": {
+      "title": "Đã đến lúc quay lại làm việc!",
+      "body": "Nghỉ giải lao đã kết thúc. Hãy làm việc thêm một chút, sau đó nghỉ ngơi lại."
+    },
+    "shortpause": {
+      "title": "Giờ nghỉ giải lao",
+      "body": "Tuyệt vời, bạn đã được nghỉ ngơi ngắn."
+    },
+    "longpause": {
+      "title": "Ồ! Thêm thời gian rảnh!",
+      "body": "Tuyệt vời. Sau khi làm việc nhiều như vậy, bạn xứng đáng được nghỉ giải lao dài hơn."
+    }
+  },
+  "error": {
+    "format_invalid": "Định dạng đầu vào không hợp lệ",
+    "range_invalid": "Giá trị phải nằm trong khoảng từ {min} đến {max}",
+    "required": "Trường này phải được điền",
+    "numeric": "Giá trị phải là một số",
+    "min": "Giá trị phải tối thiểu là {min}",
+    "max": "Giá trị phải tối đa là {max}",
+    "time_format": "Thời gian được định dạng không chính xác (MM:SS)",
+    "min_time": "Thời gian nhập quá ngắn",
+    "undefined": "Lỗi không xác định"
+  },
+  "tasks": {
+    "title": "Nhiệm vụ",
+    "empty": "Chưa có nhiệm vụ nào",
+    "manage": "Quản lý",
+    "addPlaceholder": "Nhập một cái gì đó bạn cần phải làm"
+  },
+  "ready": "Xong",
+  "errorpage": {
+    "title": {
+      "crash": "Ứng dụng đã bị crash",
+      "notfound": "Trang đó không tồn tại",
+      "other": "Đã có vấn đề gì đó xảy ra"
+    },
+    "action": {
+      "reset": "Khởi động lại ứng dụng",
+      "reload": "Tải lại trang",
+      "home": "Quay lại trang chủ",
+      "githubIssue": "Báo cáo lỗi",
+      "githubDiscussion": "Hỏi những người khác xem họ có gặp vấn đề tương tự không",
+      "twitter": "Viết một tweet thân thiện"
+    },
+    "showError": {
+      "main": "Cho tôi xem thông báo lỗi!",
+      "sub": "Tôi sẽ sử dụng nó để báo cáo sự cố hoặc hỏi xem người khác có gặp phải nó không."
+    },
+    "suggestions": {
+      "primary": "Bạn có thể",
+      "secondary": "hoặc nếu những điều đó không hữu ích"
+    }
+  },
+  "timerpreset": {
+    "_values": {
+      "default": "Mặc định",
+      "easy": "Người mới bắt đầu",
+      "advanced": "Nâng cao",
+      "workaholic": "Người nghiện công việc"
+    },
+    "_valueDescription": {
+      "default": "Các giá trị Pomodoro mặc định.",
+      "easy": "Dành cho những người chưa từng thử kỹ thuật Pomodoro.",
+      "advanced": "Làm việc hiệu quả hơn một chút.",
+      "workaholic": "Dành cho các buổi làm việc dài."
+    },
+    "description": "{brief} \n {worklength} phút làm việc với {splength} phút nghỉ ngắn và {lplength} phút nghỉ dài sau mỗi {lpfreq} phiên làm việc.",
+  },
+  "tutorials": {
+    "onboarding": {
+    "pages": {
+    "0": {
+    "title": "Chào mừng đến Betterme.study!",
+    "onboarding_invite": "Hãy thiết lập cho bạn lần đầu tiên. Bạn có thể thay đổi mọi thứ trong menu cài đặt sau.",
+    "heading": "Chọn ngôn ngữ của bạn"
+    },
+    "1": {
+    "heading": "Cài đặt bộ hẹn giờ của bạn",
+    "text": "Chọn một thiết lập được xác định trước cho thời gian của bộ hẹn giờ của bạn. Bạn có thể tùy chỉnh chúng sau trong cài đặt."
+    },
+    "2": {
+    "theme": {
+    "heading": "Chọn chủ đề",
+    "options": {
+    "_values": {
+    "light": "Sáng",
+    "dark": "Tối"
+    },
+    "_valueDescription": {
+    "light": "",
+    "dark": ""
+    }
+    }
+    },
+    "display": {
+    "heading": "Chọn kiểu hiển thị"
+    }
+    },
+    "3": {
+    "heading": "Lưu ý",
+    "text": "Bạn luôn có thể thay đổi những thứ này (và nhiều thứ khác) trong menu cài đặt!"
+    },
+    "support": {
+    "heading": "Hỗ trợ dự án",
+    "text": "Nếu dự án này hữu ích với bạn, hãy cân nhắc mua cho tác giả một tách cà phê.",
+    "hint": "Bạn cũng có thể tìm thấy các tùy chọn hỗ trợ trong trang Cài đặt > Giới thiệu."
+    }
+    },
+    "buttons": {
+    "close": "Đóng",
+    "start": "Bắt đầu thiết lập",
+    "next": "Tiếp theo",
+    "support": "Hỗ trợ dự án"
+    }
+    },
+    "olddomain": {
+    "heading": "AnotherPomodoro giờ là FocusTide",
+    "warning": "Chúng tôi phát hiện ra rằng bạn có thể đến từ tên miền cũ another-pomodoro.app, tên miền này sẽ hết hạn vào cuối năm 2023.",
+    "action": "Vui lòng cập nhật dấu trang hoặc siêu liên kết của bạn thành focustide.app.",
+    "button": "OK"
+    }
+  }
+}

@@ -1,0 +1,372 @@
+{
+  "support": {
+    "source": "Megtekintés GitHubon",
+    "support": "Fejlesztő meghívása egy kávéra",
+    "share": {
+      "twitter": "Kövesd az alkalmazást a Twitteren",
+      "facebook": "Oszd meg az alkalmazást a Facebookon",
+      "reddit": "Oszd meg az alkalmazást Redditen"
+    }
+  },
+  "section": {
+    "work": "Munka",
+    "shortpause": "Szünet",
+    "longpause": "Hosszú szünet",
+    "wait": "Várakozás"
+  },
+  "controls": {
+    "play": "Időzítő indítása vagy szünetelése",
+    "stop": "Időzítő megállítása",
+    "advance": "Ugrás a következő szakaszra"
+  },
+  "appbar": {
+    "settings": "Beállítások megnyitása",
+    "todo": "Teendők megnyitása"
+  },
+  "timer": {
+    "approximate": {
+      "hours": "óra | óra",
+      "minutes": "perc | perc"
+    }
+  },
+  "settings": {
+    "heading": "Beállítások",
+    "tabs": {
+      "main": "Alap",
+      "timer": "Órarend",
+      "display": "Megjelenés",
+      "audio": "Hang",
+      "about": "Névjegy"
+    },
+    "buttons": {
+      "close": "Bezárás",
+      "reset": "Visszaállítás"
+    },
+    "reset": {
+      "title": "Alaphelyzetbe állítás",
+      "confirm": "Visszaállítás",
+      "cancel": "Mégsem"
+    },
+    "manage": {
+      "buttons": {
+        "save": "Mentés",
+        "load": "Betöltés"
+      }
+    },
+    "scheduleMinTime": "A legrövidebb megengedett időtartam 5 másodperc",
+    "about": {
+      "madeby": "Készítette: Gera Imre",
+      "source": "Forráskód",
+      "support": "Támogasd a projektet",
+      "supportBody": "Az FocusTidet a szabadidőmben fejlesztem, sokat jelentene, ha segítenél továbbfejleszteni!",
+      "mobileSupport": "A Google Play áruház szabályai miatt nem jeleníthetek meg semmilyen hivatkozást az anyagi támogatáshoz.",
+      "share": "vagy oszd meg ismerőseiddel az alkalmazást:"
+    },
+    "values": {
+      "manage": {
+        "_title": "Beállítások kezelése",
+        "_description": "A jelenlegi beállításokat letöltheted egy fájlba vagy vissza is állíthatod onnan"
+      },
+      "mobile": {
+        "notifications": {
+          "sectionOver": {
+            "_title": "Szakasz végi értesítések",
+            "_description": "Jelenítsen meg értesítést az alkalmazás, ha vége van egy szakasznak"
+          },
+          "persistent": {
+            "_title": "Folyamatjelző értesítés",
+            "_description": "Folyamatosan mutasson egy értesítést a jelenlegi időzítővel"
+          }
+        }
+      },
+      "lang": {
+        "_title": "Nyelv",
+        "_description": ""
+      },
+      "eventLoggingEnabled": {
+        "_title": "Eseménynaplózás engedélyezése",
+        "_description": ""
+      },
+      "currentTimer": {
+        "_title": "Időzítő típusa",
+        "_description": "",
+        "_values": {
+          "traditional": "Hagyományos",
+          "approximate": "Közelítő",
+          "percentage": "Százalékos"
+        },
+        "_valueDescription": {
+          "traditional": "12:34",
+          "approximate": "13 perc",
+          "percentage": "50%"
+        }
+      },
+      "adaptiveTicking": {
+        "enabled": {
+          "_title": "Adaptív ketyegés engedélyezése",
+          "_description": "Az időzítő kevesebbszer fog frissülni, amíg háttérben van"
+        }
+      },
+      "sectionEndAction": {
+        "_title": "Szakasz befejezésekor",
+        "_description": "Mi történjen, amikor vége egy szakasznak",
+        "_values": {
+          "continue": "Folytatás",
+          "stop": "Megállítás",
+          "skip": "Következő"
+        },
+        "_valueDescription": {
+          "continue": "Az időzítő tovább futtatása",
+          "stop": "Az időzítő megállítása",
+          "skip": "Ugrás a következő szakaszra"
+        }
+      },
+      "schedule": {
+        "longPauseInterval": {
+          "_title": "Hosszú szünetek gyakorisága",
+          "_description": ""
+        },
+        "numScheduleEntries": {
+          "_title": "Órarend elemeinek száma",
+          "_description": ""
+        },
+        "visibility": {
+          "enabled": {
+            "_title": "Órarend mutatása",
+            "_description": ""
+          },
+          "showSectionType": {
+            "_title": "Szakasz típusának megjelenítése",
+            "_description": "Megjeleníti a jelenlegi szakasz típusát az órarend alatt"
+          }
+        },
+        "lengths": {
+          "_title": "Órarend előbeállítás",
+          "_description": "",
+          "_values": {
+            "default": "Alapértelmezett",
+            "debug": "Hibakeresés",
+            "custom": "Egyedi"
+          },
+          "_valueDescription": {
+            "default": "25 perc munka, 5 perc szünet",
+            "debug": "Tesztelési célokra",
+            "custom": "Felhasználói beállítások"
+          },
+          "work": {
+            "_title": "Munka",
+            "_description": ""
+          },
+          "shortpause": {
+            "_title": "Szünet",
+            "_description": ""
+          },
+          "longpause": {
+            "_title": "Hosszú szünet hossza",
+            "_description": ""
+          }
+        }
+      },
+      "performance": {
+        "showProgressBar": {
+          "_title": "Folyamatjelző mutatása",
+          "_description": "Az óra mögött jelenjen meg a folyamatsáv"
+        }
+      },
+      "permissions": {
+        "audio": {
+          "_title": "Hang lejátszása",
+          "_description": "Az alkalmazás hangot játszhat le, ha véget ért egy szakasz"
+        },
+        "notifications": {
+          "_title": "Értesítések engedélyezése",
+          "_description": "Az alkalmazás értesítést küldhet, ha véget ért egy szakasz"
+        }
+      },
+      "audio": {
+        "volume": {
+          "_title": "Hangerő",
+          "_description": ""
+        },
+        "soundSet": {
+          "_title": "Hangkészlet",
+          "_description": "Az értesítésekhez használt hangok",
+          "_values": {
+            "musical": "Zenés"
+          },
+          "_valueDescription": {
+            "musical": "Az alapértelmezett hangok"
+          }
+        }
+      },
+      "timerControls": {
+        "enableKeyboardShortcuts": {
+          "_title": "Billentyűzettel történő vezérlés",
+          "_description": "Időzítő indítása/megállítása a szóköz gombbal"
+        }
+      },
+      "tasks": {
+        "enabled": {
+          "_title": "Feladatlista",
+          "_description": "Kezeld a teendőidet közvetlenül az alkalmazásból"
+        },
+        "maxActiveTasks": {
+          "_title": "Maximum aktív feladatok",
+          "_description": "Legfeljebb ennyi aktív feladatot mutat majd a lista"
+        },
+        "removeCompletedTasks": {
+          "_title": "Kész feladatok törlése",
+          "_description": "Új szakaszra lépéskor törlődnek a kész feladatok"
+        }
+      },
+      "pageTitle": {
+        "useTickEmoji": {
+          "_title": "Pipa jel használata a címsorban",
+          "_description": "Mutasson ✔ emojit a \"kész\" helyett az alkalmazás"
+        }
+      },
+      "visuals": {
+        "theme": {
+          "_title": "Téma beállítások",
+          "_description": "Válassz az előre elkészített szakasztémák közül vagy állíts be egy sajátot",
+          "custom": "Egyedi"
+        },
+        "darkMode": {
+          "_title": "Sötét téma bekapcsolása",
+          "_description": "Kevesebb fényerő, ugyanannyi produktivitás"
+        }
+      },
+      "reset": {
+        "_title": "Alaphelyzetbe állítás",
+        "_description": "Az alkalmazás újratöltése után minden beállítás vissza lesz állítva"
+      }
+    }
+  },
+  "notification": {
+    "action": {
+      "ready": "Gyerünk!"
+    },
+    "work": {
+      "title": "Ideje újra dolgozni!",
+      "body": "Vége a szünetnek. Dolgozz egy kicsit, majd pihenj megint."
+    },
+    "shortpause": {
+      "title": "Szünidő",
+      "body": "Szép munka! Megérdemelsz egy kis szünetet."
+    },
+    "longpause": {
+      "title": "Ejha! Még több szabadidő!",
+      "body": "Nem semmi. Ennyi munka után megérdemelsz egy kis extra szünidőt."
+    }
+  },
+  "error": {
+    "format_invalid": "Hibás formátum",
+    "range_invalid": "Az érték {min} és {max} között legyen",
+    "required": "Ezt a mezőt ki kell tölteni",
+    "numeric": "A beírt értéknek számnak kell lennie",
+    "min": "Az érték legalább {min} legyen",
+    "max": "Az érték legfeljebb {max} legyen",
+    "time_format": "Hibásan formázott idő (PP:MM)",
+    "min_time": "A bevitt időtartam túl rövid",
+    "undefined": "Ismeretlen hiba"
+  },
+  "tasks": {
+    "title": "Feladatok",
+    "empty": "Nincs felvett teendő",
+    "manage": "Kezelés",
+    "addPlaceholder": "Írj be egy új teendőt"
+  },
+  "ready": "Kész",
+  "errorpage": {
+    "title": {
+      "crash": "Összeomlott az alkalmazás",
+      "notfound": "Ilyen oldal nincs",
+      "other": "Valami elromlott"
+    },
+    "action": {
+      "reset": "Alaphelyzetbe állítás",
+      "reload": "Oldal újratöltése",
+      "home": "Vissza a kezdőlapra",
+      "githubIssue": "Hiba bejelentése",
+      "githubDiscussion": "Mások megkérdezése a hibáról",
+      "twitter": "Egy barátságos tweet írása"
+    },
+    "showError": {
+      "main": "Mutasd a hibaüzenetet!",
+      "sub": "Ha hibajelentést írok vagy másokat kérdezek meg, ezt is megmutatom."
+    },
+    "suggestions": {
+      "primary": "Először próbáld meg ezeket:",
+      "secondary": "vagy ha a fentiek nem segítettek:"
+    }
+  },
+  "timerpreset": {
+    "_values": {
+      "default": "Alapértelmezett",
+      "easy": "Kezdő",
+      "advanced": "Haladó",
+      "workaholic": "Munkamániás"
+    },
+    "_valueDescription": {
+      "default": "Az alap Pomodoro idők.",
+      "easy": "Azok számára, akik még nem próbálták a Pomodoro technikát.",
+      "advanced": "Dolgozz kicsit hatékonyabban.",
+      "workaholic": "Hosszú munkamenetekre."
+    },
+    "description": "{brief} \n {worklength} perc munka {splength} perces rövid szünetekkel és {lplength} perces hosszú szünettel minden {lpfreq}. munkamenet után."
+  },
+  "tutorials": {
+    "onboarding": {
+      "pages": {
+        "0": {
+          "title": "Üdvözöl a FocusTide!",
+          "onboarding_invite": "Itt beállíthatod az alkalmazást az első használatra.",
+          "heading": "Válassz nyelvet"
+        },
+        "1": {
+          "heading": "Válassz időzítőt",
+          "text": "Válassz az előre beállított időzítők közül. Az egyes időzítők hosszát később a beállításokban is megváltoztathatod."
+        },
+        "2": {
+          "theme": {
+            "heading": "Válassz témát",
+            "options": {
+              "_values": {
+                "light": "Világos",
+                "dark": "Sötét"
+              },
+              "_valueDescription": {
+                "light": "",
+                "dark": ""
+              }
+            }
+          },
+          "display": {
+            "heading": "Válassz megjelenést"
+          }
+        },
+        "3": {
+          "heading": "Ne feledd",
+          "text": "Ezeket (és sok mást is) megváltoztathatsz a beállításokban."
+        },
+        "support": {
+          "heading": "Támogasd a projektet",
+          "text": "Ha segít neked ez az alkalmazás, hívd meg a fejlesztőt egy kávéra.",
+          "hint": "Később a Beállítások > Névjegy lapon is megtalálod a támogatási lehetőségeket."
+        }
+      },
+      "buttons": {
+        "close": "Bezárás",
+        "start": "Beállítás",
+        "next": "Következő",
+        "support": "Projekt támogatása"
+      }
+    },
+    "olddomain": {
+      "heading": "Az AnotherPomodoro mostantól FocusTide",
+      "warning": "Úgy észleltük, hogy a régi another-pomodoro.app webcímről érkeztél, ami 2023 végére lejár.",
+      "action": "Kérjük, frissítsd a könyvjelzőidet és hivatkozásaidat a focustide.app webcímre.",
+      "button": "OK"
+    }
+  }
+}

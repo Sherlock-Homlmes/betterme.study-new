@@ -1,0 +1,13 @@
+- add background task
+- redis async
+- queue by redis
+
+/ will remove
+jinja2
+
+/ security improve
+List[task, todolist] not belong to user 
+
+// beanie import 
+from beanie.odm.operators.update.general import Set
+
