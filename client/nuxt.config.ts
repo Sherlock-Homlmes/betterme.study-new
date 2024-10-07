@@ -59,6 +59,12 @@ export default defineNuxtConfig({
     }
   },
 
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false
+    }
+  },
+
   ssr: true,
 
   app: {

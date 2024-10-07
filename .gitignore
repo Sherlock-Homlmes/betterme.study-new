@@ -9,7 +9,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -166,13 +165,6 @@ node_modules
 # testing
 coverage
 
-# next.js
-.next/
-out/
-
-# production
-build
-
 # misc
 .DS_Store
 *.pem
@@ -187,8 +179,6 @@ yarn-error.log*
 .env*.local
 
 # vercel
-.vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
