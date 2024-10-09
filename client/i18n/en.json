@@ -1,4 +1,7 @@
 {
+  "general": {
+    "or": "or"
+  },
   "support": {
     "source": "View on GitHub",
     "support": "Buy the author a coffee",
@@ -29,6 +32,11 @@
       "minutes": "minute | minutes"
     }
   },
+  "login": "Login",
+  "loginBy": {
+    "discord": "Discord",
+    "google": "Google"
+  },
   "settings": {
     "heading": "Settings",
     "tabs": {
@@ -55,12 +63,13 @@
     },
     "scheduleMinTime": "The minimum allowed time is 5 seconds",
     "about": {
-      "madeby": "Made by Imre Gera",
+      "madeby": "Made by A Tăng",
       "source": "Source code",
       "support": "Support the project",
-      "supportBody": "I develop FocusTide in my free time. It would mean a lot to me if you could help me keep working on it!",
+      "supportBody": "Join Betterme Discord study community to communicate with other people and unlock more new features!",
       "mobileSupport": "Due to the rules enforced by the Google Play Store, I cannot show you any links inside the mobile app to donate to the project.",
-      "share": "or share the app on social media:"
+      "share": "or share the app on social media:",
+      "discord_betterme": "Discord Betterme"
     },
     "values": {
       "manage": {

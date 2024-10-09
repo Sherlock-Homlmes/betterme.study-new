@@ -2,11 +2,16 @@ client:
 --- BUGS ---
 - onboard light/dark theme fix
 --- FEATURES ---
+- use ts file which export from schemas(after 1)
+- user statistic
 --- REFACTOR ---
+- use ui component
 
 server:
 --- BUGS ---
 --- FEATURES ---
+- export ts from schemas(1)
+- user statistic
 --- REFACTOR ---
 - redesign models
 

@@ -2,6 +2,7 @@
 import { XIcon as CloseIcon, AdjustmentsIcon as TabIconGeneral, AlarmIcon as TabIconSchedule, ArtboardIcon as TabIconVisuals, InfoCircleIcon as InfoIcon, InfoCircleIcon as TabIconAbout } from 'vue-tabler-icons'
 
 import { ButtonImportance } from '../base/types/button'
+import ButtonControl from '~~/components/base/uiButton.vue'
 import ThemeSettings from './theme/themeSettings.vue'
 import OptionGroup from '@/components/base/optionGroup.vue'
 import TabHeader from '@/components/settings/panel/tabHeader.vue'
@@ -9,6 +10,7 @@ import ExportButton from '@/components/settings/exportButton.vue'
 import ImportButton from '@/components/settings/importButton.vue'
 
 import AboutTab from '~~/components/settings/aboutTab.vue'
+import LoginTab from '~~/components/settings/loginTab.vue'
 
 import presetTimers from '~~/assets/settings/timerPresets'
 import { useSettings } from '~~/stores/settings'
@@ -22,7 +24,10 @@ import { useEvents } from '~~/stores/events'
 import { useOpenPanels } from '~~/stores/openpanels'
 import { Control } from '~~/components/settings/types/settingsItem'
 
+import { useAuth } from '~~/stores/auth'
+
 const runtimeConfig = useRuntimeConfig()
+const authStore = useAuth()
 const eventsStore = useEvents()
 const openPanels = useOpenPanels()
 const mobileSettingsStore = useMobileSettings()
@@ -60,6 +65,22 @@ notificationsStore.updateEnabled()
         <Transition tag="div" name="tab-transition" mode="out-in" class="relative w-full">
           <!-- Core settings -->
           <div v-if="state.activeTab === 1" :key="1" class="settings-tab">
+            <template v-if="isWeb && !authStore.isAuth">
+              <SettingsItem :type="Control.Empty" path="manage" />
+              <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
+                <ButtonControl default-style :importance="ButtonImportance.Filled" @click='state.activeTab = 5' class="col-start-1 col-end-7">
+                  <span v-text="$t('login')" />
+                </ButtonControl>
+                <span class="flex justify-center items-center">{{$t('or')}}</span>
+                <div class="grid grid-flow-col grid-cols-2 gap-2 col-start-8 col-end-13">
+                  <ExportButton />
+                  <ImportButton />
+                </div>
+              </div>
+            </template>
+
+            <Divider />
+
             <OptionGroup
               :choices="$languages"
               :value="settingsStore.lang"
@@ -103,16 +124,6 @@ notificationsStore.updateEnabled()
               :disabled="!settingsStore.tasks.enabled"
             />
             <SettingsItem :type="Control.Check" path="tasks.removeCompletedTasks" :disabled="!settingsStore.tasks.enabled" />
-
-            <template v-if="isWeb">
-              <Divider />
-              <SettingsItem :type="Control.Empty" path="manage" />
-              <div class="grid grid-flow-col grid-cols-2 gap-2 mt-1">
-                <ExportButton />
-                <ImportButton />
-              </div>
-            </template>
-            <Divider />
 
             <SettingsItem :type="Control.Check" path="reset" />
           </div>
@@ -169,11 +180,17 @@ notificationsStore.updateEnabled()
           <div v-else-if="state.activeTab === 4" :key="4" class="settings-tab">
             <AboutTab />
           </div>
+
+          <!-- Login page -->
+          <div v-else-if="state.activeTab === 5" :key="5" class="settings-tab h-full">
+            <LoginTab />
+          </div>
         </Transition>
       </div>
 
       <!-- Tab bar -->
       <div class="flex flex-row flex-none h-20 p-4">
+        <!-- TODO: refactor -->
         <TabHeader :active="state.activeTab === 1" :text="$t('settings.tabs.main')" @click="state.activeTab = 1">
           <template #icon>
             <TabIconGeneral role="presentation" />

@@ -1,4 +1,7 @@
 {
+  "general": {
+    "or": "hoặc"
+  },
   "support": {
     "source": "View on GitHub",
     "support": "Buy the author a coffee",
@@ -29,6 +32,11 @@
       "minutes": "phút"
     }
   },
+  "login": "Đăng nhập",
+  "loginBy": {
+    "discord": "Discord",
+    "google": "Google"
+  },
   "settings": {
     "heading": "Cài đặt",
     "tabs": {
@@ -55,12 +63,13 @@
     },
     "scheduleMinTime": "Thời gian tối thiểu cho phép là 5 giây",
     "about": {
-      "madeby": "Được tạo bởi Imre Gera",
+      "madeby": "Được tạo bởi A Tăng",
       "source": "Mã nguồn",
       "support": "Ủng hộ dự án",
-      "supportBody": "Tôi phát triển FocusTide trong thời gian rảnh rỗi. Điều đó sẽ có ý nghĩa rất lớn đối với tôi nếu bạn có thể giúp tôi tiếp tục làm việc trên nó!",
+      "supportBody": "Tham gia cộng đồng học tập Betterme để  kết nối với mọi người và mở khóa thêm nhiều tính năng nhé!",
       "mobileSupport": "Do những quy định được áp dụng bởi Google Play Store, tôi không thể hiển thị cho bạn bất kỳ liên kết nào bên trong ứng dụng di động để quyên góp cho dự án.",
-      "share": "hoặc chia sẻ ứng dụng trên mạng xã hội:"
+      "share": "hoặc chia sẻ ứng dụng trên mạng xã hội:",
+      "discord_betterme": "Discord Betterme"
     },
     "values": {
 "manage": {

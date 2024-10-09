@@ -55,7 +55,8 @@ export default defineNuxtConfig({
     public: {
       PACKAGE_VERSION: version,
       PLATFORM: AppPlatform.web,
-      URL: 'https://focustide.app'
+      URL: 'https://focustide.app',
+      API_URL: 'http://localhost/api'
     }
   },
 

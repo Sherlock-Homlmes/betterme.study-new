@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CoffeeIcon, BrandGithubIcon, BrandTwitterIcon, BrandFacebookIcon, BrandRedditIcon } from 'vue-tabler-icons'
+import { CoffeeIcon, BrandDiscordIcon, BrandTwitterIcon, BrandFacebookIcon, BrandRedditIcon } from 'vue-tabler-icons'
 import { ButtonImportance } from '../base/types/button'
 import Button from '~~/components/base/uiButton.vue'
 import { AppPlatform } from '~~/platforms/platforms'
@@ -23,7 +23,7 @@ const mainStore = useMain()
 
     <div class="flex flex-col items-center justify-center mt-8 text-center">
       <div class="mb-2">
-        <span v-text="$t('settings.about.supportBody')" /> <span class="italic">&mdash; Imre</span>
+        <span v-text="$t('settings.about.supportBody')" />
       </div>
       <div v-if="isMobile" class="px-4 my-2 text-sm" v-text="$t('settings.about.mobileSupport')" />
 
@@ -35,14 +35,14 @@ const mainStore = useMain()
           link
           no-default-style
           no-content-theme
-          href="https://www.github.com/Hanziness/FocusTide?utm_source=FocusTide&utm_medium=web&utm_content=settings"
+          href="https://discord.gg/betterme"
           inner-class="flex flex-row items-center gap-1 text-slate-50 text-gray-50"
           bg-class="bg-slate-900 dark:bg-slate-700"
         >
-          <BrandGithubIcon />
-          <span v-text="$t('settings.about.source')" />
+          <BrandDiscordIcon />
+          <span v-text="$t('settings.about.discord_betterme')" />
         </Button>
-        <Button
+        <!-- <Button
           v-if="!isMobile"
           :importance="ButtonImportance.Filled"
           link
@@ -65,24 +65,11 @@ const mainStore = useMain()
         >
           <CoffeeIcon />
           <span v-text="$t('settings.about.support')" />
-        </Button>
+        </Button> -->
       </div>
       <!-- Share links -->
       <div class="my-2" v-text="$t('settings.about.share')" />
       <div class="flex flex-row items-center space-x-2 text-sm">
-        <Button
-          link
-          circle
-          dark
-          no-default-style
-          no-content-theme
-          :importance="ButtonImportance.Filled"
-          href="https://twitter.com/FocusTide?utm_source=FocusTide&utm_medium=web&utm_content=settings"
-          bg-class="bg-[#1da1f2]"
-          inner-class="!p-4 text-slate-50"
-        >
-          <BrandTwitterIcon :aria-label="$t('support.share.twitter')" size="24" />
-        </Button>
         <Button
           link
           circle
@@ -95,6 +82,19 @@ const mainStore = useMain()
           inner-class="!p-4 text-slate-50"
         >
           <BrandFacebookIcon :aria-label="$t('support.share.facebook')" size="24" class="translate-x-[-1px]" />
+        </Button>
+        <Button
+          link
+          circle
+          dark
+          no-default-style
+          no-content-theme
+          :importance="ButtonImportance.Filled"
+          href="https://twitter.com/FocusTide?utm_source=FocusTide&utm_medium=web&utm_content=settings"
+          bg-class="bg-[#1da1f2]"
+          inner-class="!p-4 text-slate-50"
+        >
+          <BrandTwitterIcon :aria-label="$t('support.share.twitter')" size="24" />
         </Button>
         <Button
           link
