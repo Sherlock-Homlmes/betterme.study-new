@@ -5,6 +5,7 @@ from beanie import Document, Link
 from .users import Users
 
 
+# TODO: replace user => user_id
 class TaskCategories(Document):
     user: Link[Users]
     title: str = Field(max_length=200)

@@ -85,7 +85,7 @@ const progressBarSchedules = computed(() => {
 })
 
 onBeforeMount(async()=>{
-  await authStore.getCurrentUser()
+  if(!authStore.isAuth) await authStore.getCurrentUser()
 })
 </script>
 

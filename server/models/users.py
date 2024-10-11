@@ -1,7 +1,9 @@
 # default
 import datetime
-from typing import Optional
-from pydantic import EmailStr, ValidationError, validator, Field
+from enum import Enum
+from typing import Optional, List
+
+from pydantic import EmailStr, ValidationError, validator, Field, BaseModel
 from beanie import Document, Link, Insert, after_event
 
 # local
@@ -19,9 +21,9 @@ class Users(Document):
     name: str
     avatar: Optional[str] = None
 
-    discord_id: Optional[str] = None
-    google_id: Optional[str] = None
-    facebook_id: Optional[str] = None
+    discord_id: Optional[int] = None
+    google_id: Optional[int] = None
+    facebook_id: Optional[int] = None
 
     @validator("user_type")
     def name_must_contain_space(cls, v: str):
@@ -42,19 +44,50 @@ class Users(Document):
         return {
             "id": str(self.id),
             "discord_id": self.discord_id,
+            "facebook_id": self.facebook_id,
+            "google_id": self.google_id,
             "name": self.name,
             "email": self.email,
             "avatar_url": self.avatar,
         }
 
 
+# User setting
+class UserLanguageEnum(str, Enum):
+    ENGLISH = "en"
+    VIET_NAM = "vi"
+
+
+class UserThemeSettings(BaseModel):
+    pomodoro_study: List[int] = Field(default=[255, 107, 107], max_length=3, min_length=3)
+    pomodoro_rest: List[int] = Field(default=[244, 162, 97], max_length=3, min_length=3)
+    pomodoro_long_rest: List[int] = Field(default=[46, 196, 182], max_length=3, min_length=3)
+
+    background: Optional[str] = None
+
+
+class UserPomodoroSettings(BaseModel):
+    pomodoro_study_time: Optional[int] = Field(default=25, ge=5, lt=180)
+    pomodoro_rest_time: Optional[int] = Field(default=5, ge=1)
+    pomodoro_long_rest_time: Optional[int] = Field(default=20, ge=1)
+    long_rest_time_interval: Optional[int] = Field(default=3, ge=1, lt=11)
+
+    auto_start_next_time: Optional[bool] = True
+    audio: Optional[str] = None
+    custom_audio: Optional[str] = None
+    show_progress_bar: Optional[bool] = False
+
+
 class UserSettings(Document):
     user: Link[Users]
-    pomodoro_study_time: int = Field(default=25, ge=5, lt=180)
-    pomodoro_rest_time: int = Field(default=5, ge=1)
-    pomodoro_long_rest_time: int = Field(default=20, ge=1)
+    dark_mode: Optional[bool] = False
+    language: Optional[UserLanguageEnum] = UserLanguageEnum.ENGLISH
+
+    theme_settings: Optional[UserThemeSettings] = UserThemeSettings()
+    pomodoro_settings: Optional[UserPomodoroSettings] = UserPomodoroSettings()
 
     def update_value(self, user_setting):
-        self.pomodoro_study_time = user_setting.pomodoro_study_time
-        self.pomodoro_rest_time = user_setting.pomodoro_rest_time
-        self.pomodoro_long_rest_time = user_setting.pomodoro_long_rest_time
+        pass
+        # self.pomodoro_study_time = user_setting.pomodoro_study_time
+        # self.pomodoro_rest_time = user_setting.pomodoro_rest_time
+        # self.pomodoro_long_rest_time = user_setting.pomodoro_long_rest_time

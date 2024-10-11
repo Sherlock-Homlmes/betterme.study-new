@@ -18,18 +18,18 @@ export const useAuth = defineStore('auth', {
         else throw new Error('Fail to login by discord');
     },
     async loginByDiscord(code: string) {
-        const API_URL = useRuntimeConfig().public.API_URL
-		const response = await fetch(
-			`${API_URL}/auth/discord-oauth?code=${code}`,
-		);
-		const data = await response.json();
-		if (data?.token) {
-			// set auth to localstorage
-			localStorage.removeItem("Authorization");
-			localStorage.setItem("Authorization", data.token);
-			// check if user is accessable or not
-            await this.getCurrentUser()
-		}
+      const API_URL = useRuntimeConfig().public.API_URL
+      const response = await fetch(
+        `${API_URL}/auth/discord-oauth?code=${code}`,
+      );
+      const data = await response.json();
+      if (data?.token) {
+        // set auth to localstorage
+        localStorage.removeItem("Authorization");
+        localStorage.setItem("Authorization", data.token);
+        // check if user is accessable or not
+              await this.getCurrentUser()
+      }
     },
   }
 })
