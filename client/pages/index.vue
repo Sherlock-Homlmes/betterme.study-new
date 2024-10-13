@@ -15,7 +15,8 @@ import TimerControls from '@/components/timer/controls/controlsNew.vue'
 import { AppPlatform } from '~~/platforms/platforms'
 
 import { useMobileSettings } from '~~/stores/platforms/mobileSettings'
-import { useAuth } from '~~/stores/auth'
+import { useAuthStore } from '~~/stores/auth'
+
 
 // components
 const AppBar = defineAsyncComponent(() => import('@/components/appBar.vue'))
@@ -24,7 +25,7 @@ const TutorialView = defineAsyncComponent(() => import('@/components/tutorial/_t
 const settingsStore = useSettings()
 const mobileSettingsStore = useMobileSettings()
 const scheduleStore = useSchedule()
-const authStore = useAuth()
+const {userInfo,isAuth, getCurrentUser, isAuthOnce} = useAuthStore()
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -85,7 +86,7 @@ const progressBarSchedules = computed(() => {
 })
 
 onBeforeMount(async()=>{
-  if(!authStore.isAuth) await authStore.getCurrentUser()
+  if(!isAuth.value) await getCurrentUser()
 })
 </script>
 
@@ -130,7 +131,7 @@ onBeforeMount(async()=>{
       <TimerControls class="mb-8" />
     </div>
     <client-only>
-      <TutorialView v-if='!authStore.isAuth' />
+      <TutorialView v-if='!isAuthOnce' />
     </client-only>
   </section>
 </template>

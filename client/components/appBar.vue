@@ -22,7 +22,6 @@ const settingsStore = useSettings()
     <div v-show="settingsStore.schedule.visibility.enabled && settingsStore.schedule.visibility.showSectionType" class="flex-shrink overflow-hidden text-lg whitespace-pre select-none text-ellipsis text-surface-onlight dark:text-surface-ondark" v-text="$t('section.' + scheduleStore.getCurrentItem.type).toLowerCase()" />
     <div class="flex-grow" />
     <CButton
-      v-show="settingsStore.tasks.enabled"
       circle
       :theme="openPanels.todo ? ButtonTheme.Primary : ButtonTheme.Neutral"
       :importance="ButtonImportance.Tonal"

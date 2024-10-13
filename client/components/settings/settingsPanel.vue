@@ -24,10 +24,10 @@ import { useEvents } from '~~/stores/events'
 import { useOpenPanels } from '~~/stores/openpanels'
 import { Control } from '~~/components/settings/types/settingsItem'
 
-import { useAuth } from '~~/stores/auth'
+import { useAuthStore } from '~~/stores/auth'
 
 const runtimeConfig = useRuntimeConfig()
-const authStore = useAuth()
+const {isAuth} = useAuthStore()!
 const eventsStore = useEvents()
 const openPanels = useOpenPanels()
 const mobileSettingsStore = useMobileSettings()
@@ -65,7 +65,7 @@ notificationsStore.updateEnabled()
         <Transition tag="div" name="tab-transition" mode="out-in" class="relative w-full">
           <!-- Core settings -->
           <div v-if="state.activeTab === 1" :key="1" class="settings-tab">
-            <template v-if="isWeb && !authStore.isAuth">
+            <template v-if="isWeb && !isAuth">
               <SettingsItem :type="Control.Empty" path="manage" />
               <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
                 <ButtonControl default-style :importance="ButtonImportance.Filled" @click='state.activeTab = 5' class="col-start-1 col-end-7">
@@ -115,15 +115,15 @@ notificationsStore.updateEnabled()
 
             <Divider />
 
+            <!-- TODO: remove -->
             <SettingsItem :type="Control.Check" path="tasks.enabled" />
             <SettingsItem
               :type="Control.Number"
               path="tasks.maxActiveTasks"
               :min="1"
               :max="15"
-              :disabled="!settingsStore.tasks.enabled"
             />
-            <SettingsItem :type="Control.Check" path="tasks.removeCompletedTasks" :disabled="!settingsStore.tasks.enabled" />
+            <SettingsItem :type="Control.Check" path="tasks.removeCompletedTasks" />
 
             <SettingsItem :type="Control.Check" path="reset" />
           </div>

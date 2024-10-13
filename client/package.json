@@ -19,6 +19,8 @@
     "release": "standard-version"
   },
   "dependencies": {
+    "@vueuse/core": "^11.1.0",
+    "@vueuse/nuxt": "^11.1.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-tabler-icons": "^2.21.0"

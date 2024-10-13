@@ -121,6 +121,7 @@ export default defineNuxtConfig({
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
+    '@vueuse/nuxt',
     '@pinia/nuxt'
     // '@nuxtjs/sitemap'
   ],

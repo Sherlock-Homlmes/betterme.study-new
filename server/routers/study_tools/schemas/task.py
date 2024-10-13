@@ -1,5 +1,5 @@
 # fastapi
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, model_validator
 from typing import Optional, List
 
 # local
@@ -20,7 +20,9 @@ class Task(BaseModel):
     def status_in_list(cls, v):
         # example: 2022/01/01 11:11:11
         try:
-            convert_time = str_to_time(v)
+            if v:
+                convert_time = str_to_time(v)
+            return None
         except ValueError:
             raise ValueError("Invalid time str")
         return convert_time
@@ -28,3 +30,14 @@ class Task(BaseModel):
 
 class PatchTaskPayload(Task):
     title: Optional[str] = None
+
+
+class GetTaskResponse(Task):
+    id: str
+
+    # TODO: to BaseSchemaModel
+    @model_validator(mode="before")
+    @classmethod
+    def id_valid_str(cls, data):
+        data.id = str(data.id)
+        return data

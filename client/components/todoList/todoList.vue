@@ -10,10 +10,22 @@ import { useSchedule } from '~~/stores/schedule'
 import { type Task, useTasklist } from '~~/stores/tasklist'
 import { useOpenPanels } from '~~/stores/openpanels'
 
+import { useTaskStore } from '~~/stores/todolist'
+import { onBeforeMount } from 'vue'
+
 const openPanels = useOpenPanels()
 const settingsStore = useSettings()
 const tasklistStore = useTasklist()
 const scheduleStore = useSchedule()
+const { tasks, getTaskList, 
+    postTask,
+    patchTask,
+    deleteTask,
+ } = useTaskStore()
+
+onBeforeMount(async()=>{
+  await getTaskList()
+})
 
 const state = reactive({
   manageMode: true,
@@ -72,22 +84,22 @@ const handleDrop = () => {
         </ControlButton>
       </div>
     </div>
-    <div v-show="displayedTasks.length < 1" key="notask" class="mt-3 italic text-black dark:text-gray-200 text-opacity-70" v-text="$t('tasks.empty')" />
+    <div v-show="tasks.length < 1" key="notask" class="mt-3 italic text-black dark:text-gray-200 text-opacity-70" v-text="$t('tasks.empty')" />
     <transition-group
       tag="div"
       name="transition-item"
       class="flex flex-col px-2 py-1 mt-2 -mx-2 space-y-2 overflow-x-hidden overflow-y-auto max-h-64"
     >
       <TaskItem
-        v-for="task in displayedTasks"
+        v-for="task in tasks"
         :key="task.id"
         :manage="!scheduleStore.isRunning && state.manageMode"
         :item="task"
         :droptarget="task === state.dropTarget"
         moveable
-        @input="(isCompleted) => tasklistStore.setComplete(task.id, isCompleted)"
-        @update="newTitle => tasklistStore.editTitle(task.id, newTitle)"
-        @delete="tasklistStore.deleteTask(task)"
+        @input="(isCompleted) => 0"
+        @update="newTitle => patchTask(task.id, newTitle)"
+        @delete="deleteTask(task.id)"
         @dropstart="state.draggedItem = task, state.dragging = true"
         @dropfinish="handleDrop"
         @droptarget="updateDropTarget"

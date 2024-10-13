@@ -1,24 +1,30 @@
-import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { useRuntimeConfig } from '#app'
+import { StorageSerializers, createGlobalState, useStorage } from '@vueuse/core'
 
-export const useAuth = defineStore('auth', {
-  state: () => ({
-    userInfo: null,
-  }),
+export const useAuthStore = createGlobalState( () => {
+  const API_URL = useRuntimeConfig().public.API_URL
 
-  getters: {
-    isAuth: (state) => !!state.userInfo,
-  },
+  // state
+  const userInfo = ref()
+  const isAuthOnceLocalStorage = useStorage('isAuthOnce', false, undefined, { serializer: StorageSerializers.boolean })
 
-  actions: {
-    async getCurrentUser() {
-        const API_URL = useRuntimeConfig().public.API_URL
+
+  // getters
+  const isAuth = computed(()=>!!userInfo.value)
+  const isAuthOnce = computed(()=>isAuth.value || isAuthOnceLocalStorage.value)
+
+  // actions
+  const   getCurrentUser = async() =>  {
         const response = await fetchWithAuth(`${API_URL}/auth/self`);
-        if (response.ok) this.userInfo = await response.json();
-        else throw new Error('Fail to login by discord');
-    },
-    async loginByDiscord(code: string) {
-      const API_URL = useRuntimeConfig().public.API_URL
+        if (response.ok) userInfo.value = await response.json();
+        else{
+          userInfo.value = null
+          throw new Error('Fail to get self');
+        } 
+    }
+
+  const   loginByDiscord = async(code: string) => {
       const response = await fetch(
         `${API_URL}/auth/discord-oauth?code=${code}`,
       );
@@ -28,8 +34,19 @@ export const useAuth = defineStore('auth', {
         localStorage.removeItem("Authorization");
         localStorage.setItem("Authorization", data.token);
         // check if user is accessable or not
-              await this.getCurrentUser()
+        await getCurrentUser()
+        isAuthOnceLocalStorage.value = true
       }
-    },
+    }
+
+  return {
+    // state
+    userInfo,
+    // getters
+    isAuth,
+    isAuthOnce,
+    // actions
+    getCurrentUser,
+    loginByDiscord
   }
 })

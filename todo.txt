@@ -4,8 +4,9 @@ client:
 --- FEATURES ---
 - use ts file which export from schemas(after 1)
 - user statistic
+- use pug
 --- REFACTOR ---
-- use ui component
+- use ui component lib
 
 server:
 --- BUGS ---
@@ -13,7 +14,7 @@ server:
 - export ts from schemas(1)
 - user statistic
 --- REFACTOR ---
-- redesign models
+- better schemas
 
 others:
 --- BUGS ---

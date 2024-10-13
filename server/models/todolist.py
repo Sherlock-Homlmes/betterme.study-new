@@ -17,6 +17,7 @@ class TodoList(Document):
     status: str = "TO-DO"
     necessary: str = "NORMAL"
     difficult: int = Field(default=3, ge=1, le=5)
+    priority: int = Field(ge=1)
     deadline: Optional[datetime.datetime] = None
     task_category_ids: Optional[List[str]] = Field(default=[], max_items=10)
 

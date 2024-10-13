@@ -8,7 +8,7 @@ from fastapi import APIRouter, HTTPException, Depends
 # local
 from routers.authentication import auth_handler
 
-from .schemas import Task, PatchTaskPayload
+from .schemas import Task, PatchTaskPayload, GetTaskResponse
 from models import Users, TodoList, TaskCategories
 
 from other_modules.time_modules import vn_now
@@ -23,7 +23,9 @@ router = APIRouter(
     "/todolist",
     description="get list of task",
 )
-async def get_list_of_task(user: Users = Depends(auth_handler.auth_wrapper)) -> List[TodoList]:
+async def get_list_of_task(
+    user: Users = Depends(auth_handler.auth_wrapper),
+) -> List[GetTaskResponse]:
     return await TodoList.find(TodoList.user_id == user["id"]).to_list()
 
 
@@ -31,7 +33,9 @@ async def get_list_of_task(user: Users = Depends(auth_handler.auth_wrapper)) -> 
     "/todolist/{task_id}",
     description="get a task",
 )
-async def get_a_task(task_id: str, user: Users = Depends(auth_handler.auth_wrapper)) -> TodoList:
+async def get_a_task(
+    task_id: str, user: Users = Depends(auth_handler.auth_wrapper)
+) -> GetTaskResponse:
     if task := await TodoList.find_one(
         TodoList.id == ObjectId(task_id),
         TodoList.user_id == user["id"],

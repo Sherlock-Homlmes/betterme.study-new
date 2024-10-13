@@ -5,10 +5,12 @@ import { ButtonImportance } from '../base/types/button'
 import Button from '~~/components/base/uiButton.vue'
 import { TaskState, useTasklist } from '~~/stores/tasklist'
 import { useSchedule } from '~~/stores/schedule'
+import { useTaskStore } from '~~/stores/todolist'
 
 const tasksStore = useTasklist()
 const scheduleStore = useSchedule()
 const addtaskInput: Ref<HTMLElement | null> = ref(null)
+const { postTask } = useTaskStore()
 
 const data = reactive({
   taskTitle: '',
@@ -36,7 +38,8 @@ watch(() => data.taskTitle, (newValue) => {
 })
 
 const addTask = () => {
-  tasksStore.newTask(data.taskTitle, null, 0, scheduleStore.getCurrentItem.type, data.taskState)
+  postTask(data.taskTitle)
+  // tasksStore.newTask(data.taskTitle, null, 0, scheduleStore.getCurrentItem.type, data.taskState)
   data.taskTitle = ''
   const addtaskInputCast = addtaskInput.value as HTMLElement
 
