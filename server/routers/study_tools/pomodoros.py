@@ -82,7 +82,9 @@ async def update_a_pomodoro(
         Pomodoros.id == ObjectId(pomodoro_id),
         Pomodoros.user_id == user["id"],
     ):
-        if payload.action == PomodoroStatusEnum.PAUSED:
+        if payload.action == PomodoroStatusEnum.STARTED:
+            await pomodoro.resume()
+        elif payload.action == PomodoroStatusEnum.PAUSED:
             await pomodoro.pause()
         elif payload.action == PomodoroStatusEnum.COMPLETED:
             await pomodoro.end()

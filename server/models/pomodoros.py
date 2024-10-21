@@ -32,10 +32,10 @@ class Pomodoros(Document):
     status: Optional[PomodoroStatusEnum] = PomodoroStatusEnum.STARTED
 
     ### Settings
-    # class Settings:
-    #     use_cache = False
-    #     cache_expiration_time = datetime.timedelta(seconds=1)
-    #     cache_capacity = 100
+    class Settings:
+        use_cache = True
+        cache_expiration_time = datetime.timedelta(seconds=1)
+        cache_capacity = 100
 
     ### Events
     @before_event(Insert)
@@ -50,10 +50,20 @@ class Pomodoros(Document):
     async def pause(self):
         await self.set({Pomodoros.status: PomodoroStatusEnum.PAUSED})
 
+    async def resume(self):
+        if self.status == PomodoroStatusEnum.PAUSED:
+            await self.set({Pomodoros.status: PomodoroStatusEnum.STARTED})
+
     async def end(self):
-        if self.start_at + timedelta(minutes=self.duration) > vn_now():
+        if (
+            self.status == PomodoroStatusEnum.STARTED
+            and self.start_at + timedelta(minutes=self.duration) < vn_now()
+        ):
+            await self.set(
+                {Pomodoros.end_at: vn_now(), Pomodoros.status: PomodoroStatusEnum.COMPLETED}
+            )
+        else:
             raise HTTPException(status_code=400, detail="Invalid pomodoro section")
-        await self.set({Pomodoros.end_at: vn_now(), Pomodoros.status: PomodoroStatusEnum.COMPLETED})
 
     @staticmethod
     async def get_last_pomodoro(user_id: str) -> bool:

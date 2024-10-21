@@ -23,4 +23,4 @@ class GetPomodoroResponse(BaseModel):
 
 
 class PatchPomodoroPayload(BaseModel):
-    action: Literal[PomodoroStatusEnum.PAUSED, PomodoroStatusEnum.COMPLETED]
+    action: PomodoroStatusEnum
