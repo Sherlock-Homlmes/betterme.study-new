@@ -50,7 +50,7 @@ async def get_a_task(
     status_code=201,
 )
 async def create_a_task(task: Task, user: Users = Depends(auth_handler.auth_wrapper)):
-    task = TodoList(user_id=user["id"], **task.__dict__)
+    task = TodoList(**task.__dict__, user_id=user["id"])
     await task.insert()
     return task
 

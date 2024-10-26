@@ -2,6 +2,7 @@ client:
 --- BUGS ---
 - onboard light/dark theme fix
 --- FEATURES ---
+- better api fetch
 - use ts file which export from schemas(after 1)
 - user statistic
 - use pug
@@ -12,6 +13,7 @@ server:
 --- BUGS ---
 --- FEATURES ---
 - export ts from schemas(1)
+- better exception handler
 - user statistic
 --- REFACTOR ---
 - better schemas

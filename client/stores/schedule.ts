@@ -113,6 +113,10 @@ export const useSchedule = defineStore('schedule', {
       return state.timerState
     },
 
+    isWorking(): boolean {
+      return this.getCurrentItem.type === Section.work
+    },
+
     isRunning: (state) => {
       return [TimerState.RUNNING, TimerState.PAUSED].includes(state.timerState)
     },

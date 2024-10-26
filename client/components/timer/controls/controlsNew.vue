@@ -2,23 +2,57 @@
 import { PlayerPlayIcon, PlayerPauseIcon, PlayerStopIcon, PlayerTrackNextIcon } from 'vue-tabler-icons'
 import { ButtonImportance, ButtonTheme } from '~~/components/base/types/button'
 import CButton from '~~/components/base/uiButton.vue'
-import { TimerState, useSchedule } from '~~/stores/schedule'
+import { TimerState, useSchedule, ScheduleItemType } from '~~/stores/schedule'
+import {usePomodoroStore} from '~~/stores/pomodoros'
+import {useAuthStore} from '~~/stores/auth'
+import { computed } from 'vue'
 
+const {getCurrentUserSetting} = useAuthStore()
+const {startPomodoro, pomodoroSectionAction, deletePomodoro} = usePomodoroStore()
 const scheduleStore = useSchedule()
 
-const reset = () => {
-  if (scheduleStore.timerState !== TimerState.COMPLETED && scheduleStore.getSchedule[0].timeElapsed > scheduleStore.getSchedule[0].length) {
+const reset = async () => {
+  if (
+    scheduleStore.timerState !== TimerState.COMPLETED
+    && scheduleStore.getSchedule[0].timeElapsed > scheduleStore.getSchedule[0].length
+  ) {
+    if(scheduleStore.isWorking) await deletePomodoro()
     scheduleStore.timerState = TimerState.COMPLETED
   } else {
+    if(scheduleStore.isWorking) await deletePomodoro()
     scheduleStore.timerState = TimerState.STOPPED
   }
 }
 
-const playPause = () => {
+const playPause = async () => {
+  if(scheduleStore.isWorking){
+    if(scheduleStore.timerState === TimerState.STOPPED){
+      try{
+        await startPomodoro()
+      }
+      catch(e){
+        await deletePomodoro()
+        await startPomodoro()
+      }
+    }
+    else if(scheduleStore.timerState === TimerState.RUNNING){
+      await pomodoroSectionAction("PAUSED")
+    }
+    else if(scheduleStore.timerState === TimerState.PAUSED){
+      await pomodoroSectionAction("STARTED")
+    }
+    else if(scheduleStore.timerState === TimerState.COMPLETED){
+      await pomodoroSectionAction("COMPLETED")
+      await advance()
+      return
+    }
+  }
+
   scheduleStore.timerState = scheduleStore.timerState === TimerState.RUNNING ? TimerState.PAUSED : TimerState.RUNNING
 }
 
-const advance = () => {
+const advance = async () => {
+  if(scheduleStore.isWorking && scheduleStore.timerState !== TimerState.COMPLETED) await deletePomodoro()
   scheduleStore.timerState = TimerState.STOPPED
   scheduleStore.advance()
 }
@@ -53,6 +87,7 @@ const advance = () => {
     </CButton>
 
     <CButton
+      v-if='scheduleStore.timerState !== TimerState.COMPLETED'
       :aria-label="$t('controls.advance')"
       circle
       inner-class="p-5"

@@ -141,7 +141,7 @@ export const useSettings = defineStore('settings', {
       }
     },
     eventLoggingEnabled: false,
-    sectionEndAction: SectionEndAction.Skip,
+    sectionEndAction: SectionEndAction.Stop,
     currentTimer: TimerType.Approximate,
     adaptiveTicking: {
       enabled: true,

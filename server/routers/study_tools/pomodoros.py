@@ -61,7 +61,8 @@ async def get_a_pomodoro(
 async def create_a_pomodoro(
     user: Users = Depends(auth_handler.auth_wrapper),
 ) -> GetPomodoroResponse:
-    if await Pomodoros.check_available_to_create(user_id=user["id"]):
+    last_pomodoro = await Pomodoros.get_last_pomodoro(user_id=user["id"])
+    if not last_pomodoro or last_pomodoro.check_available_to_create():
         pomodoro = Pomodoros(user_id=user["id"])
         await pomodoro.insert()
         return pomodoro
@@ -70,7 +71,7 @@ async def create_a_pomodoro(
 
 @router.patch(
     "/pomodoros/{pomodoro_id}",
-    description="create a pomodoro",
+    description="update a pomodoro",
     status_code=204,
 )
 async def update_a_pomodoro(
@@ -83,12 +84,26 @@ async def update_a_pomodoro(
         Pomodoros.user_id == user["id"],
     ):
         if payload.action == PomodoroStatusEnum.STARTED:
-            await pomodoro.resume()
+            await pomodoro.resume_section()
         elif payload.action == PomodoroStatusEnum.PAUSED:
-            await pomodoro.pause()
+            await pomodoro.pause_section()
         elif payload.action == PomodoroStatusEnum.COMPLETED:
-            await pomodoro.end()
+            await pomodoro.end_section()
 
         return
 
     raise HTTPException(status_code=404, detail="Pomodoro not exist")
+
+
+@router.delete(
+    "/pomodoros/_last",
+    description="delete a pomodoro",
+    status_code=204,
+)
+async def delete_a_pomodoro(
+    user: Users = Depends(auth_handler.auth_wrapper),
+):
+    last_pomodoro = await Pomodoros.get_last_pomodoro(user_id=user["id"])
+    if last_pomodoro:
+        await last_pomodoro.delete_section()
+    return

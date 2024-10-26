@@ -7,6 +7,7 @@ export const useAuthStore = createGlobalState( () => {
 
   // state
   const userInfo = ref()
+  const userSetting = ref()
   const isAuthOnceLocalStorage = useStorage('isAuthOnce', false, undefined, { serializer: StorageSerializers.boolean })
 
 
@@ -15,13 +16,20 @@ export const useAuthStore = createGlobalState( () => {
   const isAuthOnce = computed(()=>isAuth.value || isAuthOnceLocalStorage.value)
 
   // actions
-  const   getCurrentUser = async() =>  {
+  const getCurrentUser = async() =>  {
         const response = await fetchWithAuth(`${API_URL}/auth/self`);
         if (response.ok) userInfo.value = await response.json();
         else{
           userInfo.value = null
           throw new Error('Fail to get self');
         } 
+    }
+
+  const getCurrentUserSetting = async() =>  {
+      if(!userInfo.value) throw new Error('Not authenticate yet')
+        const response = await fetchWithAuth(`${API_URL}/users/self/settings`);
+        if (response.ok) userSetting.value = await response.json();
+        else throw new Error('Fail to get self setting');
     }
 
   const   loginByDiscord = async(code: string) => {
@@ -47,6 +55,7 @@ export const useAuthStore = createGlobalState( () => {
     isAuthOnce,
     // actions
     getCurrentUser,
+    getCurrentUserSetting,
     loginByDiscord
   }
 })

@@ -32,10 +32,10 @@ class Pomodoros(Document):
     status: Optional[PomodoroStatusEnum] = PomodoroStatusEnum.STARTED
 
     ### Settings
-    class Settings:
-        use_cache = True
-        cache_expiration_time = datetime.timedelta(seconds=1)
-        cache_capacity = 100
+    # class Settings:
+    #     use_cache = True
+    #     cache_expiration_time = datetime.timedelta(seconds=1)
+    #     cache_capacity = 100
 
     ### Events
     @before_event(Insert)
@@ -47,14 +47,14 @@ class Pomodoros(Document):
         self.start_at = vn_now()
 
     ### Functions
-    async def pause(self):
+    async def pause_section(self):
         await self.set({Pomodoros.status: PomodoroStatusEnum.PAUSED})
 
-    async def resume(self):
+    async def resume_section(self):
         if self.status == PomodoroStatusEnum.PAUSED:
             await self.set({Pomodoros.status: PomodoroStatusEnum.STARTED})
 
-    async def end(self):
+    async def end_section(self):
         if (
             self.status == PomodoroStatusEnum.STARTED
             and self.start_at + timedelta(minutes=self.duration) < vn_now()
@@ -65,12 +65,15 @@ class Pomodoros(Document):
         else:
             raise HTTPException(status_code=400, detail="Invalid pomodoro section")
 
+    async def delete_section(self):
+        if self.status != PomodoroStatusEnum.COMPLETED:
+            await self.delete()
+            return
+        raise HTTPException(status_code=400, detail="Can not delete completed pomodoro section")
+
     @staticmethod
     async def get_last_pomodoro(user_id: str) -> bool:
         return await Pomodoros.find_one(Pomodoros.user_id == user_id, sort=[("start_at", -1)])
 
-    @staticmethod
-    async def check_available_to_create(user_id: str) -> bool:
-        if last_pomodoro := await Pomodoros.get_last_pomodoro(user_id):
-            return last_pomodoro.status == PomodoroStatusEnum.COMPLETED
-        return True
+    def check_available_to_create(self) -> bool:
+        return self.status == PomodoroStatusEnum.COMPLETED
