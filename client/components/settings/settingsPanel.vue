@@ -27,7 +27,7 @@ import { Control } from '~~/components/settings/types/settingsItem'
 import { useAuthStore } from '~~/stores/auth'
 
 const runtimeConfig = useRuntimeConfig()
-const {isAuth} = useAuthStore()!
+const {isAuth, userSetting} = useAuthStore()!
 const eventsStore = useEvents()
 const openPanels = useOpenPanels()
 const mobileSettingsStore = useMobileSettings()
@@ -89,8 +89,8 @@ notificationsStore.updateEnabled()
             />
             <Divider />
             <SettingsItem :type="Control.Check" path="adaptiveTicking.enabled" />
-            <SettingsItem v-if="isWeb" :type="Control.Check" path="timerControls.enableKeyboardShortcuts" />
-            <SettingsItem :type="Control.Option" path="sectionEndAction" :choices="{continue: 'continue', stop: 'stop', skip: 'skip'}" />
+            <!-- <SettingsItem v-if="isWeb" :type="Control.Check" path="timerControls.enableKeyboardShortcuts" /> -->
+            <!-- <SettingsItem :type="Control.Option" path="sectionEndAction" :choices="{continue: 'continue', stop: 'stop', skip: 'skip'}" /> -->
 
             <template v-if="isWeb">
               <Divider />

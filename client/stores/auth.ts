@@ -7,13 +7,45 @@ export const useAuthStore = createGlobalState( () => {
 
   // state
   const userInfo = ref()
-  const userSetting = ref()
+  const userSetting = ref({
+    "dark_mode": false,
+    "language": "en",
+    "theme_settings": {
+        "pomodoro_study": [
+            255,
+            107,
+            107
+        ],
+        "pomodoro_rest": [
+            244,
+            162,
+            97
+        ],
+        "pomodoro_long_rest": [
+            46,
+            196,
+            182
+        ],
+        "background": null
+    },
+    "pomodoro_settings": {
+        "pomodoro_study_time": 25,
+        "pomodoro_rest_time": 5,
+        "pomodoro_long_rest_time": 20,
+        "long_rest_time_interval": 3,
+        "auto_start_next_time": true,
+        "audio": null,
+        "custom_audio": null,
+        "show_progress_bar": false
+    }
+})
   const isAuthOnceLocalStorage = useStorage('isAuthOnce', false, undefined, { serializer: StorageSerializers.boolean })
 
 
   // getters
   const isAuth = computed(()=>!!userInfo.value)
   const isAuthOnce = computed(()=>isAuth.value || isAuthOnceLocalStorage.value)
+  const isDarkMode = computed(()=> userSetting ? userSetting.value.dark_mode : false)
 
   // actions
   const getCurrentUser = async() =>  {
@@ -53,6 +85,7 @@ export const useAuthStore = createGlobalState( () => {
     // getters
     isAuth,
     isAuthOnce,
+isDarkMode,
     // actions
     getCurrentUser,
     getCurrentUserSetting,

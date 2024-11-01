@@ -25,7 +25,7 @@ const TutorialView = defineAsyncComponent(() => import('@/components/tutorial/_t
 const settingsStore = useSettings()
 const mobileSettingsStore = useMobileSettings()
 const scheduleStore = useSchedule()
-const {userInfo,isAuth, getCurrentUser, isAuthOnce} = useAuthStore()
+const {userInfo, isAuth, getCurrentUser, getCurrentUserSetting, isAuthOnce} = useAuthStore()
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -87,6 +87,7 @@ const progressBarSchedules = computed(() => {
 
 onBeforeMount(async()=>{
   if(!isAuth.value) await getCurrentUser()
+  if(isAuth.value) await getCurrentUserSetting()
 })
 </script>
 

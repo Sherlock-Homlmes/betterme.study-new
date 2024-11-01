@@ -2,6 +2,13 @@ import { computed, ref } from 'vue'
 import { useRuntimeConfig } from '#app'
 import { StorageSerializers, createGlobalState, useStorage } from '@vueuse/core'
 
+export enum TaskStatus {
+  TODO = "TO-DO",
+  DOING = "DOING",
+  DONE = "DONE",
+  EXPIRED = "EXPIRED"
+}
+
 export const useTaskStore = createGlobalState( () => {
   const API_URL = useRuntimeConfig().public.API_URL
 
@@ -37,21 +44,18 @@ export const useTaskStore = createGlobalState( () => {
     else throw new Error('abc?');
     }
 
-  const patchTask = async (id: string, title: string) =>  {
-    const response = await fetchWithAuth(`${API_URL}/todolist/${id}`,
+  const patchTask = async (taskId: string, change = {}) =>  {
+    if(_isEmpty(change)) return
+    const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`,
     {
       method: "PATCH",
-      body: JSON.stringify({
-        title: title,
-      }
-    )})
-    if (response.ok) await getTaskList()
-    else throw new Error('abc?');
+      body: JSON.stringify(change)})
+    if (!response.ok) throw new Error('abc?');
     }
 
-  const deleteTask = async (id: string) =>  {
-      const response = await fetchWithAuth(`${API_URL}/todolist/${id}`, {method: "DELETE"})
-      if (response.ok) await getTaskList()
+  const deleteTask = async (taskId: string) =>  {
+      const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {method: "DELETE"})
+      if (response.ok) tasks.value = tasks.value.filter(task => task.id !== taskId)
       else throw new Error('abc?');
       
     }

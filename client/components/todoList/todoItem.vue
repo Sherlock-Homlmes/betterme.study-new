@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { nextTick, type Ref, type PropType } from 'vue'
+import { nextTick, type Ref, type PropType, watch } from 'vue'
 import { MenuIcon, TrashIcon, PencilIcon } from 'vue-tabler-icons'
 import { ButtonImportance } from '../base/types/button'
 import { TaskState, useTasklist, type Task } from '~~/stores/tasklist'
+import { useTaskStore } from '~~/stores/todolist'
+import type TaskStatus from '~~/stores/todolist'
 import { useSettings, ColorMethod } from '~~/stores/settings'
 import Button from '~~/components/base/uiButton.vue'
+import ChangeTracker from '../../utils/changeTracker'
 
 // declare refs
 const editbox: Ref<HTMLInputElement | null> = ref(null)
 
+const changeTracker = new ChangeTracker()
 const tasksStore = useTasklist()
 const settingsStore = useSettings()
+const { patchTask, deleteTask } = useTaskStore()
 
 const props = defineProps({
   item: {
@@ -31,6 +36,7 @@ const props = defineProps({
     default: false
   }
 })
+changeTracker.track(props.item)
 
 const state = reactive({
   hovering: false,
@@ -40,19 +46,24 @@ const state = reactive({
 })
 
 const emit = defineEmits<{(event: 'input', checked: boolean) : void,
-  (event: 'update', newTitle: string) : void,
   (event: 'delete') : void,
   (event: 'dropstart', item: unknown) : void,
   (event: 'dropfinish', item: unknown) : void,
   (event: 'droptarget', item: unknown) : void
 }>()
 
+const handleEdit = (newValue: string) => {
+  if (isValid.value && props.item.title !== displayedTitle.value) props.item.title = newValue
+  state.editedTitle = null
+}
+
 const checked = computed({
   get () {
-    return props.item.state === TaskState.complete
+    return props.item.status === TaskStatus.DONE
   },
   set (newValue) {
-    emit('input', newValue)
+    if(newValue) props.item.status = TaskStatus.DONE
+    else props.item.status = TaskStatus.DOING
   }
 })
 const showReorder = computed(() => state.editing || (props.moveable && state.hovering))
@@ -86,18 +97,22 @@ const startDrag = (evt: DragEvent, item: Task) => {
   }
 }
 
-const handleEdit = (newValue: string) => {
-  if (isValid.value && props.item.title !== displayedTitle.value) {
-    emit('update', newValue)
-  }
-  state.editedTitle = null
-}
+// TODO: change to debounce watch
+watch(
+  () => props.item,
+  (newValue)=>{
+    const change = changeTracker.getChange(newValue)
+    patchTask(props.item.id, change)
+    changeTracker.track(newValue)
+  },
+  {deep: true}
+)
 </script>
 
 <template>
   <div
     class="relative flex flex-row items-center px-2 py-3 transition-all duration-200 border-l-8 rounded-md hover:shadow-sm border-themed md:py-2"
-    :class="[{ 'opacity-50 line-through italic': props.item.state === 2, 'cursor-move': showReorder, 'ring ring-themed': state.dragged || props.droptarget, 'bg-themed !text-white': props.manage && state.editing }, props.manage && state.editing ? 'bg-themed' : 'bg-surface-light dark:bg-surface-dark hover:shadow-md hover:ring-1 hover:ring-themed']"
+    :class="[{ 'opacity-50 line-through italic': props.item.status === TaskStatus.DONE, 'cursor-move': showReorder, 'ring ring-themed': state.dragged || props.droptarget, 'bg-themed !text-white': props.manage && state.editing }, props.manage && state.editing ? 'bg-themed' : 'bg-surface-light dark:bg-surface-dark hover:shadow-md hover:ring-1 hover:ring-themed']"
     :style="{ '--theme': settingsStore.getColor(props.item.section, ColorMethod.modern) }"
     draggable="true"
     @mouseenter="state.hovering = true"
@@ -137,7 +152,7 @@ const handleEdit = (newValue: string) => {
           class="-m-3 md:-m-2"
           inner-class="p-3 md:p-2"
           bg-class="ring-themed bg-themed"
-          @click="emit('delete')"
+          @click="deleteTask(props.item.id)"
         >
           <TrashIcon size="18" />
         </Button>

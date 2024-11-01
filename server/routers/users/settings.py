@@ -19,13 +19,17 @@ router = APIRouter(
 @router.get("/users/self/settings")
 async def get_user_setting(user: Users = Depends(auth_handler.auth_wrapper)):
     user_setting = await UserSettings.find_one(UserSettings.user.id == ObjectId(user["id"]))
+    # TODO: refactor
     del user_setting.user
     return user_setting
 
 
 @router.patch("/users/self/settings", status_code=204)
 async def update_user_setting(
-    user_setting: UserSetting, user: Users = Depends(auth_handler.auth_wrapper)
+    # TODO: refactor
+    user_setting: UserSetting,
+    #
+    user: Users = Depends(auth_handler.auth_wrapper),
 ):
     old_user_setting = await UserSettings.find_one(UserSettings.user.id == ObjectId(user["id"]))
     old_user_setting.update_value(**user_setting)

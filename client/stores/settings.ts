@@ -158,7 +158,7 @@ export const useSettings = defineStore('settings', {
       soundSet: SoundSet.Musical
     },
     timerControls: {
-      enableKeyboardShortcuts: true
+      enableKeyboardShortcuts: false
     },
     tasks: {
       enabled: false,

@@ -55,7 +55,7 @@ class Users(Document):
 # User setting
 class UserLanguageEnum(str, Enum):
     ENGLISH = "en"
-    VIET_NAM = "vi"
+    VIETNAMESE = "vi"
 
 
 class UserThemeSettings(BaseModel):
@@ -81,7 +81,7 @@ class UserPomodoroSettings(BaseModel):
 class UserSettings(Document):
     user: Link[Users]
     dark_mode: Optional[bool] = False
-    language: Optional[UserLanguageEnum] = UserLanguageEnum.ENGLISH
+    language: Optional[UserLanguageEnum] = UserLanguageEnum.VIETNAMESE
 
     theme_settings: Optional[UserThemeSettings] = UserThemeSettings()
     pomodoro_settings: Optional[UserPomodoroSettings] = UserPomodoroSettings()

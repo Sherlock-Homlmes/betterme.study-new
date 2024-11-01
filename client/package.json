@@ -43,6 +43,7 @@
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^9.22.0",
     "nuxt": "^3.10.3",
+    "nuxt-lodash": "^2.5.3",
     "postcss": "^8.4.35",
     "postcss-html": "^1.6.0",
     "sass": "^1.71.1",

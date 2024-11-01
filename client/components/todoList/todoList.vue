@@ -17,10 +17,12 @@ const openPanels = useOpenPanels()
 const settingsStore = useSettings()
 const tasklistStore = useTasklist()
 const scheduleStore = useSchedule()
-const { tasks, getTaskList, 
-    postTask,
-    patchTask,
-    deleteTask,
+const {
+  tasks,
+  getTaskList, 
+  postTask,
+  patchTask,
+  deleteTask,
  } = useTaskStore()
 
 onBeforeMount(async()=>{
@@ -38,22 +40,6 @@ const state = reactive({
   dropTarget: null as Task | null
 })
 
-const displayedTasks = computed(() => {
-  let tasks = tasklistStore.sortedTasks
-
-  // only return tasks from the current section type if the timer is running
-  if (scheduleStore.isRunning) {
-    tasks = tasks
-      .filter(task => task.section === scheduleStore.getCurrentItem.type)
-
-    // only show first few tasks in this section (according to settings)
-    if (settingsStore.tasks.maxActiveTasks > 0) {
-      tasks = tasks.slice(0, settingsStore.tasks.maxActiveTasks)
-    }
-  }
-
-  return tasks
-})
 
 const updateDropTarget = (item: unknown) => {
   if (['id', 'title', 'state'].every(key => Object.keys(item as Record<string, unknown>).includes(key))) {
@@ -97,9 +83,6 @@ const handleDrop = () => {
         :item="task"
         :droptarget="task === state.dropTarget"
         moveable
-        @input="(isCompleted) => 0"
-        @update="newTitle => patchTask(task.id, newTitle)"
-        @delete="deleteTask(task.id)"
         @dropstart="state.draggedItem = task, state.dragging = true"
         @dropfinish="handleDrop"
         @droptarget="updateDropTarget"

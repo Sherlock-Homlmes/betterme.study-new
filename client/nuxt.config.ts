@@ -122,9 +122,21 @@ export default defineNuxtConfig({
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@vueuse/nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
     // '@nuxtjs/sitemap'
+    "nuxt-lodash"
   ],
+  lodash: {
+    prefix: "_",
+    prefixSkip: ["string"],
+    upperAfterPrefix: false,
+    exclude: ["map"],
+    alias: [
+      ["camelCase", "stringToCamelCase"], // => stringToCamelCase
+      ["kebabCase", "stringToKebab"], // => stringToKebab
+      ["isDate", "isLodashDate"], // => _isLodashDate
+    ],
+  },
 
   /** Modules that need to be transpiled */
   // transpileDependencies: ['vuex-persist'],

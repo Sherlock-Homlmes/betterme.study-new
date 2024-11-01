@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { useSettings } from '~~/stores/settings'
+import { computed } from 'vue'
+import { useAuthStore } from '~~/stores/auth'
+
 
 if (!process.server) {
   useHead({
@@ -36,16 +38,18 @@ if (!process.server) {
   })
 }
 
-const settingsStore = useSettings()
-const isDarkMode = computed(() => settingsStore.visuals.darkMode)
+const {isDarkMode} = useAuthStore()!
 
-watch(isDarkMode, (newDarkMode) => {
-  useHead({
-    bodyAttrs: {
-      class: newDarkMode ? 'dark' : undefined
-    }
-  })
-})
+watch(
+  isDarkMode,
+  (newDarkMode) => {
+    useHead({
+      bodyAttrs: {
+        class: newDarkMode ? 'dark' : undefined
+      }
+    })
+  }
+)
 </script>
 
 <template>
