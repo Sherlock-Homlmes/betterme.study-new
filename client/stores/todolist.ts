@@ -60,6 +60,13 @@ export const useTaskStore = createGlobalState( () => {
       
     }
 
+  const moveTask = (task, newIndex: number) => {
+      const oldIndex = tasks.value.indexOf(task)
+      console.log(oldIndex, newIndex)
+      if (oldIndex < 0 || newIndex >= tasks.value.length) { return }
+      tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0])
+    }
+
   return {
     // state
     tasks,
@@ -70,5 +77,6 @@ export const useTaskStore = createGlobalState( () => {
     postTask,
     patchTask,
     deleteTask,
+moveTask,
   }
 })

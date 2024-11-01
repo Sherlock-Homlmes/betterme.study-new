@@ -23,6 +23,7 @@ const {
   postTask,
   patchTask,
   deleteTask,
+moveTask,
  } = useTaskStore()
 
 onBeforeMount(async()=>{
@@ -49,8 +50,8 @@ const updateDropTarget = (item: unknown) => {
 
 const handleDrop = () => {
   // move `draggedItem` around `dropTarget`
-  const newIndex = tasklistStore.tasks.indexOf(state.dropTarget as Task)
-  tasklistStore.moveItem(state.draggedItem as Task, newIndex)
+  const newIndex = tasks.value.indexOf(state.dropTarget as Task)
+  moveTask(state.draggedItem, newIndex)
 
   // reset drag-and-drop variables
   state.draggedItem = null
