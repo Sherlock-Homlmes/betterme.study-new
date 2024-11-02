@@ -3,7 +3,6 @@ import { computed, defineAsyncComponent } from 'vue'
 import { useSettings } from '~~/stores/settings'
 import OptionGroup from '~~/components/base/optionGroup.vue'
 import { Control } from '~~/components/settings/types/settingsItem'
-import { useAuthStore } from '~~/stores/auth'
 
 const controls : Record<Control, unknown> = {
   check: defineAsyncComponent(() => import('~~/components/base/uiToggle.vue')),
@@ -14,7 +13,6 @@ const controls : Record<Control, unknown> = {
   empty: null
 }
 const settingsStore = useSettings()
-const {userSetting} = useAuthStore()!
 
 type NestedKeyOf<ObjectType extends object> =
   {[Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object

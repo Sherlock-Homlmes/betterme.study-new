@@ -7,7 +7,7 @@ import { TimerType, useSettings } from '~~/stores/settings'
 import { useAuthStore } from '~~/stores/auth'
 
 const settingsStore = useSettings()
-const {isDarkMode, userSetting} = useAuthStore()!
+const {isDarkMode, userSettings} = useAuthStore()!
 
 const currentTheme = computed(() => isDarkMode.value ? 'dark' : 'light')
 const currentTimer = computed(() => settingsStore.currentTimer as string)
@@ -19,7 +19,7 @@ const currentTimer = computed(() => settingsStore.currentTimer as string)
       <BrightnessDownIcon :size="42" />
     </OnboardingHeader>
 
-    <OptionGroup :value="currentTheme" :choices="{ 'light': 'Light', 'dark': 'Dark' }" translation-key="tutorials.onboarding.pages.2.theme.options" class="w-full" @input="(newValue) => userSetting.value.darkMode = (newValue === 'dark')" />
+    <OptionGroup :value="currentTheme" :choices="{ 'light': 'Light', 'dark': 'Dark' }" translation-key="tutorials.onboarding.pages.2.theme.options" class="w-full" @input="(newValue) => userSettings.value.darkMode = (newValue === 'dark')" />
 
     <OnboardingHeader :text="$t('tutorials.onboarding.pages.2.display.heading')">
       <DeviceWatchIcon :size="42" />

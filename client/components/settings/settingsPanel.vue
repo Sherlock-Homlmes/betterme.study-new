@@ -19,6 +19,7 @@ import { useMobileSettings } from '~~/stores/platforms/mobileSettings'
 
 import ControlButton from '~~/components/base/uiButton.vue'
 import SettingsItem from '~~/components/settings/settingsItem.vue'
+import SettingsItemV2 from '~~/components/settings/settingsItemV2.vue'
 import Divider from '~~/components/base/uiDivider.vue'
 import { useEvents } from '~~/stores/events'
 import { useOpenPanels } from '~~/stores/openpanels'
@@ -27,7 +28,7 @@ import { Control } from '~~/components/settings/types/settingsItem'
 import { useAuthStore } from '~~/stores/auth'
 
 const runtimeConfig = useRuntimeConfig()
-const {isAuth, userSetting} = useAuthStore()!
+const {isAuth, userSettings} = useAuthStore()!
 const eventsStore = useEvents()
 const openPanels = useOpenPanels()
 const mobileSettingsStore = useMobileSettings()
@@ -158,6 +159,7 @@ notificationsStore.updateEnabled()
             <SettingsItem :type="Control.Empty" path="visuals.theme" />
             <ThemeSettings />
             <SettingsItem :type="Control.Check" path="visuals.darkMode" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
             <Divider />
             <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
             <Divider />

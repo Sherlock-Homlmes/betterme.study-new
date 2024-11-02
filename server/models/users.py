@@ -58,12 +58,13 @@ class UserLanguageEnum(str, Enum):
     VIETNAMESE = "vi"
 
 
-class UserThemeSettings(BaseModel):
-    pomodoro_study: List[int] = Field(default=[255, 107, 107], max_length=3, min_length=3)
-    pomodoro_rest: List[int] = Field(default=[244, 162, 97], max_length=3, min_length=3)
-    pomodoro_long_rest: List[int] = Field(default=[46, 196, 182], max_length=3, min_length=3)
+class UserVisualSettings(BaseModel):
+    pomodoro_study_color: List[int] = Field(default=[255, 107, 107], max_length=3, min_length=3)
+    pomodoro_rest_color: List[int] = Field(default=[244, 162, 97], max_length=3, min_length=3)
+    pomodoro_long_rest_color: List[int] = Field(default=[46, 196, 182], max_length=3, min_length=3)
 
     background: Optional[str] = None
+    dark_mode: Optional[bool] = False
 
 
 class UserPomodoroSettings(BaseModel):
@@ -80,14 +81,7 @@ class UserPomodoroSettings(BaseModel):
 
 class UserSettings(Document):
     user: Link[Users]
-    dark_mode: Optional[bool] = False
     language: Optional[UserLanguageEnum] = UserLanguageEnum.VIETNAMESE
 
-    theme_settings: Optional[UserThemeSettings] = UserThemeSettings()
+    visuals: Optional[UserVisualSettings] = UserVisualSettings()
     pomodoro_settings: Optional[UserPomodoroSettings] = UserPomodoroSettings()
-
-    def update_value(self, user_setting):
-        pass
-        # self.pomodoro_study_time = user_setting.pomodoro_study_time
-        # self.pomodoro_rest_time = user_setting.pomodoro_rest_time
-        # self.pomodoro_long_rest_time = user_setting.pomodoro_long_rest_time

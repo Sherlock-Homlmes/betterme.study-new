@@ -3,12 +3,13 @@ from bson.objectid import ObjectId
 
 # libraries
 from fastapi import APIRouter, Depends
+from beanie.odm.operators.update.general import Set
 
 # local
 from routers.authentication import auth_handler
 
 from models import UserSettings, Users
-from .schemas import UserSetting
+from .schemas import PatchUserSetting
 
 router = APIRouter(
     tags=["Users"],
@@ -27,11 +28,10 @@ async def get_user_setting(user: Users = Depends(auth_handler.auth_wrapper)):
 @router.patch("/users/self/settings", status_code=204)
 async def update_user_setting(
     # TODO: refactor
-    user_setting: UserSetting,
+    new_user_setting: PatchUserSetting,
     #
     user: Users = Depends(auth_handler.auth_wrapper),
 ):
     old_user_setting = await UserSettings.find_one(UserSettings.user.id == ObjectId(user["id"]))
-    old_user_setting.update_value(**user_setting)
-    await old_user_setting.save()
+    await old_user_setting.update(Set(new_user_setting.model_dump(mode="json", exclude_none=True)))
     return

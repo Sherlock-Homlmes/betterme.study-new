@@ -105,7 +105,7 @@ watch(
     patchTask(props.item.id, change)
     changeTracker.track(newValue)
   },
-  {deep: true}
+  {deep: true, immediate: true}
 )
 </script>
 

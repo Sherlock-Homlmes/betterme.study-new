@@ -25,10 +25,7 @@ export const useTaskStore = createGlobalState( () => {
         else throw new Error('abc?');
         tasks.value = tasks.value.map((task)=>({
           ...task,
-          "priority": 0,
           "section": "work",
-          "state": 2,
-          "keepOnScreen": true,
         }))
     }
 

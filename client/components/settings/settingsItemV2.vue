@@ -14,7 +14,7 @@ const controls : Record<Control, unknown> = {
   empty: null
 }
 const settingsStore = useSettings()
-const {userSetting} = useAuthStore()!
+const {userSettings, isDarkMode} = useAuthStore()
 
 type NestedKeyOf<ObjectType extends object> =
   {[Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
@@ -39,43 +39,13 @@ const emit = defineEmits<{(event: 'input', value: unknown): void }>()
 
 const value = computed({
   get () {
-    if (props.type === Control.Empty) {
-      return null
-    }
-
-    let candidate = settingsStore.$state
-    const pathSplit = props.path.split('.')
-
-    for (let i = 0; i < pathSplit.length; i++) {
-      candidate = (candidate as any)[pathSplit[i]] as any || null // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (candidate === undefined) {
-        break
-      }
-    }
-
-    if (typeof candidate === 'string' || typeof candidate === 'number' || typeof candidate === 'boolean') {
-      return candidate
-    } else {
-      return null
-    }
+    if (props.type === Control.Empty) return null
+    return _get(userSettings.value, props.path, null)
   },
 
   set (newValue) {
-    if (props.type === Control.Empty) {
-      return
-    }
-
-    const patchObj = {}
-    let current: Record<string, unknown> = patchObj
-
-    const splitPath = props.path.split('.')
-    for (let i = 0; i < splitPath.length; i++) {
-      current[splitPath[i]] = i === splitPath.length - 1 ? newValue : {}
-      current = current[splitPath[i]] as Record<string, unknown>
-    }
-
-    settingsStore.$patch(patchObj)
-    emit('input', newValue)
+    if (props.type === Control.Empty) return
+    _set(userSettings.value, props.path, newValue)
   }
 })
 

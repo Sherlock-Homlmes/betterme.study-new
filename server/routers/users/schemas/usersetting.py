@@ -1,7 +1,11 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
+from models.users import UserVisualSettings, UserLanguageEnum, UserPomodoroSettings
 
-class UserSetting(BaseModel):
-    pomodoro_study_time: int = Field(default=25, ge=1)
-    pomodoro_rest_time: int = Field(default=5, ge=1)
-    pomodoro_long_rest_time: int = Field(default=20, ge=1)
+
+class PatchUserSetting(BaseModel):
+    language: Optional[UserLanguageEnum] = None
+    visuals: Optional[UserVisualSettings] = None
+    pomodoro_settings: Optional[UserPomodoroSettings] = None

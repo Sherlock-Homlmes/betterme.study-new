@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '~~/stores/auth'
 
+const {isDarkMode} = useAuthStore()!
 
 if (!process.server) {
   useHead({
@@ -17,7 +18,12 @@ if (!process.server) {
     ],
     meta: [
       { name: 'theme-color', content: '#F87171' }
-    ]
+    ],
+    bodyAttrs: {
+      class: {
+        'dark': () => isDarkMode.value
+      }
+    }
   })
 
   onMounted(() => {
@@ -38,18 +44,6 @@ if (!process.server) {
   })
 }
 
-const {isDarkMode} = useAuthStore()!
-
-watch(
-  isDarkMode,
-  (newDarkMode) => {
-    useHead({
-      bodyAttrs: {
-        class: newDarkMode ? 'dark' : undefined
-      }
-    })
-  }
-)
 </script>
 
 <template>
