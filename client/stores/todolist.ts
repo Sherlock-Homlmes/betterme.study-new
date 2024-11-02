@@ -33,12 +33,11 @@ export const useTaskStore = createGlobalState( () => {
     }
 
   const postTask = async (title: string) =>  {
+    const index = (Math.max(...tasks.value.map(task => task.index)) ?? 0) + 1
     const response = await fetchWithAuth(`${API_URL}/todolist`,
     {
       method: "POST",
-      body: JSON.stringify({
-        title: title,
-      }
+      body: JSON.stringify({title, index}
     )})
     if (response.ok) await getTaskList()
     else throw new Error('abc?');
@@ -62,8 +61,8 @@ export const useTaskStore = createGlobalState( () => {
 
   const moveTask = (task, newIndex: number) => {
       const oldIndex = tasks.value.indexOf(task)
-      console.log(oldIndex, newIndex)
-      if (oldIndex < 0 || newIndex >= tasks.value.length) { return }
+      if (oldIndex < 0 || newIndex >= tasks.value.length) return
+      [tasks.value[oldIndex].index, tasks.value[newIndex].index] = [tasks.value[newIndex].index, tasks.value[oldIndex].index]
       tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0])
     }
 

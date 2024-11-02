@@ -26,7 +26,10 @@ router = APIRouter(
 async def get_list_of_task(
     user: Users = Depends(auth_handler.auth_wrapper),
 ) -> List[GetTaskResponse]:
-    return await TodoList.find(TodoList.user_id == user["id"]).to_list()
+    return await TodoList.find(
+        TodoList.user_id == user["id"],
+        sort=("index", 1),
+    ).to_list()
 
 
 @router.get(
