@@ -114,24 +114,11 @@ notificationsStore.updateEnabled()
               <SettingsItem :type="Control.Check" path="mobile.notifications.persistent" />
             </template>
 
-            <Divider />
-
-            <!-- TODO: remove -->
-            <SettingsItem :type="Control.Check" path="tasks.enabled" />
-            <SettingsItem
-              :type="Control.Number"
-              path="tasks.maxActiveTasks"
-              :min="1"
-              :max="15"
-            />
-            <SettingsItem :type="Control.Check" path="tasks.removeCompletedTasks" />
-
-            <SettingsItem :type="Control.Check" path="reset" />
           </div>
 
           <!-- Schedule -->
           <div v-else-if="state.activeTab === 2" :key="2" class="settings-tab">
-            <SettingsItem :type="Control.Number" path="schedule.longPauseInterval" :min="1" :max="10" />
+            <SettingsItemV2 :type="Control.Number" path="pomodoro_settings.long_rest_time_interval" :min="1" :max="10" />
             <Divider />
 
             <SettingsItem
@@ -145,9 +132,9 @@ notificationsStore.updateEnabled()
                 @input="(newPreset) => settingsStore.applyPreset(newPreset)"
               />
             </SettingsItem>
-            <SettingsItem :type="Control.Time" path="schedule.lengths.work" :min-ms="5000" />
-            <SettingsItem :type="Control.Time" path="schedule.lengths.shortpause" :min-ms="5000" />
-            <SettingsItem :type="Control.Time" path="schedule.lengths.longpause" :min-ms="5000" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_study_time" :min="5" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_rest_time" :min="1" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_long_rest_time" :min="1" />
             <div class="flex flex-row items-center px-3 py-4 space-x-2 rounded-lg ring-inset ring ring-primary bg-primary/20 dark:bg-gray-700 dark:text-gray-100">
               <InfoIcon />
               <span v-text="$t('settings.scheduleMinTime')" />
@@ -158,23 +145,11 @@ notificationsStore.updateEnabled()
           <div v-else-if="state.activeTab === 3" :key="3" class="settings-tab">
             <SettingsItem :type="Control.Empty" path="visuals.theme" />
             <ThemeSettings />
-            <SettingsItem :type="Control.Check" path="visuals.darkMode" />
             <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
             <Divider />
-            <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
-            <Divider />
-            <SettingsItem :type="Control.Check" path="schedule.visibility.enabled" />
-            <SettingsItem :type="Control.Check" path="schedule.visibility.showSectionType" :disabled="!settingsStore.schedule.visibility.enabled" />
-            <SettingsItem
-              :type="Control.Number"
-              path="schedule.numScheduleEntries"
-              :min="2"
-              :max="5"
-              :disabled="!settingsStore.schedule.visibility.enabled"
-            />
-            <Divider />
-            <SettingsItem :type="Control.Check" path="performance.showProgressBar" />
-            <SettingsItem v-if="isWeb" :type="Control.Check" path="pageTitle.useTickEmoji" />
+            <!-- <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" /> -->
+            <SettingsItemV2 :type="Control.Option" path="visuals.timer_show" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.show_progress_bar" />
             <!-- TODO Audio volume control -->
           </div>
 

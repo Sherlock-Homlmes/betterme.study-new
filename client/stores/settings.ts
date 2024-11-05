@@ -197,6 +197,7 @@ export const useSettings = defineStore('settings', {
     getAdaptiveTickRate: (state) => {
       if (state.adaptiveTicking.enabled && state.adaptiveTicking.registeredHidden !== null) {
         // fetch settings for the current timer style
+        // TODO: check state.currentTimer
         const timerSettings = TickMultipliers[state.currentTimer]
         const tickVersion = state.adaptiveTicking.registeredHidden ? 'hidden' : 'visible'
 

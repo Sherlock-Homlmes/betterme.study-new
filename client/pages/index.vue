@@ -25,7 +25,7 @@ const TutorialView = defineAsyncComponent(() => import('@/components/tutorial/_t
 const settingsStore = useSettings()
 const mobileSettingsStore = useMobileSettings()
 const scheduleStore = useSchedule()
-const {userInfo, isAuth, getCurrentUser, getCurrentUserSetting, isAuthOnce} = useAuthStore()
+const {userInfo, isAuth, getCurrentUser, getCurrentUserSetting, isAuthOnce, userSettings} = useAuthStore()
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -102,6 +102,7 @@ onBeforeMount(async()=>{
 
     <!-- Progress bar -->
     <TransitionGroup name="progress-transition" tag="div" :duration="1000">
+      <!-- TODO: check this scheduleStore -->
       <TimerProgress
         v-for="(scheduleItem, index) in progressBarSchedules"
         :key="scheduleItem.id"
@@ -119,12 +120,14 @@ onBeforeMount(async()=>{
       }"
     >
       <AppBar />
+      <p>{{scheduleStore.getCurrentItem.timeElapsed}}</p> 
+      <p>{{scheduleStore.getCurrentItem.length}}</p> 
       <TimerSwitch
         key="timerswitch"
         :time-elapsed="scheduleStore.getCurrentItem.timeElapsed"
         :time-original="scheduleStore.getCurrentItem.length"
         :timer-state="scheduleStore.timerState"
-        :timer-widget="settingsStore.currentTimer"
+        :timer-widget="userSettings.visuals.timer_show"
         class="flex-grow"
         @tick="state.timeString = $event"
       />

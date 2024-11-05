@@ -22,7 +22,7 @@ class PomodoroStatusEnum(str, Enum):
 
 class Pomodoros(Document):
     user_id: str
-    duration: Optional[int] = Field(ge=5, lt=180, default=None)
+    duration: Optional[int] = Field(ge=5 * 60, lt=180 * 60, default=None)
     # tasks: Optional[List[Link[TodoList]]]
     tasks: Optional[List[str]] = Field(max_items=10, default=[])
 
@@ -57,7 +57,7 @@ class Pomodoros(Document):
     async def end_section(self):
         if (
             self.status == PomodoroStatusEnum.STARTED
-            and self.start_at + timedelta(minutes=self.duration) < vn_now()
+            and self.start_at + timedelta(seconds=self.duration) < vn_now()
         ):
             await self.set(
                 {Pomodoros.end_at: vn_now(), Pomodoros.status: PomodoroStatusEnum.COMPLETED}

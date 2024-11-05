@@ -14,10 +14,10 @@ const props = defineProps({
   }
 })
 
-const timeToObject = (timeInMs: number) => {
+const timeToObject = (timeInSecond: number) => {
   return {
-    min: Math.floor(timeInMs / 1000 / 60),
-    sec: Math.floor((timeInMs / 1000)) % 60
+    min: Math.floor(timeInSecond / 60),
+    sec: timeInSecond % 60
   }
 }
 
@@ -27,7 +27,7 @@ const errorState = reactive({
   sec: false
 })
 
-const innerValueMs = computed(() => innerValue.min * 60 * 1000 + innerValue.sec * 1000)
+const innerValueSeconds = computed(() => innerValue.min * 60 + innerValue.sec)
 
 const emit = defineEmits({
   input (value: number) {
@@ -38,7 +38,7 @@ const emit = defineEmits({
 // Emit 'input' if innerValue changes
 watch(innerValue, (newValue) => {
   if (newValue.min >= 0 && newValue.sec >= 0 && !(newValue.min === 0 && newValue.sec === 0)) {
-    emit('input', innerValueMs.value)
+    emit('input', innerValueSeconds.value)
   }
 })
 

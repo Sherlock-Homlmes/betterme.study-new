@@ -10,7 +10,7 @@ const settingsStore = useSettings()
 const {isDarkMode, userSettings} = useAuthStore()!
 
 const currentTheme = computed(() => isDarkMode.value ? 'dark' : 'light')
-const currentTimer = computed(() => settingsStore.currentTimer as string)
+const currentTimer = computed(() => userSettings.value.visuals.timer_show)
 </script>
 
 <template>
@@ -25,6 +25,6 @@ const currentTimer = computed(() => settingsStore.currentTimer as string)
       <DeviceWatchIcon :size="42" />
     </OnboardingHeader>
 
-    <OptionGroup :value="currentTimer" :choices="{ 'traditional': 'Traditional', 'approximate': 'Approximate', 'percentage': 'Percentage' }" translation-key="settings.values.currentTimer" class="w-full" @input="(newValue) => settingsStore.currentTimer = newValue as TimerType" />
+    <OptionGroup :value="currentTimer" :choices="{ 'traditional': 'Traditional', 'approximate': 'Approximate', 'percentage': 'Percentage' }" translation-key="settings.values.currentTimer" class="w-full" @input="(newValue) => userSettings.value.visuals.timer_show = newValue" />
   </OnboardingPage>
 </template>

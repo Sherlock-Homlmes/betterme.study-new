@@ -1,47 +1,50 @@
 import { computed, ref, watch } from 'vue'
 import { useRuntimeConfig } from '#app'
-import { StorageSerializers, createGlobalState, useStorage } from '@vueuse/core'
+import { StorageSerializers, createGlobalState, useStorage, useLocalStorage } from '@vueuse/core'
+import _ from "lodash";
 import ChangeTracker from '../utils/changeTracker'
 
 const changeTracker = new ChangeTracker()
+const defaultSettings = {
+    language: "vi",
+    visuals: {
+        pomodoro_study: [
+            255,
+            107,
+            107
+        ],
+        pomodoro_rest: [
+            244,
+            162,
+            97
+        ],
+        pomodoro_long_rest: [
+            46,
+            196,
+            182
+        ],
+        background: null,
+        dark_mode: false,
+        timer_show: "approximate" },
+      pomodoro_settings: {
+          pomodoro_study_time: 25 * 60,
+          pomodoro_rest_time: 5 * 60,
+          pomodoro_long_rest_time: 20 * 60,
+          long_rest_time_interval: 3,
+
+          auto_start_next_time: true,
+          audio: null,
+          custom_audio: null,
+          show_progress_bar: true
+      }
+  }
 
 export const useAuthStore = createGlobalState( () => {
   const API_URL = useRuntimeConfig().public.API_URL
 
   // state
   const userInfo = ref()
-  const userSettings = ref({
-    "language": "vi",
-    "visuals": {
-        "pomodoro_study": [
-            255,
-            107,
-            107
-        ],
-        "pomodoro_rest": [
-            244,
-            162,
-            97
-        ],
-        "pomodoro_long_rest": [
-            46,
-            196,
-            182
-        ],
-        "background": null,
-        "dark_mode": false,
-      },
-      "pomodoro_settings": {
-          "pomodoro_study_time": 25,
-          "pomodoro_rest_time": 5,
-          "pomodoro_long_rest_time": 20,
-          "long_rest_time_interval": 3,
-          "auto_start_next_time": true,
-          "audio": null,
-          "custom_audio": null,
-          "show_progress_bar": false
-      }
-  })
+  const userSettings = useStorage('userSettings', _.cloneDeep(defaultSettings), undefined, { serializer: StorageSerializers.object })
   changeTracker.track(userSettings.value)
   const isAuthOnceLocalStorage = useStorage('isAuthOnce', false, undefined, { serializer: StorageSerializers.boolean })
 

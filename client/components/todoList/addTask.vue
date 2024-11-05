@@ -39,7 +39,6 @@ watch(() => data.taskTitle, (newValue) => {
 
 const addTask = () => {
   postTask(data.taskTitle)
-  // tasksStore.newTask(data.taskTitle, null, 0, scheduleStore.getCurrentItem.type, data.taskState)
   data.taskTitle = ''
   const addtaskInputCast = addtaskInput.value as HTMLElement
 

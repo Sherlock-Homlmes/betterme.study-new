@@ -1,6 +1,7 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRuntimeConfig } from '#app'
-import { StorageSerializers, createGlobalState, useStorage } from '@vueuse/core'
+import { createGlobalState } from '@vueuse/core'
+import _ from "lodash";
 
 export enum TaskStatus {
   TODO = "TO-DO",
@@ -30,7 +31,9 @@ export const useTaskStore = createGlobalState( () => {
     }
 
   const postTask = async (title: string) =>  {
-    const index = (Math.max(...tasks.value.map(task => task.index)) ?? 0) + 1
+    const index = _.isEmpty(tasks.value)
+    ? 1
+    : Math.max(...tasks.value.map(task => task.index)) + 1
     const response = await fetchWithAuth(`${API_URL}/todolist`,
     {
       method: "POST",

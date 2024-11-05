@@ -58,20 +58,28 @@ class UserLanguageEnum(str, Enum):
     VIETNAMESE = "vi"
 
 
+class TimerShowEnum(str, Enum):
+    TRADITIONAL = "traditional"
+    APPROXIMATE = "approximate"
+    PERCENTAGE = "percentage"
+
+
 class UserVisualSettings(BaseModel):
     pomodoro_study_color: List[int] = Field(default=[255, 107, 107], max_length=3, min_length=3)
     pomodoro_rest_color: List[int] = Field(default=[244, 162, 97], max_length=3, min_length=3)
     pomodoro_long_rest_color: List[int] = Field(default=[46, 196, 182], max_length=3, min_length=3)
+
+    timer_show: TimerShowEnum = TimerShowEnum.APPROXIMATE
 
     background: Optional[str] = None
     dark_mode: Optional[bool] = False
 
 
 class UserPomodoroSettings(BaseModel):
-    pomodoro_study_time: Optional[int] = Field(default=25, ge=5, lt=180)
-    pomodoro_rest_time: Optional[int] = Field(default=5, ge=1)
-    pomodoro_long_rest_time: Optional[int] = Field(default=20, ge=1)
-    long_rest_time_interval: Optional[int] = Field(default=3, ge=1, lt=11)
+    pomodoro_study_time: Optional[int] = Field(default=25 * 60, ge=5 * 60, le=180 * 60)
+    pomodoro_rest_time: Optional[int] = Field(default=5 * 60, ge=1 * 60)
+    pomodoro_long_rest_time: Optional[int] = Field(default=20 * 60, ge=1 * 60)
+    long_rest_time_interval: Optional[int] = Field(default=3, ge=1, le=10)
 
     auto_start_next_time: Optional[bool] = True
     audio: Optional[str] = None
