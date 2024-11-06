@@ -142,7 +142,7 @@ export const useSettings = defineStore('settings', {
     },
     eventLoggingEnabled: false,
     sectionEndAction: SectionEndAction.Stop,
-    currentTimer: TimerType.Approximate,
+    currentTimer: TimerType.Traditional,
     adaptiveTicking: {
       enabled: true,
       baseTickRate: 1000,

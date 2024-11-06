@@ -120,8 +120,6 @@ onBeforeMount(async()=>{
       }"
     >
       <AppBar />
-      <p>{{scheduleStore.getCurrentItem.timeElapsed}}</p> 
-      <p>{{scheduleStore.getCurrentItem.length}}</p> 
       <TimerSwitch
         key="timerswitch"
         :time-elapsed="scheduleStore.getCurrentItem.timeElapsed"
