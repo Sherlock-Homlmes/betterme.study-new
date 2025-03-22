@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CoffeeIcon, BrandDiscordIcon, BrandTwitterIcon, BrandFacebookIcon, BrandRedditIcon } from 'vue-tabler-icons'
+import { NewsIcon, BrandDiscordIcon, BrandTwitterIcon, BrandFacebookIcon, BrandRedditIcon } from 'vue-tabler-icons'
 import { ButtonImportance } from '../base/types/button'
 import Button from '~~/components/base/uiButton.vue'
 import { AppPlatform } from '~~/platforms/platforms'
@@ -41,6 +41,19 @@ const mainStore = useMain()
         >
           <BrandDiscordIcon />
           <span v-text="$t('settings.about.discord_betterme')" />
+        </Button>
+        <Button
+          :importance="ButtonImportance.Filled"
+          link
+          dark
+          no-default-style
+          no-content-theme
+          href="https://betterme.news"
+          inner-class="flex flex-row items-center gap-1 text-black"
+          bg-class="bg-yellow-300"
+        >
+          <NewsIcon />
+          <span v-text="$t('settings.about.betterme_news')" />
         </Button>
         <!-- <Button
           v-if="!isMobile"

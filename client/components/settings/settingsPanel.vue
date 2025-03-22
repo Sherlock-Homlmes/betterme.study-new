@@ -28,7 +28,7 @@ import { Control } from '~~/components/settings/types/settingsItem'
 import { useAuthStore } from '~~/stores/auth'
 
 const runtimeConfig = useRuntimeConfig()
-const {isAuth, userSettings} = useAuthStore()!
+const {isAuth, loading} = useAuthStore()!
 const eventsStore = useEvents()
 const openPanels = useOpenPanels()
 const mobileSettingsStore = useMobileSettings()
@@ -62,7 +62,7 @@ notificationsStore.updateEnabled()
           <CloseIcon :aria-label="$t('settings.buttons.close')" />
         </ControlButton>
       </h1>
-      <div class="flex-grow overflow-y-auto">
+      <div v-if="!loading" class="flex-grow overflow-y-auto">
         <Transition tag="div" name="tab-transition" mode="out-in" class="relative w-full">
           <!-- Core settings -->
           <div v-if="state.activeTab === 1" :key="1" class="settings-tab">
@@ -89,13 +89,13 @@ notificationsStore.updateEnabled()
               @input="(newLang) => { settingsStore.lang = newLang }"
             />
             <Divider />
-            <SettingsItem :type="Control.Check" path="adaptiveTicking.enabled" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.enable_adaptive_ticking" />
             <!-- <SettingsItem v-if="isWeb" :type="Control.Check" path="timerControls.enableKeyboardShortcuts" /> -->
             <!-- <SettingsItem :type="Control.Option" path="sectionEndAction" :choices="{continue: 'continue', stop: 'stop', skip: 'skip'}" /> -->
 
             <template v-if="isWeb">
               <Divider />
-              <SettingsItem :type="Control.Check" path="permissions.audio" />
+              <SettingsItemV2 :type="Control.Check" path="visuals.enable_audio" />
               <SettingsItem
                 :type="Control.Check"
                 path="permissions.notifications"
@@ -113,7 +113,6 @@ notificationsStore.updateEnabled()
               <SettingsItem :type="Control.Check" path="mobile.notifications.sectionOver" />
               <SettingsItem :type="Control.Check" path="mobile.notifications.persistent" />
             </template>
-
           </div>
 
           <!-- Schedule -->
@@ -143,8 +142,8 @@ notificationsStore.updateEnabled()
 
           <!-- Display -->
           <div v-else-if="state.activeTab === 3" :key="3" class="settings-tab">
-            <SettingsItem :type="Control.Empty" path="visuals.theme" />
-            <ThemeSettings />
+            <!-- <SettingsItem :type="Control.Empty" path="visuals.theme" />
+            <ThemeSettings /> -->
             <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
             <Divider />
             <!-- <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" /> -->

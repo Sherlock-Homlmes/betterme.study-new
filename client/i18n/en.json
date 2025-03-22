@@ -61,7 +61,7 @@
         "load": "Load"
       }
     },
-    "scheduleMinTime": "The minimum allowed time is 5 seconds",
+    "scheduleMinTime": "The minimum allowed time is 5 minutes",
     "about": {
       "madeby": "Made by A Tăng",
       "source": "Source code",
@@ -69,9 +69,29 @@
       "supportBody": "Join Betterme Discord study community to communicate with other people and unlock more new features!",
       "mobileSupport": "Due to the rules enforced by the Google Play Store, I cannot show you any links inside the mobile app to donate to the project.",
       "share": "or share the app on social media:",
-      "discord_betterme": "Discord Betterme"
+      "discord_betterme": "Discord Betterme",
+      "betterme_news": "Betterme.news"
     },
     "values": {
+      "pomodoro_settings": {
+        "long_rest_time_interval": {
+          "_title": "Long Break interval",
+          "_description": ""
+        },
+        "pomodoro_study_time":{
+            "_title": "Work",
+            "_description": ""
+        },
+        "pomodoro_rest_time":{
+            "_title": "Break",
+            "_description": ""
+        },
+        "pomodoro_long_rest_time":{
+            "_title": "Long break",
+            "_description": ""
+
+        }
+      },
       "manage": {
         "_title": "Manage settings",
         "_description": "Download the current settings or load them from a file"
@@ -108,12 +128,6 @@
           "traditional": "12:34",
           "approximate": "13 minutes",
           "percentage": "50%"
-        }
-      },
-      "adaptiveTicking": {
-        "enabled": {
-          "_title": "Enable adaptive ticking",
-          "_description": "Timer will tick less frequently while in the background"
         }
       },
       "sectionEndAction": {
@@ -176,17 +190,7 @@
           }
         }
       },
-      "performance": {
-        "showProgressBar": {
-          "_title": "Show progress bar",
-          "_description": "Show progress behind timer"
-        }
-      },
       "permissions": {
-        "audio": {
-          "_title": "Play audio",
-          "_description": "Let the app play sounds when a section is over"
-        },
         "notifications": {
           "_title": "Notification permissions",
           "_description": "Let the app send you notifications when a section is over"
@@ -235,14 +239,40 @@
         }
       },
       "visuals": {
+        "enable_audio": {
+          "_title": "Play audio",
+          "_description": "Let the app play sounds when a section is over"
+        },
         "theme": {
           "_title": "Theme settings",
           "_description": "Choose a set of predefined section colors or set your own",
           "custom": "Custom"
         },
-        "darkMode": {
+        "dark_mode": {
           "_title": "Enable dark mode",
           "_description": "Less bright, just as productive"
+        },
+        "show_progress_bar": {
+          "_title": "Show progress bar",
+          "_description": "Show progress behind timer"
+        },
+        "timer_show": {
+          "_title": "Timer style",
+          "_description": "",
+        "_values": {
+          "traditional": "Traditional",
+          "approximate": "Approximate",
+          "percentage": "Percentage"
+        },
+        "_valueDescription": {
+          "traditional": "12:34",
+          "approximate": "13 minutes",
+          "percentage": "50%"
+        }
+        },
+        "enable_adaptive_ticking":{
+          "_title": "Enable adaptive ticking",
+          "_description": "Timer will tick less frequently while in the background"
         }
       },
       "reset": {

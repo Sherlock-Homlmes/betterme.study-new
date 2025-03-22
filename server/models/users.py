@@ -73,6 +73,13 @@ class UserVisualSettings(BaseModel):
 
     background: Optional[str] = None
     dark_mode: Optional[bool] = False
+    show_progress_bar: Optional[bool] = False
+
+    enable_audio: Optional[bool] = True
+    enable_audio: Optional[bool] = True
+    enable_adaptive_ticking: Optional[bool] = True
+    auto_start_next_time: Optional[bool] = True
+    custom_audios: Optional[List[str]] = None
 
 
 class UserPomodoroSettings(BaseModel):
@@ -80,11 +87,6 @@ class UserPomodoroSettings(BaseModel):
     pomodoro_rest_time: Optional[int] = Field(default=5 * 60, ge=1 * 60)
     pomodoro_long_rest_time: Optional[int] = Field(default=20 * 60, ge=1 * 60)
     long_rest_time_interval: Optional[int] = Field(default=3, ge=1, le=10)
-
-    auto_start_next_time: Optional[bool] = True
-    audio: Optional[str] = None
-    custom_audio: Optional[str] = None
-    show_progress_bar: Optional[bool] = False
 
 
 class UserSettings(Document):

@@ -61,7 +61,7 @@
         "load": "Tải"
       }
     },
-    "scheduleMinTime": "Thời gian tối thiểu cho phép là 5 giây",
+    "scheduleMinTime": "Thời gian tối thiểu cho phép là 5 phút",
     "about": {
       "madeby": "Được tạo bởi A Tăng",
       "source": "Mã nguồn",
@@ -69,10 +69,29 @@
       "supportBody": "Tham gia cộng đồng học tập Betterme để  kết nối với mọi người và mở khóa thêm nhiều tính năng nhé!",
       "mobileSupport": "Do những quy định được áp dụng bởi Google Play Store, tôi không thể hiển thị cho bạn bất kỳ liên kết nào bên trong ứng dụng di động để quyên góp cho dự án.",
       "share": "hoặc chia sẻ ứng dụng trên mạng xã hội:",
-      "discord_betterme": "Discord Betterme"
+      "discord_betterme": "Discord Betterme",
+      "betterme_news": "Betterme.news"
     },
     "values": {
-"manage": {
+      "pomodoro_settings": {
+        "long_rest_time_interval": {
+          "_title": "Khoảng thời gian nghỉ dài",
+          "_description": ""
+        },
+        "pomodoro_study_time":{
+          "_title": "Làm việc",
+          "_description": ""
+        },
+        "pomodoro_rest_time":{
+          "_title": "Nghỉ",
+          "_description": ""
+        },
+        "pomodoro_long_rest_time":{
+          "_title": "Nghỉ dài",
+          "_description": ""
+        }
+      },
+    "manage": {
       "_title": "Quản lý cài đặt",
       "_description": "Tải xuống cài đặt hiện tại hoặc tải chúng từ một tệp"
     },
@@ -131,10 +150,6 @@
       }
     },
     "schedule": {
-      "longPauseInterval": {
-        "_title": "Khoảng thời gian nghỉ dài",
-        "_description": ""
-      },
       "numScheduleEntries": {
         "_title": "Số mục trong lịch trình",
         "_description": ""
@@ -161,18 +176,6 @@
           "default": "25 phút làm việc, 5 phút nghỉ",
           "debug": "Cho mục đích gỡ lỗi",
           "custom": "Đã được thiết lập bởi bạn"
-        },
-        "work": {
-          "_title": "Làm việc",
-          "_description": ""
-        },
-        "shortpause": {
-          "_title": "Nghỉ",
-          "_description": ""
-        },
-        "longpause": {
-          "_title": "Nghỉ dài",
-          "_description": ""
         }
       }
     },
@@ -183,10 +186,6 @@
       }
     },
     "permissions": {
-      "audio": {
-        "_title": "Phát âm thanh",
-        "_description": "Cho phép ứng dụng phát ra âm thanh khi một phần kết thúc"
-      },
       "notifications": {
         "_title": "Quyền thông báo",
         "_description": "Cho phép ứng dụng gửi cho bạn thông báo khi một phần kết thúc"
@@ -235,14 +234,40 @@
       }
     },
     "visuals": {
+      "enable_audio": {
+        "_title": "Phát âm thanh",
+        "_description": "Cho phép ứng dụng phát ra âm thanh khi một phần kết thúc"
+      },
       "theme": {
         "_title": "Thiết lập chủ đề",
         "_description": "Chọn một bộ màu phần được xác định trước hoặc thiết lập của riêng bạn",
         "custom": "Tùy chỉnh"
       },
-      "darkMode": {
+      "dark_mode": {
         "_title": "Kích hoạt chế độ tối",
         "_description": "Ít sáng hơn, vẫn hiệu quả như vậy"
+      },
+      "show_progress_bar": {
+        "_title": "Hiển thị thanh tiến trình",
+        "_description": "Hiển thị tiến độ phía sau bộ hẹn giờ"
+      },
+      "timer_show": {
+        "_title": "Kiểu bộ hẹn giờ",
+        "_description": "",
+        "_values": {
+          "traditional": "Truyền thống",
+          "approximate": "Xấp xỉ",
+          "percentage": "Phần trăm"
+        },
+        "_valueDescription": {
+          "traditional": "12:34",
+          "approximate": "13 phút",
+          "percentage": "50%"
+        }
+      },
+      "enable_adaptive_ticking":{
+        "_title": "Kích hoạt tích tắc thích ứng",
+        "_description": "Bộ hẹn giờ sẽ tích tắc ít thường xuyên hơn khi ở chế độ nền"
       }
     },
     "reset": {
@@ -312,9 +337,9 @@
   "timerpreset": {
     "_values": {
       "default": "Mặc định",
-      "easy": "Người mới bắt đầu",
+      "easy": "Người mới",
       "advanced": "Nâng cao",
-      "workaholic": "Người nghiện công việc"
+      "workaholic": "Con nghiện công việc"
     },
     "_valueDescription": {
       "default": "Các giá trị Pomodoro mặc định.",

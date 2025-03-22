@@ -45,7 +45,6 @@ getLoginUrl()
           <span v-text="$t('loginBy.discord')" />
         </Button>
         <Button
-          v-if="!isMobile"
           :importance="ButtonImportance.Filled"
           link
           dark
@@ -57,16 +56,6 @@ getLoginUrl()
         >
           <BrandGoogleIcon />
           <span v-text="$t('loginBy.google')" />
-        </Button>
-        <Button
-          v-else
-          :importance="ButtonImportance.Filled"
-          disabled
-          inner-class="flex flex-row items-center gap-1 text-black"
-          bg-class="bg-yellow-300"
-        >
-          <CoffeeIcon />
-          <span v-text="$t('settings.about.support')" />
         </Button>
       </div>
     </div>

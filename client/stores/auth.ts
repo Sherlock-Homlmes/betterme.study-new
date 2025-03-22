@@ -47,7 +47,7 @@ export const useAuthStore = createGlobalState( () => {
   const userSettings = useStorage('userSettings', _.cloneDeep(defaultSettings), undefined, { serializer: StorageSerializers.object })
   changeTracker.track(userSettings.value)
   const isAuthOnceLocalStorage = useStorage('isAuthOnce', false, undefined, { serializer: StorageSerializers.boolean })
-
+  const loading = ref(true)
 
   // getters
   const isAuth = computed(()=>!!userInfo.value)
@@ -113,7 +113,8 @@ export const useAuthStore = createGlobalState( () => {
   return {
     // state
     userInfo,
-  userSettings,
+    userSettings,
+    loading,
     // getters
     isAuth,
     isAuthOnce,

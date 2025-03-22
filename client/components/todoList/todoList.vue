@@ -19,11 +19,11 @@ const tasklistStore = useTasklist()
 const scheduleStore = useSchedule()
 const {
   tasks,
-  getTaskList, 
+  getTaskList,
   postTask,
   patchTask,
   deleteTask,
-moveTask,
+  moveTask,
  } = useTaskStore()
 
 onBeforeMount(async()=>{
@@ -41,11 +41,8 @@ const state = reactive({
   dropTarget: null as Task | null
 })
 
-
-const updateDropTarget = (item: unknown) => {
-  if (['id', 'title', 'state'].every(key => Object.keys(item as Record<string, unknown>).includes(key))) {
-    state.dropTarget = item as Task
-  }
+const updateDropTarget = (item: Task) => {
+  state.dropTarget = item
 }
 
 const handleDrop = () => {

@@ -62,7 +62,13 @@ export const useTaskStore = createGlobalState( () => {
   const moveTask = (task, newIndex: number) => {
       const oldIndex = tasks.value.indexOf(task)
       if (oldIndex < 0 || newIndex >= tasks.value.length) return
-      [tasks.value[oldIndex].index, tasks.value[newIndex].index] = [tasks.value[newIndex].index, tasks.value[oldIndex].index]
+      console.log(oldIndex, newIndex, tasks.value[oldIndex], tasks.value[newIndex], tasks.value[oldIndex].index, tasks.value[newIndex].index )
+
+      const swapProp = (obj1, obj2, prop) => {
+        if (!(prop in obj1) || !(prop in obj2)) return;
+        [obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
+      }
+      swapProp(tasks.value[oldIndex], tasks.value[newIndex], 'index')
       tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0])
     }
 
@@ -76,6 +82,6 @@ export const useTaskStore = createGlobalState( () => {
     postTask,
     patchTask,
     deleteTask,
-moveTask,
+    moveTask,
   }
 })

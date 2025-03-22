@@ -47,5 +47,19 @@ const settingsStore = useSettings()
     >
       <SettingsIcon class="inline-block" />
     </CButton>
+
+    <!-- <CButton
+      circle
+      :aria-label="$t('test')"
+      :importance="ButtonImportance.Filled"
+      :theme="ButtonTheme.Neutral"
+      class="h-11"
+      no-content-theme
+      no-padding
+      inner-class="p-1"
+      @click="togglePictureInPicture"
+    >
+      test
+    </CButton> -->
   </div>
 </template>
