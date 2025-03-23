@@ -1,48 +1,58 @@
 <script setup lang="ts">
-import { XIcon as CloseIcon, AdjustmentsIcon as TabIconGeneral, AlarmIcon as TabIconSchedule, ArtboardIcon as TabIconVisuals, InfoCircleIcon as InfoIcon, InfoCircleIcon as TabIconAbout } from 'vue-tabler-icons'
+import {
+	XIcon as CloseIcon,
+	AdjustmentsIcon as TabIconGeneral,
+	AlarmIcon as TabIconSchedule,
+	ArtboardIcon as TabIconVisuals,
+	InfoCircleIcon as InfoIcon,
+	InfoCircleIcon as TabIconAbout,
+} from "vue-tabler-icons";
 
-import { ButtonImportance } from '../base/types/button'
-import ButtonControl from '~~/components/base/uiButton.vue'
-import ThemeSettings from './theme/themeSettings.vue'
-import OptionGroup from '@/components/base/optionGroup.vue'
-import TabHeader from '@/components/settings/panel/tabHeader.vue'
-import ExportButton from '@/components/settings/exportButton.vue'
-import ImportButton from '@/components/settings/importButton.vue'
+import { ButtonImportance } from "../base/types/button";
+import ButtonControl from "~~/components/base/uiButton.vue";
+import ThemeSettings from "./theme/themeSettings.vue";
+import OptionGroup from "@/components/base/optionGroup.vue";
+import TabHeader from "@/components/settings/panel/tabHeader.vue";
+import ExportButton from "@/components/settings/exportButton.vue";
+import ImportButton from "@/components/settings/importButton.vue";
 
-import AboutTab from '~~/components/settings/aboutTab.vue'
-import LoginTab from '~~/components/settings/loginTab.vue'
+import AboutTab from "~~/components/settings/aboutTab.vue";
+import LoginTab from "~~/components/settings/loginTab.vue";
 
-import presetTimers from '~~/assets/settings/timerPresets'
-import { useSettings } from '~~/stores/settings'
-import { NotificationPermission, useNotifications } from '~~/stores/notifications'
-import { useMobileSettings } from '~~/stores/platforms/mobileSettings'
+import presetTimers from "~~/assets/settings/timerPresets";
+import { useSettings } from "~~/stores/settings";
+import {
+	NotificationPermission,
+	useNotifications,
+} from "~~/stores/notifications";
+import { useMobileSettings } from "~~/stores/platforms/mobileSettings";
 
-import ControlButton from '~~/components/base/uiButton.vue'
-import SettingsItem from '~~/components/settings/settingsItem.vue'
-import SettingsItemV2 from '~~/components/settings/settingsItemV2.vue'
-import Divider from '~~/components/base/uiDivider.vue'
-import { useEvents } from '~~/stores/events'
-import { useOpenPanels } from '~~/stores/openpanels'
-import { Control } from '~~/components/settings/types/settingsItem'
+import ControlButton from "~~/components/base/uiButton.vue";
+import SettingsItem from "~~/components/settings/settingsItem.vue";
+import SettingsItemV2 from "~~/components/settings/settingsItemV2.vue";
+import Divider from "~~/components/base/uiDivider.vue";
+import { useEvents } from "~~/stores/events";
+import { useOpenPanels } from "~~/stores/openpanels";
+import { Control } from "~~/components/settings/types/settingsItem";
 
-import { useAuthStore } from '~~/stores/auth'
+import { useAuthStore } from "~~/stores/auth";
 
-const runtimeConfig = useRuntimeConfig()
-const {isAuth, loading} = useAuthStore()!
-const eventsStore = useEvents()
-const openPanels = useOpenPanels()
-const mobileSettingsStore = useMobileSettings()
-const notificationsStore = useNotifications()
-const settingsStore = useSettings()
-const isWeb = computed(() => runtimeConfig.public.PLATFORM === 'web')
-const isMobile = computed(() => runtimeConfig.public.PLATFORM === 'mobile')
+const runtimeConfig = useRuntimeConfig();
+const { isAuth, loading } = useAuthStore()!;
+const eventsStore = useEvents();
+const openPanels = useOpenPanels();
+const mobileSettingsStore = useMobileSettings();
+const notificationsStore = useNotifications();
+const settingsStore = useSettings();
+const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
+const isMobile = computed(() => runtimeConfig.public.PLATFORM === "mobile");
 
 const state = reactive({
-  activeTab: 1,
-  resetConfirm: false
-})
+	activeTab: 1,
+	resetConfirm: false,
+});
 
-notificationsStore.updateEnabled()
+notificationsStore.updateEnabled();
 </script>
 
 <template>

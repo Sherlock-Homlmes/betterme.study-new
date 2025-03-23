@@ -2,20 +2,21 @@
 from dataclasses import dataclass
 
 # local
-from .base import dtbs
-db = dtbs['todolist']
 from users.study_tools.schemas import TodoList
+from .base import dtbs
+
+db = dtbs["todolist"]
+
 
 @dataclass
 class TodoListDB:
-
     @staticmethod
     def create(data: TodoList):
         db.insert_one(data.__dict__)
 
     @staticmethod
     def list_todo(user_id):
-        data = db.find({'user_id': user_id})
+        data = db.find({"user_id": user_id})
 
         result = []
         for dat in data:

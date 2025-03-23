@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
-import { Section, useSettings } from '~~/stores/settings'
+import { type PropType } from "vue";
+import { Section, useSettings } from "~~/stores/settings";
 
-const settingsStore = useSettings()
+const settingsStore = useSettings();
 
 const props = defineProps({
-  type: {
-    type: String as PropType<Section>,
-    required: true
-  },
-  active: {
-    type: Boolean,
-    default: false
-  }
-})
+	type: {
+		type: String as PropType<Section>,
+		required: true,
+	},
+	active: {
+		type: Boolean,
+		default: false,
+	},
+});
 
-const colour = computed(() => settingsStore.getColor(props.type))
+const colour = computed(() => settingsStore.getColor(props.type));
 </script>
 
 <template>

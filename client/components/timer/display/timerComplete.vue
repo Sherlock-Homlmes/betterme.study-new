@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CheckIcon as CompleteIcon } from 'vue-tabler-icons'
+import { CheckIcon as CompleteIcon } from "vue-tabler-icons";
 </script>
 
 <template>

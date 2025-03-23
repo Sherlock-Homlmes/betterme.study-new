@@ -1,358 +1,358 @@
 {
-  "support": {
-    "source": "Ver en GitHub",
-    "support": "Invítele un café al autor",
-    "share": {
-      "twitter": "Siga la aplicación en Twitter",
-      "facebook": "Comparta la aplicación en Facebook",
-      "reddit": "Comparta la aplicación en Reddit"
-    }
-  },
-  "section": {
-    "work": "Trabajo",
-    "shortpause": "Descanso",
-    "longpause": "Descanso Largo",
-    "wait": "Esperando"
-  },
-  "controls": {
-    "play": "Iniciar o pausar el temporizador",
-    "stop": "Restablecer temporizador",
-    "advance": "Ir a la siguiente sección"
-  },
-  "appbar": {
-    "settings": "Abrir ajustes",
-    "todo": "Abrir lista de tareas"
-  },
-  "timer": {
-    "approximate": {
-      "hours": "hora | horas",
-      "minutes": "minuto | minutos"
-    }
-  },
-  "settings": {
-    "heading": "Ajustes",
-    "tabs": {
-      "main": "Principal",
-      "timer": "Horario",
-      "display": "Vista",
-      "audio": "Audio",
-      "about": "Acerca de"
-    },
-    "buttons": {
-      "close": "Cerrar",
-      "reset": "Restablecer"
-    },
-    "reset": {
-      "title": "Restablecer ajustes",
-      "confirm": "Restablecer",
-      "cancel": "Cancelar"
-    },
-    "manage": {
-      "buttons": {
-        "save": "Guardar",
-        "load": "Cargar"
-      }
-    },
-    "scheduleMinTime": "El tiempo mínimo permitido es de 5 segundos",
-    "about": {
-      "madeby": "Hecho por Imre Gera",
-      "source": "Código fuente",
-      "support": "Apoye el proyecto",
-      "supportBody": "Desarrollo FocusTide en mi tiempo libre. ¡Significaría mucho para mí si pudiera ayudarme a seguir trabajando en él!",
-      "mobileSupport": "Debido a las reglas impuestas por la Google Play Store, no puedo mostrarle ningún enlace dentro de la aplicación móvil para donar al proyecto.",
-      "share": "o comparta la aplicación en redes sociales:"
-    },
-    "values": {
-      "manage": {
-        "_title": "Administrar ajustes",
-        "_description": "Descargar los ajustes actuales o cargarlos desde un archivo"
-      },
-      "mobile": {
-        "notifications": {
-          "sectionOver": {
-            "_title": "Sección sobre notificaciones",
-            "_description": "Mostrar una notificación cuando termine una sección"
-          },
-          "persistent": {
-            "_title": "Notificación persistente",
-            "_description": "Mostrar el progreso del temporizador actual"
-          }
-        }
-      },
-      "lang": {
-        "_title": "Idioma",
-        "_description": ""
-      },
-      "eventLoggingEnabled": {
-        "_title": "Activar registro de eventos",
-        "_description": ""
-      },
-      "currentTimer": {
-        "_title": "Estilo del temporizador",
-        "_description": "",
-        "_values": {
-          "traditional": "Tradicional",
-          "approximate": "Aproximado",
-          "percentage": "Porcentaje"
-        },
-        "_valueDescription": {
-          "traditional": "12:34",
-          "approximate": "13 minutos",
-          "percentage": "50%"
-        }
-      },
-      "adaptiveTicking": {
-        "enabled": {
-          "_title": "Activar tictac adaptativo",
-          "_description": "El temporizador avanzará con menos frecuencia mientras está en segundo plano"
-        }
-      },
-      "schedule": {
-        "longPauseInterval": {
-          "_title": "Intervalo de descanso largo",
-          "_description": ""
-        },
-        "numScheduleEntries": {
-          "_title": "Número de entradas en el horario",
-          "_description": ""
-        },
-        "visibility": {
-          "enabled": {
-            "_title": "Mostrar horario",
-            "_description": ""
-          },
-          "showSectionType": {
-            "_title": "Mostrar tipo de sesión en el horario",
-            "_description": "Muestra el tipo de sección actual bajo el horario"
-          }
-        },
-        "lengths": {
-          "_title": "Preajuste de horario",
-          "_description": "",
-          "_values": {
-            "default": "Por defecto",
-            "debug": "Depurar",
-            "custom": "Personalizado"
-          },
-          "_valueDescription": {
-            "default": "25 minutos de trabajo, 5 minutos de descanso",
-            "debug": "Para motivos de depuración",
-            "custom": "Establecido por usted"
-          },
-          "work": {
-            "_title": "Trabajo",
-            "_description": ""
-          },
-          "shortpause": {
-            "_title": "Descanso",
-            "_description": ""
-          },
-          "longpause": {
-            "_title": "Descanso largo",
-            "_description": ""
-          }
-        }
-      },
-      "performance": {
-        "showProgressBar": {
-          "_title": "Mostrar barra de progreso",
-          "_description": "Mostrar progreso detrás del temporizador"
-        }
-      },
-      "permissions": {
-        "audio": {
-          "_title": "Reproducir audio",
-          "_description": "Permitir que la aplicación reproduzca sonidos cuando una sección haya terminado"
-        },
-        "notifications": {
-          "_title": "Permisos de notificación",
-          "_description": "Permitir que la aplicación le envíe notificaciones cuando una sección haya terminado"
-        }
-      },
-      "audio": {
-        "volume": {
-          "_title": "Volumen del audio",
-          "_description": ""
-        },
-        "soundSet": {
-          "_title": "Sound set",
-          "_description": "Sonidos usados para las notificaciones",
-          "_values": {
-            "musical": "Musical"
-          },
-          "_valueDescription": {
-            "musical": "Los sonidos por defecto"
-          }
-        }
-      },
-      "timerControls": {
-        "enableKeyboardShortcuts": {
-          "_title": "Activar atajos de teclado",
-          "_description": "Iniciar/pausar el temporizador con la tecla de espacio"
-        }
-      },
-      "tasks": {
-        "enabled": {
-          "_title": "Activar lista de tareas",
-          "_description": "Administre su trabajo directamente desde la aplicación"
-        },
-        "maxActiveTasks": {
-          "_title": "Máximo de tareas activas a mostrar",
-          "_description": "Solo verá esta cantidad de tareas activas como máximo"
-        },
-        "removeCompletedTasks": {
-          "_title": "Eliminar tareas completadas",
-          "_description": "Las tareas completadas serán eliminadas cuando una nueva sección comience"
-        }
-      },
-      "pageTitle": {
-        "useTickEmoji": {
-          "_title": "Usar emoji de tick en el título",
-          "_description": "Mostrar ✔ en vez de \"hecho\""
-        }
-      },
-      "visuals": {
-        "theme": {
-          "_title": "Ajustes de tema",
-          "_description": "Elija un conjunto de colores predefinidos para la sección o establezca los suyos",
-          "custom": "Personalizado"
-        },
-        "darkMode": {
-          "_title": "Activar modo oscuro",
-          "_description": "Menos brillante, igual de productivo"
-        }
-      },
-      "reset": {
-        "_title": "Restablecer ajustes",
-        "_description": "Todos los ajustes serán restablecidos después de recargar la aplicación"
-      }
-    }
-  },
-  "notification": {
-    "action": {
-      "ready": "¡Vamos!"
-    },
-    "work": {
-      "title": "¡Hora de volver al trabajo!",
-      "body": "Su descanso ha terminado. Trabaja un poco más, luego descansa de nuevo."
-    },
-    "shortpause": {
-      "title": "Hora para un descanso",
-      "body": "Bien, ha ganado un breve descanso."
-    },
-    "longpause": {
-      "title": "¡Uf! ¡Más tiempo libre!",
-      "body": "Bueno, bueno. Después de trabajar tanto, merece un descanso más largo."
-    }
-  },
-  "error": {
-    "format_invalid": "Formato de entrada inválido",
-    "range_invalid": "El valor debe estar entre {min} y {max}",
-    "required": "Este campo debe ser completado",
-    "numeric": "El valor debe ser un número",
-    "min": "El valor debe ser como mínimo {min}",
-    "max": "El valor debe ser como mínimo {max}",
-    "time_format": "Tiempo formateado incorrectamente (MM:SS)",
-    "min_time": "El tiempo ingresado es demasiado corto",
-    "undefined": "Error indefinido"
-  },
-  "tasks": {
-    "title": "Tareas",
-    "empty": "Aún no hay tareas",
-    "manage": "Administrar",
-    "addPlaceholder": "Introduzca algo que tenga que hacer"
-  },
-  "ready": "Hecho",
-  "errorpage": {
-    "title": {
-      "crash": "La aplicación falló",
-      "notfound": "Esa página no existe",
-      "other": "Algo salió mal"
-    },
-    "action": {
-      "reset": "Restablecer la aplicación",
-      "reload": "Recargar la página",
-      "home": "Volver a la página principal",
-      "githubIssue": "Enviar un informe de error",
-      "githubDiscussion": "Preguntar a otros si tienen el mismo problema",
-      "twitter": "Escribir un tweet amistoso"
-    },
-    "showError": {
-      "main": "¡Muéstrame el mensaje de error!",
-      "sub": "Lo usaré para reportar un problema o preguntaré si otros lo experimentan también."
-    },
-    "suggestions": {
-      "primary": "Usted puede",
-      "secondary": "o si esos no ayudaron"
-    }
-  },
-  "timerpreset": {
-    "_values": {
-      "default": "Por defecto",
-      "easy": "Principiante",
-      "advanced": "Avanzado",
-      "workaholic": "Adicto/a al trabajo"
-    },
-    "_valueDescription": {
-      "default": "Los valores por defecto de Pomodoro.",
-      "easy": "Para aquellos que aún no ha probado la técnica Pomodoro.",
-      "advanced": "Trabaje un poco más eficazmente.",
-      "workaholic": "Para sesiones de trabajo largas."
-    },
-    "description": "{brief} \n {worklength} minutos de trabajo con una pausa corta de {splength} minutos y una pausa larga de {lplength} minutos después de cada {lpfreq} sesiones."
-  },
-  "tutorials": {
-    "onboarding": {
-      "pages": {
-        "0": {
-          "title": "¡Bienvenido/a FocusTide!",
-          "onboarding_invite": "Vamos a instalarlo/a por primera vez. Puede cambiar todo en el menú de ajustes más tarde.",
-          "heading": "Elija su idioma"
-        },
-        "1": {
-          "heading": "Establezca sus temporizadores",
-          "text": "Trabaje o tómese un descanso hasta que se acabe el temporizador. Luego proceda con su próximo temporizador."
-        },
-        "2": {
-          "theme": {
-            "heading": "Elija un tema",
-            "options": {
-              "_values": {
-                "light": "Claro",
-                "dark": "Oscuro"
-              },
-              "_valueDescription": {
-                "light": "",
-                "dark": ""
-              }
-            }
-          },
-          "display": {
-            "heading": "Elija una vista"
-          }
-        },
-        "3": {
-          "heading": "Recuerda",
-          "text": "Configure sus propios temporizadores, utilice la lista de tareas y notificaciones a su favor. ¡Revise el menú de ajustes para más oportunidades!"
-        },
-        "support": {
-          "heading": "Apoye el proyecto",
-          "text": "Si este proyecto te ha ayudado, considera invitar al autor un café. También puede encontrar el botón de apoyo en el menú de ajustes.",
-          "hint": "También puede encontrar opciones de asistencia en la página Configuración > Acerca de."
-        }
-      },
-      "buttons": {
-        "close": "Cerrar",
-        "start": "Iniciar tutorial",
-        "next": "Siguiente",
-        "support": "Apoye el proyecto"
-      }
-    },
-    "olddomain": {
-      "heading": "AnotherPomodoro es ahora FocusTide",
-      "warning": "Hemos detectado que es posible que procedas del antiguo dominio another-pomodoro.app, que expirará a finales de 2023.",
-      "action": "Por favor, actualice su marcador o hipervínculo a focustide.app.",
-      "button": "Ok"
-    }
-  }
+	"support": {
+		"source": "Ver en GitHub",
+		"support": "Invítele un café al autor",
+		"share": {
+			"twitter": "Siga la aplicación en Twitter",
+			"facebook": "Comparta la aplicación en Facebook",
+			"reddit": "Comparta la aplicación en Reddit"
+		}
+	},
+	"section": {
+		"work": "Trabajo",
+		"shortpause": "Descanso",
+		"longpause": "Descanso Largo",
+		"wait": "Esperando"
+	},
+	"controls": {
+		"play": "Iniciar o pausar el temporizador",
+		"stop": "Restablecer temporizador",
+		"advance": "Ir a la siguiente sección"
+	},
+	"appbar": {
+		"settings": "Abrir ajustes",
+		"todo": "Abrir lista de tareas"
+	},
+	"timer": {
+		"approximate": {
+			"hours": "hora | horas",
+			"minutes": "minuto | minutos"
+		}
+	},
+	"settings": {
+		"heading": "Ajustes",
+		"tabs": {
+			"main": "Principal",
+			"timer": "Horario",
+			"display": "Vista",
+			"audio": "Audio",
+			"about": "Acerca de"
+		},
+		"buttons": {
+			"close": "Cerrar",
+			"reset": "Restablecer"
+		},
+		"reset": {
+			"title": "Restablecer ajustes",
+			"confirm": "Restablecer",
+			"cancel": "Cancelar"
+		},
+		"manage": {
+			"buttons": {
+				"save": "Guardar",
+				"load": "Cargar"
+			}
+		},
+		"scheduleMinTime": "El tiempo mínimo permitido es de 5 segundos",
+		"about": {
+			"madeby": "Hecho por Imre Gera",
+			"source": "Código fuente",
+			"support": "Apoye el proyecto",
+			"supportBody": "Desarrollo FocusTide en mi tiempo libre. ¡Significaría mucho para mí si pudiera ayudarme a seguir trabajando en él!",
+			"mobileSupport": "Debido a las reglas impuestas por la Google Play Store, no puedo mostrarle ningún enlace dentro de la aplicación móvil para donar al proyecto.",
+			"share": "o comparta la aplicación en redes sociales:"
+		},
+		"values": {
+			"manage": {
+				"_title": "Administrar ajustes",
+				"_description": "Descargar los ajustes actuales o cargarlos desde un archivo"
+			},
+			"mobile": {
+				"notifications": {
+					"sectionOver": {
+						"_title": "Sección sobre notificaciones",
+						"_description": "Mostrar una notificación cuando termine una sección"
+					},
+					"persistent": {
+						"_title": "Notificación persistente",
+						"_description": "Mostrar el progreso del temporizador actual"
+					}
+				}
+			},
+			"lang": {
+				"_title": "Idioma",
+				"_description": ""
+			},
+			"eventLoggingEnabled": {
+				"_title": "Activar registro de eventos",
+				"_description": ""
+			},
+			"currentTimer": {
+				"_title": "Estilo del temporizador",
+				"_description": "",
+				"_values": {
+					"traditional": "Tradicional",
+					"approximate": "Aproximado",
+					"percentage": "Porcentaje"
+				},
+				"_valueDescription": {
+					"traditional": "12:34",
+					"approximate": "13 minutos",
+					"percentage": "50%"
+				}
+			},
+			"adaptiveTicking": {
+				"enabled": {
+					"_title": "Activar tictac adaptativo",
+					"_description": "El temporizador avanzará con menos frecuencia mientras está en segundo plano"
+				}
+			},
+			"schedule": {
+				"longPauseInterval": {
+					"_title": "Intervalo de descanso largo",
+					"_description": ""
+				},
+				"numScheduleEntries": {
+					"_title": "Número de entradas en el horario",
+					"_description": ""
+				},
+				"visibility": {
+					"enabled": {
+						"_title": "Mostrar horario",
+						"_description": ""
+					},
+					"showSectionType": {
+						"_title": "Mostrar tipo de sesión en el horario",
+						"_description": "Muestra el tipo de sección actual bajo el horario"
+					}
+				},
+				"lengths": {
+					"_title": "Preajuste de horario",
+					"_description": "",
+					"_values": {
+						"default": "Por defecto",
+						"debug": "Depurar",
+						"custom": "Personalizado"
+					},
+					"_valueDescription": {
+						"default": "25 minutos de trabajo, 5 minutos de descanso",
+						"debug": "Para motivos de depuración",
+						"custom": "Establecido por usted"
+					},
+					"work": {
+						"_title": "Trabajo",
+						"_description": ""
+					},
+					"shortpause": {
+						"_title": "Descanso",
+						"_description": ""
+					},
+					"longpause": {
+						"_title": "Descanso largo",
+						"_description": ""
+					}
+				}
+			},
+			"performance": {
+				"showProgressBar": {
+					"_title": "Mostrar barra de progreso",
+					"_description": "Mostrar progreso detrás del temporizador"
+				}
+			},
+			"permissions": {
+				"audio": {
+					"_title": "Reproducir audio",
+					"_description": "Permitir que la aplicación reproduzca sonidos cuando una sección haya terminado"
+				},
+				"notifications": {
+					"_title": "Permisos de notificación",
+					"_description": "Permitir que la aplicación le envíe notificaciones cuando una sección haya terminado"
+				}
+			},
+			"audio": {
+				"volume": {
+					"_title": "Volumen del audio",
+					"_description": ""
+				},
+				"soundSet": {
+					"_title": "Sound set",
+					"_description": "Sonidos usados para las notificaciones",
+					"_values": {
+						"musical": "Musical"
+					},
+					"_valueDescription": {
+						"musical": "Los sonidos por defecto"
+					}
+				}
+			},
+			"timerControls": {
+				"enableKeyboardShortcuts": {
+					"_title": "Activar atajos de teclado",
+					"_description": "Iniciar/pausar el temporizador con la tecla de espacio"
+				}
+			},
+			"tasks": {
+				"enabled": {
+					"_title": "Activar lista de tareas",
+					"_description": "Administre su trabajo directamente desde la aplicación"
+				},
+				"maxActiveTasks": {
+					"_title": "Máximo de tareas activas a mostrar",
+					"_description": "Solo verá esta cantidad de tareas activas como máximo"
+				},
+				"removeCompletedTasks": {
+					"_title": "Eliminar tareas completadas",
+					"_description": "Las tareas completadas serán eliminadas cuando una nueva sección comience"
+				}
+			},
+			"pageTitle": {
+				"useTickEmoji": {
+					"_title": "Usar emoji de tick en el título",
+					"_description": "Mostrar ✔ en vez de \"hecho\""
+				}
+			},
+			"visuals": {
+				"theme": {
+					"_title": "Ajustes de tema",
+					"_description": "Elija un conjunto de colores predefinidos para la sección o establezca los suyos",
+					"custom": "Personalizado"
+				},
+				"darkMode": {
+					"_title": "Activar modo oscuro",
+					"_description": "Menos brillante, igual de productivo"
+				}
+			},
+			"reset": {
+				"_title": "Restablecer ajustes",
+				"_description": "Todos los ajustes serán restablecidos después de recargar la aplicación"
+			}
+		}
+	},
+	"notification": {
+		"action": {
+			"ready": "¡Vamos!"
+		},
+		"work": {
+			"title": "¡Hora de volver al trabajo!",
+			"body": "Su descanso ha terminado. Trabaja un poco más, luego descansa de nuevo."
+		},
+		"shortpause": {
+			"title": "Hora para un descanso",
+			"body": "Bien, ha ganado un breve descanso."
+		},
+		"longpause": {
+			"title": "¡Uf! ¡Más tiempo libre!",
+			"body": "Bueno, bueno. Después de trabajar tanto, merece un descanso más largo."
+		}
+	},
+	"error": {
+		"format_invalid": "Formato de entrada inválido",
+		"range_invalid": "El valor debe estar entre {min} y {max}",
+		"required": "Este campo debe ser completado",
+		"numeric": "El valor debe ser un número",
+		"min": "El valor debe ser como mínimo {min}",
+		"max": "El valor debe ser como mínimo {max}",
+		"time_format": "Tiempo formateado incorrectamente (MM:SS)",
+		"min_time": "El tiempo ingresado es demasiado corto",
+		"undefined": "Error indefinido"
+	},
+	"tasks": {
+		"title": "Tareas",
+		"empty": "Aún no hay tareas",
+		"manage": "Administrar",
+		"addPlaceholder": "Introduzca algo que tenga que hacer"
+	},
+	"ready": "Hecho",
+	"errorpage": {
+		"title": {
+			"crash": "La aplicación falló",
+			"notfound": "Esa página no existe",
+			"other": "Algo salió mal"
+		},
+		"action": {
+			"reset": "Restablecer la aplicación",
+			"reload": "Recargar la página",
+			"home": "Volver a la página principal",
+			"githubIssue": "Enviar un informe de error",
+			"githubDiscussion": "Preguntar a otros si tienen el mismo problema",
+			"twitter": "Escribir un tweet amistoso"
+		},
+		"showError": {
+			"main": "¡Muéstrame el mensaje de error!",
+			"sub": "Lo usaré para reportar un problema o preguntaré si otros lo experimentan también."
+		},
+		"suggestions": {
+			"primary": "Usted puede",
+			"secondary": "o si esos no ayudaron"
+		}
+	},
+	"timerpreset": {
+		"_values": {
+			"default": "Por defecto",
+			"easy": "Principiante",
+			"advanced": "Avanzado",
+			"workaholic": "Adicto/a al trabajo"
+		},
+		"_valueDescription": {
+			"default": "Los valores por defecto de Pomodoro.",
+			"easy": "Para aquellos que aún no ha probado la técnica Pomodoro.",
+			"advanced": "Trabaje un poco más eficazmente.",
+			"workaholic": "Para sesiones de trabajo largas."
+		},
+		"description": "{brief} \n {worklength} minutos de trabajo con una pausa corta de {splength} minutos y una pausa larga de {lplength} minutos después de cada {lpfreq} sesiones."
+	},
+	"tutorials": {
+		"onboarding": {
+			"pages": {
+				"0": {
+					"title": "¡Bienvenido/a FocusTide!",
+					"onboarding_invite": "Vamos a instalarlo/a por primera vez. Puede cambiar todo en el menú de ajustes más tarde.",
+					"heading": "Elija su idioma"
+				},
+				"1": {
+					"heading": "Establezca sus temporizadores",
+					"text": "Trabaje o tómese un descanso hasta que se acabe el temporizador. Luego proceda con su próximo temporizador."
+				},
+				"2": {
+					"theme": {
+						"heading": "Elija un tema",
+						"options": {
+							"_values": {
+								"light": "Claro",
+								"dark": "Oscuro"
+							},
+							"_valueDescription": {
+								"light": "",
+								"dark": ""
+							}
+						}
+					},
+					"display": {
+						"heading": "Elija una vista"
+					}
+				},
+				"3": {
+					"heading": "Recuerda",
+					"text": "Configure sus propios temporizadores, utilice la lista de tareas y notificaciones a su favor. ¡Revise el menú de ajustes para más oportunidades!"
+				},
+				"support": {
+					"heading": "Apoye el proyecto",
+					"text": "Si este proyecto te ha ayudado, considera invitar al autor un café. También puede encontrar el botón de apoyo en el menú de ajustes.",
+					"hint": "También puede encontrar opciones de asistencia en la página Configuración > Acerca de."
+				}
+			},
+			"buttons": {
+				"close": "Cerrar",
+				"start": "Iniciar tutorial",
+				"next": "Siguiente",
+				"support": "Apoye el proyecto"
+			}
+		},
+		"olddomain": {
+			"heading": "AnotherPomodoro es ahora FocusTide",
+			"warning": "Hemos detectado que es posible que procedas del antiguo dominio another-pomodoro.app, que expirará a finales de 2023.",
+			"action": "Por favor, actualice su marcador o hipervínculo a focustide.app.",
+			"button": "Ok"
+		}
+	}
 }

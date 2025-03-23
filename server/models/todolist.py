@@ -1,13 +1,11 @@
 from pydantic import Field, validator
-from beanie import Document, Link
+from beanie import Document
 from typing import Optional, List
 import datetime
 
 from enum import Enum
 
 # local
-from .users import Users
-from .taskcategories import TaskCategories
 
 from other_modules.time_modules import vn_now
 

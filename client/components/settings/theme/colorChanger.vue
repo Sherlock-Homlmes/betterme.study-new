@@ -1,32 +1,41 @@
 <script setup lang="ts">
-import { HSLToRGB, RGBToHSL } from './colorUtils'
-import InputNumber from '~~/components/base/inputNumber.vue'
+import { HSLToRGB, RGBToHSL } from "./colorUtils";
+import InputNumber from "~~/components/base/inputNumber.vue";
 
 interface InputProps {
-  inputTheme: number[]
+	inputTheme: number[];
 }
 
-const props = defineProps<InputProps>()
+const props = defineProps<InputProps>();
 
-const propHSL = RGBToHSL(props.inputTheme[0], props.inputTheme[1], props.inputTheme[2])
-const inputHue = ref(propHSL[0] ?? 0)
-const inputSat = ref(propHSL[1] ?? 10)
-const inputLit = ref(60)
+const propHSL = RGBToHSL(
+	props.inputTheme[0],
+	props.inputTheme[1],
+	props.inputTheme[2],
+);
+const inputHue = ref(propHSL[0] ?? 0);
+const inputSat = ref(propHSL[1] ?? 10);
+const inputLit = ref(60);
 
-const previewColorRGB = computed(() => HSLToRGB(inputHue.value, inputSat.value, inputLit.value))
+const previewColorRGB = computed(() =>
+	HSLToRGB(inputHue.value, inputSat.value, inputLit.value),
+);
 
-const emit = defineEmits<{(e: 'input', rgbColors: number[]) : void }>()
+const emit = defineEmits<{ (e: "input", rgbColors: number[]): void }>();
 
 watch(previewColorRGB, (newRGB) => {
-  emit('input', newRGB)
-})
+	emit("input", newRGB);
+});
 
-watch(() => props.inputTheme, (newTheme) => {
-  const themeHSL = RGBToHSL(newTheme[0], newTheme[1], newTheme[2])
+watch(
+	() => props.inputTheme,
+	(newTheme) => {
+		const themeHSL = RGBToHSL(newTheme[0], newTheme[1], newTheme[2]);
 
-  inputHue.value = themeHSL[0]
-  inputSat.value = themeHSL[1]
-})
+		inputHue.value = themeHSL[0];
+		inputSat.value = themeHSL[1];
+	},
+);
 </script>
 
 <template>

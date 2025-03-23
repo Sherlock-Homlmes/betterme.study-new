@@ -7,7 +7,7 @@ from typing import Optional
 
 # local
 from . import router
-from .schemas import RegisterUser, RegisterUserResponse, LoginUser, LoginUserResponse
+from .schemas import RegisterUser, RegisterUserResponse, LoginUser
 from .jwt_auth import auth_handler
 from .google_oauth import GoogleOauth2
 from .facebook_oauth import FaceBookOauth2

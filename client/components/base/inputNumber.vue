@@ -1,54 +1,67 @@
 <script setup lang="ts">
 const props = defineProps({
-  value: {
-    type: Number,
-    required: true
-  },
-  min: {
-    type: Number,
-    default: -Infinity
-  },
-  max: {
-    type: Number,
-    default: Infinity
-  },
-  prefix: {
-    type: String,
-    default: ''
-  },
-  postfix: {
-    type: String,
-    default: ''
-  },
-  valueClass: {
-    type: String,
-    default: ''
-  }
-})
+	value: {
+		type: Number,
+		required: true,
+	},
+	min: {
+		type: Number,
+		default: -Infinity,
+	},
+	max: {
+		type: Number,
+		default: Infinity,
+	},
+	prefix: {
+		type: String,
+		default: "",
+	},
+	postfix: {
+		type: String,
+		default: "",
+	},
+	valueClass: {
+		type: String,
+		default: "",
+	},
+});
 
 const state = reactive({
-  value: JSON.parse(JSON.stringify(props.value)) as number
-})
+	value: JSON.parse(JSON.stringify(props.value)) as number,
+});
 
-watch(() => state.value, (newValue) => {
-  if (newValue !== null && newValue !== undefined && !isNaN(newValue) && isFinite(newValue) && newValue <= props.max && newValue >= props.min) {
-    emit('input', newValue)
-  }
-})
+watch(
+	() => state.value,
+	(newValue) => {
+		if (
+			newValue !== null &&
+			newValue !== undefined &&
+			!isNaN(newValue) &&
+			isFinite(newValue) &&
+			newValue <= props.max &&
+			newValue >= props.min
+		) {
+			emit("input", newValue);
+		}
+	},
+);
 
-watch(() => props.value, (newValue) => {
-  state.value = newValue
-})
+watch(
+	() => props.value,
+	(newValue) => {
+		state.value = newValue;
+	},
+);
 
-const emit = defineEmits<{(event: 'input', value: number): void }>()
+const emit = defineEmits<{ (event: "input", value: number): void }>();
 
 const updateInput = (newValue: string) => {
-  const newValueNumber = Number.parseInt(newValue)
+	const newValueNumber = Number.parseInt(newValue);
 
-  if (!isNaN(newValueNumber)) {
-    state.value = newValueNumber
-  }
-}
+	if (!isNaN(newValueNumber)) {
+		state.value = newValueNumber;
+	}
+};
 </script>
 
 <template>

@@ -1,22 +1,22 @@
 <script setup lang="ts">
 const props = defineProps({
-  value: {
-    type: String,
-    required: true
-  }
-})
+	value: {
+		type: String,
+		required: true,
+	},
+});
 
 const innerValue = computed({
-  get () {
-    return props.value
-  },
+	get() {
+		return props.value;
+	},
 
-  set (newValue) {
-    emit('input', newValue)
-  }
-})
+	set(newValue) {
+		emit("input", newValue);
+	},
+});
 
-const emit = defineEmits<{(event: 'input', value: string): void}>()
+const emit = defineEmits<{ (event: "input", value: string): void }>();
 </script>
 
 <template>

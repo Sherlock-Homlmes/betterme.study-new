@@ -22,9 +22,7 @@ scope = (
     "https://www.googleapis.com/auth/userinfo.profile",
     "openid",
 )
-oauth = OAuth2Session(
-    client_id=GOOGLE_CLIENT_ID, redirect_uri=GOOGLE_REDIRECT_URL, scope=scope
-)
+oauth = OAuth2Session(client_id=GOOGLE_CLIENT_ID, redirect_uri=GOOGLE_REDIRECT_URL, scope=scope)
 
 
 @dataclass

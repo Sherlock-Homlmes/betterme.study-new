@@ -1,87 +1,104 @@
 <script setup lang="ts">
-import { MoodSadIcon as IconCrash, RoadSignIcon as IconLost, MoodConfuzedIcon as IconOtherError, RefreshAlertIcon as IconReset, RefreshIcon as IconReload, HomeIcon as IconHome, BrandGithubIcon as IconGithub, BrandTwitterIcon as IconTwitter, MessagesIcon as IconDiscussion, BugIcon as IconShowError } from 'vue-tabler-icons'
-import { useI18n } from 'vue-i18n'
-import type { Component, ComputedRef } from 'vue'
-import { ActionType } from './components/error/types'
-import UiButton from './components/base/uiButton.vue'
-import { ButtonImportance, ButtonTheme } from './components/base/types/button'
-import ActionBar from '~~/components/error/errorActionBar.vue'
-import { useSettings } from '~~/stores/settings'
+import {
+	MoodSadIcon as IconCrash,
+	RoadSignIcon as IconLost,
+	MoodConfuzedIcon as IconOtherError,
+	RefreshAlertIcon as IconReset,
+	RefreshIcon as IconReload,
+	HomeIcon as IconHome,
+	BrandGithubIcon as IconGithub,
+	BrandTwitterIcon as IconTwitter,
+	MessagesIcon as IconDiscussion,
+	BugIcon as IconShowError,
+} from "vue-tabler-icons";
+import { useI18n } from "vue-i18n";
+import type { Component, ComputedRef } from "vue";
+import { ActionType } from "./components/error/types";
+import UiButton from "./components/base/uiButton.vue";
+import { ButtonImportance, ButtonTheme } from "./components/base/types/button";
+import ActionBar from "~~/components/error/errorActionBar.vue";
+import { useSettings } from "~~/stores/settings";
 
-const { t } = useI18n()
-const route = useRoute()
-const settingsStore = useSettings()
+const { t } = useI18n();
+const route = useRoute();
+const settingsStore = useSettings();
 
 enum ErrorType {
-  Crash = 'crash',
-  NotFound = 'notfound',
-  Other = 'other'
+	Crash = "crash",
+	NotFound = "notfound",
+	Other = "other",
 }
 
 enum Action {
-  Reload = 'reload',
-  Reset = 'reset',
-  Home = 'home',
-  GithubIssue = 'githubIssue',
-  GithubDiscussion = 'githubDiscussion',
-  Twitter = 'twitter'
+	Reload = "reload",
+	Reset = "reset",
+	Home = "home",
+	GithubIssue = "githubIssue",
+	GithubDiscussion = "githubDiscussion",
+	Twitter = "twitter",
 }
 
 /** Action button presets */
 const actions: Record<ErrorType, Record<Action, ActionType>> = {
-  crash: {
-    reload: ActionType.RECOMMEND,
-    reset: ActionType.PRIMARY,
-    home: ActionType.PRIMARY,
-    githubIssue: ActionType.SECONDARY,
-    githubDiscussion: ActionType.SECONDARY,
-    twitter: ActionType.SECONDARY
-  },
+	crash: {
+		reload: ActionType.RECOMMEND,
+		reset: ActionType.PRIMARY,
+		home: ActionType.PRIMARY,
+		githubIssue: ActionType.SECONDARY,
+		githubDiscussion: ActionType.SECONDARY,
+		twitter: ActionType.SECONDARY,
+	},
 
-  notfound: {
-    home: ActionType.RECOMMEND,
-    githubDiscussion: ActionType.SECONDARY,
-    twitter: ActionType.SECONDARY,
-    githubIssue: ActionType.HIDE,
-    reload: ActionType.HIDE,
-    reset: ActionType.HIDE
-  },
+	notfound: {
+		home: ActionType.RECOMMEND,
+		githubDiscussion: ActionType.SECONDARY,
+		twitter: ActionType.SECONDARY,
+		githubIssue: ActionType.HIDE,
+		reload: ActionType.HIDE,
+		reset: ActionType.HIDE,
+	},
 
-  other: {
-    reload: ActionType.RECOMMEND,
-    home: ActionType.PRIMARY,
-    reset: ActionType.PRIMARY,
-    githubIssue: ActionType.SECONDARY,
-    githubDiscussion: ActionType.SECONDARY,
-    twitter: ActionType.SECONDARY
-  }
-}
+	other: {
+		reload: ActionType.RECOMMEND,
+		home: ActionType.PRIMARY,
+		reset: ActionType.PRIMARY,
+		githubIssue: ActionType.SECONDARY,
+		githubDiscussion: ActionType.SECONDARY,
+		twitter: ActionType.SECONDARY,
+	},
+};
 
 const props = defineProps({
-  error: {
-    type: Object,
-    default: null
-  }
-})
+	error: {
+		type: Object,
+		default: null,
+	},
+});
 
 const state = reactive({
-  showError: false
-})
+	showError: false,
+});
 
 /** Determines what type of error happened */
 const currentErrorType: ComputedRef<ErrorType> = computed(() => {
-  if (Number.parseInt(props.error.statusCode) >= 500) { return ErrorType.Crash }
-  if (Number.parseInt(props.error.statusCode) === 404) { return ErrorType.NotFound }
-  return ErrorType.Other
-})
+	if (Number.parseInt(props.error.statusCode) >= 500) {
+		return ErrorType.Crash;
+	}
+	if (Number.parseInt(props.error.statusCode) === 404) {
+		return ErrorType.NotFound;
+	}
+	return ErrorType.Other;
+});
 
 const Icons: Record<ErrorType, Component> = {
-  crash: IconCrash,
-  notfound: IconLost,
-  other: IconOtherError
-}
+	crash: IconCrash,
+	notfound: IconLost,
+	other: IconOtherError,
+};
 
-const errorHeading = computed(() => t('errorpage.title.' + currentErrorType.value))
+const errorHeading = computed(() =>
+	t("errorpage.title." + currentErrorType.value),
+);
 
 /** The title and icon to show on the error page.
  * For example on a 404 error it would show "Looks like you're lost",
@@ -89,62 +106,62 @@ const errorHeading = computed(() => t('errorpage.title.' + currentErrorType.valu
  * "Oops, the app crashed". Can return the icon as well.
  */
 useHead({
-  title: errorHeading.value
-})
+	title: errorHeading.value,
+});
 
 /** Returns actions to show or recommend based on the error.
  * For example if it's a 404 error, go to home or the
  * discussion button is recommended but the reset button is hidden.
  */
 const recommendedActions = computed(() => {
-  return actions[currentErrorType.value]
-})
+	return actions[currentErrorType.value];
+});
 
 const fullError = computed(() => {
-  return Object.assign({}, props.error, { route })
-})
+	return Object.assign({}, props.error, { route });
+});
 
 /// Ask settings to reset and navigate back to the home page
 const actionReset = () => {
-  settingsStore.setReset(true)
-  location.assign('/')
-}
+	settingsStore.setReset(true);
+	location.assign("/");
+};
 
 /// Reload the current page
 const actionReload = () => {
-  location.reload()
-}
+	location.reload();
+};
 
 interface ButtonStyleMapping {
-  theme: ButtonTheme,
-  importance: ButtonImportance
+	theme: ButtonTheme;
+	importance: ButtonImportance;
 }
 
 const actionTypeToButtonStyle = (action: ActionType): ButtonStyleMapping => {
-  switch (action) {
-    case ActionType.RECOMMEND:
-      return {
-        theme: ButtonTheme.Primary,
-        importance: ButtonImportance.Filled
-      }
-    case ActionType.PRIMARY:
-      return {
-        theme: ButtonTheme.Primary,
-        importance: ButtonImportance.Outline
-      }
-    case ActionType.SECONDARY:
-      return {
-        theme: ButtonTheme.Secondary,
-        importance: ButtonImportance.Outline
-      }
-    default: {
-      return {
-        theme: ButtonTheme.Neutral,
-        importance: ButtonImportance.Outline
-      }
-    }
-  }
-}
+	switch (action) {
+		case ActionType.RECOMMEND:
+			return {
+				theme: ButtonTheme.Primary,
+				importance: ButtonImportance.Filled,
+			};
+		case ActionType.PRIMARY:
+			return {
+				theme: ButtonTheme.Primary,
+				importance: ButtonImportance.Outline,
+			};
+		case ActionType.SECONDARY:
+			return {
+				theme: ButtonTheme.Secondary,
+				importance: ButtonImportance.Outline,
+			};
+		default: {
+			return {
+				theme: ButtonTheme.Neutral,
+				importance: ButtonImportance.Outline,
+			};
+		}
+	}
+};
 </script>
 
 <template>

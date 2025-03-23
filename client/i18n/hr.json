@@ -1,358 +1,358 @@
 {
-  "support": {
-    "source": "Pogledaj na GitHubu",
-    "support": "Kupi autoru kavu",
-    "share": {
-      "twitter": "Prati program na Twitteru",
-      "facebook": "Dijeli program na Facebooku",
-      "reddit": "Dijeli program na Redditu"
-    }
-  },
-  "section": {
-    "work": "Rad",
-    "shortpause": "Pauza",
-    "longpause": "Duga pauza",
-    "wait": "Čekanje"
-  },
-  "controls": {
-    "play": "Pokreni ili zaustavi timer",
-    "stop": "Resetiraj timer",
-    "advance": "Idi na sljedeći odjeljak"
-  },
-  "appbar": {
-    "settings": "Otvori postavke",
-    "todo": "Otvori popis zadataka"
-  },
-  "timer": {
-    "approximate": {
-      "hours": "sat | sata | sati",
-      "minutes": "minuta | minute | minuta"
-    }
-  },
-  "settings": {
-    "heading": "Postavke",
-    "tabs": {
-      "main": "Opće",
-      "timer": "Raspored",
-      "display": "Prikaz",
-      "audio": "Zvuk",
-      "about": "Informacije"
-    },
-    "buttons": {
-      "close": "Zatvori",
-      "reset": "Resetiraj"
-    },
-    "reset": {
-      "title": "Resetiraj postavke",
-      "confirm": "Resetiraj",
-      "cancel": "Odustani"
-    },
-    "manage": {
-      "buttons": {
-        "save": "Spremi",
-        "load": "Učitaj"
-      }
-    },
-    "scheduleMinTime": "Najkraće dozvoljeno vrijeme je 5 sekundi",
-    "about": {
-      "madeby": "Autor: Imre Gera",
-      "source": "Izvorni kod",
-      "support": "Podrži projekt",
-      "supportBody": "FocusTide razvijam u slobodno vrijeme. Puno bi mi značilo kad bi mi pomogao/la nastaviti rad na programu!",
-      "mobileSupport": "Zbog pravila koja provodi Google Play Store, ne mogu pokazati poveznice unutar mobilnog programa za doniranje projektu.",
-      "share": "ili dijeli program na društvenim mrežama:"
-    },
-    "values": {
-      "manage": {
-        "_title": "Upravljaj postavkama",
-        "_description": "Preuzmi trenutačne postavke ili učitaj postavke iz datoteke"
-      },
-      "mobile": {
-        "notifications": {
-          "sectionOver": {
-            "_title": "Odjeljak iznad obavijesti",
-            "_description": "Prikaži obavijest kada odjeljak završi"
-          },
-          "persistent": {
-            "_title": "Trajna obavijest",
-            "_description": "Prikaži napredak trenutačnog timera"
-          }
-        }
-      },
-      "lang": {
-        "_title": "Jezik",
-        "_description": ""
-      },
-      "eventLoggingEnabled": {
-        "_title": "Aktiviraj zapisivanje događaja u dnevnik",
-        "_description": ""
-      },
-      "currentTimer": {
-        "_title": "Stil timera",
-        "_description": "",
-        "_values": {
-          "traditional": "Tradicionalo",
-          "approximate": "Približno",
-          "percentage": "Postotak"
-        },
-        "_valueDescription": {
-          "traditional": "12:34",
-          "approximate": "13 minuta",
-          "percentage": "50 %"
-        }
-      },
-      "adaptiveTicking": {
-        "enabled": {
-          "_title": "Aktiviraj adaptivno otkucavanje",
-          "_description": "Timer će rjeđe otkucavati dok je u pozadini"
-        }
-      },
-      "schedule": {
-        "longPauseInterval": {
-          "_title": "Interval duge pauze",
-          "_description": ""
-        },
-        "numScheduleEntries": {
-          "_title": "Broj unosa u rasporedu",
-          "_description": ""
-        },
-        "visibility": {
-          "enabled": {
-            "_title": "Prikaži raspored",
-            "_description": ""
-          },
-          "showSectionType": {
-            "_title": "Prikaži vrstu odjeljka u rasporedu",
-            "_description": "Prikazuje trenutačnu vrstu odjeljka ispod rasporeda"
-          }
-        },
-        "lengths": {
-          "_title": "Unaprijed postavljen raspored",
-          "_description": "",
-          "_values": {
-            "default": "Standardne",
-            "debug": "Otklanjanja grešaka",
-            "custom": "Prilagođeni"
-          },
-          "_valueDescription": {
-            "default": "25 minuta rada, 5 minuta pauze",
-            "debug": "U svrhu otklanjanja grešaka",
-            "custom": "Postavi kako želiš"
-          },
-          "work": {
-            "_title": "Rad",
-            "_description": ""
-          },
-          "shortpause": {
-            "_title": "Pauza",
-            "_description": ""
-          },
-          "longpause": {
-            "_title": "Duga pauza",
-            "_description": ""
-          }
-        }
-      },
-      "performance": {
-        "showProgressBar": {
-          "_title": "Prikaži traku napredovanja",
-          "_description": "Prikaži napredovanje iza timera"
-        }
-      },
-      "permissions": {
-        "audio": {
-          "_title": "Odsviraj zvuk",
-          "_description": "Dozvoli programu odsvirati zvukove kad je jedan odjeljak gotov"
-        },
-        "notifications": {
-          "_title": "Dozvole za obavijesti",
-          "_description": "Dozvoli programu slati obavijesti kad je jedan odjeljak gotov"
-        }
-      },
-      "audio": {
-        "volume": {
-          "_title": "Glasnoća zvuka",
-          "_description": ""
-        },
-        "soundSet": {
-          "_title": "Postaljen zvuk",
-          "_description": "Korišteni zvukovi za obavijesti",
-          "_values": {
-            "musical": "Glazba"
-          },
-          "_valueDescription": {
-            "musical": "Standardni zvukovi"
-          }
-        }
-      },
-      "timerControls": {
-        "enableKeyboardShortcuts": {
-          "_title": "Aktiviraj tipkovne prečace",
-          "_description": "Pokreni/zaustavi timer pomoću razmaknice"
-        }
-      },
-      "tasks": {
-        "enabled": {
-          "_title": "Aktiviraj popis zadataka",
-          "_description": "Upravljaj radom izravno u programu"
-        },
-        "maxActiveTasks": {
-          "_title": "Maksimalan broj prikazanih aktivnih zadataka",
-          "_description": "Vidjet ćeš najviše ovoliko aktivnih zadataka"
-        },
-        "removeCompletedTasks": {
-          "_title": "Ukloni završene zadatke",
-          "_description": "Završeni zadaci će se ukloniti kad započne novi odjeljak"
-        }
-      },
-      "pageTitle": {
-        "useTickEmoji": {
-          "_title": "Koristi kvačicu u naslovu",
-          "_description": "Prikaži ✔ umjesto „Gotovo”"
-        }
-      },
-      "visuals": {
-        "theme": {
-          "_title": "Postavke teme",
-          "_description": "Odaberi skup unaprijed definiranih boja sekcija ili postavi vlastite",
-          "custom": "Prilagođeni"
-        },
-        "darkMode": {
-          "_title": "Aktiviraj tamni modus",
-          "_description": "Tamnija, jednaka produktivnost"
-        }
-      },
-      "reset": {
-        "_title": "Resetiraj postavke",
-        "_description": "Sve postavke će se resetirati nakon ponovnog učitavanja programa"
-      }
-    }
-  },
-  "notification": {
-    "action": {
-      "ready": "Krenimo!"
-    },
-    "work": {
-      "title": "Vrijeme je da se vratiš na rad!",
-      "body": "Tvoja je pauza gotova. Radi još malo više, a onda se opet odmori."
-    },
-    "shortpause": {
-      "title": "Vrijeme je za pauzu",
-      "body": "Baš lijepo, zaslužio/la si kratku pauzu."
-    },
-    "longpause": {
-      "title": "Konačno! Više slobodnog vremena!",
-      "body": "Nakon ovoliko rada zaslužuješ dužu pauzu."
-    }
-  },
-  "error": {
-    "format_invalid": "Neispravan format unosa",
-    "range_invalid": "Vrijednost mora biti između {min} i {max}",
-    "required": "Ovo se polje mora ispuniti",
-    "numeric": "Vrijednost mora biti broj",
-    "min": "Vrijednost mora biti barem {min}",
-    "max": "Vrijednost ne smije biti veća od {max}",
-    "time_format": "Neispravno formatirano vrijeme (MM:SS)",
-    "min_time": "Unos vremena je prekratak",
-    "undefined": "Nedefinirana greška"
-  },
-  "tasks": {
-    "title": "Zadaci",
-    "empty": "Još nema zadataka",
-    "manage": "Upravljaj",
-    "addPlaceholder": "Upiši nešto što trebaš učiniti"
-  },
-  "ready": "Gotovo",
-  "errorpage": {
-    "title": {
-      "crash": "Program je prekinuo rad",
-      "notfound": "Ta stranica ne postoji",
-      "other": "Dogodila se greška"
-    },
-    "action": {
-      "reset": "Resetiraj program",
-      "reload": "Ponovo učitaj stranicu",
-      "home": "Vrati se na početnu stranicu",
-      "githubIssue": "Pošalji izvještaj o grešci",
-      "githubDiscussion": "Pitaj druge imaju li isti problem",
-      "twitter": "Napišite prijateljsku poruku"
-    },
-    "showError": {
-      "main": "Prikaži mi poruku greške!",
-      "sub": "Koristit ću je za prijavljivanje problema ili ću pitati druge imaju li isti problem."
-    },
-    "suggestions": {
-      "primary": "Možeš",
-      "secondary": "ili ako ti nisu pomogli"
-    }
-  },
-  "timerpreset": {
-    "_values": {
-      "default": "Standardne",
-      "easy": "Početnički",
-      "advanced": "Napredni",
-      "workaholic": "Radoholičarski"
-    },
-    "_valueDescription": {
-      "default": "Standardne Pomodoro vrijednosti.",
-      "easy": "Za one koji još nisu isprobali Pomodoro tehniku.",
-      "advanced": "Za učinkovitiji rad.",
-      "workaholic": "Za duge radne sesije."
-    },
-    "description": "{brief} \n {worklength} min rada s {splength} min kratkih {lplength} min dugih pauza nakon svakih {lpfreq} radnih sesija."
-  },
-  "tutorials": {
-    "onboarding": {
-      "pages": {
-        "0": {
-          "title": "Dobro došao, dobro došla u FocusTide!",
-          "onboarding_invite": "Postavimo opcije za prvo pokretanje. Kasnije ih sve možeš promijeniti u postavkama.",
-          "heading": "Odaberi jezik"
-        },
-        "1": {
-          "heading": "Postavi svoje timere",
-          "text": "Radi ili pauziraj sve dok timer ne istekne. Zatim nastavi sa sljedećim timerom."
-        },
-        "2": {
-          "theme": {
-            "heading": "Odaberi temu",
-            "options": {
-              "_values": {
-                "light": "Svijetla",
-                "dark": "Tamna"
-              },
-              "_valueDescription": {
-                "light": "",
-                "dark": ""
-              }
-            }
-          },
-          "display": {
-            "heading": "Odaberi prikaz"
-          }
-        },
-        "3": {
-          "heading": "Zapamti",
-          "text": "Postavi vlastite timere, koristi popis zadataka i obavijesti u svoju korist. Pogledaj daljnje mogućnosti u izborniku postavki!"
-        },
-        "support": {
-          "heading": "Podrži projekt",
-          "text": "Ako ti je ovaj projekt pomogao, plati autoru kavu. Gumb za podršku također možeš pronaći u izborniku postavki.",
-          "hint": "Opcije podrške možeš pronaći na stranici „Informacije” u postavkama."
-        }
-      },
-      "buttons": {
-        "close": "Zatvori",
-        "start": "Pokreni vježbu",
-        "next": "Dalje",
-        "support": "Podrži projekt"
-      }
-    },
-    "olddomain": {
-      "heading": "AnotherPomodoro se sada zove FocusTide",
-      "warning": "Otkrili smo da možda dolaziš sa stare domene another-pomodoro.app, koja će isteći 2023.",
-      "action": "Aktualiziraj svoju oznaku ili hiperpoveznicu na focustide.app.",
-      "button": "U redu"
-    }
-  }
+	"support": {
+		"source": "Pogledaj na GitHubu",
+		"support": "Kupi autoru kavu",
+		"share": {
+			"twitter": "Prati program na Twitteru",
+			"facebook": "Dijeli program na Facebooku",
+			"reddit": "Dijeli program na Redditu"
+		}
+	},
+	"section": {
+		"work": "Rad",
+		"shortpause": "Pauza",
+		"longpause": "Duga pauza",
+		"wait": "Čekanje"
+	},
+	"controls": {
+		"play": "Pokreni ili zaustavi timer",
+		"stop": "Resetiraj timer",
+		"advance": "Idi na sljedeći odjeljak"
+	},
+	"appbar": {
+		"settings": "Otvori postavke",
+		"todo": "Otvori popis zadataka"
+	},
+	"timer": {
+		"approximate": {
+			"hours": "sat | sata | sati",
+			"minutes": "minuta | minute | minuta"
+		}
+	},
+	"settings": {
+		"heading": "Postavke",
+		"tabs": {
+			"main": "Opće",
+			"timer": "Raspored",
+			"display": "Prikaz",
+			"audio": "Zvuk",
+			"about": "Informacije"
+		},
+		"buttons": {
+			"close": "Zatvori",
+			"reset": "Resetiraj"
+		},
+		"reset": {
+			"title": "Resetiraj postavke",
+			"confirm": "Resetiraj",
+			"cancel": "Odustani"
+		},
+		"manage": {
+			"buttons": {
+				"save": "Spremi",
+				"load": "Učitaj"
+			}
+		},
+		"scheduleMinTime": "Najkraće dozvoljeno vrijeme je 5 sekundi",
+		"about": {
+			"madeby": "Autor: Imre Gera",
+			"source": "Izvorni kod",
+			"support": "Podrži projekt",
+			"supportBody": "FocusTide razvijam u slobodno vrijeme. Puno bi mi značilo kad bi mi pomogao/la nastaviti rad na programu!",
+			"mobileSupport": "Zbog pravila koja provodi Google Play Store, ne mogu pokazati poveznice unutar mobilnog programa za doniranje projektu.",
+			"share": "ili dijeli program na društvenim mrežama:"
+		},
+		"values": {
+			"manage": {
+				"_title": "Upravljaj postavkama",
+				"_description": "Preuzmi trenutačne postavke ili učitaj postavke iz datoteke"
+			},
+			"mobile": {
+				"notifications": {
+					"sectionOver": {
+						"_title": "Odjeljak iznad obavijesti",
+						"_description": "Prikaži obavijest kada odjeljak završi"
+					},
+					"persistent": {
+						"_title": "Trajna obavijest",
+						"_description": "Prikaži napredak trenutačnog timera"
+					}
+				}
+			},
+			"lang": {
+				"_title": "Jezik",
+				"_description": ""
+			},
+			"eventLoggingEnabled": {
+				"_title": "Aktiviraj zapisivanje događaja u dnevnik",
+				"_description": ""
+			},
+			"currentTimer": {
+				"_title": "Stil timera",
+				"_description": "",
+				"_values": {
+					"traditional": "Tradicionalo",
+					"approximate": "Približno",
+					"percentage": "Postotak"
+				},
+				"_valueDescription": {
+					"traditional": "12:34",
+					"approximate": "13 minuta",
+					"percentage": "50 %"
+				}
+			},
+			"adaptiveTicking": {
+				"enabled": {
+					"_title": "Aktiviraj adaptivno otkucavanje",
+					"_description": "Timer će rjeđe otkucavati dok je u pozadini"
+				}
+			},
+			"schedule": {
+				"longPauseInterval": {
+					"_title": "Interval duge pauze",
+					"_description": ""
+				},
+				"numScheduleEntries": {
+					"_title": "Broj unosa u rasporedu",
+					"_description": ""
+				},
+				"visibility": {
+					"enabled": {
+						"_title": "Prikaži raspored",
+						"_description": ""
+					},
+					"showSectionType": {
+						"_title": "Prikaži vrstu odjeljka u rasporedu",
+						"_description": "Prikazuje trenutačnu vrstu odjeljka ispod rasporeda"
+					}
+				},
+				"lengths": {
+					"_title": "Unaprijed postavljen raspored",
+					"_description": "",
+					"_values": {
+						"default": "Standardne",
+						"debug": "Otklanjanja grešaka",
+						"custom": "Prilagođeni"
+					},
+					"_valueDescription": {
+						"default": "25 minuta rada, 5 minuta pauze",
+						"debug": "U svrhu otklanjanja grešaka",
+						"custom": "Postavi kako želiš"
+					},
+					"work": {
+						"_title": "Rad",
+						"_description": ""
+					},
+					"shortpause": {
+						"_title": "Pauza",
+						"_description": ""
+					},
+					"longpause": {
+						"_title": "Duga pauza",
+						"_description": ""
+					}
+				}
+			},
+			"performance": {
+				"showProgressBar": {
+					"_title": "Prikaži traku napredovanja",
+					"_description": "Prikaži napredovanje iza timera"
+				}
+			},
+			"permissions": {
+				"audio": {
+					"_title": "Odsviraj zvuk",
+					"_description": "Dozvoli programu odsvirati zvukove kad je jedan odjeljak gotov"
+				},
+				"notifications": {
+					"_title": "Dozvole za obavijesti",
+					"_description": "Dozvoli programu slati obavijesti kad je jedan odjeljak gotov"
+				}
+			},
+			"audio": {
+				"volume": {
+					"_title": "Glasnoća zvuka",
+					"_description": ""
+				},
+				"soundSet": {
+					"_title": "Postaljen zvuk",
+					"_description": "Korišteni zvukovi za obavijesti",
+					"_values": {
+						"musical": "Glazba"
+					},
+					"_valueDescription": {
+						"musical": "Standardni zvukovi"
+					}
+				}
+			},
+			"timerControls": {
+				"enableKeyboardShortcuts": {
+					"_title": "Aktiviraj tipkovne prečace",
+					"_description": "Pokreni/zaustavi timer pomoću razmaknice"
+				}
+			},
+			"tasks": {
+				"enabled": {
+					"_title": "Aktiviraj popis zadataka",
+					"_description": "Upravljaj radom izravno u programu"
+				},
+				"maxActiveTasks": {
+					"_title": "Maksimalan broj prikazanih aktivnih zadataka",
+					"_description": "Vidjet ćeš najviše ovoliko aktivnih zadataka"
+				},
+				"removeCompletedTasks": {
+					"_title": "Ukloni završene zadatke",
+					"_description": "Završeni zadaci će se ukloniti kad započne novi odjeljak"
+				}
+			},
+			"pageTitle": {
+				"useTickEmoji": {
+					"_title": "Koristi kvačicu u naslovu",
+					"_description": "Prikaži ✔ umjesto „Gotovo”"
+				}
+			},
+			"visuals": {
+				"theme": {
+					"_title": "Postavke teme",
+					"_description": "Odaberi skup unaprijed definiranih boja sekcija ili postavi vlastite",
+					"custom": "Prilagođeni"
+				},
+				"darkMode": {
+					"_title": "Aktiviraj tamni modus",
+					"_description": "Tamnija, jednaka produktivnost"
+				}
+			},
+			"reset": {
+				"_title": "Resetiraj postavke",
+				"_description": "Sve postavke će se resetirati nakon ponovnog učitavanja programa"
+			}
+		}
+	},
+	"notification": {
+		"action": {
+			"ready": "Krenimo!"
+		},
+		"work": {
+			"title": "Vrijeme je da se vratiš na rad!",
+			"body": "Tvoja je pauza gotova. Radi još malo više, a onda se opet odmori."
+		},
+		"shortpause": {
+			"title": "Vrijeme je za pauzu",
+			"body": "Baš lijepo, zaslužio/la si kratku pauzu."
+		},
+		"longpause": {
+			"title": "Konačno! Više slobodnog vremena!",
+			"body": "Nakon ovoliko rada zaslužuješ dužu pauzu."
+		}
+	},
+	"error": {
+		"format_invalid": "Neispravan format unosa",
+		"range_invalid": "Vrijednost mora biti između {min} i {max}",
+		"required": "Ovo se polje mora ispuniti",
+		"numeric": "Vrijednost mora biti broj",
+		"min": "Vrijednost mora biti barem {min}",
+		"max": "Vrijednost ne smije biti veća od {max}",
+		"time_format": "Neispravno formatirano vrijeme (MM:SS)",
+		"min_time": "Unos vremena je prekratak",
+		"undefined": "Nedefinirana greška"
+	},
+	"tasks": {
+		"title": "Zadaci",
+		"empty": "Još nema zadataka",
+		"manage": "Upravljaj",
+		"addPlaceholder": "Upiši nešto što trebaš učiniti"
+	},
+	"ready": "Gotovo",
+	"errorpage": {
+		"title": {
+			"crash": "Program je prekinuo rad",
+			"notfound": "Ta stranica ne postoji",
+			"other": "Dogodila se greška"
+		},
+		"action": {
+			"reset": "Resetiraj program",
+			"reload": "Ponovo učitaj stranicu",
+			"home": "Vrati se na početnu stranicu",
+			"githubIssue": "Pošalji izvještaj o grešci",
+			"githubDiscussion": "Pitaj druge imaju li isti problem",
+			"twitter": "Napišite prijateljsku poruku"
+		},
+		"showError": {
+			"main": "Prikaži mi poruku greške!",
+			"sub": "Koristit ću je za prijavljivanje problema ili ću pitati druge imaju li isti problem."
+		},
+		"suggestions": {
+			"primary": "Možeš",
+			"secondary": "ili ako ti nisu pomogli"
+		}
+	},
+	"timerpreset": {
+		"_values": {
+			"default": "Standardne",
+			"easy": "Početnički",
+			"advanced": "Napredni",
+			"workaholic": "Radoholičarski"
+		},
+		"_valueDescription": {
+			"default": "Standardne Pomodoro vrijednosti.",
+			"easy": "Za one koji još nisu isprobali Pomodoro tehniku.",
+			"advanced": "Za učinkovitiji rad.",
+			"workaholic": "Za duge radne sesije."
+		},
+		"description": "{brief} \n {worklength} min rada s {splength} min kratkih {lplength} min dugih pauza nakon svakih {lpfreq} radnih sesija."
+	},
+	"tutorials": {
+		"onboarding": {
+			"pages": {
+				"0": {
+					"title": "Dobro došao, dobro došla u FocusTide!",
+					"onboarding_invite": "Postavimo opcije za prvo pokretanje. Kasnije ih sve možeš promijeniti u postavkama.",
+					"heading": "Odaberi jezik"
+				},
+				"1": {
+					"heading": "Postavi svoje timere",
+					"text": "Radi ili pauziraj sve dok timer ne istekne. Zatim nastavi sa sljedećim timerom."
+				},
+				"2": {
+					"theme": {
+						"heading": "Odaberi temu",
+						"options": {
+							"_values": {
+								"light": "Svijetla",
+								"dark": "Tamna"
+							},
+							"_valueDescription": {
+								"light": "",
+								"dark": ""
+							}
+						}
+					},
+					"display": {
+						"heading": "Odaberi prikaz"
+					}
+				},
+				"3": {
+					"heading": "Zapamti",
+					"text": "Postavi vlastite timere, koristi popis zadataka i obavijesti u svoju korist. Pogledaj daljnje mogućnosti u izborniku postavki!"
+				},
+				"support": {
+					"heading": "Podrži projekt",
+					"text": "Ako ti je ovaj projekt pomogao, plati autoru kavu. Gumb za podršku također možeš pronaći u izborniku postavki.",
+					"hint": "Opcije podrške možeš pronaći na stranici „Informacije” u postavkama."
+				}
+			},
+			"buttons": {
+				"close": "Zatvori",
+				"start": "Pokreni vježbu",
+				"next": "Dalje",
+				"support": "Podrži projekt"
+			}
+		},
+		"olddomain": {
+			"heading": "AnotherPomodoro se sada zove FocusTide",
+			"warning": "Otkrili smo da možda dolaziš sa stare domene another-pomodoro.app, koja će isteći 2023.",
+			"action": "Aktualiziraj svoju oznaku ili hiperpoveznicu na focustide.app.",
+			"button": "U redu"
+		}
+	}
 }

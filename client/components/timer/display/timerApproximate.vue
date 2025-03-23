@@ -1,31 +1,45 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { TimerState, useSchedule } from '~~/stores/schedule'
+import { useI18n } from "vue-i18n";
+import { TimerState, useSchedule } from "~~/stores/schedule";
 
-const { t } = useI18n()
-const scheduleStore = useSchedule()
-const running = computed(() => scheduleStore.getCurrentTimerState === TimerState.RUNNING)
+const { t } = useI18n();
+const scheduleStore = useSchedule();
+const running = computed(
+	() => scheduleStore.getCurrentTimerState === TimerState.RUNNING,
+);
 
-const emit = defineEmits<{(event: 'tick', timeString: string): void }>()
+const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
 
 const time = computed(() => {
-  const remainingMinutes = (scheduleStore.getCurrentItem.length - scheduleStore.getCurrentItem.timeElapsed) / (1000 * 60)
+	const remainingMinutes =
+		(scheduleStore.getCurrentItem.length -
+			scheduleStore.getCurrentItem.timeElapsed) /
+		(1000 * 60);
 
-  const timeObject = {
-    value: 0,
-    string: ''
-  }
-  if (Math.abs(remainingMinutes) > 59) {
-    timeObject.value = remainingMinutes >= 0 ? Math.round(remainingMinutes / 60) : Math.ceil(remainingMinutes / 60)
-    timeObject.string = t('timer.approximate.hours', timeObject.value)
-  } else {
-    timeObject.value = remainingMinutes > 0 ? Math.ceil(remainingMinutes) : Math.min(-1, Math.floor(remainingMinutes))
-    timeObject.string = t('timer.approximate.minutes', timeObject.value)
-  }
+	const timeObject = {
+		value: 0,
+		string: "",
+	};
+	if (Math.abs(remainingMinutes) > 59) {
+		timeObject.value =
+			remainingMinutes >= 0
+				? Math.round(remainingMinutes / 60)
+				: Math.ceil(remainingMinutes / 60);
+		timeObject.string = t("timer.approximate.hours", timeObject.value);
+	} else {
+		timeObject.value =
+			remainingMinutes > 0
+				? Math.ceil(remainingMinutes)
+				: Math.min(-1, Math.floor(remainingMinutes));
+		timeObject.string = t("timer.approximate.minutes", timeObject.value);
+	}
 
-  emit('tick', `${timeObject.value < 0 ? '+' : ''}${Math.abs(timeObject.value)} ${timeObject.string}`)
-  return timeObject
-})
+	emit(
+		"tick",
+		`${timeObject.value < 0 ? "+" : ""}${Math.abs(timeObject.value)} ${timeObject.string}`,
+	);
+	return timeObject;
+});
 </script>
 
 <template>

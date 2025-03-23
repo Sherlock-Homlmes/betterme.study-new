@@ -1,79 +1,79 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
-import { ButtonImportance, ButtonTheme, MotionTheme } from './types/button'
+import { type PropType } from "vue";
+import { ButtonImportance, ButtonTheme, MotionTheme } from "./types/button";
 
 const props = defineProps({
-  disabled: {
-    default: false,
-    type: Boolean
-  },
+	disabled: {
+		default: false,
+		type: Boolean,
+	},
 
-  /** Classes to be applied to the background of the button */
-  bgClass: {
-    default: '',
-    type: String
-  },
+	/** Classes to be applied to the background of the button */
+	bgClass: {
+		default: "",
+		type: String,
+	},
 
-  /** Classes to apply to the inner element (contents) */
-  innerClass: {
-    default: '',
-    type: String
-  },
+	/** Classes to apply to the inner element (contents) */
+	innerClass: {
+		default: "",
+		type: String,
+	},
 
-  /** If true, the component is rendered as an anchor (`<a>`) instead of a `<button>` */
-  link: {
-    default: false,
-    type: Boolean
-  },
+	/** If true, the component is rendered as an anchor (`<a>`) instead of a `<button>` */
+	link: {
+		default: false,
+		type: Boolean,
+	},
 
-  /// The button's colour theme
-  theme: {
-    type: String as PropType<ButtonTheme>,
-    default: 'primary'
-  },
+	/// The button's colour theme
+	theme: {
+		type: String as PropType<ButtonTheme>,
+		default: "primary",
+	},
 
-  /// Defines whether the button should have a scaling animation when pressed
-  motion: {
-    type: String as PropType<MotionTheme>,
-    default: 'all'
-  },
+	/// Defines whether the button should have a scaling animation when pressed
+	motion: {
+		type: String as PropType<MotionTheme>,
+		default: "all",
+	},
 
-  /// Remove the default padding on the contents of the button
-  noPadding: {
-    type: Boolean,
-    default: false
-  },
+	/// Remove the default padding on the contents of the button
+	noPadding: {
+		type: Boolean,
+		default: false,
+	},
 
-  /// Disable colour theming the contents of the button
-  noContentTheme: {
-    type: Boolean,
-    default: false
-  },
+	/// Disable colour theming the contents of the button
+	noContentTheme: {
+		type: Boolean,
+		default: false,
+	},
 
-  /** Apply default colour scheme to the button */
-  noDefaultStyle: {
-    default: false,
-    type: Boolean
-  },
+	/** Apply default colour scheme to the button */
+	noDefaultStyle: {
+		default: false,
+		type: Boolean,
+	},
 
-  /** Indicates that the button is dark. Classes will be adjusted to it. */
-  dark: {
-    default: false,
-    type: Boolean
-  },
+	/** Indicates that the button is dark. Classes will be adjusted to it. */
+	dark: {
+		default: false,
+		type: Boolean,
+	},
 
-  /** Make padding equal on all sides for circular buttons */
-  circle: {
-    default: false,
-    type: Boolean
-  },
+	/** Make padding equal on all sides for circular buttons */
+	circle: {
+		default: false,
+		type: Boolean,
+	},
 
-  /** Defines how important a button appears to be. */
-  importance: {
-    type: String as PropType<ButtonImportance>,
-    default: ButtonImportance.Filled
-  }
-})
+	/** Defines how important a button appears to be. */
+	importance: {
+		type: String as PropType<ButtonImportance>,
+		default: ButtonImportance.Filled,
+	},
+});
 </script>
 
 <template>

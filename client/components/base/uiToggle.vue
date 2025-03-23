@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { CheckIcon, XIcon } from 'vue-tabler-icons'
+import { CheckIcon, XIcon } from "vue-tabler-icons";
 
 const props = defineProps({
-  value: {
-    type: Boolean,
-    default: false
-  },
+	value: {
+		type: Boolean,
+		default: false,
+	},
 
-  hideOnOffMarkers: {
-    type: Boolean,
-    default: false
-  },
+	hideOnOffMarkers: {
+		type: Boolean,
+		default: false,
+	},
 
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-})
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
+});
 
-const emit = defineEmits<{(type: 'input', value: boolean): void}>()
+const emit = defineEmits<{ (type: "input", value: boolean): void }>();
 
 const computedValue = computed({
-  get () {
-    return props.value
-  },
-  set (newValue) {
-    emit('input', newValue)
-  }
-})
+	get() {
+		return props.value;
+	},
+	set(newValue) {
+		emit("input", newValue);
+	},
+});
 </script>
 
 <template>

@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import TaskItem from './todoItem.vue'
-import { TaskState, useTasklist } from '~~/stores/tasklist'
-import { useSettings } from '~~/stores/settings'
-import { useSchedule } from '~~/stores/schedule'
+import TaskItem from "./todoItem.vue";
+import { TaskState, useTasklist } from "~~/stores/tasklist";
+import { useSettings } from "~~/stores/settings";
+import { useSchedule } from "~~/stores/schedule";
 
-const tasklistStore = useTasklist()
-const settingsStore = useSettings()
-const scheduleStore = useSchedule()
+const tasklistStore = useTasklist();
+const settingsStore = useSettings();
+const scheduleStore = useSchedule();
 
 const tasks = computed(() => {
-  let tasks = tasklistStore.sortedTasks
-    .filter(task => task.section === scheduleStore.getCurrentItem.type)
+	let tasks = tasklistStore.sortedTasks.filter(
+		(task) => task.section === scheduleStore.getCurrentItem.type,
+	);
 
-  if (settingsStore.tasks.maxActiveTasks > 0) {
-    tasks = tasks.slice(0, settingsStore.tasks.maxActiveTasks)
-  }
+	if (settingsStore.tasks.maxActiveTasks > 0) {
+		tasks = tasks.slice(0, settingsStore.tasks.maxActiveTasks);
+	}
 
-  return tasks
-})
+	return tasks;
+});
 </script>
 
 <template>

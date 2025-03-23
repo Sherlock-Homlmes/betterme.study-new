@@ -1,7 +1,7 @@
 import datetime
-from typing import Literal, Optional
+from typing import Optional
 
-from pydantic import BaseModel, Field, validator, model_validator
+from pydantic import BaseModel, model_validator
 
 from models.pomodoros import PomodoroStatusEnum
 

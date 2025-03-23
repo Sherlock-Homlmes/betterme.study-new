@@ -5,6 +5,7 @@ from pydantic.error_wrappers import ValidationError
 
 from .settings import app
 
+
 # discord oauth
 @app.exception_handler(Unauthorized)
 async def unauthorized_error_handler(_, __):

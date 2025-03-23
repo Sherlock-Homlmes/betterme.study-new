@@ -17,4 +17,4 @@ class ChangeTracker {
 	}
 }
 
-export default ChangeTracker
+export default ChangeTracker;

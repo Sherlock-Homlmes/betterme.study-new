@@ -1,99 +1,100 @@
-import { ref } from 'vue'
-import { useRuntimeConfig } from '#app'
-import { createGlobalState, useLocalStorage } from '@vueuse/core'
+import { ref } from "vue";
+import { useRuntimeConfig } from "#app";
+import { createGlobalState, useLocalStorage } from "@vueuse/core";
 import _ from "lodash";
-import {useAuthStore} from "./auth"
+import { useAuthStore } from "./auth";
 
 export enum TaskStatus {
-  TODO = "TO-DO",
-  DOING = "DOING",
-  DONE = "DONE",
-  EXPIRED = "EXPIRED"
+	TODO = "TO-DO",
+	DOING = "DOING",
+	DONE = "DONE",
+	EXPIRED = "EXPIRED",
 }
 
-export const useTaskStore = createGlobalState( () => {
-  const API_URL = useRuntimeConfig().public.API_URL
-  const { isAuth } = useAuthStore()
+export const useTaskStore = createGlobalState(() => {
+	const API_URL = useRuntimeConfig().public.API_URL;
+	const { isAuth } = useAuthStore();
 
-  // state
-  const tasks = useLocalStorage('tasks', [])
-  const enableTodoListTask = useLocalStorage('enableTodoListTask', true)
+	// state
+	const tasks = useLocalStorage("tasks", []);
+	const enableTodoListTask = useLocalStorage("enableTodoListTask", true);
 
-  // getters
+	// getters
 
-  // actions
-  const getTaskList = async() =>  {
-    if(!isAuth.value) return
-        const response = await fetchWithAuth(`${API_URL}/todolist`);
-        if (response.ok) tasks.value = await response.json();
-        else throw new Error('abc?');
-        tasks.value = tasks.value.map((task)=>({
-          ...task,
-          section: "work",
-        }))
-    }
+	// actions
+	const getTaskList = async () => {
+		if (!isAuth.value) return;
+		const response = await fetchWithAuth(`${API_URL}/todolist`);
+		if (response.ok) tasks.value = await response.json();
+		else throw new Error("abc?");
+		tasks.value = tasks.value.map((task) => ({
+			...task,
+			section: "work",
+		}));
+	};
 
-  const postTask = async (title: string) =>  {
-    if(!isAuth.value) {
-      tasks.value.push({
-        title,
-        status: TaskStatus.DOING,
-        section: "work",
-      })
-      return
-    }
-    const index = _.isEmpty(tasks.value)
-    ? 1
-    : Math.max(...tasks.value.map(task => task.index)) + 1
-    const response = await fetchWithAuth(`${API_URL}/todolist`,
-    {
-      method: "POST",
-      body: JSON.stringify({title, index}
-    )})
-    if (response.ok) await getTaskList()
-    else throw new Error('abc?');
-    }
+	const postTask = async (title: string) => {
+		if (!isAuth.value) {
+			tasks.value.push({
+				title,
+				status: TaskStatus.DOING,
+				section: "work",
+			});
+			return;
+		}
+		const index = _.isEmpty(tasks.value)
+			? 1
+			: Math.max(...tasks.value.map((task) => task.index)) + 1;
+		const response = await fetchWithAuth(`${API_URL}/todolist`, {
+			method: "POST",
+			body: JSON.stringify({ title, index }),
+		});
+		if (response.ok) await getTaskList();
+		else throw new Error("abc?");
+	};
 
-  const patchTask = async (taskId: string, change = {}) =>  {
-    if(!isAuth.value) return
-    if(_isEmpty(change)) return
-    const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(change)})
-    if (!response.ok) throw new Error('abc?');
-    }
+	const patchTask = async (taskId: string, change = {}) => {
+		if (!isAuth.value) return;
+		if (_isEmpty(change)) return;
+		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
+			method: "PATCH",
+			body: JSON.stringify(change),
+		});
+		if (!response.ok) throw new Error("abc?");
+	};
 
-  const deleteTask = async (taskId: string) =>  {
-    if(!isAuth.value) return
-      const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {method: "DELETE"})
-      if (response.ok) tasks.value = tasks.value.filter(task => task.id !== taskId)
-      else throw new Error('abc?');
-      
-    }
+	const deleteTask = async (taskId: string) => {
+		if (!isAuth.value) return;
+		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
+			method: "DELETE",
+		});
+		if (response.ok)
+			tasks.value = tasks.value.filter((task) => task.id !== taskId);
+		else throw new Error("abc?");
+	};
 
-  const moveTask = (task, newIndex: number) => {
-      const oldIndex = tasks.value.indexOf(task)
-      if (oldIndex < 0 || newIndex >= tasks.value.length) return
+	const moveTask = (task, newIndex: number) => {
+		const oldIndex = tasks.value.indexOf(task);
+		if (oldIndex < 0 || newIndex >= tasks.value.length) return;
 
-      const swapProp = (obj1, obj2, prop) => {
-        if (!(prop in obj1) || !(prop in obj2)) return;
-        [obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
-      }
-      swapProp(tasks.value[oldIndex], tasks.value[newIndex], 'index')
-      tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0])
-    }
+		const swapProp = (obj1, obj2, prop) => {
+			if (!(prop in obj1) || !(prop in obj2)) return;
+			[obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
+		};
+		swapProp(tasks.value[oldIndex], tasks.value[newIndex], "index");
+		tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0]);
+	};
 
-  return {
-    // state
-    tasks,
-    enableTodoListTask,
-    // getters
-    // actions
-    getTaskList,
-    postTask,
-    patchTask,
-    deleteTask,
-    moveTask,
-  }
-})
+	return {
+		// state
+		tasks,
+		enableTodoListTask,
+		// getters
+		// actions
+		getTaskList,
+		postTask,
+		patchTask,
+		deleteTask,
+		moveTask,
+	};
+});

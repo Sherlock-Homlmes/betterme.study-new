@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { NewsIcon, BrandDiscordIcon, BrandTwitterIcon, BrandFacebookIcon, BrandRedditIcon } from 'vue-tabler-icons'
-import { ButtonImportance } from '../base/types/button'
-import Button from '~~/components/base/uiButton.vue'
-import { AppPlatform } from '~~/platforms/platforms'
-import { useMain } from '~~/stores/main'
+import {
+	NewsIcon,
+	BrandDiscordIcon,
+	BrandTwitterIcon,
+	BrandFacebookIcon,
+	BrandRedditIcon,
+} from "vue-tabler-icons";
+import { ButtonImportance } from "../base/types/button";
+import Button from "~~/components/base/uiButton.vue";
+import { AppPlatform } from "~~/platforms/platforms";
+import { useMain } from "~~/stores/main";
 
-const runtimeConfig = useRuntimeConfig()
-const isMobile = computed(() => runtimeConfig.public.PLATFORM === AppPlatform.mobile)
-const mainStore = useMain()
+const runtimeConfig = useRuntimeConfig();
+const isMobile = computed(
+	() => runtimeConfig.public.PLATFORM === AppPlatform.mobile,
+);
+const mainStore = useMain();
 </script>
 
 <template>

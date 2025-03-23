@@ -1,411 +1,410 @@
 {
-  "general": {
-    "or": "or"
-  },
-  "support": {
-    "source": "View on GitHub",
-    "support": "Buy the author a coffee",
-    "share": {
-      "twitter": "Follow the app on Twitter",
-      "facebook": "Share the app on Facebook",
-      "reddit": "Share the app on Reddit"
-    }
-  },
-  "section": {
-    "work": "Work",
-    "shortpause": "Break",
-    "longpause": "Long Break",
-    "wait": "Waiting"
-  },
-  "controls": {
-    "play": "Start or pause the timer",
-    "stop": "Reset timer",
-    "advance": "Go to next section"
-  },
-  "appbar": {
-    "settings": "Open settings",
-    "todo": "Open task list"
-  },
-  "timer": {
-    "approximate": {
-      "hours": "hour | hours",
-      "minutes": "minute | minutes"
-    }
-  },
-  "login": "Login",
-  "loginBy": {
-    "discord": "Discord",
-    "google": "Google"
-  },
-  "settings": {
-    "heading": "Settings",
-    "tabs": {
-      "main": "Main",
-      "timer": "Schedule",
-      "display": "Display",
-      "audio": "Audio",
-      "about": "About"
-    },
-    "buttons": {
-      "close": "Close",
-      "reset": "Reset"
-    },
-    "reset": {
-      "title": "Reset settings",
-      "confirm": "Reset",
-      "cancel": "Cancel"
-    },
-    "manage": {
-      "buttons": {
-        "save": "Save",
-        "load": "Load"
-      }
-    },
-    "scheduleMinTime": "The minimum allowed time is 5 minutes",
-    "about": {
-      "madeby": "Made by A Tăng",
-      "source": "Source code",
-      "support": "Support the project",
-      "supportBody": "Join Betterme Discord study community to communicate with other people and unlock more new features!",
-      "mobileSupport": "Due to the rules enforced by the Google Play Store, I cannot show you any links inside the mobile app to donate to the project.",
-      "share": "or share the app on social media:",
-      "discord_betterme": "Discord Betterme",
-      "betterme_news": "Betterme.news"
-    },
-    "values": {
-      "pomodoro_settings": {
-        "long_rest_time_interval": {
-          "_title": "Long Break interval",
-          "_description": ""
-        },
-        "pomodoro_study_time":{
-            "_title": "Work",
-            "_description": ""
-        },
-        "pomodoro_rest_time":{
-            "_title": "Break",
-            "_description": ""
-        },
-        "pomodoro_long_rest_time":{
-            "_title": "Long break",
-            "_description": ""
-
-        }
-      },
-      "manage": {
-        "_title": "Manage settings",
-        "_description": "Download the current settings or load them from a file"
-      },
-      "mobile": {
-        "notifications": {
-          "sectionOver": {
-            "_title": "Section over notifications",
-            "_description": "Show a notification when a section is over"
-          },
-          "persistent": {
-            "_title": "Persistent notification",
-            "_description": "Display the progress of the current timer"
-          }
-        }
-      },
-      "lang": {
-        "_title": "Language",
-        "_description": ""
-      },
-      "eventLoggingEnabled": {
-        "_title": "Enable event logging",
-        "_description": ""
-      },
-      "currentTimer": {
-        "_title": "Timer style",
-        "_description": "",
-        "_values": {
-          "traditional": "Traditional",
-          "approximate": "Approximate",
-          "percentage": "Percentage"
-        },
-        "_valueDescription": {
-          "traditional": "12:34",
-          "approximate": "13 minutes",
-          "percentage": "50%"
-        }
-      },
-      "sectionEndAction": {
-        "_title": "Section end behavior",
-        "_description": "What should happen when the timer runs out",
-        "_values": {
-          "continue": "Continue",
-          "stop": "Stop",
-          "skip": "Advance"
-        },
-        "_valueDescription": {
-          "continue": "Keep ticking",
-          "stop": "Stop the timer",
-          "skip": "Start the next section"
-        }
-      },
-      "schedule": {
-        "longPauseInterval": {
-          "_title": "Long Break interval",
-          "_description": ""
-        },
-        "numScheduleEntries": {
-          "_title": "Number of entries in schedule",
-          "_description": ""
-        },
-        "visibility": {
-          "enabled": {
-            "_title": "Show schedule",
-            "_description": ""
-          },
-          "showSectionType": {
-            "_title": "Show section type in schedule",
-            "_description": "Displays the current section type under the schedule"
-          }
-        },
-        "lengths": {
-          "_title": "Schedule preset",
-          "_description": "",
-          "_values": {
-            "default": "Default",
-            "debug": "Debug",
-            "custom": "Custom"
-          },
-          "_valueDescription": {
-            "default": "25 minutes work, 5 minutes break",
-            "debug": "For debugging purposes",
-            "custom": "Set by you"
-          },
-          "work": {
-            "_title": "Work",
-            "_description": ""
-          },
-          "shortpause": {
-            "_title": "Break",
-            "_description": ""
-          },
-          "longpause": {
-            "_title": "Long break",
-            "_description": ""
-          }
-        }
-      },
-      "permissions": {
-        "notifications": {
-          "_title": "Notification permissions",
-          "_description": "Let the app send you notifications when a section is over"
-        }
-      },
-      "audio": {
-        "volume": {
-          "_title": "Audio volume",
-          "_description": ""
-        },
-        "soundSet": {
-          "_title": "Sound set",
-          "_description": "Sounds used for notifications",
-          "_values": {
-            "musical": "Musical"
-          },
-          "_valueDescription": {
-            "musical": "The default sounds"
-          }
-        }
-      },
-      "timerControls": {
-        "enableKeyboardShortcuts": {
-          "_title": "Enable keyboard shortcuts",
-          "_description": "Start/pause the timer with the space key"
-        }
-      },
-      "tasks": {
-        "enabled": {
-          "_title": "Enable task list",
-          "_description": "Manage your work right from the app"
-        },
-        "maxActiveTasks": {
-          "_title": "Maximum active tasks to show",
-          "_description": "You'll only see this many active tasks at most"
-        },
-        "removeCompletedTasks": {
-          "_title": "Remove completed tasks",
-          "_description": "Tasks completed will be removed when a new section begins"
-        }
-      },
-      "pageTitle": {
-        "useTickEmoji": {
-          "_title": "Use tick emoji in title",
-          "_description": "Show ✔ instead of \"done\""
-        }
-      },
-      "visuals": {
-        "enable_audio": {
-          "_title": "Play audio",
-          "_description": "Let the app play sounds when a section is over"
-        },
-        "theme": {
-          "_title": "Theme settings",
-          "_description": "Choose a set of predefined section colors or set your own",
-          "custom": "Custom"
-        },
-        "dark_mode": {
-          "_title": "Enable dark mode",
-          "_description": "Less bright, just as productive"
-        },
-        "show_progress_bar": {
-          "_title": "Show progress bar",
-          "_description": "Show progress behind timer"
-        },
-        "timer_show": {
-          "_title": "Timer style",
-          "_description": "",
-        "_values": {
-          "traditional": "Traditional",
-          "approximate": "Approximate",
-          "percentage": "Percentage"
-        },
-        "_valueDescription": {
-          "traditional": "12:34",
-          "approximate": "13 minutes",
-          "percentage": "50%"
-        }
-        },
-        "enable_adaptive_ticking":{
-          "_title": "Enable adaptive ticking",
-          "_description": "Timer will tick less frequently while in the background"
-        }
-      },
-      "reset": {
-        "_title": "Reset settings",
-        "_description": "All settings will be reset after the app is reloaded"
-      }
-    }
-  },
-  "notification": {
-    "action": {
-      "ready": "Let's go!"
-    },
-    "work": {
-      "title": "Time to get back to work!",
-      "body": "Your break is over. Work some more, then rest again."
-    },
-    "shortpause": {
-      "title": "Time for a break",
-      "body": "Nice, you've earned a short break."
-    },
-    "longpause": {
-      "title": "Whew! More spare time!",
-      "body": "Well-well. After working this much, you deserve a longer break."
-    }
-  },
-  "error": {
-    "format_invalid": "Invalid input format",
-    "range_invalid": "Value must be between {min} and {max}",
-    "required": "This field must be filled",
-    "numeric": "Value must be a number",
-    "min": "Value must be at least {min}",
-    "max": "Value must be at most {max}",
-    "time_format": "Incorrectly formatted time (MM:SS)",
-    "min_time": "The input time is too short",
-    "undefined": "Undefined error"
-  },
-  "tasks": {
-    "title": "Tasks",
-    "empty": "No tasks yet",
-    "manage": "Manage",
-    "addPlaceholder": "Enter something you need to do"
-  },
-  "ready": "Done",
-  "errorpage": {
-    "title": {
-      "crash": "The app crashed",
-      "notfound": "That page does not exist",
-      "other": "Something went wrong"
-    },
-    "action": {
-      "reset": "Reset the app",
-      "reload": "Reload the page",
-      "home": "Go back to the home page",
-      "githubIssue": "File a bug report",
-      "githubDiscussion": "Ask others if they have the same issue",
-      "twitter": "Write a friendly tweet"
-    },
-    "showError": {
-      "main": "Show me the error message!",
-      "sub": "I'll use it to report an issue or ask if others experience it, too."
-    },
-    "suggestions": {
-      "primary": "You can",
-      "secondary": "or if those didn't help"
-    }
-  },
-  "timerpreset": {
-    "_values": {
-      "default": "Default",
-      "easy": "Beginner",
-      "advanced": "Advanced",
-      "workaholic": "Workaholic"
-    },
-    "_valueDescription": {
-      "default": "The default Pomodoro values.",
-      "easy": "For those who haven't yet tried the Pomodoro technique.",
-      "advanced": "Work slightly more effectively.",
-      "workaholic": "For long work sessions."
-    },
-    "description": "{brief} \n {worklength} minutes of work with {splength} minutes short and {lplength} minutes long breaks after every {lpfreq} work sessions."
-  },
-  "tutorials": {
-    "onboarding": {
-      "pages": {
-        "0": {
-          "title": "Welcome to Betterme.study!",
-          "onboarding_invite": "Let's set you up for the first time. You can change everything in the settings menu later.",
-          "heading": "Choose your language"
-        },
-        "1": {
-          "heading": "Set your timers",
-          "text": "Choose a predefined setup for the lengths of your timers. You can customize them later in the settings."
-        },
-        "2": {
-          "theme": {
-            "heading": "Choose a theme",
-            "options": {
-              "_values": {
-                "light": "Light",
-                "dark": "Dark"
-              },
-              "_valueDescription": {
-                "light": "",
-                "dark": ""
-              }
-            }
-          },
-          "display": {
-            "heading": "Choose a display"
-          }
-        },
-        "3": {
-          "heading": "Remember",
-          "text": "You can always change these (and more) in the settings menu!"
-        },
-        "support": {
-          "heading": "Support the project",
-          "text": "If this project has helped you, consider buying the author a coffee.",
-          "hint": "You can also find support options in the Settings > About page."
-        }
-      },
-      "buttons": {
-        "close": "Close",
-        "start": "Start setup",
-        "next": "Next",
-        "support": "Support the project"
-      }
-    },
-    "olddomain": {
-      "heading": "AnotherPomodoro is now FocusTide",
-      "warning": "We have detected that you might be coming from the old domain another-pomodoro.app, which will expire by the end of 2023.",
-      "action": "Please update your bookmark or hyperlink to focustide.app.",
-      "button": "OK"
-    }
-  }
+	"general": {
+		"or": "or"
+	},
+	"support": {
+		"source": "View on GitHub",
+		"support": "Buy the author a coffee",
+		"share": {
+			"twitter": "Follow the app on Twitter",
+			"facebook": "Share the app on Facebook",
+			"reddit": "Share the app on Reddit"
+		}
+	},
+	"section": {
+		"work": "Work",
+		"shortpause": "Break",
+		"longpause": "Long Break",
+		"wait": "Waiting"
+	},
+	"controls": {
+		"play": "Start or pause the timer",
+		"stop": "Reset timer",
+		"advance": "Go to next section"
+	},
+	"appbar": {
+		"settings": "Open settings",
+		"todo": "Open task list"
+	},
+	"timer": {
+		"approximate": {
+			"hours": "hour | hours",
+			"minutes": "minute | minutes"
+		}
+	},
+	"login": "Login",
+	"loginBy": {
+		"discord": "Discord",
+		"google": "Google"
+	},
+	"settings": {
+		"heading": "Settings",
+		"tabs": {
+			"main": "Main",
+			"timer": "Schedule",
+			"display": "Display",
+			"audio": "Audio",
+			"about": "About"
+		},
+		"buttons": {
+			"close": "Close",
+			"reset": "Reset"
+		},
+		"reset": {
+			"title": "Reset settings",
+			"confirm": "Reset",
+			"cancel": "Cancel"
+		},
+		"manage": {
+			"buttons": {
+				"save": "Save",
+				"load": "Load"
+			}
+		},
+		"scheduleMinTime": "The minimum allowed time is 5 minutes",
+		"about": {
+			"madeby": "Made by A Tăng",
+			"source": "Source code",
+			"support": "Support the project",
+			"supportBody": "Join Betterme Discord study community to communicate with other people and unlock more new features!",
+			"mobileSupport": "Due to the rules enforced by the Google Play Store, I cannot show you any links inside the mobile app to donate to the project.",
+			"share": "or share the app on social media:",
+			"discord_betterme": "Discord Betterme",
+			"betterme_news": "Betterme.news"
+		},
+		"values": {
+			"pomodoro_settings": {
+				"long_rest_time_interval": {
+					"_title": "Long Break interval",
+					"_description": ""
+				},
+				"pomodoro_study_time": {
+					"_title": "Work",
+					"_description": ""
+				},
+				"pomodoro_rest_time": {
+					"_title": "Break",
+					"_description": ""
+				},
+				"pomodoro_long_rest_time": {
+					"_title": "Long break",
+					"_description": ""
+				}
+			},
+			"manage": {
+				"_title": "Manage settings",
+				"_description": "Download the current settings or load them from a file"
+			},
+			"mobile": {
+				"notifications": {
+					"sectionOver": {
+						"_title": "Section over notifications",
+						"_description": "Show a notification when a section is over"
+					},
+					"persistent": {
+						"_title": "Persistent notification",
+						"_description": "Display the progress of the current timer"
+					}
+				}
+			},
+			"lang": {
+				"_title": "Language",
+				"_description": ""
+			},
+			"eventLoggingEnabled": {
+				"_title": "Enable event logging",
+				"_description": ""
+			},
+			"currentTimer": {
+				"_title": "Timer style",
+				"_description": "",
+				"_values": {
+					"traditional": "Traditional",
+					"approximate": "Approximate",
+					"percentage": "Percentage"
+				},
+				"_valueDescription": {
+					"traditional": "12:34",
+					"approximate": "13 minutes",
+					"percentage": "50%"
+				}
+			},
+			"sectionEndAction": {
+				"_title": "Section end behavior",
+				"_description": "What should happen when the timer runs out",
+				"_values": {
+					"continue": "Continue",
+					"stop": "Stop",
+					"skip": "Advance"
+				},
+				"_valueDescription": {
+					"continue": "Keep ticking",
+					"stop": "Stop the timer",
+					"skip": "Start the next section"
+				}
+			},
+			"schedule": {
+				"longPauseInterval": {
+					"_title": "Long Break interval",
+					"_description": ""
+				},
+				"numScheduleEntries": {
+					"_title": "Number of entries in schedule",
+					"_description": ""
+				},
+				"visibility": {
+					"enabled": {
+						"_title": "Show schedule",
+						"_description": ""
+					},
+					"showSectionType": {
+						"_title": "Show section type in schedule",
+						"_description": "Displays the current section type under the schedule"
+					}
+				},
+				"lengths": {
+					"_title": "Schedule preset",
+					"_description": "",
+					"_values": {
+						"default": "Default",
+						"debug": "Debug",
+						"custom": "Custom"
+					},
+					"_valueDescription": {
+						"default": "25 minutes work, 5 minutes break",
+						"debug": "For debugging purposes",
+						"custom": "Set by you"
+					},
+					"work": {
+						"_title": "Work",
+						"_description": ""
+					},
+					"shortpause": {
+						"_title": "Break",
+						"_description": ""
+					},
+					"longpause": {
+						"_title": "Long break",
+						"_description": ""
+					}
+				}
+			},
+			"permissions": {
+				"notifications": {
+					"_title": "Notification permissions",
+					"_description": "Let the app send you notifications when a section is over"
+				}
+			},
+			"audio": {
+				"volume": {
+					"_title": "Audio volume",
+					"_description": ""
+				},
+				"soundSet": {
+					"_title": "Sound set",
+					"_description": "Sounds used for notifications",
+					"_values": {
+						"musical": "Musical"
+					},
+					"_valueDescription": {
+						"musical": "The default sounds"
+					}
+				}
+			},
+			"timerControls": {
+				"enableKeyboardShortcuts": {
+					"_title": "Enable keyboard shortcuts",
+					"_description": "Start/pause the timer with the space key"
+				}
+			},
+			"tasks": {
+				"enabled": {
+					"_title": "Enable task list",
+					"_description": "Manage your work right from the app"
+				},
+				"maxActiveTasks": {
+					"_title": "Maximum active tasks to show",
+					"_description": "You'll only see this many active tasks at most"
+				},
+				"removeCompletedTasks": {
+					"_title": "Remove completed tasks",
+					"_description": "Tasks completed will be removed when a new section begins"
+				}
+			},
+			"pageTitle": {
+				"useTickEmoji": {
+					"_title": "Use tick emoji in title",
+					"_description": "Show ✔ instead of \"done\""
+				}
+			},
+			"visuals": {
+				"enable_audio": {
+					"_title": "Play audio",
+					"_description": "Let the app play sounds when a section is over"
+				},
+				"theme": {
+					"_title": "Theme settings",
+					"_description": "Choose a set of predefined section colors or set your own",
+					"custom": "Custom"
+				},
+				"dark_mode": {
+					"_title": "Enable dark mode",
+					"_description": "Less bright, just as productive"
+				},
+				"show_progress_bar": {
+					"_title": "Show progress bar",
+					"_description": "Show progress behind timer"
+				},
+				"timer_show": {
+					"_title": "Timer style",
+					"_description": "",
+					"_values": {
+						"traditional": "Traditional",
+						"approximate": "Approximate",
+						"percentage": "Percentage"
+					},
+					"_valueDescription": {
+						"traditional": "12:34",
+						"approximate": "13 minutes",
+						"percentage": "50%"
+					}
+				},
+				"enable_adaptive_ticking": {
+					"_title": "Enable adaptive ticking",
+					"_description": "Timer will tick less frequently while in the background"
+				}
+			},
+			"reset": {
+				"_title": "Reset settings",
+				"_description": "All settings will be reset after the app is reloaded"
+			}
+		}
+	},
+	"notification": {
+		"action": {
+			"ready": "Let's go!"
+		},
+		"work": {
+			"title": "Time to get back to work!",
+			"body": "Your break is over. Work some more, then rest again."
+		},
+		"shortpause": {
+			"title": "Time for a break",
+			"body": "Nice, you've earned a short break."
+		},
+		"longpause": {
+			"title": "Whew! More spare time!",
+			"body": "Well-well. After working this much, you deserve a longer break."
+		}
+	},
+	"error": {
+		"format_invalid": "Invalid input format",
+		"range_invalid": "Value must be between {min} and {max}",
+		"required": "This field must be filled",
+		"numeric": "Value must be a number",
+		"min": "Value must be at least {min}",
+		"max": "Value must be at most {max}",
+		"time_format": "Incorrectly formatted time (MM:SS)",
+		"min_time": "The input time is too short",
+		"undefined": "Undefined error"
+	},
+	"tasks": {
+		"title": "Tasks",
+		"empty": "No tasks yet",
+		"manage": "Manage",
+		"addPlaceholder": "Enter something you need to do"
+	},
+	"ready": "Done",
+	"errorpage": {
+		"title": {
+			"crash": "The app crashed",
+			"notfound": "That page does not exist",
+			"other": "Something went wrong"
+		},
+		"action": {
+			"reset": "Reset the app",
+			"reload": "Reload the page",
+			"home": "Go back to the home page",
+			"githubIssue": "File a bug report",
+			"githubDiscussion": "Ask others if they have the same issue",
+			"twitter": "Write a friendly tweet"
+		},
+		"showError": {
+			"main": "Show me the error message!",
+			"sub": "I'll use it to report an issue or ask if others experience it, too."
+		},
+		"suggestions": {
+			"primary": "You can",
+			"secondary": "or if those didn't help"
+		}
+	},
+	"timerpreset": {
+		"_values": {
+			"default": "Default",
+			"easy": "Beginner",
+			"advanced": "Advanced",
+			"workaholic": "Workaholic"
+		},
+		"_valueDescription": {
+			"default": "The default Pomodoro values.",
+			"easy": "For those who haven't yet tried the Pomodoro technique.",
+			"advanced": "Work slightly more effectively.",
+			"workaholic": "For long work sessions."
+		},
+		"description": "{brief} \n {worklength} minutes of work with {splength} minutes short and {lplength} minutes long breaks after every {lpfreq} work sessions."
+	},
+	"tutorials": {
+		"onboarding": {
+			"pages": {
+				"0": {
+					"title": "Welcome to Betterme.study!",
+					"onboarding_invite": "Let's set you up for the first time. You can change everything in the settings menu later.",
+					"heading": "Choose your language"
+				},
+				"1": {
+					"heading": "Set your timers",
+					"text": "Choose a predefined setup for the lengths of your timers. You can customize them later in the settings."
+				},
+				"2": {
+					"theme": {
+						"heading": "Choose a theme",
+						"options": {
+							"_values": {
+								"light": "Light",
+								"dark": "Dark"
+							},
+							"_valueDescription": {
+								"light": "",
+								"dark": ""
+							}
+						}
+					},
+					"display": {
+						"heading": "Choose a display"
+					}
+				},
+				"3": {
+					"heading": "Remember",
+					"text": "You can always change these (and more) in the settings menu!"
+				},
+				"support": {
+					"heading": "Support the project",
+					"text": "If this project has helped you, consider buying the author a coffee.",
+					"hint": "You can also find support options in the Settings > About page."
+				}
+			},
+			"buttons": {
+				"close": "Close",
+				"start": "Start setup",
+				"next": "Next",
+				"support": "Support the project"
+			}
+		},
+		"olddomain": {
+			"heading": "AnotherPomodoro is now FocusTide",
+			"warning": "We have detected that you might be coming from the old domain another-pomodoro.app, which will expire by the end of 2023.",
+			"action": "Please update your bookmark or hyperlink to focustide.app.",
+			"button": "OK"
+		}
+	}
 }

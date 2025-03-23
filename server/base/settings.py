@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from all_env import docs_url
 
 # base setting
 app = FastAPI(

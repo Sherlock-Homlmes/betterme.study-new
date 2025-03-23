@@ -18,10 +18,10 @@ from models import Users, TaskCategories
     dependencies=[Depends(auth_handler.auth_wrapper)],
 )
 async def get_list_of_task_category(user: Users = Depends(auth_handler.auth_wrapper)):
-    TaskCategories = await TaskCategories.find(
+    task_categories = await TaskCategories.find(
         TaskCategories.user.id == ObjectId(user["id"])
     ).to_list()
-    for task_category in TaskCategories:
+    for task_category in task_categories:
         del task_category.user
     return TaskCategories
 

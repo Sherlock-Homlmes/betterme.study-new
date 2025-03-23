@@ -1,39 +1,53 @@
 <script setup lang="ts">
-import { TimerState, useSchedule } from '~~/stores/schedule'
+import { TimerState, useSchedule } from "~~/stores/schedule";
 
-const scheduleStore = useSchedule()
-const running = computed(() => scheduleStore.getCurrentTimerState === TimerState.RUNNING)
-const emit = defineEmits<{(event: 'tick', timeString: string): void }>()
+const scheduleStore = useSchedule();
+const running = computed(
+	() => scheduleStore.getCurrentTimerState === TimerState.RUNNING,
+);
+const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
 
 const timeLeftStructured = computed(() => {
-  const sLeft = Math.abs(Math.round((scheduleStore.getCurrentItem.length - scheduleStore.getCurrentItem.timeElapsed) / 1000))
-  const hours = Math.floor(sLeft / (60 * 60))
-  const minutes = Math.floor((sLeft % (60 * 60)) / (60))
-  const seconds = Math.floor(sLeft % 60)
+	const sLeft = Math.abs(
+		Math.round(
+			(scheduleStore.getCurrentItem.length -
+				scheduleStore.getCurrentItem.timeElapsed) /
+				1000,
+		),
+	);
+	const hours = Math.floor(sLeft / (60 * 60));
+	const minutes = Math.floor((sLeft % (60 * 60)) / 60);
+	const seconds = Math.floor(sLeft % 60);
 
-  const timeStructured = { hours, minutes, seconds }
+	const timeStructured = { hours, minutes, seconds };
 
-  const displayKeys = (Object.keys(timeStructured) as Array<keyof typeof timeStructured>).filter(value => value !== 'hours' || hours > 0)
-  const completed = scheduleStore.getCurrentItem.timeElapsed > scheduleStore.getCurrentItem.length && [hours, minutes, seconds].some(num => num > 0)
+	const displayKeys = (
+		Object.keys(timeStructured) as Array<keyof typeof timeStructured>
+	).filter((value) => value !== "hours" || hours > 0);
+	const completed =
+		scheduleStore.getCurrentItem.timeElapsed >
+			scheduleStore.getCurrentItem.length &&
+		[hours, minutes, seconds].some((num) => num > 0);
 
-  // if (completed) {
-  //   displayKeys.unshift('_plus')
-  // }
+	// if (completed) {
+	//   displayKeys.unshift('_plus')
+	// }
 
-  const returnObject = {
-    num: timeStructured,
-    displayKeys,
-    completed
-  }
+	const returnObject = {
+		num: timeStructured,
+		displayKeys,
+		completed,
+	};
 
-  emit(
-    'tick',
-    (completed ? '+' : '') + displayKeys
-      .map(key => returnObject.num[key].toString().padStart(2, '0'))
-      .join(':')
-  )
-  return returnObject
-})
+	emit(
+		"tick",
+		(completed ? "+" : "") +
+			displayKeys
+				.map((key) => returnObject.num[key].toString().padStart(2, "0"))
+				.join(":"),
+	);
+	return returnObject;
+});
 </script>
 
 <template>

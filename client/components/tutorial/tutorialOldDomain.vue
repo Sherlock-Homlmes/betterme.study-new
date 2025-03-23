@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ExclamationCircleIcon } from 'vue-tabler-icons'
-import { ButtonImportance, ButtonTheme } from '../base/types/button'
-import Button from '~~/components/base/uiButton.vue'
-import PopupSheet from '@/components/base/popupSheet.vue'
+import { ExclamationCircleIcon } from "vue-tabler-icons";
+import { ButtonImportance, ButtonTheme } from "../base/types/button";
+import Button from "~~/components/base/uiButton.vue";
+import PopupSheet from "@/components/base/popupSheet.vue";
 
-const emit = defineEmits<{(type: 'close'): void}>()
-const router = useRouter()
+const emit = defineEmits<{ (type: "close"): void }>();
+const router = useRouter();
 const closePopup = () => {
-  router.replace(router.currentRoute.value.path)
-  emit('close')
-}
+	router.replace(router.currentRoute.value.path);
+	emit("close");
+};
 </script>
 
 <template>

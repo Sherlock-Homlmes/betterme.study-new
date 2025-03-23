@@ -1,56 +1,64 @@
 <script setup lang="ts">
-import { CornerDownLeftIcon } from 'vue-tabler-icons'
-import { type Ref } from 'vue'
-import { ButtonImportance } from '../base/types/button'
-import Button from '~~/components/base/uiButton.vue'
-import { TaskState, useTasklist } from '~~/stores/tasklist'
-import { useSchedule } from '~~/stores/schedule'
-import { useTaskStore } from '~~/stores/todolist'
+import { CornerDownLeftIcon } from "vue-tabler-icons";
+import { type Ref } from "vue";
+import { ButtonImportance } from "../base/types/button";
+import Button from "~~/components/base/uiButton.vue";
+import { TaskState, useTasklist } from "~~/stores/tasklist";
+import { useSchedule } from "~~/stores/schedule";
+import { useTaskStore } from "~~/stores/todolist";
 
-const tasksStore = useTasklist()
-const scheduleStore = useSchedule()
-const addtaskInput: Ref<HTMLElement | null> = ref(null)
-const { postTask } = useTaskStore()
+const tasksStore = useTasklist();
+const scheduleStore = useSchedule();
+const addtaskInput: Ref<HTMLElement | null> = ref(null);
+const { postTask } = useTaskStore();
 
 const data = reactive({
-  taskTitle: '',
-  taskState: TaskState.inProgress,
-  valid: false,
-  debug_lastinput: ''
-})
+	taskTitle: "",
+	taskState: TaskState.inProgress,
+	valid: false,
+	debug_lastinput: "",
+});
 
 // computed: {
 //   ...mapState(useTasklist, ['tasks']),
 //   ...mapState(useSchedule, ['getCurrentItem', 'currentScheduleColourModern'])
 // },
 
-watch(() => data.taskTitle, (newValue) => {
-  if (newValue.length < 1) {
-    data.valid = false
-    return
-  }
+watch(
+	() => data.taskTitle,
+	(newValue) => {
+		if (newValue.length < 1) {
+			data.valid = false;
+			return;
+		}
 
-  const matchingTasks = tasksStore.tasks.filter(
-    task => task.title === newValue && task.section === scheduleStore.getCurrentItem.type
-  )
+		const matchingTasks = tasksStore.tasks.filter(
+			(task) =>
+				task.title === newValue &&
+				task.section === scheduleStore.getCurrentItem.type,
+		);
 
-  data.valid = matchingTasks.length === 0
-})
+		data.valid = matchingTasks.length === 0;
+	},
+);
 
 const addTask = () => {
-  postTask(data.taskTitle)
-  data.taskTitle = ''
-  const addtaskInputCast = addtaskInput.value as HTMLElement
+	postTask(data.taskTitle);
+	data.taskTitle = "";
+	const addtaskInputCast = addtaskInput.value as HTMLElement;
 
-  addtaskInputCast.focus()
-}
+	addtaskInputCast.focus();
+};
 
 // Add new task when enter is pressed
 const checkEnter = (event: KeyboardEvent) => {
-  if (data.valid && (event.code.toLowerCase() === 'enter' || event.keyCode === 13)) {
-    addTask()
-  }
-}
+	if (
+		data.valid &&
+		(event.code.toLowerCase() === "enter" || event.keyCode === 13)
+	) {
+		addTask();
+	}
+};
 </script>
 
 <template>

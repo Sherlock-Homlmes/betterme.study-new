@@ -1,5 +1,5 @@
 from pydantic import Field
-from beanie import Document, Link, before_event, Insert
+from beanie import Document, before_event, Insert
 from typing import Optional, List
 import datetime
 from datetime import timedelta
@@ -8,8 +8,7 @@ from enum import Enum
 from fastapi import HTTPException
 
 # local
-from .users import Users, UserSettings
-from .todolist import TodoList
+from .users import UserSettings
 
 from other_modules.time_modules import vn_now
 

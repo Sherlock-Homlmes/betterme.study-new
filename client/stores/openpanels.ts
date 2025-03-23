@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-const useOpenPanels = defineStore('openpanels', {
-  state: () => ({
-    settings: false,
-    todo: false
-  })
-})
+const useOpenPanels = defineStore("openpanels", {
+	state: () => ({
+		settings: false,
+		todo: false,
+	}),
+});
 
-export { useOpenPanels }
+export { useOpenPanels };

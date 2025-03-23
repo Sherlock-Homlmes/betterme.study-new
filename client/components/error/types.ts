@@ -1,12 +1,12 @@
 export enum ErrorActionState {
-  Recommended = 'recommended',
-  Default = 'default',
-  Disabled = 'disabled'
+	Recommended = "recommended",
+	Default = "default",
+	Disabled = "disabled",
 }
 
 export enum ActionType {
-  RECOMMEND = 'recommended',
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-  HIDE = 'disabled'
+	RECOMMEND = "recommended",
+	PRIMARY = "primary",
+	SECONDARY = "secondary",
+	HIDE = "disabled",
 }

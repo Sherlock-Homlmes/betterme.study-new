@@ -1,0 +1,43 @@
+# This pre-commit file use for check code style before commit and also use for check code style in CI
+# TODO: seperate ci check in other file(check code only, no format)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: debug-statements
+        language_version: python3
+
+  # js
+  - repo: https://github.com/biomejs/pre-commit
+    rev: "v1.9.4"
+    hooks:
+    -   id: biome-format
+        name: "client formatter"
+        additional_dependencies: ["@biomejs/biome@1.8.1"]
+        files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
+
+  - repo: https://github.com/haocheng6/mirrors-oxlint
+    rev: v0.16.2
+    hooks:
+    -   id: oxlint
+        name: "client linter"
+        files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
+
+
+  # python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.2
+    hooks:
+      # formatter
+      - id: ruff-format
+        name: "server formatter"
+        files: ^server/
+      # linter
+      - id: ruff
+        name: "server linter"
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^server/

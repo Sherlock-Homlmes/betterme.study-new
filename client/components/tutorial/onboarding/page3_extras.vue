@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { InfoCircleIcon } from 'vue-tabler-icons'
-import OnboardingHeader from './onboardingHeader.vue'
-import OnboardingPage from './onboardingPage.vue'
+import { InfoCircleIcon } from "vue-tabler-icons";
+import OnboardingHeader from "./onboardingHeader.vue";
+import OnboardingPage from "./onboardingPage.vue";
 </script>
 
 <template>

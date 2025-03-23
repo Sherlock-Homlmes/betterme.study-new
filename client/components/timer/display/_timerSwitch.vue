@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { TimerType } from '~~/stores/settings'
-import { TimerState, useSchedule } from '~~/stores/schedule'
+import { TimerType } from "~~/stores/settings";
+import { TimerState, useSchedule } from "~~/stores/schedule";
 
-import TimerTraditional from '@/components/timer/display/timerTraditional.vue'
-import TimerApproximate from '@/components/timer/display/timerApproximate.vue'
-import TimerPercentage from '@/components/timer/display/timerPercentage.vue'
-import CompleteMarker from '@/components/timer/display/timerComplete.vue'
+import TimerTraditional from "@/components/timer/display/timerTraditional.vue";
+import TimerApproximate from "@/components/timer/display/timerApproximate.vue";
+import TimerPercentage from "@/components/timer/display/timerPercentage.vue";
+import CompleteMarker from "@/components/timer/display/timerComplete.vue";
 
 export interface TimerInfo {
-  timeElapsed: number,
-  timeOriginal: number,
-  timerState: number
+	timeElapsed: number;
+	timeOriginal: number;
+	timerState: number;
 }
 
-const scheduleStore = useSchedule()
+const scheduleStore = useSchedule();
 
 interface Props {
-  timerWidget: TimerType
+	timerWidget: TimerType;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  timerWidget: TimerType.Approximate
-})
+	timerWidget: TimerType.Approximate,
+});
 
-const running = computed(() => scheduleStore.timerState === TimerState.RUNNING)
+const running = computed(() => scheduleStore.timerState === TimerState.RUNNING);
 </script>
 
 <template>

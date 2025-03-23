@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const props = defineProps({
-  open: {
-    type: Boolean,
-    default: false
-  }
-})
+	open: {
+		type: Boolean,
+		default: false,
+	},
+});
 </script>
 
 <template>

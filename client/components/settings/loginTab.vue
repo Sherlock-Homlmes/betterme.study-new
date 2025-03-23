@@ -1,25 +1,27 @@
 <script setup lang="ts">
-import { BrandDiscordIcon, BrandGoogleIcon } from 'vue-tabler-icons'
-import { ButtonImportance } from '../base/types/button'
-import Button from '~~/components/base/uiButton.vue'
-import { AppPlatform } from '~~/platforms/platforms'
-import { useMain } from '~~/stores/main'
+import { BrandDiscordIcon, BrandGoogleIcon } from "vue-tabler-icons";
+import { ButtonImportance } from "../base/types/button";
+import Button from "~~/components/base/uiButton.vue";
+import { AppPlatform } from "~~/platforms/platforms";
+import { useMain } from "~~/stores/main";
 
-const runtimeConfig = useRuntimeConfig()
-const {API_URL, PLATFORM} = runtimeConfig.public
-const isMobile = computed(() => PLATFORM === AppPlatform.mobile)
-const mainStore = useMain()
+const runtimeConfig = useRuntimeConfig();
+const { API_URL, PLATFORM } = runtimeConfig.public;
+const isMobile = computed(() => PLATFORM === AppPlatform.mobile);
+const mainStore = useMain();
 const oauthLink = reactive({
-  discord_link: null,
-  google_link: null,
-})
+	discord_link: null,
+	google_link: null,
+});
 const getLoginUrl = async () => {
-  const response = await fetch(`${API_URL}/auth/oauth-link?discord_link=true&google_link=true`);
-  const data = await response.json()
-  oauthLink.discord_link = data.discord_link
-  oauthLink.google_link = data.google_link
-}
-getLoginUrl()
+	const response = await fetch(
+		`${API_URL}/auth/oauth-link?discord_link=true&google_link=true`,
+	);
+	const data = await response.json();
+	oauthLink.discord_link = data.discord_link;
+	oauthLink.google_link = data.google_link;
+};
+getLoginUrl();
 </script>
 
 <template>

@@ -33,12 +33,12 @@ elif [[ ${args[0]} == "install" ]]; then
         echo "Installing Docker Desktop. Please wait..."
 
         echo "Step 1/4: Installing neccesary tools"
-        echo $(eval "sudo apt-get update 
+        echo $(eval "sudo apt-get update
             ${linebreak}sudo apt-get install \
             ca-certificates \
             curl \
             gnupg \
-            lsb-release -y 
+            lsb-release -y
         ")
 
         echo "Step 2/4: Setting up Docker's package repository"

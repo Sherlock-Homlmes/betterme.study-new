@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSchedule } from '~~/stores/schedule'
-import ScheduleItem from '@/components/schedule/scheduleItem.vue'
+import { useSchedule } from "~~/stores/schedule";
+import ScheduleItem from "@/components/schedule/scheduleItem.vue";
 
-const scheduleStore = useSchedule()
+const scheduleStore = useSchedule();
 </script>
 
 <template>

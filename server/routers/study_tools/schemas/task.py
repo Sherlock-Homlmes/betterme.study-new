@@ -1,11 +1,10 @@
 import datetime
 
 # fastapi
-from pydantic import BaseModel, Field, validator, model_validator
+from pydantic import BaseModel, Field, model_validator
 from typing import Optional, List
 
 # local
-from other_modules.time_modules import str_to_time
 from models.todolist import TaskStatusEnum
 
 

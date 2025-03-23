@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { BrightnessDownIcon, DeviceWatchIcon } from 'vue-tabler-icons'
-import OnboardingPage from './onboardingPage.vue'
-import OnboardingHeader from './onboardingHeader.vue'
-import OptionGroup from '~~/components/base/optionGroup.vue'
-import { TimerType, useSettings } from '~~/stores/settings'
-import { useAuthStore } from '~~/stores/auth'
+import { BrightnessDownIcon, DeviceWatchIcon } from "vue-tabler-icons";
+import OnboardingPage from "./onboardingPage.vue";
+import OnboardingHeader from "./onboardingHeader.vue";
+import OptionGroup from "~~/components/base/optionGroup.vue";
+import { TimerType, useSettings } from "~~/stores/settings";
+import { useAuthStore } from "~~/stores/auth";
 
-const settingsStore = useSettings()
-const {isDarkMode, userSettings} = useAuthStore()!
+const settingsStore = useSettings();
+const { isDarkMode, userSettings } = useAuthStore()!;
 
-const currentTheme = computed(() => isDarkMode.value ? 'dark' : 'light')
-const currentTimer = computed(() => userSettings.value.visuals.timer_show)
+const currentTheme = computed(() => (isDarkMode.value ? "dark" : "light"));
+const currentTimer = computed(() => userSettings.value.visuals.timer_show);
 </script>
 
 <template>

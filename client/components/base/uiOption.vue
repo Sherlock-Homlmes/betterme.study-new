@@ -1,20 +1,20 @@
 <script setup lang="ts">
 const props = defineProps({
-  active: {
-    type: Boolean,
-    default: false
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  description: {
-    type: String,
-    default: ''
-  }
-})
+	active: {
+		type: Boolean,
+		default: false,
+	},
+	title: {
+		type: String,
+		default: "",
+	},
+	description: {
+		type: String,
+		default: "",
+	},
+});
 
-const emit = defineEmits<{(type: 'click'): void}>()
+const emit = defineEmits<{ (type: "click"): void }>();
 </script>
 
 <template>

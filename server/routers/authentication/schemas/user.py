@@ -13,6 +13,7 @@ class RegisterUserResponse(BaseModel):
     name: str
     avatar: str
 
+
 class LoginUser(BaseModel):
     email: EmailStr = Field()
     password: str = Field()

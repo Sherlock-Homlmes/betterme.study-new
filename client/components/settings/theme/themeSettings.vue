@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import { prebuiltThemes } from './prebuiltThemes'
-import ColorChanger from './colorChanger.vue'
-import ThemePreview from './themePreview.vue'
-import { useSettings } from '~~/stores/settings'
-import UiOption from '~~/components/base/uiOption.vue'
+import { prebuiltThemes } from "./prebuiltThemes";
+import ColorChanger from "./colorChanger.vue";
+import ThemePreview from "./themePreview.vue";
+import { useSettings } from "~~/stores/settings";
+import UiOption from "~~/components/base/uiOption.vue";
 
-const settingsStore = useSettings()
+const settingsStore = useSettings();
 
-const customTheme = reactive(settingsStore.visuals.theme)
+const customTheme = reactive(settingsStore.visuals.theme);
 const activeThemeKey = computed(() => {
-  const findValue = Object.keys(prebuiltThemes).find((key) => {
-    const rgbValues = [customTheme.work, customTheme.shortpause, customTheme.longpause].flat()
-    const prebuiltValues = [prebuiltThemes[key as keyof typeof prebuiltThemes].work, prebuiltThemes[key as keyof typeof prebuiltThemes].shortpause, prebuiltThemes[key as keyof typeof prebuiltThemes].longpause].flat()
+	const findValue = Object.keys(prebuiltThemes).find((key) => {
+		const rgbValues = [
+			customTheme.work,
+			customTheme.shortpause,
+			customTheme.longpause,
+		].flat();
+		const prebuiltValues = [
+			prebuiltThemes[key as keyof typeof prebuiltThemes].work,
+			prebuiltThemes[key as keyof typeof prebuiltThemes].shortpause,
+			prebuiltThemes[key as keyof typeof prebuiltThemes].longpause,
+		].flat();
 
-    return rgbValues.every((value, index) => prebuiltValues[index] === value)
-  })
+		return rgbValues.every((value, index) => prebuiltValues[index] === value);
+	});
 
-  return findValue
-})
+	return findValue;
+});
 
-const isUsingCustomTheme = ref(activeThemeKey === undefined)
+const isUsingCustomTheme = ref(activeThemeKey === undefined);
 </script>
 
 <template>

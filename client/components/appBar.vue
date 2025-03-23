@@ -1,15 +1,15 @@
 <script setup>
-import { SettingsIcon, ChecklistIcon } from 'vue-tabler-icons'
-import { ButtonImportance, ButtonTheme } from './base/types/button'
-import CButton from '~~/components/base/uiButton.vue'
-import ScheduleView from '@/components/schedule/scheduleDisplay.vue'
-import { useOpenPanels } from '@/stores/openpanels'
-import { useSchedule } from '~~/stores/schedule'
-import { useSettings } from '~~/stores/settings'
+import { SettingsIcon, ChecklistIcon } from "vue-tabler-icons";
+import { ButtonImportance, ButtonTheme } from "./base/types/button";
+import CButton from "~~/components/base/uiButton.vue";
+import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
+import { useOpenPanels } from "@/stores/openpanels";
+import { useSchedule } from "~~/stores/schedule";
+import { useSettings } from "~~/stores/settings";
 
-const openPanels = useOpenPanels()
-const scheduleStore = useSchedule()
-const settingsStore = useSettings()
+const openPanels = useOpenPanels();
+const scheduleStore = useSchedule();
+const settingsStore = useSettings();
 </script>
 
 <template>

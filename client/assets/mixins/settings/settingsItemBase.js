@@ -1,45 +1,45 @@
 export default {
-  data () {
-    return {
-      inputData: '',
-      defaultValidations: {}
-    }
-  },
+	data() {
+		return {
+			inputData: "",
+			defaultValidations: {},
+		};
+	},
 
-  props: {
-    settingsKey: {
-      type: Array,
-      default: () => []
-    },
+	props: {
+		settingsKey: {
+			type: Array,
+			default: () => [],
+		},
 
-    validators: {
-      type: Object,
-      default: () => {}
-    },
+		validators: {
+			type: Object,
+			default: () => {},
+		},
 
-    disabled: {
-      type: Boolean,
-      default: false
-    },
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 
-    customSetFunction: {
-      type: Function,
-      default: undefined
-    }
-  },
+		customSetFunction: {
+			type: Function,
+			default: undefined,
+		},
+	},
 
-  validations () {
-    const additionalValidators = this.validators
-    const defaultValidations = this.defaultValidations
-    return {
-      ...defaultValidations,
-      ...additionalValidators
-    }
-  },
+	validations() {
+		const additionalValidators = this.validators;
+		const defaultValidations = this.defaultValidations;
+		return {
+			...defaultValidations,
+			...additionalValidators,
+		};
+	},
 
-  methods: {
-    checkUpdate (newValue, updateFn, errorFn) {
-      updateFn(newValue)
-    }
-  }
-}
+	methods: {
+		checkUpdate(newValue, updateFn, errorFn) {
+			updateFn(newValue);
+		},
+	},
+};

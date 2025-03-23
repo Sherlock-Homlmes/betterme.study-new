@@ -1,61 +1,54 @@
 <script setup lang="ts">
-import { XIcon } from 'vue-tabler-icons'
+import { XIcon } from "vue-tabler-icons";
 
-import { ButtonImportance, ButtonTheme } from '../base/types/button'
-import ControlButton from '~~/components/base/uiButton.vue'
-import TaskItem from '~~/components/todoList/todoItem.vue'
-import TaskAdd from '@/components/todoList/addTask.vue'
-import { useSettings } from '~~/stores/settings'
-import { useSchedule } from '~~/stores/schedule'
-import { type Task, useTasklist } from '~~/stores/tasklist'
-import { useOpenPanels } from '~~/stores/openpanels'
+import { ButtonImportance, ButtonTheme } from "../base/types/button";
+import ControlButton from "~~/components/base/uiButton.vue";
+import TaskItem from "~~/components/todoList/todoItem.vue";
+import TaskAdd from "@/components/todoList/addTask.vue";
+import { useSettings } from "~~/stores/settings";
+import { useSchedule } from "~~/stores/schedule";
+import { type Task, useTasklist } from "~~/stores/tasklist";
+import { useOpenPanels } from "~~/stores/openpanels";
 
-import { useTaskStore } from '~~/stores/todolist'
-import { onBeforeMount } from 'vue'
+import { useTaskStore } from "~~/stores/todolist";
+import { onBeforeMount } from "vue";
 
-const openPanels = useOpenPanels()
-const settingsStore = useSettings()
-const tasklistStore = useTasklist()
-const scheduleStore = useSchedule()
-const {
-  tasks,
-  getTaskList,
-  postTask,
-  patchTask,
-  deleteTask,
-  moveTask,
- } = useTaskStore()
+const openPanels = useOpenPanels();
+const settingsStore = useSettings();
+const tasklistStore = useTasklist();
+const scheduleStore = useSchedule();
+const { tasks, getTaskList, postTask, patchTask, deleteTask, moveTask } =
+	useTaskStore();
 
-onBeforeMount(async()=>{
-  await getTaskList()
-})
+onBeforeMount(async () => {
+	await getTaskList();
+});
 
 const state = reactive({
-  manageMode: true,
+	manageMode: true,
 
-  /** Is a task being dragged to another place? */
-  dragging: false,
-  /** The task that is being moved */
-  draggedItem: null as Task | null,
-  /** The task that the moved item will be dropped onto */
-  dropTarget: null as Task | null
-})
+	/** Is a task being dragged to another place? */
+	dragging: false,
+	/** The task that is being moved */
+	draggedItem: null as Task | null,
+	/** The task that the moved item will be dropped onto */
+	dropTarget: null as Task | null,
+});
 
 const updateDropTarget = (item: Task) => {
-  state.dropTarget = item
-}
+	state.dropTarget = item;
+};
 
 const handleDrop = () => {
-  // move `draggedItem` around `dropTarget`
-  const newIndex = tasks.value.indexOf(state.dropTarget as Task)
-  moveTask(state.draggedItem, newIndex)
+	// move `draggedItem` around `dropTarget`
+	const newIndex = tasks.value.indexOf(state.dropTarget as Task);
+	moveTask(state.draggedItem, newIndex);
 
-  // reset drag-and-drop variables
-  state.draggedItem = null
-  state.dragging = false
-  state.dropTarget = null
-}
-
+	// reset drag-and-drop variables
+	state.draggedItem = null;
+	state.dragging = false;
+	state.dropTarget = null;
+};
 </script>
 
 <template>

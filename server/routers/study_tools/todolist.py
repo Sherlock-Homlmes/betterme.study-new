@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from routers.authentication import auth_handler
 
 from .schemas import Task, PatchTaskPayload, GetTaskResponse
-from models import Users, TodoList, TaskCategories
+from models import Users, TodoList
 
 from other_modules.time_modules import vn_now
 

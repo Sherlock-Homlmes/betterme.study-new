@@ -1,7 +1,8 @@
 # default
 from bson import json_util
 from beanie.odm.fields import PydanticObjectId
-import json, datetime
+import json
+import datetime
 
 # local
 from .time_modules import time_to_str

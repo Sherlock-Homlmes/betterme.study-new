@@ -1,5 +1,7 @@
 # default
-import imgbbpy, wget, os
+import imgbbpy
+import wget
+import os
 from dataclasses import dataclass
 from typing import Optional
 

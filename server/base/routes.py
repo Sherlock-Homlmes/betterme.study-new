@@ -1,3 +1,4 @@
+# ruff: noqa: F403
 # libraries
 from fastapi import APIRouter, Depends
 

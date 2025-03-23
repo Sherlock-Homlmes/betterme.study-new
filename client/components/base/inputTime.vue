@@ -1,78 +1,85 @@
 <script setup lang="ts">
 const props = defineProps({
-  value: {
-    type: Number,
-    required: true
-  },
-  min: {
-    type: Number,
-    default: -Infinity
-  },
-  max: {
-    type: Number,
-    default: Infinity
-  }
-})
+	value: {
+		type: Number,
+		required: true,
+	},
+	min: {
+		type: Number,
+		default: -Infinity,
+	},
+	max: {
+		type: Number,
+		default: Infinity,
+	},
+});
 
 const timeToObject = (timeInSecond: number) => {
-  return {
-    min: Math.floor(timeInSecond / 60),
-    sec: timeInSecond % 60
-  }
-}
+	return {
+		min: Math.floor(timeInSecond / 60),
+		sec: timeInSecond % 60,
+	};
+};
 
-const innerValue = reactive(timeToObject(props.value))
+const innerValue = reactive(timeToObject(props.value));
 const errorState = reactive({
-  min: false,
-  sec: false
-})
+	min: false,
+	sec: false,
+});
 
-const innerValueSeconds = computed(() => innerValue.min * 60 + innerValue.sec)
+const innerValueSeconds = computed(() => innerValue.min * 60 + innerValue.sec);
 
 const emit = defineEmits({
-  input (value: number) {
-    return value >= 5
-  }
-})
+	input(value: number) {
+		return value >= 5;
+	},
+});
 
 // Emit 'input' if innerValue changes
 watch(innerValue, (newValue) => {
-  if (newValue.min >= 0 && newValue.sec >= 0 && !(newValue.min === 0 && newValue.sec === 0)) {
-    emit('input', innerValueSeconds.value)
-  }
-})
+	if (
+		newValue.min >= 0 &&
+		newValue.sec >= 0 &&
+		!(newValue.min === 0 && newValue.sec === 0)
+	) {
+		emit("input", innerValueSeconds.value);
+	}
+});
 
 // Update innerValue if the "value" prop changes
-watch(() => props.value, (newValue) => {
-  const newTime = timeToObject(newValue)
-  innerValue.min = newTime.min
-  innerValue.sec = newTime.sec
+watch(
+	() => props.value,
+	(newValue) => {
+		const newTime = timeToObject(newValue);
+		innerValue.min = newTime.min;
+		innerValue.sec = newTime.sec;
 
-  errorState.min = false
-  errorState.sec = false
-})
+		errorState.min = false;
+		errorState.sec = false;
+	},
+);
 
 const updateMin = (newValue: string) => {
-  const newValueNum = Number.parseInt(newValue)
+	const newValueNum = Number.parseInt(newValue);
 
-  if (!isNaN(newValueNum) && newValueNum >= 0) {
-    innerValue.min = newValueNum
-    errorState.min = false
-  } else {
-    errorState.min = true
-  }
-}
+	if (!isNaN(newValueNum) && newValueNum >= 0) {
+		innerValue.min = newValueNum;
+		errorState.min = false;
+	} else {
+		errorState.min = true;
+	}
+};
 
 const updateSec = (newValue: string) => {
-  const newValueNum = Number.parseInt(newValue)
+	const newValueNum = Number.parseInt(newValue);
 
-  if (!isNaN(newValueNum) && newValueNum >= 0 && newValueNum <= 59) {
-    innerValue.sec = newValueNum
-    errorState.sec = false
-  } else {
-    errorState.sec = true
-  }
-}
+	if (!isNaN(newValueNum) && newValueNum >= 0 && newValueNum <= 59) {
+		innerValue.sec = newValueNum;
+		errorState.sec = false;
+	} else {
+		errorState.sec = true;
+	}
+};
 </script>
 
 <template>

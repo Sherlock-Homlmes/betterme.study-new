@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ClockPlayIcon } from 'vue-tabler-icons'
-import OnboardingPage from './onboardingPage.vue'
-import OnboardingHeader from './onboardingHeader.vue'
-import OptionGroup from '~~/components/base/optionGroup.vue'
-import { useSettings } from '~~/stores/settings'
+import { ClockPlayIcon } from "vue-tabler-icons";
+import OnboardingPage from "./onboardingPage.vue";
+import OnboardingHeader from "./onboardingHeader.vue";
+import OptionGroup from "~~/components/base/optionGroup.vue";
+import { useSettings } from "~~/stores/settings";
 
-const settingsStore = useSettings()
+const settingsStore = useSettings();
 </script>
 
 <template>

@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { useSchedule } from '~~/stores/schedule'
+import { useSchedule } from "~~/stores/schedule";
 
-const scheduleStore = useSchedule()
+const scheduleStore = useSchedule();
 
 const props = defineProps({
-  timeElapsed: {
-    type: Number,
-    required: true
-  },
-  timeOriginal: {
-    type: Number,
-    required: true
-  },
-  scheduleEntryId: {
-    type: Number,
-    default: 1
-  },
-  colour: {
-    type: String,
-    default: null
-  },
-  background: {
-    type: Boolean,
-    default: false
-  }
-})
+	timeElapsed: {
+		type: Number,
+		required: true,
+	},
+	timeOriginal: {
+		type: Number,
+		required: true,
+	},
+	scheduleEntryId: {
+		type: Number,
+		default: 1,
+	},
+	colour: {
+		type: String,
+		default: null,
+	},
+	background: {
+		type: Boolean,
+		default: false,
+	},
+});
 
 const progressPercentage = computed(() => {
-  return Math.min((props.timeElapsed / props.timeOriginal) * 100, 100)
-})
+	return Math.min((props.timeElapsed / props.timeOriginal) * 100, 100);
+});
 </script>
 
 <template>

@@ -1,15 +1,15 @@
 <script setup lang="ts">
 const props = defineProps({
-  active: {
-    type: Boolean,
-    default: false
-  },
+	active: {
+		type: Boolean,
+		default: false,
+	},
 
-  text: {
-    type: String,
-    default: ''
-  }
-})
+	text: {
+		type: String,
+		default: "",
+	},
+});
 </script>
 
 <template>

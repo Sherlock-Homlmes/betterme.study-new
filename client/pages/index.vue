@@ -1,37 +1,46 @@
 <script setup lang="ts">
-import { defineAsyncComponent, onBeforeMount } from 'vue'
-import { useHead } from '#app'
-import { useI18n } from 'vue-i18n'
-import { useSchedule } from '~~/stores/schedule'
-import { useSettings } from '~~/stores/settings'
+import { defineAsyncComponent, onBeforeMount } from "vue";
+import { useHead } from "#app";
+import { useI18n } from "vue-i18n";
+import { useSchedule } from "~~/stores/schedule";
+import { useSettings } from "~~/stores/settings";
 
-import { useTicker } from '~~/components/ticker'
-import { useWeb } from '~~/platforms/web'
-import { useMobile } from '~~/platforms/mobile'
+import { useTicker } from "~~/components/ticker";
+import { useWeb } from "~~/platforms/web";
+import { useMobile } from "~~/platforms/mobile";
 
-import TimerSwitch from '@/components/timer/display/_timerSwitch.vue'
-import TimerProgress from '@/components/timer/timerProgress.vue'
-import TimerControls from '@/components/timer/controls/controlsNew.vue'
-import { AppPlatform } from '~~/platforms/platforms'
+import TimerSwitch from "@/components/timer/display/_timerSwitch.vue";
+import TimerProgress from "@/components/timer/timerProgress.vue";
+import TimerControls from "@/components/timer/controls/controlsNew.vue";
+import { AppPlatform } from "~~/platforms/platforms";
 
-import { useMobileSettings } from '~~/stores/platforms/mobileSettings'
-import { useAuthStore } from '~~/stores/auth'
-
+import { useMobileSettings } from "~~/stores/platforms/mobileSettings";
+import { useAuthStore } from "~~/stores/auth";
 
 // components
-const AppBar = defineAsyncComponent(() => import('@/components/appBar.vue'))
-const TutorialView = defineAsyncComponent(() => import('@/components/tutorial/_tutorialView.vue'))
+const AppBar = defineAsyncComponent(() => import("@/components/appBar.vue"));
+const TutorialView = defineAsyncComponent(
+	() => import("@/components/tutorial/_tutorialView.vue"),
+);
 
-const settingsStore = useSettings()
-const mobileSettingsStore = useMobileSettings()
-const scheduleStore = useSchedule()
-const { isAuth, getCurrentUser, getCurrentUserSetting, isAuthOnce, userSettings, loading } = useAuthStore()
+const settingsStore = useSettings();
+const mobileSettingsStore = useMobileSettings();
+const scheduleStore = useSchedule();
+const {
+	isAuth,
+	getCurrentUser,
+	getCurrentUserSetting,
+	isAuthOnce,
+	userSettings,
+	loading,
+} = useAuthStore();
 
-const runtimeConfig = useRuntimeConfig()
+const runtimeConfig = useRuntimeConfig();
 
-const { t } = useI18n()
+const { t } = useI18n();
 
-const iconSvg = computed(() => `data:image/svg+xml,
+const iconSvg = computed(
+	() => `data:image/svg+xml,
 <svg
   width="32"
   height="32"
@@ -40,56 +49,59 @@ const iconSvg = computed(() => `data:image/svg+xml,
   style="color: ${scheduleStore.currentScheduleColour};"
   xmlns="http://www.w3.org/2000/svg"
 >
-<circle cx="16" cy="16" r="14" fill="currentColor" /></svg>`)
+<circle cx="16" cy="16" r="14" fill="currentColor" /></svg>`,
+);
 
-definePageMeta({ layout: 'timer', layoutTransition: false })
+definePageMeta({ layout: "timer", layoutTransition: false });
 useHead({
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: iconSvg
-    }
-  ]
-})
+	link: [
+		{
+			rel: "icon",
+			type: "image/svg+xml",
+			href: iconSvg,
+		},
+	],
+});
 
-useTicker()
+useTicker();
 
 // Load appropriate platform module based on runtime config
 if (runtimeConfig.public.PLATFORM === AppPlatform.web) {
-  useWeb()
+	useWeb();
 } else if (runtimeConfig.public.PLATFORM === AppPlatform.mobile) {
-  useMobile()
+	useMobile();
 }
 
 const state = reactive({
-  timeString: ''
-})
+	timeString: "",
+});
 
 const remainingTimeString = computed(() => {
-  if (scheduleStore.getCurrentTimerState === 3) {
-    return settingsStore.pageTitle.useTickEmoji ? '✔' : t('ready').toLowerCase()
-  }
+	if (scheduleStore.getCurrentTimerState === 3) {
+		return settingsStore.pageTitle.useTickEmoji
+			? "✔"
+			: t("ready").toLowerCase();
+	}
 
-  return state.timeString
-})
+	return state.timeString;
+});
 
 const pageTitle = computed(() => {
-  return scheduleStore.getCurrentItem
-    ? t('section.' + scheduleStore.getCurrentItem.type).toLowerCase()
-    : 'Pomodoro'
-})
+	return scheduleStore.getCurrentItem
+		? t("section." + scheduleStore.getCurrentItem.type).toLowerCase()
+		: "Pomodoro";
+});
 
 const progressBarSchedules = computed(() => {
-  const numSchedules = settingsStore.performance.showProgressBar ? 2 : 1
-  return scheduleStore.getSchedule.slice(0, numSchedules)
-})
+	const numSchedules = settingsStore.performance.showProgressBar ? 2 : 1;
+	return scheduleStore.getSchedule.slice(0, numSchedules);
+});
 
-onBeforeMount(async()=>{
-  if(!isAuth.value) await getCurrentUser()
-  if(isAuth.value) await getCurrentUserSetting()
-  loading.value = false
-})
+onBeforeMount(async () => {
+	if (!isAuth.value) await getCurrentUser();
+	if (isAuth.value) await getCurrentUserSetting();
+	loading.value = false;
+});
 </script>
 
 <template>

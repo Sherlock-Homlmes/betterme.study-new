@@ -1,13 +1,11 @@
 <script setup lang="ts">
-
 const props = defineProps({
-  progress: {
-    type: Number,
-    default: 1.0,
-    validator: (value: number) => value >= 0.0 && value <= 1.0
-  }
-})
-
+	progress: {
+		type: Number,
+		default: 1.0,
+		validator: (value: number) => value >= 0.0 && value <= 1.0,
+	},
+});
 </script>
 
 <template>

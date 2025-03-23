@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { LanguageIcon } from 'vue-tabler-icons'
-import OnboardingPage from './onboardingPage.vue'
-import OnboardingHeader from './onboardingHeader.vue'
-import OptionGroup from '~~/components/base/optionGroup.vue'
-import { useSettings } from '~~/stores/settings'
+import { LanguageIcon } from "vue-tabler-icons";
+import OnboardingPage from "./onboardingPage.vue";
+import OnboardingHeader from "./onboardingHeader.vue";
+import OptionGroup from "~~/components/base/optionGroup.vue";
+import { useSettings } from "~~/stores/settings";
 
-const settingsStore = useSettings()
+const settingsStore = useSettings();
 </script>
 
 <template>

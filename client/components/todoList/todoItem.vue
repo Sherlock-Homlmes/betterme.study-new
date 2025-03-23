@@ -1,112 +1,127 @@
 <script setup lang="ts">
-import { nextTick, type Ref, type PropType, watch } from 'vue'
-import { MenuIcon, TrashIcon, PencilIcon } from 'vue-tabler-icons'
-import { ButtonImportance } from '../base/types/button'
-import { TaskState, useTasklist, type Task } from '~~/stores/tasklist'
-import { useTaskStore } from '~~/stores/todolist'
-import type TaskStatus from '~~/stores/todolist'
-import { useSettings, ColorMethod } from '~~/stores/settings'
-import Button from '~~/components/base/uiButton.vue'
-import ChangeTracker from '../../utils/changeTracker'
+import { nextTick, type Ref, type PropType, watch } from "vue";
+import { MenuIcon, TrashIcon, PencilIcon } from "vue-tabler-icons";
+import { ButtonImportance } from "../base/types/button";
+import { TaskState, useTasklist, type Task } from "~~/stores/tasklist";
+import { useTaskStore } from "~~/stores/todolist";
+import type TaskStatus from "~~/stores/todolist";
+import { useSettings, ColorMethod } from "~~/stores/settings";
+import Button from "~~/components/base/uiButton.vue";
+import ChangeTracker from "../../utils/changeTracker";
 
 // declare refs
-const editbox: Ref<HTMLInputElement | null> = ref(null)
+const editbox: Ref<HTMLInputElement | null> = ref(null);
 
-const changeTracker = new ChangeTracker()
-const tasksStore = useTasklist()
-const settingsStore = useSettings()
-const { patchTask, deleteTask } = useTaskStore()
+const changeTracker = new ChangeTracker();
+const tasksStore = useTasklist();
+const settingsStore = useSettings();
+const { patchTask, deleteTask } = useTaskStore();
 
 const props = defineProps({
-  item: {
-    type: Object as PropType<Task>,
-    required: true
-  },
-  manage: {
-    type: Boolean,
-    default: false
-  },
-  /** Whether a dragged item is over this one */
-  droptarget: {
-    type: Boolean,
-    default: false
-  },
-  moveable: {
-    type: Boolean,
-    default: false
-  }
-})
-changeTracker.track(props.item)
+	item: {
+		type: Object as PropType<Task>,
+		required: true,
+	},
+	manage: {
+		type: Boolean,
+		default: false,
+	},
+	/** Whether a dragged item is over this one */
+	droptarget: {
+		type: Boolean,
+		default: false,
+	},
+	moveable: {
+		type: Boolean,
+		default: false,
+	},
+});
+changeTracker.track(props.item);
 
 const state = reactive({
-  hovering: false,
-  dragged: false,
-  editing: false,
-  editedTitle: null as string | null
-})
+	hovering: false,
+	dragged: false,
+	editing: false,
+	editedTitle: null as string | null,
+});
 
-const emit = defineEmits<{(event: 'input', checked: boolean) : void,
-  (event: 'delete') : void,
-  (event: 'dropstart', item: unknown) : void,
-  (event: 'dropfinish', item: unknown) : void,
-  (event: 'droptarget', item: unknown) : void
-}>()
+const emit = defineEmits<{
+	(event: "input", checked: boolean): void;
+	(event: "delete"): void;
+	(event: "dropstart", item: unknown): void;
+	(event: "dropfinish", item: unknown): void;
+	(event: "droptarget", item: unknown): void;
+}>();
 
 const handleEdit = (newValue: string) => {
-  if (isValid.value && props.item.title !== displayedTitle.value) props.item.title = newValue
-  state.editedTitle = null
-}
+	if (isValid.value && props.item.title !== displayedTitle.value)
+		props.item.title = newValue;
+	state.editedTitle = null;
+};
 
 const checked = computed({
-  get () {
-    return props.item.status === TaskStatus.DONE
-  },
-  set (newValue) {
-    if(newValue) props.item.status = TaskStatus.DONE
-    else props.item.status = TaskStatus.DOING
-  }
-})
-const showReorder = computed(() => state.editing || (props.moveable && state.hovering))
+	get() {
+		return props.item.status === TaskStatus.DONE;
+	},
+	set(newValue) {
+		if (newValue) props.item.status = TaskStatus.DONE;
+		else props.item.status = TaskStatus.DOING;
+	},
+});
+const showReorder = computed(
+	() => state.editing || (props.moveable && state.hovering),
+);
 const displayedTitle = computed({
-  get () {
-    return state.editedTitle ?? props.item.title
-  },
-  set (newValue: string) {
-    state.editedTitle = newValue
-  }
-})
-const isValid = computed(() => !tasksStore.tasks.some(task => task.id !== props.item.id && task.title === displayedTitle.value && task.section === props.item.section))
+	get() {
+		return state.editedTitle ?? props.item.title;
+	},
+	set(newValue: string) {
+		state.editedTitle = newValue;
+	},
+});
+const isValid = computed(
+	() =>
+		!tasksStore.tasks.some(
+			(task) =>
+				task.id !== props.item.id &&
+				task.title === displayedTitle.value &&
+				task.section === props.item.section,
+		),
+);
 
-watch(() => state.editing, (newValue: boolean) => {
-  if (newValue) {
-    // only focus on <input> in the next tick (when it is rendered)
-    nextTick(() => {
-      (editbox.value as HTMLInputElement).focus()
-    })
-  }
-})
+watch(
+	() => state.editing,
+	(newValue: boolean) => {
+		if (newValue) {
+			// only focus on <input> in the next tick (when it is rendered)
+			nextTick(() => {
+				(editbox.value as HTMLInputElement).focus();
+			});
+		}
+	},
+);
 
 // methods
 const startDrag = (evt: DragEvent, item: Task) => {
-  if (evt.dataTransfer) {
-    evt.dataTransfer.dropEffect = 'move'
-    evt.dataTransfer.effectAllowed = 'move'
-    evt.dataTransfer.setData('source.title', item.title)
-    evt.dataTransfer.setData('source.section', item.section)
-    state.dragged = true
-  }
-}
+	if (evt.dataTransfer) {
+		evt.dataTransfer.dropEffect = "move";
+		evt.dataTransfer.effectAllowed = "move";
+		evt.dataTransfer.setData("source.title", item.title);
+		evt.dataTransfer.setData("source.section", item.section);
+		state.dragged = true;
+	}
+};
 
 // TODO: change to debounce watch
 watch(
-  () => props.item,
-  (newValue)=>{
-    const change = changeTracker.getChange(newValue)
-    patchTask(props.item.id, change)
-    changeTracker.track(newValue)
-  },
-  {deep: true, immediate: true}
-)
+	() => props.item,
+	(newValue) => {
+		const change = changeTracker.getChange(newValue);
+		patchTask(props.item.id, change);
+		changeTracker.track(newValue);
+	},
+	{ deep: true, immediate: true },
+);
 </script>
 
 <template>

@@ -26,17 +26,17 @@
 </template>
 
 <script setup lang="ts">
-import { ButtonImportance, ButtonTheme } from '../base/types/button'
-import Button from '~~/components/base/uiButton.vue'
-import PopupSheet from '@/components/base/popupSheet.vue'
-import UiProgress from '~~/components/base/uiProgress.vue'
+import { ButtonImportance, ButtonTheme } from "../base/types/button";
+import Button from "~~/components/base/uiButton.vue";
+import PopupSheet from "@/components/base/popupSheet.vue";
+import UiProgress from "~~/components/base/uiProgress.vue";
 
-import OnboardingPage0 from '~~/components/tutorial/onboarding/page0_welcome.vue'
-import OnboardingPage1 from '~~/components/tutorial/onboarding/page1_timer.vue'
-import OnboardingPage2 from '~~/components/tutorial/onboarding/page2_theme.vue'
-import OnboardingPage3 from '~~/components/tutorial/onboarding/page3_extras.vue'
+import OnboardingPage0 from "~~/components/tutorial/onboarding/page0_welcome.vue";
+import OnboardingPage1 from "~~/components/tutorial/onboarding/page1_timer.vue";
+import OnboardingPage2 from "~~/components/tutorial/onboarding/page2_theme.vue";
+import OnboardingPage3 from "~~/components/tutorial/onboarding/page3_extras.vue";
 
 const state = reactive({
-  page: 0
-})
+	page: 0,
+});
 </script>

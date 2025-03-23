@@ -1,15 +1,15 @@
 <script setup lang="ts">
 interface ThemePreviewProps {
-  theme: {
-    work: number[]
-    shortpause: number[]
-    longpause: number[]
-  }
+	theme: {
+		work: number[];
+		shortpause: number[];
+		longpause: number[];
+	};
 }
 
-const props = defineProps<ThemePreviewProps>()
+const props = defineProps<ThemePreviewProps>();
 
-const colorArrayToRgb = (color: number[]) => `rgb(${color.join(', ')})`
+const colorArrayToRgb = (color: number[]) => `rgb(${color.join(", ")})`;
 </script>
 
 <template>

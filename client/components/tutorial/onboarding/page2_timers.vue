@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import OptionGroup from '~~/components/base/optionGroup.vue'
+import OptionGroup from "~~/components/base/optionGroup.vue";
 </script>
 
 <template>

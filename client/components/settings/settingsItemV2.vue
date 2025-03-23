@@ -1,55 +1,59 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from 'vue'
-import { useSettings } from '~~/stores/settings'
-import OptionGroup from '~~/components/base/optionGroup.vue'
-import { Control } from '~~/components/settings/types/settingsItem'
-import { useAuthStore } from '~~/stores/auth'
+import { computed, defineAsyncComponent } from "vue";
+import { useSettings } from "~~/stores/settings";
+import OptionGroup from "~~/components/base/optionGroup.vue";
+import { Control } from "~~/components/settings/types/settingsItem";
+import { useAuthStore } from "~~/stores/auth";
 
-const controls : Record<Control, unknown> = {
-  check: defineAsyncComponent(() => import('~~/components/base/uiToggle.vue')),
-  text: defineAsyncComponent(() => import('@/components/base/inputText.vue')),
-  time: defineAsyncComponent(() => import('@/components/base/inputTime.vue')),
-  number: defineAsyncComponent(() => import('@/components/base/inputNumber.vue')),
-  option: null,
-  empty: null
-}
-const settingsStore = useSettings()
-const {userSettings, isDarkMode} = useAuthStore()
+const controls: Record<Control, unknown> = {
+	check: defineAsyncComponent(() => import("~~/components/base/uiToggle.vue")),
+	text: defineAsyncComponent(() => import("@/components/base/inputText.vue")),
+	time: defineAsyncComponent(() => import("@/components/base/inputTime.vue")),
+	number: defineAsyncComponent(
+		() => import("@/components/base/inputNumber.vue"),
+	),
+	option: null,
+	empty: null,
+};
+const settingsStore = useSettings();
+const { userSettings, isDarkMode } = useAuthStore();
 
-type NestedKeyOf<ObjectType extends object> =
-  {[Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
-  ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
-  : `${Key}`
-  }[keyof ObjectType & (string | number)];
+type NestedKeyOf<ObjectType extends object> = {
+	[Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
+		? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
+		: `${Key}`;
+}[keyof ObjectType & (string | number)];
 
 interface Props {
-  path: NestedKeyOf<typeof settingsStore.$state> | 'manage',
-  type: Control,
-  disabled?: boolean,
-  choices?: Record<string, unknown>,
-  min?: number,
-  max?: number
+	path: NestedKeyOf<typeof settingsStore.$state> | "manage";
+	type: Control;
+	disabled?: boolean;
+	choices?: Record<string, unknown>;
+	min?: number;
+	max?: number;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const translationKey = 'settings.values.' + props.path
+const translationKey = "settings.values." + props.path;
 
-const emit = defineEmits<{(event: 'input', value: unknown): void }>()
+const emit = defineEmits<{ (event: "input", value: unknown): void }>();
 
 const value = computed({
-  get () {
-    if (props.type === Control.Empty) return null
-    return _get(userSettings.value, props.path, null)
-  },
+	get() {
+		if (props.type === Control.Empty) return null;
+		return _get(userSettings.value, props.path, null);
+	},
 
-  set (newValue) {
-    if (props.type === Control.Empty) return
-    _set(userSettings.value, props.path, newValue)
-  }
-})
+	set(newValue) {
+		if (props.type === Control.Empty) return;
+		_set(userSettings.value, props.path, newValue);
+	},
+});
 
-const isSideControls = computed(() => ![Control.Option, Control.Empty].includes(props.type))
+const isSideControls = computed(
+	() => ![Control.Option, Control.Empty].includes(props.type),
+);
 </script>
 
 <template>
