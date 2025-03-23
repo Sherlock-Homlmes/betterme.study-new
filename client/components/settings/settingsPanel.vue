@@ -62,7 +62,7 @@ notificationsStore.updateEnabled()
           <CloseIcon :aria-label="$t('settings.buttons.close')" />
         </ControlButton>
       </h1>
-      <div v-if="!loading" class="flex-grow overflow-y-auto">
+      <div v-if="!loading || !isAuth" class="flex-grow overflow-y-auto">
         <Transition tag="div" name="tab-transition" mode="out-in" class="relative w-full">
           <!-- Core settings -->
           <div v-if="state.activeTab === 1" :key="1" class="settings-tab">
