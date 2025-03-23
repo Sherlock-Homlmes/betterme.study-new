@@ -55,30 +55,6 @@ const mainStore = useMain()
           <NewsIcon />
           <span v-text="$t('settings.about.betterme_news')" />
         </Button>
-        <!-- <Button
-          v-if="!isMobile"
-          :importance="ButtonImportance.Filled"
-          link
-          dark
-          no-default-style
-          no-content-theme
-          href="https://www.buymeacoffee.com/imreg?utm_source=FocusTide&utm_medium=web&utm_content=settings"
-          inner-class="flex flex-row items-center gap-1 text-black"
-          bg-class="bg-yellow-300"
-        >
-          <CoffeeIcon />
-          <span v-text="$t('settings.about.support')" />
-        </Button>
-        <Button
-          v-else
-          :importance="ButtonImportance.Filled"
-          disabled
-          inner-class="flex flex-row items-center gap-1 text-black"
-          bg-class="bg-yellow-300"
-        >
-          <CoffeeIcon />
-          <span v-text="$t('settings.about.support')" />
-        </Button> -->
       </div>
       <!-- Share links -->
       <div class="my-2" v-text="$t('settings.about.share')" />
@@ -96,7 +72,7 @@ const mainStore = useMain()
         >
           <BrandFacebookIcon :aria-label="$t('support.share.facebook')" size="24" class="translate-x-[-1px]" />
         </Button>
-        <Button
+        <!-- <Button
           link
           circle
           dark
@@ -108,8 +84,8 @@ const mainStore = useMain()
           inner-class="!p-4 text-slate-50"
         >
           <BrandTwitterIcon :aria-label="$t('support.share.twitter')" size="24" />
-        </Button>
-        <Button
+        </Button> -->
+        <!-- <Button
           link
           circle
           dark
@@ -121,7 +97,7 @@ const mainStore = useMain()
           inner-class="!p-4 text-slate-50"
         >
           <BrandRedditIcon :aria-label="$t('support.share.reddit')" size="24" />
-        </Button>
+        </Button> -->
       </div>
     </div>
   </div>

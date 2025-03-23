@@ -55,7 +55,7 @@ export default defineNuxtConfig({
     public: {
       PACKAGE_VERSION: version,
       PLATFORM: AppPlatform.web,
-      URL: 'https://focustide.app',
+      URL: 'https://betterme.study',
       API_URL: 'http://localhost/api'
     }
   },
@@ -70,13 +70,13 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'FocusTide',
+      title: 'betterme.study',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
         { hid: 'description', name: 'description', content: 'Modern and open-source productivity timer, right from your browser. Built to be simple.' },
         { hid: 'keywords', name: 'keywords', content: 'pomodoro app, pomodoro, free, productivity tool, app, open-source, online timer, countdown timer, focus timer, pomodoro clock, no ads, productivity timer, todo list, task management, tomato timer, pwa' },
-        { hid: 'twitter:title', name: 'twitter:title', content: 'FocusTide' },
+        { hid: 'twitter:title', name: 'twitter:title', content: 'betterme.study' },
         { hid: 'twitter:description', name: 'twitter:description', content: 'Modern and open-source productivity timer, right from your browser. Built to be simple.' },
         { hid: 'twitter:image', name: 'twitter:image', content: '/img/ogImage.png' },
         { hid: 'og:image', property: 'og:image', content: '/img/ogImage.png' },
