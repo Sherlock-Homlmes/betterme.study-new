@@ -19,12 +19,12 @@ const currentTimer = computed(() => userSettings.value.visuals.timer_show);
       <BrightnessDownIcon :size="42" />
     </OnboardingHeader>
 
-    <OptionGroup :value="currentTheme" :choices="{ 'light': 'Light', 'dark': 'Dark' }" translation-key="tutorials.onboarding.pages.2.theme.options" class="w-full" @input="(newValue) => userSettings.value.darkMode = (newValue === 'dark')" />
+    <OptionGroup :value="currentTheme" :choices="{ 'light': 'Light', 'dark': 'Dark' }" translation-key="tutorials.onboarding.pages.2.theme.options" class="w-full" @input="(newValue) => userSettings.visuals.dark_mode = (newValue === 'dark')" />
 
     <OnboardingHeader :text="$t('tutorials.onboarding.pages.2.display.heading')">
       <DeviceWatchIcon :size="42" />
     </OnboardingHeader>
 
-    <OptionGroup :value="currentTimer" :choices="{ 'traditional': 'Traditional', 'approximate': 'Approximate', 'percentage': 'Percentage' }" translation-key="settings.values.currentTimer" class="w-full" @input="(newValue) => userSettings.value.visuals.timer_show = newValue" />
+    <OptionGroup :value="currentTimer" :choices="{ 'traditional': 'Traditional', 'approximate': 'Approximate', 'percentage': 'Percentage' }" translation-key="settings.values.currentTimer" class="w-full" @input="(newValue) => userSettings.visuals.timer_show = newValue" />
   </OnboardingPage>
 </template>

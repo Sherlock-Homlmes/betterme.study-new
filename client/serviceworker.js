@@ -53,7 +53,7 @@ define(["./workbox-fa5dbb3c"], function (e) {
 				{ url: "i18n/hr.json", revision: "56ad9a3fcb244d90faccf23df04885d3" },
 				{ url: "i18n/hu.json", revision: "7586c09c7dd3fa49065ff1c8631eb8f9" },
 				{ url: "i18n/pt.json", revision: "5749ba38d6ee9b1d640e7ed38bc738a9" },
-				{ url: "i18n/vi.json", revision: "bd09ea5af7a04bc157fc98805e61f476" },
+				{ url: "i18n/vi.json", revision: "89d650bada4e0a7e67ffc4dc16d8e27b" },
 				{ url: "i18n/zh.json", revision: "35bbe9b9989227816d91e938dafb1e9c" },
 				{ url: "jsconfig.json", revision: "067bb768824c14fda1bb7415145a9687" },
 				{
