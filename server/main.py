@@ -1,7 +1,12 @@
 # default
-import uvicorn
 
 # custom
+from base.settings import app
+from base.routes import *
+from base.event_handler import *
+from base.exception_handle import *
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, workers=8)
+
+@app.get("/api")
+def main_router():
+    return {"status": "alive"}

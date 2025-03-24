@@ -28,8 +28,3 @@ for module in auth_modules:
         prefix="/api",
         dependencies=[Depends(auth_handler.auth_wrapper)],
     )
-
-
-@app.get("/api")
-def hello():
-    return {"status": "ok"}
