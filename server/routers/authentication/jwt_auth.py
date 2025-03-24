@@ -37,6 +37,8 @@ class AuthHandler:
             raise HTTPException(status_code=401, detail="Signature has expired")
         except jwt.InvalidTokenError:
             raise HTTPException(status_code=401, detail="Invalid token")
+        except Exception:
+            raise HTTPException(status_code=500, detail="Server error")
 
     def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
         return self.decode_token(auth.credentials)
