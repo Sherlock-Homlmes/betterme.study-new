@@ -116,7 +116,6 @@ export const useAuthStore = createGlobalState(() => {
 
 	// actions
 	const applyPreset = (id: string) => {
-		console.log(timerPresets);
 		const validate = (id: string): id is keyof typeof timerPresets => {
 			return Object.keys(timerPresets).includes(id);
 		};

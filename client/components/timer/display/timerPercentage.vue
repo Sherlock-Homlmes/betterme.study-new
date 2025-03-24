@@ -10,11 +10,6 @@ const timerValue = computed(() => {
 		getCurrentItem.value.length - getCurrentItem.value.timeElapsed,
 	);
 	const totalRounded = Math.round(getCurrentItem.value.length);
-	console.log(
-		totalRounded,
-		completeRounded,
-		(totalRounded / completeRounded) * 100,
-	);
 	const percentageValue = Math.round(
 		((totalRounded - completeRounded) / totalRounded) * 100,
 	);
