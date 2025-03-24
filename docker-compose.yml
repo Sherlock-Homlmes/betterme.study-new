@@ -23,8 +23,6 @@ services:
       - .:/var/task
     working_dir: /var/task/client
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    ports:
-      - 3000:3000
     networks:
       - app-network
     command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
@@ -37,8 +35,6 @@ services:
       - .:/var/task
     working_dir: /var/task/server
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    ports:
-      - 8080:8080
     environment:
       - HOME=/tmp
       - ENV=DEV
