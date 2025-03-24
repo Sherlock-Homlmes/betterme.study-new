@@ -74,8 +74,7 @@ const timeLeftStructured = computed(() => {
           :key="`${key}-${idx}`"
           class="w-[1ch]"
           :class="{ 'md:text-right text-center': idx === 0, 'md:text-left text-center': idx === 1 }"
-          v-text="char"
-        />
+        >{{char}}</span>
       </div>
     </transition-group>
   </div>
