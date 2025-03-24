@@ -7,13 +7,13 @@ import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
-from all_env import secret_key
+from all_env import SECRET_KEY
 
 
 class AuthHandler:
     security = HTTPBearer()
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    secret = secret_key
+    secret = SECRET_KEY
 
     def get_password_hash(self, password):
         return self.pwd_context.hash(password)

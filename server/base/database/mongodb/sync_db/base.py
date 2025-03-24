@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from all_env import database_url
+from all_env import DATABASE_URL
 
-cluster = MongoClient(database_url)
+cluster = MongoClient(DATABASE_URL)
 dtbs = cluster["bettermestudy"]

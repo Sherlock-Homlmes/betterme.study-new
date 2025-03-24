@@ -15,7 +15,7 @@ from all_env import (
     DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET,
     DISCORD_REDIRECT_URL,
-    self_url,
+    SELF_URL,
 )
 from models import Users
 from other_modules.time_modules import vn_now
@@ -42,7 +42,7 @@ async def discord_oauth(code: str):
     token, refresh_token = await discord.get_access_token(code)
     headersList = {"Authorization": f"Bearer {token}"}
     async with aiohttp.ClientSession() as session:
-        res = await session.get(url=f"{self_url}/auth/discord/user/self", headers=headersList)
+        res = await session.get(url=f"{SELF_URL}/auth/discord/user/self", headers=headersList)
         try:
             discord_user = await res.json()
         except Exception:

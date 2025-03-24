@@ -7,16 +7,16 @@ load_dotenv()
 environ = os.getenv("environ")
 
 # self url
-self_url = os.getenv("self_url")
+SELF_URL = os.getenv("SELF_URL")
 
-# secret_key
-secret_key = os.getenv("secret_key")
+# SECRET_KEY
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # fastapi
 docs_url = os.getenv("docs_url")
 
 # mongodb
-database_url = os.environ.get("database_url")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 # imgbb
 IMGBB_API_KEY = os.environ.get("IMGBB_API_KEY")
