@@ -4,9 +4,11 @@ import tutorialOnboarding from "./tutorialOnboarding.vue";
 import tutorialOldDomain from "./tutorialOldDomain.vue";
 import { useTutorials } from "~~/stores/tutorials";
 import { useMain } from "~~/stores/main";
+import { useAuthStore } from "~~/stores/auth";
 
 const tutorialsStore = useTutorials();
 const mainStore = useMain();
+const { isOnboarded } = useAuthStore();
 
 const tutorials = {
 	onboarding: markRaw(tutorialOnboarding),
@@ -40,6 +42,11 @@ onMounted(() => {
 		tutorialsStore.openTutorial("oldDomain");
 	}
 });
+
+const closeTutorial = (tutorialId) => {
+	isOnboarded.value = true;
+	tutorialsStore.closeTutorial(tutorialId);
+};
 </script>
 
 <template>
@@ -56,7 +63,7 @@ onMounted(() => {
       leave-active-class="transition duration-300"
       appear
     >
-      <component :is="tutorials[tutorialId]" v-for="tutorialId in (Object.keys(tutorials) as Array<keyof typeof tutorials>)" :key="tutorialId" :open="tutorialsStore.isTutorialOpen(tutorialId)" @close="tutorialsStore.closeTutorial(tutorialId)" />
+      <component :is="tutorials[tutorialId]" v-for="tutorialId in (Object.keys(tutorials) as Array<keyof typeof tutorials>)" :key="tutorialId" :open="tutorialsStore.isTutorialOpen(tutorialId)" @close="closeTutorial" />
     </transition-group>
   </div>
 </template>

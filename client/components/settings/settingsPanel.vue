@@ -36,9 +36,11 @@ import { useOpenPanels } from "~~/stores/openpanels";
 import { Control } from "~~/components/settings/types/settingsItem";
 
 import { useAuthStore } from "~~/stores/auth";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 
 const runtimeConfig = useRuntimeConfig();
-const { isAuth, loading } = useAuthStore()!;
+const { isAuth, loading, getActiveSchedulePreset, applyPreset } =
+	useAuthStore()!;
 const eventsStore = useEvents();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
@@ -137,8 +139,8 @@ notificationsStore.updateEnabled();
               <OptionGroup
                 translation-key="timerpreset"
                 :choices="presetTimers"
-                :value="settingsStore.getActiveSchedulePreset"
-                @input="(newPreset) => settingsStore.applyPreset(newPreset)"
+                :value="getActiveSchedulePreset"
+                @input="(newPreset) => applyPreset(newPreset)"
               />
             </SettingsItem>
             <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_study_time" :min="5" />

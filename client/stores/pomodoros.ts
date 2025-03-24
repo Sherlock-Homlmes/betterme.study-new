@@ -45,14 +45,7 @@ export const usePomodoroStore = createGlobalState(() => {
 
 	// TODO: fix this
 	const settings = useSettings();
-	const scheduleItemTypeTimeLengthMapReverse = {
-		work: "pomodoro_study_time",
-		shortpause: "pomodoro_rest_time",
-		longpause: "pomodoro_long_rest_time",
-	};
-	const scheduleItemTypePathReverse = (itemType: string): string =>
-		scheduleItemTypeTimeLengthMapReverse[itemType];
-	// END TODO
+
 	// state
 	const currentPomodoroSection = ref();
 	const items = ref(createScheduleSeries(10));
@@ -170,7 +163,6 @@ export const usePomodoroStore = createGlobalState(() => {
 		return colours;
 	});
 
-	// actions
 	const startPomodoro = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/pomodoros/`, {

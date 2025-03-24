@@ -36,9 +36,9 @@ const {
 	isAuth,
 	getCurrentUser,
 	getCurrentUserSetting,
-	isAuthOnce,
 	userSettings,
 	loading,
+	isOnboarded,
 } = useAuthStore();
 
 const runtimeConfig = useRuntimeConfig();
@@ -149,7 +149,7 @@ onBeforeMount(async () => {
       <TimerControls class="mb-8" />
     </div>
     <client-only>
-      <TutorialView v-if='!isAuthOnce' />
+      <TutorialView v-if='!isOnboarded' />
     </client-only>
   </section>
 </template>

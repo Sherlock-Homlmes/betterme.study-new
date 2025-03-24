@@ -4,9 +4,9 @@ import {
 	StorageSerializers,
 	createGlobalState,
 	useStorage,
-	useLocalStorage,
 } from "@vueuse/core";
 import _ from "lodash";
+import timerPresets from "~~/assets/settings/timerPresets";
 import ChangeTracker from "../utils/changeTracker";
 
 const changeTracker = new ChangeTracker();
@@ -49,16 +49,14 @@ export const useAuthStore = createGlobalState(() => {
 		{ serializer: StorageSerializers.object },
 	);
 	changeTracker.track(userSettings.value);
-	const isAuthOnceLocalStorage = useStorage("isAuthOnce", false, undefined, {
+	const loading = ref(true);
+	// TODO: move this to tutorial store
+	const isOnboarded = useStorage("isOnboarded", false, undefined, {
 		serializer: StorageSerializers.boolean,
 	});
-	const loading = ref(true);
 
 	// getters
 	const isAuth = computed(() => !!userInfo.value);
-	const isAuthOnce = computed(
-		() => isAuth.value || isAuthOnceLocalStorage.value,
-	);
 	const isDarkMode = computed(() =>
 		userSettings ? userSettings.value.visuals.dark_mode : false,
 	);
@@ -74,14 +72,14 @@ export const useAuthStore = createGlobalState(() => {
 	};
 
 	const getCurrentUserSetting = async () => {
-		if (!userInfo.value) throw new Error("Not authenticate yet");
+		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/users/self/settings`);
 		if (response.ok) userSettings.value = await response.json();
 		else throw new Error("Fail to get self setting");
 	};
 
 	const updateCurrentUserSetting = async (data: object) => {
-		if (!isAuth.value) throw new Error("Not authenticate yet");
+		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/users/self/settings`, {
 			method: "PATCH",
 			body: JSON.stringify(data),
@@ -98,7 +96,36 @@ export const useAuthStore = createGlobalState(() => {
 			localStorage.setItem("Authorization", data.token);
 			// check if user is accessable or not
 			await getCurrentUser();
-			isAuthOnceLocalStorage.value = true;
+		}
+	};
+
+	const getActiveSchedulePreset = computed(() => {
+		const index = Object.entries(timerPresets).findIndex(([_key, value]) => {
+			return (
+				JSON.stringify(value) ===
+				JSON.stringify(userSettings.value.pomodoro_settings)
+			);
+		});
+
+		if (index >= 0) {
+			return Object.keys(timerPresets)[index];
+		} else {
+			return null;
+		}
+	});
+
+	// actions
+	const applyPreset = (id: string) => {
+		console.log(timerPresets);
+		const validate = (id: string): id is keyof typeof timerPresets => {
+			return Object.keys(timerPresets).includes(id);
+		};
+
+		if (validate(id)) {
+			userSettings.value.pomodoro_settings = Object.assign(
+				{},
+				timerPresets[id],
+			);
 		}
 	};
 
@@ -121,11 +148,13 @@ export const useAuthStore = createGlobalState(() => {
 		loading,
 		// getters
 		isAuth,
-		isAuthOnce,
+		isOnboarded,
 		isDarkMode,
+		getActiveSchedulePreset,
 		// actions
 		getCurrentUser,
 		getCurrentUserSetting,
 		loginByDiscord,
+		applyPreset,
 	};
 });

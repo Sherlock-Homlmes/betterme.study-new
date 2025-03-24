@@ -4,35 +4,27 @@
  */
 export default {
 	default: {
-		lengths: {
-			work: 25 * 60 * 1000, // 25 minutes
-			shortpause: 5 * 60 * 1000, // 5 minutes
-			longpause: 15 * 60 * 1000, // 15 minutes
-		},
-		longPauseInterval: 3, // every 3rd pause is a long one
+		pomodoro_study_time: 25 * 60, // 25 minutes
+		pomodoro_rest_time: 5 * 60, // 5 minutes
+		pomodoro_long_rest_time: 15 * 60, // 15 minutes
+		long_rest_time_interval: 3,
 	},
 	easy: {
-		lengths: {
-			work: 15 * 60 * 1000, // 15 minutes
-			shortpause: 5 * 60 * 1000, // 5 minutes
-			longpause: 15 * 60 * 1000, // 15 minutes
-		},
-		longPauseInterval: 2, // every 2nd pause is a long one
+		pomodoro_study_time: 15 * 60, // 15 minutes
+		pomodoro_rest_time: 5 * 60, // 5 minutes
+		pomodoro_long_rest_time: 15 * 60, // 15 minutes
+		long_rest_time_interval: 3,
 	},
 	advanced: {
-		lengths: {
-			work: 40 * 60 * 1000, // 40 minutes
-			shortpause: 10 * 60 * 1000, // 10 minutes
-			longpause: 30 * 60 * 1000, // 30 minutes
-		},
-		longPauseInterval: 3, // every 3rd pause is a long one
+		pomodoro_study_time: 40 * 60, // 15 minutes
+		pomodoro_rest_time: 10 * 60, // 5 minutes
+		pomodoro_long_rest_time: 30 * 60, // 15 minutes
+		long_rest_time_interval: 3,
 	},
 	workaholic: {
-		lengths: {
-			work: 50 * 60 * 1000, // 50 minutes
-			shortpause: 10 * 60 * 1000, // 5 minutes
-			longpause: 30 * 60 * 1000, // 20 minutes
-		},
-		longPauseInterval: 3, // every 3rd pause is a long one
+		pomodoro_study_time: 50 * 60, // 15 minutes
+		pomodoro_rest_time: 10 * 60, // 5 minutes
+		pomodoro_long_rest_time: 30 * 60, // 15 minutes
+		long_rest_time_interval: 3,
 	},
 };
