@@ -65,9 +65,9 @@ class TimerShowEnum(str, Enum):
 
 
 class UserVisualSettings(BaseModel):
-    pomodoro_study_color: List[int] = Field(default=[255, 107, 107], max_length=3, min_length=3)
-    pomodoro_rest_color: List[int] = Field(default=[244, 162, 97], max_length=3, min_length=3)
-    pomodoro_long_rest_color: List[int] = Field(default=[46, 196, 182], max_length=3, min_length=3)
+    pomodoro_study_color: List[int] = Field(default=[255, 107, 107])
+    pomodoro_rest_color: List[int] = Field(default=[244, 162, 97])
+    pomodoro_long_rest_color: List[int] = Field(default=[46, 196, 182])
 
     timer_show: TimerShowEnum = TimerShowEnum.APPROXIMATE
 
