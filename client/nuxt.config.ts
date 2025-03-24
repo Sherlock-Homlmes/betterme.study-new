@@ -56,11 +56,11 @@ export default defineNuxtConfig({
 			PACKAGE_VERSION: version,
 			PLATFORM: AppPlatform.web,
 			URL:
-				process.env.ENV === "PRODUCTION"
+				(process.env.ENV || "PRODUCTION") === "PRODUCTION"
 					? "https://betterme.study"
 					: "http://local.betterme.study",
 			API_URL:
-				process.env.ENV === "PRODUCTION"
+				(process.env.ENV || "PRODUCTION") === "PRODUCTION"
 					? "https://api.betterme.study/api"
 					: "http://local.betterme.study/api",
 		},
