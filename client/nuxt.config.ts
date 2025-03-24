@@ -87,14 +87,13 @@ export default defineNuxtConfig({
 				{
 					hid: "description",
 					name: "description",
-					content:
-						"Modern and open-source productivity timer, right from your browser. Built to be simple.",
+					content: "Modern productivity timer, right from your browser.",
 				},
 				{
 					hid: "keywords",
 					name: "keywords",
 					content:
-						"pomodoro app, pomodoro, free, productivity tool, app, open-source, online timer, countdown timer, focus timer, pomodoro clock, no ads, productivity timer, todo list, task management, tomato timer, pwa",
+						"betterme, pomodoro app, pomodoro, free, productivity tool, app, open-source, online timer, countdown timer, focus timer, pomodoro clock, no ads, productivity timer, todo list, task management, tomato timer, pwa",
 				},
 				{
 					hid: "twitter:title",
@@ -104,8 +103,7 @@ export default defineNuxtConfig({
 				{
 					hid: "twitter:description",
 					name: "twitter:description",
-					content:
-						"Modern and open-source productivity timer, right from your browser. Built to be simple.",
+					content: "Modern productivity timer, right from your browser.",
 				},
 				{
 					hid: "twitter:image",
@@ -121,9 +119,7 @@ export default defineNuxtConfig({
 				{
 					hid: "og:url",
 					property: "og:url",
-					content: process.env.URL
-						? process.env.URL
-						: "https://another-pomodoro.netlify.app",
+					content: "https://betterme.study",
 				},
 			],
 			link: [
