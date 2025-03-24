@@ -1,6 +1,7 @@
 import { reactive, computed, watch } from "vue";
 
-import { TimerState, useSchedule } from "~~/stores/schedule";
+import { useSchedule } from "~~/stores/schedule";
+import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 import { SectionEndAction, useSettings } from "~~/stores/settings";
 import { useTasklist } from "~~/stores/tasklist";
 import { useEvents, EventType } from "~~/stores/events";
@@ -13,7 +14,8 @@ interface TickState {
 
 export function useTicker() {
 	const settingsStore = useSettings();
-	const scheduleStore = useSchedule();
+	const { items, getCurrentItem, timerState, advance, lockInfo } =
+		usePomodoroStore();
 	const tasklistStore = useTasklist();
 	const eventsStore = useEvents();
 
@@ -22,27 +24,25 @@ export function useTicker() {
 		lastUpdate: new Date().getTime(),
 
 		/** The tick interval */
-		nextTickDelta: 1000,
+		nextTickDelta: 1,
 
 		/** Handle to keep track of the set timer */
 		timerHandle: null,
 	});
 
-	const timeOriginal = computed(() => scheduleStore.getCurrentItem.length);
-	const scheduleId = computed(() => scheduleStore.getCurrentItem.id);
+	const timeOriginal = computed(() => getCurrentItem.value.length);
+	const scheduleId = computed(() => getCurrentItem.value.id);
 
 	const timeElapsed = computed({
 		get() {
-			return scheduleStore.items[0].timeElapsed as number;
+			return items.value[0].timeElapsed as number;
 		},
 		set(newValue) {
-			scheduleStore.items[0].timeElapsed = newValue;
+			items.value[0].timeElapsed = newValue;
 		},
 	});
 
-	const timeRemaining = computed(() => {
-		return timeOriginal.value - timeElapsed.value;
-	});
+	const timeRemaining = computed(() => timeOriginal.value - timeElapsed.value);
 
 	/** Watcher to automatically reset timer if schedule changes */
 	watch(scheduleId, (newValue, oldValue) => {
@@ -58,10 +58,7 @@ export function useTicker() {
 	watch(
 		() => settingsStore.getAdaptiveTickRate,
 		(newValue, oldValue) => {
-			if (
-				scheduleStore.timerState === TimerState.RUNNING &&
-				newValue !== oldValue
-			) {
+			if (timerState.value === TimerState.RUNNING && newValue !== oldValue) {
 				scheduleNextTick({});
 			}
 		},
@@ -69,7 +66,7 @@ export function useTicker() {
 
 	/** Start/pause/stop timer if timerState changes */
 	watch(
-		() => scheduleStore.timerState,
+		() => timerState.value,
 		(newValue, oldValue) => {
 			if (oldValue === TimerState.COMPLETED) {
 				resetTimer();
@@ -96,8 +93,8 @@ export function useTicker() {
 	/** Resets the remaining time to the original value, resetting the timer to 0% */
 	const resetTimer = () => {
 		const nextState =
-			scheduleStore.timerState === TimerState.RUNNING
-				? scheduleStore.timerState
+			timerState.value === TimerState.RUNNING
+				? timerState.value
 				: TimerState.STOPPED;
 		timeElapsed.value = 0;
 		timerTick({ nextState, decrement: false });
@@ -118,7 +115,7 @@ export function useTicker() {
 	const scheduleNextTick = ({ decrement = true }) => {
 		timerTick({ decrement });
 
-		if (scheduleStore.timerState === TimerState.RUNNING) {
+		if (timerState.value === TimerState.RUNNING) {
 			// check adaptive ticking settings
 			let nextTickMs = settingsStore.getAdaptiveTickRate;
 
@@ -151,7 +148,8 @@ export function useTicker() {
 	 */
 	const timerTick = ({ nextState = TimerState.RUNNING, decrement = true }) => {
 		const newUpdate = new Date().getTime();
-		const elapsedDelta = newUpdate - state.lastUpdate;
+		const elapsedDelta = (newUpdate - state.lastUpdate) / 1000;
+		// console.log(elapsedDelta)
 
 		// update remaining time if the timer is still running
 		if (decrement) {
@@ -169,10 +167,10 @@ export function useTicker() {
 			eventsStore.recordEvent(EventType.TIMER_FINISH);
 
 			if (settingsStore.sectionEndAction === SectionEndAction.Stop) {
-				scheduleStore.timerState = TimerState.COMPLETED;
+				timerState.value = TimerState.COMPLETED;
 			} else if (settingsStore.sectionEndAction === SectionEndAction.Skip) {
 				nextTick(() => {
-					scheduleStore.advance();
+					advance();
 				});
 			}
 		}
@@ -181,9 +179,9 @@ export function useTicker() {
 	/** Starts or resumes the timer */
 	const startTimer = () => {
 		eventsStore.recordEvent(EventType.TIMER_START);
-		scheduleStore.lockInfo({
+		lockInfo({
 			length: timeOriginal.value,
-			type: scheduleStore.getCurrentItem.type,
+			type: getCurrentItem.value.type,
 		});
 		scheduleNextTick({ decrement: false });
 	};
@@ -197,7 +195,7 @@ export function useTicker() {
 		);
 
 		if (stop) {
-			scheduleStore.lockInfo({
+			lockInfo({
 				length: undefined,
 				type: undefined,
 			});

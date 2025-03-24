@@ -5,10 +5,12 @@ import { ButtonImportance } from "../base/types/button";
 import Button from "~~/components/base/uiButton.vue";
 import { TaskState, useTasklist } from "~~/stores/tasklist";
 import { useSchedule } from "~~/stores/schedule";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useTaskStore } from "~~/stores/todolist";
 
 const tasksStore = useTasklist();
-const scheduleStore = useSchedule();
+const scheduleStore = usePomodoroStore();
+const { getCurrentItem, currentScheduleColourModern } = usePomodoroStore();
 const addtaskInput: Ref<HTMLElement | null> = ref(null);
 const { postTask } = useTaskStore();
 
@@ -34,8 +36,7 @@ watch(
 
 		const matchingTasks = tasksStore.tasks.filter(
 			(task) =>
-				task.title === newValue &&
-				task.section === scheduleStore.getCurrentItem.type,
+				task.title === newValue && task.section === getCurrentItem.value.type,
 		);
 
 		data.valid = matchingTasks.length === 0;
@@ -62,7 +63,7 @@ const checkEnter = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="flex flex-row items-center py-4 pl-4 pr-2 space-x-2 transition-all duration-500 shadow-sm bg-surface-light rounded-xl dark:bg-surface-dark focus-within:shadow-lg focus-within:ring-1 focus-within:ring-opacity-50 dark:focus-within:ring-opacity-50 focus-within:ring-primary dark:focus-within:ring-primary-dark focus-within:duration-200" :style="{ '--theme': scheduleStore.currentScheduleColourModern }">
+  <div class="flex flex-row items-center py-4 pl-4 pr-2 space-x-2 transition-all duration-500 shadow-sm bg-surface-light rounded-xl dark:bg-surface-dark focus-within:shadow-lg focus-within:ring-1 focus-within:ring-opacity-50 dark:focus-within:ring-opacity-50 focus-within:ring-primary dark:focus-within:ring-primary-dark focus-within:duration-200" :style="{ '--theme': currentScheduleColourModern }">
     <input
       ref="addtaskInput"
       :value="data.taskTitle"

@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { TimerState, useSchedule } from "~~/stores/schedule";
+import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
 const { t } = useI18n();
-const scheduleStore = useSchedule();
-const running = computed(
-	() => scheduleStore.getCurrentTimerState === TimerState.RUNNING,
-);
+const { timerState, getCurrentItem } = usePomodoroStore();
+const running = computed(() => timerState.value === TimerState.RUNNING);
 
 const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
 
 const time = computed(() => {
 	const remainingMinutes =
-		(scheduleStore.getCurrentItem.length -
-			scheduleStore.getCurrentItem.timeElapsed) /
-		(1000 * 60);
+		(getCurrentItem.value.length - getCurrentItem.value.timeElapsed) / 60;
 
 	const timeObject = {
 		value: 0,

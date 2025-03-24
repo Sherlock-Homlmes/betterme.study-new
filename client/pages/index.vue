@@ -2,7 +2,7 @@
 import { defineAsyncComponent, onBeforeMount } from "vue";
 import { useHead } from "#app";
 import { useI18n } from "vue-i18n";
-import { useSchedule } from "~~/stores/schedule";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useSettings } from "~~/stores/settings";
 
 import { useTicker } from "~~/components/ticker";
@@ -25,7 +25,13 @@ const TutorialView = defineAsyncComponent(
 
 const settingsStore = useSettings();
 const mobileSettingsStore = useMobileSettings();
-const scheduleStore = useSchedule();
+const {
+	timerState,
+	getCurrentItem,
+	getSchedule,
+	currentScheduleColour,
+	getScheduleColour,
+} = usePomodoroStore();
 const {
 	isAuth,
 	getCurrentUser,
@@ -46,7 +52,7 @@ const iconSvg = computed(
   height="32"
   viewBox="0 0 32 32"
   fill="none"
-  style="color: ${scheduleStore.currentScheduleColour};"
+  style="color: ${currentScheduleColour};"
   xmlns="http://www.w3.org/2000/svg"
 >
 <circle cx="16" cy="16" r="14" fill="currentColor" /></svg>`,
@@ -72,29 +78,27 @@ if (runtimeConfig.public.PLATFORM === AppPlatform.web) {
 	useMobile();
 }
 
-const state = reactive({
-	timeString: "",
-});
+const timeStringLocal = ref("");
 
 const remainingTimeString = computed(() => {
-	if (scheduleStore.getCurrentTimerState === 3) {
+	if (timerState.value === 3) {
 		return settingsStore.pageTitle.useTickEmoji
 			? "✔"
 			: t("ready").toLowerCase();
 	}
 
-	return state.timeString;
+	return timeStringLocal.value;
 });
 
 const pageTitle = computed(() => {
-	return scheduleStore.getCurrentItem
-		? t("section." + scheduleStore.getCurrentItem.type).toLowerCase()
+	return getCurrentItem.value
+		? t("section." + getCurrentItem.value.type).toLowerCase()
 		: "Pomodoro";
 });
 
 const progressBarSchedules = computed(() => {
 	const numSchedules = settingsStore.performance.showProgressBar ? 2 : 1;
-	return scheduleStore.getSchedule.slice(0, numSchedules);
+	return getSchedule.value.slice(0, numSchedules);
 });
 
 onBeforeMount(async () => {
@@ -115,14 +119,13 @@ onBeforeMount(async () => {
 
     <!-- Progress bar -->
     <TransitionGroup name="progress-transition" tag="div" :duration="1000">
-      <!-- TODO: check this scheduleStore -->
       <TimerProgress
         v-for="(scheduleItem, index) in progressBarSchedules"
         :key="scheduleItem.id"
-        :colour="scheduleStore.getScheduleColour[index]"
+        :colour="getScheduleColour[index]"
         :background="index === 0"
-        :time-elapsed="scheduleStore.getCurrentItem.timeElapsed"
-        :time-original="scheduleStore.getCurrentItem.length"
+        :time-elapsed="getCurrentItem.timeElapsed"
+        :time-original="getCurrentItem.length"
       />
     </TransitionGroup>
     <div
@@ -135,12 +138,12 @@ onBeforeMount(async () => {
       <AppBar />
       <TimerSwitch
         key="timerswitch"
-        :time-elapsed="scheduleStore.getCurrentItem.timeElapsed"
-        :time-original="scheduleStore.getCurrentItem.length"
-        :timer-state="scheduleStore.timerState"
+        :time-elapsed="getCurrentItem.timeElapsed"
+        :time-original="getCurrentItem.length"
+        :timer-state="timerState"
         :timer-widget="userSettings.visuals.timer_show"
         class="flex-grow"
-        @tick="state.timeString = $event"
+        @tick="timeStringLocal = $event"
       />
 
       <TimerControls class="mb-8" />

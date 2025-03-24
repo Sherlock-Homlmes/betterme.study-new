@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useSchedule } from "~~/stores/schedule";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 
-const scheduleStore = useSchedule();
+const { getScheduleColour } = usePomodoroStore();
 
 const props = defineProps({
 	timeElapsed: {
@@ -36,7 +36,7 @@ const progressPercentage = computed(() => {
     class="absolute top-0 left-0 block w-full h-full transition-all duration-500 transform-gpu"
     :class="[{ 'ease-out-expo': background }]"
     :style="{
-      'background-color': colour ? colour : scheduleStore.getScheduleColour[scheduleEntryId],
+      'background-color': colour ? colour : getScheduleColour[scheduleEntryId],
       'transform': !background ? `translateX(${-100 + progressPercentage}%)` : 'translateX(0%)'
     }"
   >

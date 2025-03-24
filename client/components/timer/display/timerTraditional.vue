@@ -1,20 +1,15 @@
 <script setup lang="ts">
-import { TimerState, useSchedule } from "~~/stores/schedule";
+import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
-const scheduleStore = useSchedule();
-const running = computed(
-	() => scheduleStore.getCurrentTimerState === TimerState.RUNNING,
-);
+const { timerState, getCurrentItem } = usePomodoroStore();
+const running = computed(() => timerState.value === TimerState.RUNNING);
 const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
 
 const timeLeftStructured = computed(() => {
 	const sLeft = Math.abs(
-		Math.round(
-			(scheduleStore.getCurrentItem.length -
-				scheduleStore.getCurrentItem.timeElapsed) /
-				1000,
-		),
+		Math.round(getCurrentItem.value.length - getCurrentItem.value.timeElapsed),
 	);
+
 	const hours = Math.floor(sLeft / (60 * 60));
 	const minutes = Math.floor((sLeft % (60 * 60)) / 60);
 	const seconds = Math.floor(sLeft % 60);
@@ -25,8 +20,7 @@ const timeLeftStructured = computed(() => {
 		Object.keys(timeStructured) as Array<keyof typeof timeStructured>
 	).filter((value) => value !== "hours" || hours > 0);
 	const completed =
-		scheduleStore.getCurrentItem.timeElapsed >
-			scheduleStore.getCurrentItem.length &&
+		getCurrentItem.value.timeElapsed > getCurrentItem.value.length &&
 		[hours, minutes, seconds].some((num) => num > 0);
 
 	// if (completed) {

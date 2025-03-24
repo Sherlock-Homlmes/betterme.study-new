@@ -16,20 +16,24 @@ const defaultSettings = {
 		pomodoro_study: [255, 107, 107],
 		pomodoro_rest: [244, 162, 97],
 		pomodoro_long_rest: [46, 196, 182],
+
+		timer_show: "traditional",
+
 		background: null,
+		custom_backgrounds: [],
 		dark_mode: false,
-		timer_show: "approximate",
+		show_progress_bar: true,
+
+		enable_audio: true,
+		enable_adaptive_ticking: true,
+		auto_start_next_time: true,
+		custom_audios: [],
 	},
 	pomodoro_settings: {
 		pomodoro_study_time: 25 * 60,
 		pomodoro_rest_time: 5 * 60,
 		pomodoro_long_rest_time: 20 * 60,
 		long_rest_time_interval: 3,
-
-		auto_start_next_time: true,
-		audio: null,
-		custom_audio: null,
-		show_progress_bar: true,
 	},
 };
 
@@ -77,7 +81,7 @@ export const useAuthStore = createGlobalState(() => {
 	};
 
 	const updateCurrentUserSetting = async (data: object) => {
-		if (!userInfo.value) throw new Error("Not authenticate yet");
+		if (!isAuth.value) throw new Error("Not authenticate yet");
 		const response = await fetchWithAuth(`${API_URL}/users/self/settings`, {
 			method: "PATCH",
 			body: JSON.stringify(data),

@@ -7,64 +7,68 @@ import {
 } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "~~/components/base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
-import { TimerState, useSchedule, ScheduleItemType } from "~~/stores/schedule";
-import { usePomodoroStore } from "~~/stores/pomodoros";
+import { useSchedule } from "~~/stores/schedule";
+import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 import { useAuthStore } from "~~/stores/auth";
 import { computed } from "vue";
 
 const { getCurrentUserSetting } = useAuthStore();
-const { startPomodoro, pomodoroSectionAction, deletePomodoro } =
-	usePomodoroStore();
+const {
+	startPomodoro,
+	pomodoroSectionAction,
+	deletePomodoro,
+	isWorking,
+	isRunning,
+	timerState,
+	getCurrentItem,
+	advance: advanceStore,
+} = usePomodoroStore();
 const scheduleStore = useSchedule();
 
 const reset = async () => {
 	if (
-		scheduleStore.timerState !== TimerState.COMPLETED &&
-		scheduleStore.getSchedule[0].timeElapsed >
-			scheduleStore.getSchedule[0].length
+		timerState.value !== TimerState.COMPLETED &&
+		getCurrentItem.value.timeElapsed > getCurrentItem.value.length
 	) {
-		if (scheduleStore.isWorking) await deletePomodoro();
-		scheduleStore.timerState = TimerState.COMPLETED;
+		if (isWorking.value) await deletePomodoro();
+		timerState.value = TimerState.COMPLETED;
 	} else {
-		if (scheduleStore.isWorking) await deletePomodoro();
-		scheduleStore.timerState = TimerState.STOPPED;
+		if (isWorking.value) await deletePomodoro();
+		timerState.value = TimerState.STOPPED;
 	}
 };
 
 const playPause = async () => {
-	if (scheduleStore.isWorking) {
-		if (scheduleStore.timerState === TimerState.STOPPED) {
+	if (isWorking.value) {
+		if (timerState.value === TimerState.STOPPED) {
 			try {
 				await startPomodoro();
 			} catch (e) {
 				await deletePomodoro();
 				await startPomodoro();
 			}
-		} else if (scheduleStore.timerState === TimerState.RUNNING) {
+		} else if (timerState.value === TimerState.RUNNING) {
 			await pomodoroSectionAction("PAUSED");
-		} else if (scheduleStore.timerState === TimerState.PAUSED) {
+		} else if (timerState.value === TimerState.PAUSED) {
 			await pomodoroSectionAction("STARTED");
-		} else if (scheduleStore.timerState === TimerState.COMPLETED) {
+		} else if (timerState.value === TimerState.COMPLETED) {
 			await pomodoroSectionAction("COMPLETED");
 			await advance();
 			return;
 		}
 	}
 
-	scheduleStore.timerState =
-		scheduleStore.timerState === TimerState.RUNNING
+	timerState.value =
+		timerState.value === TimerState.RUNNING
 			? TimerState.PAUSED
 			: TimerState.RUNNING;
 };
 
 const advance = async () => {
-	if (
-		scheduleStore.isWorking &&
-		scheduleStore.timerState !== TimerState.COMPLETED
-	)
+	if (isWorking.value && timerState.value !== TimerState.COMPLETED)
 		await deletePomodoro();
-	scheduleStore.timerState = TimerState.STOPPED;
-	scheduleStore.advance();
+	timerState.value = TimerState.STOPPED;
+	advanceStore();
 };
 </script>
 
@@ -76,7 +80,7 @@ const advance = async () => {
       :theme="ButtonTheme.Secondary"
       :importance="ButtonImportance.Filled"
       class="h-16 transition"
-      :class="{ 'scale-0 opacity-0 pointer-events-none' : !scheduleStore.isRunning }"
+      :class="{ 'scale-0 opacity-0 pointer-events-none' : !isRunning }"
       :aria-label="$t('controls.stop')"
       @click="reset"
     >
@@ -92,19 +96,19 @@ const advance = async () => {
       :importance="ButtonImportance.Filled"
       @click="playPause"
     >
-      <PlayerPlayIcon v-if="scheduleStore.timerState !== TimerState.RUNNING" :size="28" />
+      <PlayerPlayIcon v-if="timerState !== TimerState.RUNNING" :size="28" />
       <PlayerPauseIcon v-else :size="28" />
     </CButton>
 
     <CButton
-      v-if='scheduleStore.timerState !== TimerState.COMPLETED'
+      v-if='timerState !== TimerState.COMPLETED'
       :aria-label="$t('controls.advance')"
       circle
       inner-class="p-5"
       :theme="ButtonTheme.Secondary"
       :importance="ButtonImportance.Filled"
       class="h-16 transition"
-      :class="{ 'scale-0 opacity-0 pointer-events-none' : scheduleStore.timerState === TimerState.RUNNING }"
+      :class="{ 'scale-0 opacity-0 pointer-events-none' : timerState === TimerState.RUNNING }"
       @click="advance()"
     >
       <PlayerTrackNextIcon :size="24" />
