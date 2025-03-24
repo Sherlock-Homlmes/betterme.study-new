@@ -46,7 +46,7 @@ getLoginUrl();
           <BrandDiscordIcon />
           <span v-text="$t('loginBy.discord')" />
         </Button>
-        <Button
+        <!-- <Button
           :importance="ButtonImportance.Filled"
           link
           dark
@@ -58,7 +58,7 @@ getLoginUrl();
         >
           <BrandGoogleIcon />
           <span v-text="$t('loginBy.google')" />
-        </Button>
+        </Button> -->
       </div>
     </div>
   </div>
