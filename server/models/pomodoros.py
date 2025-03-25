@@ -56,7 +56,7 @@ class Pomodoros(Document):
     async def end_section(self):
         if (
             self.status == PomodoroStatusEnum.STARTED
-            and self.start_at + timedelta(seconds=self.duration) < vn_now()
+            and self.start_at + timedelta(seconds=self.duration - 60) <= vn_now()
         ):
             await self.set(
                 {Pomodoros.end_at: vn_now(), Pomodoros.status: PomodoroStatusEnum.COMPLETED}
