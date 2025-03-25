@@ -9,7 +9,7 @@ onMounted(async () => {
 	const videoPlayer = document.getElementById("videoPlayer");
 	const source = document.createElement("canvas");
 	const ctx = source.getContext("2d");
-	ctx.font = "900 50px Arial";
+	ctx.font = "700 50px Lexend";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
 
