@@ -17,7 +17,7 @@ repos:
     hooks:
     -   id: biome-format
         name: "client formatter"
-        additional_dependencies: ["@biomejs/biome@1.8.1"]
+        additional_dependencies: ["@biomejs/biome@1.9.4"]
         files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
 
   - repo: https://github.com/haocheng6/mirrors-oxlint
