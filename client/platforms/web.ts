@@ -2,8 +2,8 @@ import { reactive, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useSettings } from "~~/stores/settings";
-import { useSchedule } from "~~/stores/schedule";
 import { useNotifications } from "~~/stores/notifications";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 import { EventType, useEvents } from "~~/stores/events";
 
 interface SoundSettings {
@@ -13,7 +13,7 @@ interface SoundSettings {
 
 export function useWeb() {
 	const settingsStore = useSettings();
-	const scheduleStore = useSchedule();
+	const { timerState, getSchedule } = usePomodoroStore();
 	const notificationsStore = useNotifications();
 	const eventsStore = useEvents();
 	const i18n = useI18n();
@@ -34,7 +34,7 @@ export function useWeb() {
 
 	watch(lastEvent, (newValue) => {
 		if (newValue !== null && newValue._event === EventType.TIMER_FINISH) {
-			showNotification(scheduleStore.getSchedule[1].type);
+			showNotification(getSchedule.value[1].type);
 		}
 	});
 
@@ -81,7 +81,7 @@ export function useWeb() {
 		eventsStore.recordEvent(EventType.APP_STARTED);
 
 		// check if timer is already running
-		if (scheduleStore.timerState === 1) {
+		if (timerState.value === 1) {
 			loadSoundSet();
 		}
 

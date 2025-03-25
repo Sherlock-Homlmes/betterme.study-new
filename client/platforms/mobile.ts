@@ -1,7 +1,7 @@
 import { useMobileSettings } from "~~/stores/platforms/mobileSettings";
 import { useEvents, EventType } from "~~/stores/events";
 import { useSettings } from "~~/stores/settings";
-import { useSchedule } from "~~/stores/schedule";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 
 interface FlutterJavascriptChannel {
 	postMessage(message: string): void;

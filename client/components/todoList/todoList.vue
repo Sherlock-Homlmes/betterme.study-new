@@ -6,9 +6,9 @@ import ControlButton from "~~/components/base/uiButton.vue";
 import TaskItem from "~~/components/todoList/todoItem.vue";
 import TaskAdd from "@/components/todoList/addTask.vue";
 import { useSettings } from "~~/stores/settings";
-import { useSchedule } from "~~/stores/schedule";
 import { type Task, useTasklist } from "~~/stores/tasklist";
 import { useOpenPanels } from "~~/stores/openpanels";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 
 import { useTaskStore } from "~~/stores/todolist";
 import { onBeforeMount } from "vue";
@@ -16,9 +16,9 @@ import { onBeforeMount } from "vue";
 const openPanels = useOpenPanels();
 const settingsStore = useSettings();
 const tasklistStore = useTasklist();
-const scheduleStore = useSchedule();
 const { tasks, getTaskList, postTask, patchTask, deleteTask, moveTask } =
 	useTaskStore();
+const { isRunning } = usePomodoroStore();
 
 onBeforeMount(async () => {
 	await getTaskList();
@@ -70,7 +70,7 @@ const handleDrop = () => {
       <TaskItem
         v-for="task in tasks"
         :key="task.id"
-        :manage="!scheduleStore.isRunning && state.manageMode"
+        :manage="!isRunning && state.manageMode"
         :item="task"
         :droptarget="task === state.dropTarget"
         moveable

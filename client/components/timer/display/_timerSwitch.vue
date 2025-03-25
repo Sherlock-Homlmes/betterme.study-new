@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { TimerType } from "~~/stores/settings";
-import { useSchedule } from "~~/stores/schedule";
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
 import TimerTraditional from "@/components/timer/display/timerTraditional.vue";
@@ -14,7 +13,6 @@ export interface TimerInfo {
 	timerState: number;
 }
 
-const scheduleStore = useSchedule();
 const { timerState } = usePomodoroStore();
 
 interface Props {

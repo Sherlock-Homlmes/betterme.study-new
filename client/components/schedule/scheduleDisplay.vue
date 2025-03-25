@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSchedule } from "~~/stores/schedule";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 import ScheduleItem from "@/components/schedule/scheduleItem.vue";
 
-const scheduleStore = useSchedule();
+const { getSchedule } = usePomodoroStore();
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const scheduleStore = useSchedule();
     class="relative flex-grow-0 h-full rounded-full select-none"
   >
     <schedule-item
-      v-for="(item, i) in scheduleStore.getSchedule"
+      v-for="(item, i) in getSchedule"
       :key="item.id"
       :type="item.type"
       :active="i === 0"

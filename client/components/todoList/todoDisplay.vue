@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import TaskItem from "./todoItem.vue";
 import { TaskState, useTasklist } from "~~/stores/tasklist";
+import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useSettings } from "~~/stores/settings";
-import { useSchedule } from "~~/stores/schedule";
 
 const tasklistStore = useTasklist();
 const settingsStore = useSettings();
-const scheduleStore = useSchedule();
+const { getCurrentItem } = usePomodoroStore();
 
 const tasks = computed(() => {
 	let tasks = tasklistStore.sortedTasks.filter(
-		(task) => task.section === scheduleStore.getCurrentItem.type,
+		(task) => task.section === getCurrentItem.value.type,
 	);
 
 	if (settingsStore.tasks.maxActiveTasks > 0) {

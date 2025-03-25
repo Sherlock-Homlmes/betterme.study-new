@@ -7,7 +7,6 @@ import {
 } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "~~/components/base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
-import { useSchedule } from "~~/stores/schedule";
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 import { useAuthStore } from "~~/stores/auth";
 import { computed } from "vue";
@@ -23,7 +22,6 @@ const {
 	getCurrentItem,
 	advance: advanceStore,
 } = usePomodoroStore();
-const scheduleStore = useSchedule();
 
 const reset = async () => {
 	if (

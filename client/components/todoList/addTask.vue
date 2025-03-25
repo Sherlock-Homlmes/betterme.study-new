@@ -4,12 +4,10 @@ import { type Ref } from "vue";
 import { ButtonImportance } from "../base/types/button";
 import Button from "~~/components/base/uiButton.vue";
 import { TaskState, useTasklist } from "~~/stores/tasklist";
-import { useSchedule } from "~~/stores/schedule";
 import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useTaskStore } from "~~/stores/todolist";
 
 const tasksStore = useTasklist();
-const scheduleStore = usePomodoroStore();
 const { getCurrentItem, currentScheduleColourModern } = usePomodoroStore();
 const addtaskInput: Ref<HTMLElement | null> = ref(null);
 const { postTask } = useTaskStore();
@@ -20,11 +18,6 @@ const data = reactive({
 	valid: false,
 	debug_lastinput: "",
 });
-
-// computed: {
-//   ...mapState(useTasklist, ['tasks']),
-//   ...mapState(useSchedule, ['getCurrentItem', 'currentScheduleColourModern'])
-// },
 
 watch(
 	() => data.taskTitle,

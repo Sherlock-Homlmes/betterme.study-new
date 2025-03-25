@@ -1,6 +1,5 @@
 import { reactive, computed, watch } from "vue";
 
-import { useSchedule } from "~~/stores/schedule";
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 import { SectionEndAction, useSettings } from "~~/stores/settings";
 import { useTasklist } from "~~/stores/tasklist";

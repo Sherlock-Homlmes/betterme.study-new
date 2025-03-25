@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
 import { usePomodoroStore } from "~~/stores/pomodoros";
+
 const { timerString, currentScheduleColour } = usePomodoroStore();
 
 onMounted(async () => {

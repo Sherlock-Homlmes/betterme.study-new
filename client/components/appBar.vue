@@ -4,11 +4,12 @@ import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
 import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
 import { useOpenPanels } from "@/stores/openpanels";
-import { useSchedule } from "~~/stores/schedule";
 import { useSettings } from "~~/stores/settings";
+import { usePomodoroStore } from "~~/stores/pomodoros";
+
+const { getCurrentItem } = usePomodoroStore();
 
 const openPanels = useOpenPanels();
-const scheduleStore = useSchedule();
 const settingsStore = useSettings();
 </script>
 
@@ -19,7 +20,7 @@ const settingsStore = useSettings();
         <ScheduleView />
       </ClientOnly>
     </div>
-    <div v-show="settingsStore.schedule.visibility.enabled && settingsStore.schedule.visibility.showSectionType" class="flex-shrink overflow-hidden text-lg whitespace-pre select-none text-ellipsis text-surface-onlight dark:text-surface-ondark" v-text="$t('section.' + scheduleStore.getCurrentItem.type).toLowerCase()" />
+    <div v-show="settingsStore.schedule.visibility.enabled && settingsStore.schedule.visibility.showSectionType" class="flex-shrink overflow-hidden text-lg whitespace-pre select-none text-ellipsis text-surface-onlight dark:text-surface-ondark" v-text="$t('section.' + getCurrentItem.type).toLowerCase()" />
     <div class="flex-grow" />
     <CButton
       circle
