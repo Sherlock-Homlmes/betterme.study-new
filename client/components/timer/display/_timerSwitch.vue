@@ -32,9 +32,9 @@ const running = computed(() => timerState === TimerState.RUNNING);
   <div class="relative grid text-black transition-opacity duration-500 select-none place-items-center dark:text-gray-100" :class="[{ 'opacity-70': !running, 'opacity-100': running }]">
     <Transition name="timer-switch" mode="out-in">
       <CompleteMarker v-if="timerState === TimerState.COMPLETED" :key="'complete'" />
-      <TimerTraditional v-else-if="props.timerWidget === TimerType.Traditional" :key="'traditional'" @tick="$emit('tick', $event)" />
-      <TimerApproximate v-else-if="props.timerWidget === TimerType.Approximate" :key="'approximate'" @tick="$emit('tick', $event)" />
-      <TimerPercentage v-else-if="props.timerWidget === TimerType.Percentage" :key="'percentage'" @tick="$emit('tick', $event)" />
+      <TimerTraditional v-else-if="props.timerWidget === TimerType.Traditional" :key="'traditional'"/>
+      <TimerApproximate v-else-if="props.timerWidget === TimerType.Approximate" :key="'approximate'"/>
+      <TimerPercentage v-else-if="props.timerWidget === TimerType.Percentage" :key="'percentage'"/>
     </Transition>
   </div>
 </template>

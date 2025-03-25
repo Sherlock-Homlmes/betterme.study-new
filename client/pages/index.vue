@@ -27,6 +27,7 @@ const settingsStore = useSettings();
 const mobileSettingsStore = useMobileSettings();
 const {
 	timerState,
+	timerString,
 	getCurrentItem,
 	getSchedule,
 	currentScheduleColour,
@@ -78,8 +79,6 @@ if (runtimeConfig.public.PLATFORM === AppPlatform.web) {
 	useMobile();
 }
 
-const timeStringLocal = ref("");
-
 const remainingTimeString = computed(() => {
 	if (timerState.value === 3) {
 		return settingsStore.pageTitle.useTickEmoji
@@ -87,7 +86,7 @@ const remainingTimeString = computed(() => {
 			: t("ready").toLowerCase();
 	}
 
-	return timeStringLocal.value;
+	return timerString.value;
 });
 
 const pageTitle = computed(() => {
@@ -143,7 +142,6 @@ onBeforeMount(async () => {
         :timer-state="timerState"
         :timer-widget="userSettings.visuals.timer_show"
         class="flex-grow"
-        @tick="timeStringLocal = $event"
       />
 
       <TimerControls class="mb-8" />

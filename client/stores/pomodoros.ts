@@ -48,6 +48,7 @@ export const usePomodoroStore = createGlobalState(() => {
 
 	// state
 	const currentPomodoroSection = ref();
+	const timerString = ref("");
 	const items = ref(createScheduleSeries(10));
 	const timerState = ref(TimerState.STOPPED);
 	const scheduleItemTypeTimeLengthMap = {
@@ -216,6 +217,7 @@ export const usePomodoroStore = createGlobalState(() => {
 	return {
 		// state
 		currentPomodoroSection,
+		timerString,
 		items,
 		timerState,
 		// getters

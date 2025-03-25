@@ -3,39 +3,38 @@ import { useI18n } from "vue-i18n";
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
 const { t } = useI18n();
-const { timerState, getCurrentItem } = usePomodoroStore();
+const { timerState, timerString, getCurrentItem } = usePomodoroStore();
 const running = computed(() => timerState.value === TimerState.RUNNING);
 
-const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
+const time = computed(
+	() => {
+		const remainingMinutes =
+			(getCurrentItem.value.length - getCurrentItem.value.timeElapsed) / 60;
 
-const time = computed(() => {
-	const remainingMinutes =
-		(getCurrentItem.value.length - getCurrentItem.value.timeElapsed) / 60;
+		const timeObject = {
+			value: 0,
+			string: "",
+		};
+		if (Math.abs(remainingMinutes) > 59) {
+			timeObject.value =
+				remainingMinutes >= 0
+					? Math.round(remainingMinutes / 60)
+					: Math.ceil(remainingMinutes / 60);
+			timeObject.string = t("timer.approximate.hours", timeObject.value);
+		} else {
+			timeObject.value =
+				remainingMinutes > 0
+					? Math.ceil(remainingMinutes)
+					: Math.min(-1, Math.floor(remainingMinutes));
+			timeObject.string = t("timer.approximate.minutes", timeObject.value);
+		}
 
-	const timeObject = {
-		value: 0,
-		string: "",
-	};
-	if (Math.abs(remainingMinutes) > 59) {
-		timeObject.value =
-			remainingMinutes >= 0
-				? Math.round(remainingMinutes / 60)
-				: Math.ceil(remainingMinutes / 60);
-		timeObject.string = t("timer.approximate.hours", timeObject.value);
-	} else {
-		timeObject.value =
-			remainingMinutes > 0
-				? Math.ceil(remainingMinutes)
-				: Math.min(-1, Math.floor(remainingMinutes));
-		timeObject.string = t("timer.approximate.minutes", timeObject.value);
-	}
+		timerString.value = `${timeObject.value < 0 ? "+" : ""}${Math.abs(timeObject.value)} ${timeObject.string}`;
 
-	emit(
-		"tick",
-		`${timeObject.value < 0 ? "+" : ""}${Math.abs(timeObject.value)} ${timeObject.string}`,
-	);
-	return timeObject;
-});
+		return timeObject;
+	},
+	{ cache: false },
+);
 </script>
 
 <template>
