@@ -255,6 +255,10 @@
 					"_title": "Show progress bar",
 					"_description": "Show progress behind timer"
 				},
+				"show_pip_mode": {
+					"_title": "Show picture in picture mode",
+					"_description": "Show a small window in the corner when you leave page"
+				},
 				"timer_show": {
 					"_title": "Timer style",
 					"_description": "",

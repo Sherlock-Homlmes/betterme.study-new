@@ -23,6 +23,7 @@ const defaultSettings = {
 		custom_backgrounds: [],
 		dark_mode: false,
 		show_progress_bar: true,
+		show_pip_mode: true,
 
 		enable_audio: true,
 		enable_adaptive_ticking: true,

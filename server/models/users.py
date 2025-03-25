@@ -75,6 +75,7 @@ class UserVisualSettings(BaseModel):
     custom_backgrounds: Optional[List[str]] = None
     dark_mode: Optional[bool] = False
     show_progress_bar: Optional[bool] = False
+    show_pip_mode: Optional[bool] = True
 
     enable_audio: Optional[bool] = True
     enable_adaptive_ticking: Optional[bool] = True

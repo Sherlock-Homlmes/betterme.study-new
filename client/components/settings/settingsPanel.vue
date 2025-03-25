@@ -161,6 +161,7 @@ notificationsStore.updateEnabled();
             <!-- <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" /> -->
             <SettingsItemV2 :type="Control.Option" path="visuals.timer_show" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
             <SettingsItemV2 :type="Control.Check" path="visuals.show_progress_bar" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.show_pip_mode" />
             <!-- TODO Audio volume control -->
           </div>
 

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
-const { timerState, getCurrentItem, timerString } = usePomodoroStore();
+const { timerState, getCurrentItem } = usePomodoroStore();
 const running = computed(() => timerState.value === TimerState.RUNNING);
+
+const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
 
 const timeLeftStructured = computed(
 	() => {
@@ -35,11 +37,13 @@ const timeLeftStructured = computed(
 			completed,
 		};
 
-		timerString.value =
+		emit(
+			"tick",
 			(completed ? "+" : "") +
-			displayKeys
-				.map((key) => returnObject.num[key].toString().padStart(2, "0"))
-				.join(":");
+				displayKeys
+					.map((key) => returnObject.num[key].toString().padStart(2, "0"))
+					.join(":"),
+		);
 		return returnObject;
 	},
 	{ cache: false },

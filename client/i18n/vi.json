@@ -247,6 +247,10 @@
 					"_title": "Kích hoạt chế độ tối",
 					"_description": "Ít sáng hơn, vẫn hiệu quả như vậy"
 				},
+				"show_pip_mode": {
+					"_title": "Kích hoạt chế độ picture in picture",
+					"_description": "Hiển thị 1 cửa sổ nhỏ khi bạn rời trang"
+				},
 				"show_progress_bar": {
 					"_title": "Hiển thị thanh tiến trình",
 					"_description": "Hiển thị tiến độ phía sau bộ hẹn giờ"

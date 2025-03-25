@@ -15,7 +15,7 @@ export interface TimerInfo {
 }
 
 const scheduleStore = useSchedule();
-const { timerState } = usePomodoroStore();
+const { timerState, timerString } = usePomodoroStore();
 
 interface Props {
 	timerWidget: TimerType;
@@ -24,6 +24,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
 	timerWidget: "traditional",
 });
+const updateTimerString = ($event: string) => (timerString.value = $event);
 
 const running = computed(() => timerState === TimerState.RUNNING);
 </script>
@@ -32,9 +33,9 @@ const running = computed(() => timerState === TimerState.RUNNING);
   <div class="relative grid text-black transition-opacity duration-500 select-none place-items-center dark:text-gray-100" :class="[{ 'opacity-70': !running, 'opacity-100': running }]">
     <Transition name="timer-switch" mode="out-in">
       <CompleteMarker v-if="timerState === TimerState.COMPLETED" :key="'complete'" />
-      <TimerTraditional v-else-if="props.timerWidget === TimerType.Traditional" :key="'traditional'"/>
-      <TimerApproximate v-else-if="props.timerWidget === TimerType.Approximate" :key="'approximate'"/>
-      <TimerPercentage v-else-if="props.timerWidget === TimerType.Percentage" :key="'percentage'"/>
+      <TimerTraditional v-else-if="props.timerWidget === TimerType.Traditional" :key="'traditional'" @tick='updateTimerString'/>
+      <TimerApproximate v-else-if="props.timerWidget === TimerType.Approximate" :key="'approximate'" @tick='updateTimerString'/>
+      <TimerPercentage v-else-if="props.timerWidget === TimerType.Percentage" :key="'percentage'" @tick='updateTimerString'/>
     </Transition>
   </div>
 </template>
