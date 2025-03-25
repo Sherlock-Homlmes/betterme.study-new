@@ -3,7 +3,7 @@ import { useI18n } from "vue-i18n";
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
 const { t } = useI18n();
-const { timerState, getCurrentItem } = usePomodoroStore();
+const { timerState, timerString, getCurrentItem } = usePomodoroStore();
 const running = computed(() => timerState.value === TimerState.RUNNING);
 
 const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
@@ -31,10 +31,8 @@ const time = computed(
 			timeObject.string = t("timer.approximate.minutes", timeObject.value);
 		}
 
-		emit(
-			"tick",
-			`${timeObject.value < 0 ? "+" : ""}${Math.abs(timeObject.value)} ${timeObject.string}`,
-		);
+		timerString.value = `${timeObject.value < 0 ? "+" : ""}${Math.abs(timeObject.value)} ${timeObject.string}`;
+
 		return timeObject;
 	},
 	{ cache: false },

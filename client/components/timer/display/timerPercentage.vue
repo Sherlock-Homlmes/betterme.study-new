@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TimerState, usePomodoroStore } from "~~/stores/pomodoros";
 
-const { timerState, getCurrentItem } = usePomodoroStore();
+const { timerState, timerString, getCurrentItem } = usePomodoroStore();
 const running = computed(() => timerState === TimerState.RUNNING);
 
 const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
@@ -16,7 +16,7 @@ const timerValue = computed(
 			((totalRounded - completeRounded) / totalRounded) * 100,
 		);
 
-		emit("tick", `${percentageValue}%`);
+		timerString.value = `${percentageValue}%`;
 		return percentageValue;
 	},
 	{ cache: false },
