@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ButtonControl from "~~/components/base/uiButton.vue";
+import { ButtonImportance } from "../base/types/button";
 import { useSettings } from "~~/stores/settings";
 import { useTasklist } from "~~/stores/tasklist";
-import { ButtonImportance } from "../base/types/button";
 
 const downloadSettings = () => {
 	const settings = useSettings().$state;

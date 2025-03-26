@@ -1,5 +1,5 @@
 <script setup>
-import { SettingsIcon, ChecklistIcon } from "vue-tabler-icons";
+import { SettingsIcon, ChecklistIcon, UserIcon } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
 import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
@@ -35,6 +35,7 @@ const settingsStore = useSettings();
     >
       <ChecklistIcon class="inline-block" />
     </CButton>
+
     <CButton
       circle
       :aria-label="$t('appbar.settings')"
@@ -49,18 +50,18 @@ const settingsStore = useSettings();
       <SettingsIcon class="inline-block" />
     </CButton>
 
-    <!-- <CButton
+    <CButton
       circle
-      :aria-label="$t('test')"
+      :aria-label="$t('appbar.settings')"
       :importance="ButtonImportance.Filled"
       :theme="ButtonTheme.Neutral"
       class="h-11"
       no-content-theme
       no-padding
       inner-class="p-1"
-      @click="togglePictureInPicture"
+      @click="openPanels.user = !openPanels.user"
     >
-      test
-    </CButton> -->
+      <UserIcon class="inline-block" />
+    </CButton>
   </div>
 </template>

@@ -284,6 +284,24 @@
 			}
 		}
 	},
+	"user_settings": {
+		"heading": "User Information",
+		"tabs": {
+			"info": {
+				"heading": "Info",
+				"inputs": {
+					"name": "Name",
+					"email": "Email"
+				},
+				"buttons": {
+					"save": "Save"
+				}
+			},
+			"statistic": {
+				"heading": "Statistic"
+			}
+		}
+	},
 	"notification": {
 		"action": {
 			"ready": "Let's go!"

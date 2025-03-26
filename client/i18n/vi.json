@@ -280,6 +280,24 @@
 			}
 		}
 	},
+	"user_settings": {
+		"heading": "Tài khoản",
+		"tabs": {
+			"info": {
+				"heading": "Thông tin",
+				"inputs": {
+					"name": "Tên",
+					"email": "Mail"
+				},
+				"buttons": {
+					"save": "Lưu"
+				}
+			},
+			"statistic": {
+				"heading": "Thống kê"
+			}
+		}
+	},
 	"notification": {
 		"action": {
 			"ready": "Bắt đầu thôi!"

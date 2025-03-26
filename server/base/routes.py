@@ -9,10 +9,10 @@ from .exception_handle import *
 from routers.authentication.auth import auth_handler
 from routers import authentication
 from routers.study_tools import pomodoros, todolist
-from routers.users import settings
+from routers.users import settings, info
 
 non_auth_modules = [authentication]
-auth_modules = [pomodoros, todolist, settings]
+auth_modules = [pomodoros, todolist, settings, info]
 
 router = APIRouter(
     prefix="/api",

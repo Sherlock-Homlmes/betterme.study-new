@@ -1,6 +1,7 @@
 <script setup lang="ts"> // eslint-disable-line vue/multi-word-component-names
 import { useI18n } from 'vue-i18n'
 import SettingsPanel from '@/components/settings/settingsPanel.vue'
+import UserSettingPanel from '@/components/userSettingPanel/index.vue'
 import TodoList from '~~/components/todoList/todoList.vue'
 import { useOpenPanels } from '~~/stores/openpanels'
 import { usePomodoroStore } from "~~/stores/pomodoros";
@@ -30,6 +31,9 @@ useHead(() => {
     </transition>
     <transition enter-from-class="translate-y-full" enter-active-class="duration-300 ease-out" leave-to-class="translate-y-full" leave-active-class="duration-150 ease-in">
       <TodoList v-if="openPanels.todo" class="fixed bottom-0 z-10 w-full md:max-w-lg transition-all rounded-t-xl md:right-4 md:pb-8" :editing="[0].includes(timerState)" @hide="openPanels.todo = false" />
+    </transition>
+    <transition enter-from-class="translate-y-full" enter-active-class="duration-300 ease-out" leave-to-class="translate-y-full" leave-active-class="duration-150 ease-in">
+      <UserSettingPanel v-show="openPanels.user" class="right-0" />
     </transition>
     <slot />
   </div>
