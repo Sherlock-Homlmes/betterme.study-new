@@ -90,7 +90,6 @@ const advance = async () => {
       <PlayerStopIcon :size="24" />
     </CButton>
 
-	<span>{{timerState}}</span>
     <CButton
       :aria-label="$t('controls.play')"
       inner-class="p-6 px-8 transition"
