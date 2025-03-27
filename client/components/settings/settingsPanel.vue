@@ -108,7 +108,7 @@ notificationsStore.updateEnabled();
             <template v-if="isWeb">
               <Divider />
               <SettingsItemV2 :type="Control.Check" path="visuals.enable_audio" />
-              <SettingsItem
+              <!-- <SettingsItem
                 :type="Control.Check"
                 path="permissions.notifications"
                 :disabled="notificationsStore.enabled === NotificationPermission.Denied"
@@ -117,7 +117,7 @@ notificationsStore.updateEnabled();
                     eventsStore.recordEvent('permission.notification')
                   }
                 }"
-              />
+              /> -->
             </template>
 
             <template v-if="isMobile">

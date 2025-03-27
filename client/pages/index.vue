@@ -97,7 +97,7 @@ const pageTitle = computed(() => {
 });
 
 const progressBarSchedules = computed(() => {
-	const numSchedules = settingsStore.performance.showProgressBar ? 2 : 1;
+	const numSchedules = userSettings.value.visuals.show_progress_bar ? 2 : 1;
 	return getSchedule.value.slice(0, numSchedules);
 });
 
