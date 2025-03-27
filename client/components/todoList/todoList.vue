@@ -18,7 +18,6 @@ const settingsStore = useSettings();
 const tasklistStore = useTasklist();
 const { tasks, getTaskList, postTask, patchTask, deleteTask, moveTask } =
 	useTaskStore();
-const { isRunning } = usePomodoroStore();
 
 onBeforeMount(async () => {
 	await getTaskList();
@@ -70,7 +69,7 @@ const handleDrop = () => {
       <TaskItem
         v-for="task in tasks"
         :key="task.id"
-        :manage="!isRunning && state.manageMode"
+        :manage="state.manageMode"
         :item="task"
         :droptarget="task === state.dropTarget"
         moveable
