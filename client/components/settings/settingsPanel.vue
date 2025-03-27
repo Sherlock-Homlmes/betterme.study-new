@@ -143,9 +143,9 @@ notificationsStore.updateEnabled();
                 @input="(newPreset) => applyPreset(newPreset)"
               />
             </SettingsItem>
-            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_study_time" :min="5" />
-            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_rest_time" :min="1" />
-            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_long_rest_time" :min="1" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_study_time" :min="5 * 60" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_rest_time" :min="1 * 60" />
+            <SettingsItemV2 :type="Control.Time" path="pomodoro_settings.pomodoro_long_rest_time" :min="1 * 60" />
             <div class="flex flex-row items-center px-3 py-4 space-x-2 rounded-lg ring-inset ring ring-primary bg-primary/20 dark:bg-gray-700 dark:text-gray-100">
               <InfoIcon />
               <span v-text="$t('settings.scheduleMinTime')" />

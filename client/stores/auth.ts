@@ -131,6 +131,24 @@ export const useAuthStore = createGlobalState(() => {
 
 	// Events
 	watch(
+		() => userSettings.value.pomodoro_settings,
+		(newValue) => {
+			// Auto set min value
+			const pomodoroMinStudyTimeMap = {
+				pomodoro_study_time: 5 * 60,
+				pomodoro_rest_time: 5 * 60,
+				pomodoro_long_rest_time: 5 * 60,
+			};
+			for (const [key, val] of Object.entries(pomodoroMinStudyTimeMap)) {
+				if (newValue[key] < val)
+					userSettings.value.pomodoro_settings[key] = val;
+				console.log(newValue[key] < val);
+				console.log(userSettings.value.pomodoro_settings[key]);
+			}
+		},
+		{ immediate: true, deep: true },
+	);
+	watch(
 		userSettings,
 		(newValue) => {
 			const change = changeTracker.getChange(newValue);
