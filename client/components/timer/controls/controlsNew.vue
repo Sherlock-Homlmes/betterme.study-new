@@ -56,8 +56,14 @@ const playPause = async () => {
 		}
 	} else {
 		if (timerState.value === TimerState.COMPLETED) {
-			await advance();
-			return;
+			timerState.value = TimerState.STOPPED;
+			advanceStore();
+			try {
+				await startPomodoro();
+			} catch (e) {
+				await deletePomodoro();
+				await startPomodoro();
+			}
 		}
 	}
 

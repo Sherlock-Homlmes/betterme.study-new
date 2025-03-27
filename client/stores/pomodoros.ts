@@ -193,7 +193,7 @@ export const usePomodoroStore = createGlobalState(() => {
 		});
 		if (response.ok) {
 			currentPomodoroSection.value = null;
-		} else throw new Error(`Fail to delete pomodoro section`);
+		}
 	};
 
 	/** Advances the schedule by removing the first item and adding a new one to the end */
