@@ -6,6 +6,7 @@ import Button from "~~/components/base/uiButton.vue";
 import { TaskState, useTasklist } from "~~/stores/tasklist";
 import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useTaskStore } from "~~/stores/todolist";
+import _ from "lodash";
 
 const tasksStore = useTasklist();
 const { getCurrentItem, currentScheduleColourModern } = usePomodoroStore();
@@ -36,9 +37,10 @@ watch(
 	},
 );
 
-const addTask = () => {
-	postTask(data.taskTitle);
+const addTask = async () => {
+	const title = _.cloneDeep(data.taskTitle);
 	data.taskTitle = "";
+	await postTask(title);
 	const addtaskInputCast = addtaskInput.value as HTMLElement;
 
 	addtaskInputCast.focus();
