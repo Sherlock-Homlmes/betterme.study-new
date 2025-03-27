@@ -54,6 +54,11 @@ const playPause = async () => {
 			await advance();
 			return;
 		}
+	} else {
+		if (timerState.value === TimerState.COMPLETED) {
+			await advance();
+			return;
+		}
 	}
 
 	timerState.value =
@@ -85,6 +90,7 @@ const advance = async () => {
       <PlayerStopIcon :size="24" />
     </CButton>
 
+	<span>{{timerState}}</span>
     <CButton
       :aria-label="$t('controls.play')"
       inner-class="p-6 px-8 transition"
