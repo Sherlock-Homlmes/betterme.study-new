@@ -15,6 +15,7 @@ import OptionGroup from "@/components/base/optionGroup.vue";
 import TabHeader from "@/components/settings/panel/tabHeader.vue";
 import ExportButton from "@/components/settings/exportButton.vue";
 import ImportButton from "@/components/settings/importButton.vue";
+import ResetButton from "@/components/settings/resetButton.vue";
 
 import AboutTab from "~~/components/settings/aboutTab.vue";
 import LoginTab from "~~/components/settings/loginTab.vue";
@@ -39,7 +40,7 @@ import { useAuthStore } from "~~/stores/auth";
 import { usePomodoroStore } from "~~/stores/pomodoros";
 
 const runtimeConfig = useRuntimeConfig();
-const { isAuth, loading, getActiveSchedulePreset, applyPreset } =
+const { isAuth, loading, getActiveSchedulePreset, applyPreset, userSettings } =
 	useAuthStore()!;
 const eventsStore = useEvents();
 const openPanels = useOpenPanels();
@@ -78,27 +79,11 @@ notificationsStore.updateEnabled();
         <Transition tag="div" name="tab-transition" mode="out-in" class="relative w-full">
           <!-- Core settings -->
           <div v-if="state.activeTab === 1" :key="1" class="settings-tab">
-            <template v-if="isWeb && !isAuth">
-              <SettingsItem :type="Control.Empty" path="manage" />
-              <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
-                <ButtonControl default-style :importance="ButtonImportance.Filled" @click='state.activeTab = 5' class="col-start-1 col-end-7">
-                  <span v-text="$t('login')" />
-                </ButtonControl>
-                <span class="flex justify-center items-center">{{$t('or')}}</span>
-                <div class="grid grid-flow-col grid-cols-2 gap-2 col-start-8 col-end-13">
-                  <ExportButton />
-                  <ImportButton />
-                </div>
-              </div>
-            </template>
-
-            <Divider />
-
             <OptionGroup
               :choices="$languages"
-              :value="settingsStore.lang"
+              :value="userSettings.language"
               :override-text="{ title: $languages, description: {} }"
-              @input="(newLang) => { settingsStore.lang = newLang }"
+              @input="(newLang) => { userSettings.language = newLang }"
             />
             <Divider />
             <SettingsItemV2 :type="Control.Check" path="visuals.enable_adaptive_ticking" />
@@ -125,6 +110,23 @@ notificationsStore.updateEnabled();
               <SettingsItem :type="Control.Check" path="mobile.notifications.sectionOver" />
               <SettingsItem :type="Control.Check" path="mobile.notifications.persistent" />
             </template>
+
+            <Divider />
+            <template v-if="isWeb && !isAuth">
+              <SettingsItem :type="Control.Empty" path="manage" />
+              <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
+                <ButtonControl default-style :importance="ButtonImportance.Filled" @click='state.activeTab = 5' class="col-start-1 col-end-4">
+                  <span v-text="$t('login')" />
+                </ButtonControl>
+                <span class="flex justify-center items-center">{{$t('general.or')}}</span>
+                <div class="grid grid-flow-col grid-cols-3 gap-2 col-start-5 col-end-13">
+                  <ExportButton />
+                  <ImportButton />
+                  <ResetButton />
+                </div>
+              </div>
+            </template>
+
           </div>
 
           <!-- Schedule -->

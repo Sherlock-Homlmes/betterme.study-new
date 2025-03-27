@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import ButtonControl from "~~/components/base/uiButton.vue";
 import { ButtonImportance } from "../base/types/button";
-import { useSettings } from "~~/stores/settings";
-import { useTasklist } from "~~/stores/tasklist";
+import { useAuthStore } from "~~/stores/auth";
 
 const downloadSettings = () => {
-	const settings = useSettings().$state;
-	const tasklist = useTasklist().$state;
+	const { userSettings } = useAuthStore();
 
 	const downloadObject = {
-		settings,
-		tasklist,
+		userSettings: userSettings.value,
 	};
 
 	const downloadElement = document.createElement("a");

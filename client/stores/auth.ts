@@ -10,7 +10,7 @@ import timerPresets from "~~/assets/settings/timerPresets";
 import ChangeTracker from "../utils/changeTracker";
 
 const changeTracker = new ChangeTracker();
-const defaultSettings = {
+export const defaultSettings = {
 	language: "vi",
 	visuals: {
 		pomodoro_study: [255, 107, 107],
@@ -139,12 +139,9 @@ export const useAuthStore = createGlobalState(() => {
 				pomodoro_rest_time: 5 * 60,
 				pomodoro_long_rest_time: 5 * 60,
 			};
-			for (const [key, val] of Object.entries(pomodoroMinStudyTimeMap)) {
+			for (const [key, val] of Object.entries(pomodoroMinStudyTimeMap))
 				if (newValue[key] < val)
 					userSettings.value.pomodoro_settings[key] = val;
-				console.log(newValue[key] < val);
-				console.log(userSettings.value.pomodoro_settings[key]);
-			}
 		},
 		{ immediate: true, deep: true },
 	);

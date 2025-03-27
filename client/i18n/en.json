@@ -58,7 +58,8 @@
 		"manage": {
 			"buttons": {
 				"save": "Save",
-				"load": "Load"
+				"load": "Load",
+				"reset": "Reset"
 			}
 		},
 		"scheduleMinTime": "The minimum allowed time is 5 minutes",

@@ -58,7 +58,8 @@
 		"manage": {
 			"buttons": {
 				"save": "Lưu",
-				"load": "Tải"
+				"load": "Tải",
+				"reset": "Đặt lại"
 			}
 		},
 		"scheduleMinTime": "Thời gian tối thiểu cho phép là 5 phút",
