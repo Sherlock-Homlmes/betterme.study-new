@@ -58,11 +58,11 @@ export default defineNuxtConfig({
 			URL:
 				(process.env.ENV || "PRODUCTION") === "PRODUCTION"
 					? "https://betterme.study"
-					: "http://local.betterme.study",
+					: "http://localhost",
 			API_URL:
 				(process.env.ENV || "PRODUCTION") === "PRODUCTION"
 					? "https://api.betterme.study/api"
-					: "http://local.betterme.study/api",
+					: "http://localhost/api",
 		},
 	},
 

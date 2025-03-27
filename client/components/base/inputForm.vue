@@ -36,6 +36,7 @@ const validated = computed(() => {
               :class="{
                   'bg-gray-300 dark:bg-gray-700 text-gray-500': disabled,
                   'bg-error-dark text-error-onlight dark:text-error-ondark': !validated,
+                  'bg-transparent': validated,
               }"
           >
       </div>
