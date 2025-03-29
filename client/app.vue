@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useAuthStore } from "~~/stores/auth";
+import Alert from "@/components/base/uiAlert.vue";
 
 const { isDarkMode } = useAuthStore()!;
 
@@ -46,5 +47,6 @@ if (!process.server) {
 <template>
   <NuxtLayout>
     <NuxtPage />
+	<Alert />
   </NuxtLayout>
 </template>

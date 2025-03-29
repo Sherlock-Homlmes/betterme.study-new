@@ -3,6 +3,7 @@ import { useRuntimeConfig } from "#app";
 import { createGlobalState } from "@vueuse/core";
 import { useAuthStore } from "./auth";
 import { useSettings } from "./settings";
+import { useErrorStore } from "./common";
 
 export enum ETimerState {
 	STOPPED,
@@ -42,6 +43,7 @@ export enum TimerState {
 export const usePomodoroStore = createGlobalState(() => {
 	const API_URL = useRuntimeConfig().public.API_URL;
 	const { isAuth, userSettings } = useAuthStore();
+	const { showError } = useErrorStore();
 
 	// TODO: fix this
 	const settings = useSettings();
@@ -164,14 +166,21 @@ export const usePomodoroStore = createGlobalState(() => {
 		return colours;
 	});
 
+	const firstFetchStartPomodoro = ref(true);
 	const startPomodoro = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/pomodoros/`, {
 			method: "POST",
 		});
 		if (response.ok) {
+			firstFetchStartPomodoro.value = true;
 			currentPomodoroSection.value = await response.json();
-		} else throw new Error("Fail to start pomodoro section");
+		} else {
+			const errorMsg = "Fail to start pomodoro section";
+			if (!firstFetchStartPomodoro.value) showError(errorMsg);
+			firstFetchStartPomodoro.value = false;
+			throw new Error(errorMsg);
+		}
 	};
 
 	const pomodoroSectionAction = async (action: string) => {

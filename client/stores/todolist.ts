@@ -3,6 +3,7 @@ import { useRuntimeConfig } from "#app";
 import { createGlobalState, useLocalStorage } from "@vueuse/core";
 import _ from "lodash";
 import { useAuthStore } from "./auth";
+import { useErrorStore } from "./common";
 
 export enum TaskStatus {
 	TODO = "TO-DO",
@@ -14,6 +15,7 @@ export enum TaskStatus {
 export const useTaskStore = createGlobalState(() => {
 	const API_URL = useRuntimeConfig().public.API_URL;
 	const { isAuth } = useAuthStore();
+	const { showError } = useErrorStore();
 
 	// state
 	const tasks = useLocalStorage("tasks", []);
@@ -26,7 +28,11 @@ export const useTaskStore = createGlobalState(() => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/todolist`);
 		if (response.ok) tasks.value = await response.json();
-		else throw new Error("abc?");
+		else {
+			const errorMsg = "Failed to get newest task list";
+			showError(errorMsg);
+			throw new Error(errorMsg);
+		}
 		tasks.value = tasks.value.map((task) => ({
 			...task,
 			section: "work",
@@ -50,7 +56,11 @@ export const useTaskStore = createGlobalState(() => {
 			body: JSON.stringify({ title, index }),
 		});
 		if (response.ok) await getTaskList();
-		else throw new Error("abc?");
+		else {
+			const errorMsg = "Failed to create task";
+			showError(errorMsg);
+			throw new Error(errorMsg);
+		}
 	};
 
 	const patchTask = async (taskId: string, change = {}) => {
@@ -60,7 +70,11 @@ export const useTaskStore = createGlobalState(() => {
 			method: "PATCH",
 			body: JSON.stringify(change),
 		});
-		if (!response.ok) throw new Error("abc?");
+		if (!response.ok) {
+			const errorMsg = "Failed to update task";
+			showError(errorMsg);
+			throw new Error(errorMsg);
+		}
 	};
 
 	const deleteTask = async (taskId: string) => {
@@ -70,7 +84,11 @@ export const useTaskStore = createGlobalState(() => {
 		});
 		if (response.ok)
 			tasks.value = tasks.value.filter((task) => task.id !== taskId);
-		else throw new Error("abc?");
+		else {
+			const errorMsg = "Failed to delete task";
+			showError(errorMsg);
+			throw new Error(errorMsg);
+		}
 	};
 
 	const moveTask = (task, newIndex: number) => {
