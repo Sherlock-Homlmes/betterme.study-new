@@ -10,9 +10,10 @@ from routers.authentication.auth import auth_handler
 from routers import authentication
 from routers.study_tools import pomodoros, todolist
 from routers.users import settings, info
+from routers.audios import audios
 
 non_auth_modules = [authentication]
-auth_modules = [pomodoros, todolist, settings, info]
+auth_modules = [pomodoros, todolist, settings, info, audios]
 
 router = APIRouter(
     prefix="/api",

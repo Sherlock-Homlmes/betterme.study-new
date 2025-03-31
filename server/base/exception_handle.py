@@ -33,4 +33,4 @@ async def invalid_token(_, e: InvalidToken):
 # pydantic validate
 @app.exception_handler(ValidationError)
 async def validation_error_handler(_, e: ValidationError):
-    return JSONResponse({"error": "Validate error", "detail": str(e)}, status_code=400)
+    return JSONResponse({"error": "Validate error", "detail": str(e)}, status_code=422)

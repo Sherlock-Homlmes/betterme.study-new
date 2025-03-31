@@ -1,0 +1,51 @@
+from fastapi import APIRouter, HTTPException, Depends
+from models import Audios, Users
+from .schemas.audios import AudioMappingCreate, AudioMappingResponse
+from .utils import download_audio
+from routers.authentication import auth_handler
+from other_modules.tebi import upload_audio
+from yt_dlp.utils import DownloadError
+
+router = APIRouter(
+    prefix="/audios",
+    tags=["Audios"],
+    responses={404: {"description": "Not found"}},
+)
+
+
+@router.post(
+    "/",
+    response_model=AudioMappingResponse,
+    summary="Create Audio Mapping",
+    description="Create a new mapping between an original audio URL and its storage URL.",
+)
+async def create_audio_mapping(
+    payload: AudioMappingCreate,
+    user: Users = Depends(auth_handler.auth_wrapper),
+) -> AudioMappingResponse:
+    """
+    Creates a new audio mapping record in the database.
+    **audio_url**: The original URL of the audio (e.g., Spotify, YouTube).
+    """
+    # Check if mapping already exists (optional, but good practice)
+    old_audio = await Audios.find_one(Audios.audio_url == str(payload.audio_url))
+    if old_audio:
+        return AudioMappingResponse(link=old_audio.storage_url)
+
+    audio_name = download_audio(payload.audio_url)
+    try:
+        storage_url = upload_audio(audio_name)
+    except DownloadError as e1:
+        print(e1)
+        raise HTTPException(status_code=400, detail="Invalid audio source")
+    except RuntimeError as e2:
+        print(e2)
+        raise HTTPException(status_code=400, detail="Server error in when processing")
+
+    # Create new mapping document
+    new_audio = Audios(**payload.dict(), storage_url=storage_url, created_by_user_id=user["id"])
+
+    # Insert into database
+    await new_audio.insert()
+
+    return AudioMappingResponse(link=new_audio.storage_url)
