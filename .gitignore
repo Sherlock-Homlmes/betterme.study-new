@@ -182,3 +182,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+.cache/*
+!.cache/audios/keep.py
+!.cache/images/keep.py

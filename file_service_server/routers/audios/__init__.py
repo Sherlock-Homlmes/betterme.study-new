@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
-from models import Audios, Users
+from models import Audios
 from .schemas.audios import AudioMappingCreate, AudioMappingResponse
 from .utils import download_audio
-from routers.authentication import auth_handler
-from other_modules.tebi import upload_audio
+from utils.tebi import upload_audio
 from yt_dlp.utils import DownloadError
 
 router = APIRouter(
@@ -21,7 +20,6 @@ router = APIRouter(
 )
 async def create_audio_mapping(
     payload: AudioMappingCreate,
-    user: Users = Depends(auth_handler.auth_wrapper),
 ) -> AudioMappingResponse:
     """
     Creates a new audio mapping record in the database.
@@ -43,7 +41,7 @@ async def create_audio_mapping(
         raise HTTPException(status_code=400, detail="Server error in when processing")
 
     # Create new mapping document
-    new_audio = Audios(**payload.dict(), storage_url=storage_url, created_by_user_id=user["id"])
+    new_audio = Audios(**payload.dict(), storage_url=storage_url, created_by=payload.user_id)
 
     # Insert into database
     await new_audio.insert()

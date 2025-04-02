@@ -7,6 +7,7 @@ class AudioMappingCreate(BaseModel):
     Schema for creating a new audio mapping.
     """
 
+    user_id: str = Field(..., description="The user id request this audio")
     audio_url: str = Field(..., description="The original URL of the audio source.")
 
     @validator("audio_url")
