@@ -48,10 +48,10 @@ services:
   file-service:
     build:
       context: ./
-      dockerfile: ./others/docker/file_service_server/Dockerfile
+      dockerfile: ./others/docker/file_service/Dockerfile
     volumes:
       - .:/var/task
-    working_dir: /var/task/file_service_server
+    working_dir: /var/task/file_service
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
       - HOME=/tmp

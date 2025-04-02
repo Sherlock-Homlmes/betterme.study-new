@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.13
 
 RUN apt-get update && apt-get install -y ffmpeg
 
@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 COPY poetry.lock pyproject.toml ./
-RUN poetry install --without dev --no-root
+RUN poetry install --only-root
 
 COPY . .
 
