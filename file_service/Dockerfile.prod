@@ -11,10 +11,10 @@ ENV PYTHONUNBUFFERED=1
 
 COPY pyproject.toml pyproject.toml
 COPY poetry.lock poetry.lock
-RUN poetry install --only-root
+RUN poetry sync --only main
 
 EXPOSE 8080
 COPY . .
 
 ENTRYPOINT ["poetry", "run"]
-CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]
+CMD ["python3", "-m", "uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]
