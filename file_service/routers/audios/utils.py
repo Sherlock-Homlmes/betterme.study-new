@@ -30,17 +30,21 @@ def download_audio(url, output_path=".cache/audios") -> str:
     # --- yt-dlp options ---
     ydl_opts = {
         "format": "bestaudio/best",
-        # Download to temp dir, keep original extension for ffmpeg
+        "extractaudio": True,
+        "audioformat": "mp3",
         "outtmpl": {
             "default": os.path.join(temp_dir, "%(title)s.%(ext)s"),
         },
-        "quiet": False,
-        "no_warnings": True,
-        "ignoreerrors": True,  # Continue on playlist errors if possible
+        "restrictfilenames": True,
+        "noplaylist": True,
         "nocheckcertificate": True,
+        "ignoreerrors": False,
+        "logtostderr": False,
+        "quiet": True,
+        "no_warnings": True,
+        "default_search": "ytsearch",
+        "source_address": "0.0.0.0",
         "verbose": False,
-        "noplaylist": False,  # Allow playlists by default
-        # No yt-dlp post-processing needed here, ffmpeg handles conversion
     }
 
     try:
