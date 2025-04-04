@@ -127,6 +127,7 @@ export default defineNuxtConfig({
 				// { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
 			],
 		},
+        buildAssetsDir: 'nuxt',
 	},
 
 	/*
@@ -194,6 +195,9 @@ export default defineNuxtConfig({
 		// Exclude home and setup pages on mobile platforms
 		exclude: currentPlatform === "mobile" ? ["/", "/setup"] : [],
 		// manifest: false
+	},
+	experimental: {
+		payloadExtraction: false
 	},
 
 	/**
