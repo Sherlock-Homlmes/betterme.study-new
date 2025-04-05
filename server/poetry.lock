@@ -265,28 +265,35 @@ files = [
 
 [[package]]
 name = "beanie"
-version = "1.25.0"
+version = "1.29.0"
 description = "Asynchronous Python ODM for MongoDB"
 optional = false
-python-versions = ">=3.7,<4.0"
+python-versions = "<4.0,>=3.8"
 groups = ["main"]
 files = [
-    {file = "beanie-1.25.0-py3-none-any.whl", hash = "sha256:4436ac740718ccd62b21576778679ac972359fce2938557890c576adbbf5e244"},
-    {file = "beanie-1.25.0.tar.gz", hash = "sha256:f153866b9ba015274102e10a397602d088fc039b705bd806cb447c898cd2979b"},
+    {file = "beanie-1.29.0-py3-none-any.whl", hash = "sha256:aeb53e6648ceccf70eb35c35233e45406fe4de4c9887075581c01b968bfec2c7"},
+    {file = "beanie-1.29.0.tar.gz", hash = "sha256:f078620c3515a8222d40a3a8ab195b1d8f1153010f009ed5d205b73371c43869"},
 ]
 
 [package.dependencies]
 click = ">=7"
 lazy-model = "0.2.0"
 motor = ">=2.5.0,<4.0.0"
-pydantic = ">=1.10,<3.0"
+pydantic = ">=1.10.18,<3.0"
 toml = "*"
-typing-extensions = {version = ">=4.7", markers = "python_version < \"3.11\""}
+typing-extensions = ">=4.7"
 
 [package.extras]
+aws = ["motor[aws] (>=2.5.0,<4.0.0)"]
+ci = ["requests", "toml", "types-requests"]
 doc = ["Markdown (>=3.3)", "Pygments (>=2.8.0)", "jinja2 (>=3.0.3)", "mkdocs (>=1.4)", "mkdocs-material (>=9.0)", "pydoc-markdown (>=4.8)"]
+encryption = ["motor[encryption] (>=2.5.0,<4.0.0)"]
+gssapi = ["motor[gssapi] (>=2.5.0,<4.0.0)"]
+ocsp = ["motor[ocsp] (>=2.5.0,<4.0.0)"]
 queue = ["beanie-batteries-queue (>=0.2)"]
-test = ["asgi-lifespan (>=1.0.1)", "dnspython (>=2.1.0)", "fastapi (>=0.100)", "flake8 (>=3)", "httpx (>=0.23.0)", "pre-commit (>=2.3.0)", "pydantic-extra-types (>=2)", "pydantic-settings (>=2)", "pydantic[email]", "pyright (>=0)", "pytest (>=6.0.0)", "pytest-asyncio (>=0.21.0)", "pytest-cov (>=2.8.1)"]
+snappy = ["motor[snappy] (>=2.5.0,<4.0.0)"]
+test = ["asgi-lifespan (>=1.0.1)", "dnspython (>=2.1.0)", "fastapi (>=0.100)", "httpx (>=0.23.0)", "pre-commit (>=3.5.0)", "pydantic-extra-types (>=2)", "pydantic-settings (>=2)", "pydantic[email]", "pyright (>=0)", "pytest (>=8.3.3)", "pytest-asyncio (>=0.24.0)", "pytest-cov (>=5.0.0)"]
+zstd = ["motor[zstd] (>=2.5.0,<4.0.0)"]
 
 [[package]]
 name = "certifi"
@@ -2056,4 +2063,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9.21"
-content-hash = "bc1308a386ab7d12f8fdb2852cdf74ed57cb44df12650a0e61c0c05284d7cbf5"
+content-hash = "869a9a16d1778c0d4d1ed228a126efd6f1ee89731a89562d77387316b5cb9d81"

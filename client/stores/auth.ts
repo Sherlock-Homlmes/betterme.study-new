@@ -40,6 +40,7 @@ export const defaultSettings = {
 
 export const useAuthStore = createGlobalState(() => {
 	const API_URL = useRuntimeConfig().public.API_URL;
+	const { showError } = useErrorStore();
 
 	// state
 	const userInfo = ref();
@@ -65,18 +66,19 @@ export const useAuthStore = createGlobalState(() => {
 	// actions
 	const getCurrentUser = async () => {
 		const response = await fetchWithAuth(`${API_URL}/auth/self`);
-		if (response.ok) userInfo.value = await response.json();
+		if (response?.ok) userInfo.value = await response.json();
 		else {
 			userInfo.value = null;
-			throw new Error("Fail to get self");
+			showError("Fail to get user information");
+			throw new Error();
 		}
 	};
 
 	const getCurrentUserSetting = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/users/self/settings`);
-		if (response.ok) userSettings.value = await response.json();
-		else throw new Error("Fail to get self setting");
+		if (response?.ok) userSettings.value = await response.json();
+		else showError("Fail to get self setting");
 	};
 
 	const updateCurrentUserSetting = async (data: object) => {
@@ -85,7 +87,7 @@ export const useAuthStore = createGlobalState(() => {
 			method: "PATCH",
 			body: JSON.stringify(data),
 		});
-		if (!response.ok) throw new Error("Fail to get self setting");
+		if (!response?.ok) throw showError("Fail to update user setting");
 	};
 
 	const loginByDiscord = async (code: string) => {

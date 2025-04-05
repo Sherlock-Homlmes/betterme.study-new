@@ -2,7 +2,7 @@ from pydantic import Field, validator
 from beanie import Document, Link
 
 # local
-from .users import Users
+from ..users import Users
 
 
 # TODO: replace user => user_id

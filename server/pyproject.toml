@@ -13,7 +13,6 @@ uvicorn = {extras = ["standard"], version = "^0.30.1"}
 python-dotenv = "^1.0.0"
 pydantic-settings = "^2.0.3"
 discord-py = "^2.3.2"
-beanie = "1.25.0"
 pillow = "^10.0.1"
 facebook-sdk = "^3.1.0"
 pytz = "^2023.3.post1"
@@ -26,6 +25,7 @@ tinify = "^1.6.0"
 python-multipart = "^0.0.9"
 orjson = "^3.10.3"
 requests-oauthlib = "^2.0.0"
+beanie = "1.29.0"
 
 [tool.ruff]
 line-length = 100
@@ -34,8 +34,6 @@ line-length = 100
 "__init__.py" = ["E402", "F401", "F403", "F405"]
 "main.py" = ["F403"]
 "scripts.py" = ["E711"]
-
-[tool.poetry.group.dev.dependencies]
 
 [build-system]
 requires = ["poetry-core"]

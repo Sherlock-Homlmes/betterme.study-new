@@ -38,7 +38,7 @@ const updateUserInfo = async () => {
 			method: "PATCH",
 			body: JSON.stringify(payload),
 		});
-		if (!response.ok) throw new Error(`Fail to update user information`);
+		if (!response?.ok) throw new Error(`Fail to update user information`);
 		const data = await response.json();
 		localStorage.removeItem("Authorization");
 		localStorage.setItem("Authorization", data.token);
@@ -51,8 +51,6 @@ const updateUserInfo = async () => {
 
 <template>
   <div class="flex flex-col items-center">
-      <div class="inline-block text-2xl font-bold">
-        Coming soon...
-      </div>
+    <div class="inline-block text-2xl font-bold">Coming soon...</div>
   </div>
 </template>

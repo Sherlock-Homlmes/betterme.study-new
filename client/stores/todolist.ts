@@ -27,7 +27,7 @@ export const useTaskStore = createGlobalState(() => {
 	const getTaskList = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/todolist`);
-		if (response.ok) tasks.value = await response.json();
+		if (response?.ok) tasks.value = await response.json();
 		else {
 			const errorMsg = "Failed to get newest task list";
 			showError(errorMsg);
@@ -55,7 +55,7 @@ export const useTaskStore = createGlobalState(() => {
 			method: "POST",
 			body: JSON.stringify({ title, index }),
 		});
-		if (response.ok) await getTaskList();
+		if (response?.ok) await getTaskList();
 		else {
 			const errorMsg = "Failed to create task";
 			showError(errorMsg);
@@ -70,7 +70,7 @@ export const useTaskStore = createGlobalState(() => {
 			method: "PATCH",
 			body: JSON.stringify(change),
 		});
-		if (!response.ok) {
+		if (!response?.ok) {
 			const errorMsg = "Failed to update task";
 			showError(errorMsg);
 			throw new Error(errorMsg);
@@ -82,7 +82,7 @@ export const useTaskStore = createGlobalState(() => {
 		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
 			method: "DELETE",
 		});
-		if (response.ok)
+		if (response?.ok)
 			tasks.value = tasks.value.filter((task) => task.id !== taskId);
 		else {
 			const errorMsg = "Failed to delete task";

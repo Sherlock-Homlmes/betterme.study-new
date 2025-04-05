@@ -1,17 +1,11 @@
 # default
-import beanie
 
 # local
 from .settings import app
-from .database.mongodb.async_db import client
-from models import document_models
+from models import connect_db
 
 
 @app.on_event("startup")
 async def startup():
-    await beanie.init_beanie(
-        database=client.betterme_study,
-        document_models=document_models,
-    )
-
+    await connect_db()
     print("Start up done")

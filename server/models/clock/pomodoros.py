@@ -8,7 +8,7 @@ from enum import Enum
 from fastapi import HTTPException
 
 # local
-from .users import UserSettings
+from ..users import UserSettings
 
 from other_modules.time_modules import vn_now
 

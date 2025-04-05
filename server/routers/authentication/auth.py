@@ -54,6 +54,11 @@ async def login(user: LoginUser):
 
 @router.get("/self", dependencies=[Depends(auth_handler.auth_wrapper)])
 def protected(user: Users = Depends(auth_handler.auth_wrapper)):
+    # TODO: refactor this
+    if not user.get("custom_name"):
+        user["custom_name"] = user["name"]
+    if not user.get("custom_avatar"):
+        user["custom_avatar_url"] = user["avatar_url"]
     return user
 
 

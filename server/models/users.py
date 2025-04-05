@@ -19,7 +19,11 @@ class Users(Document):
     locale: Optional[str] = None
 
     name: str
+    nick: Optional[str] = None
     avatar: Optional[str] = None
+
+    custom_name: Optional[str] = None
+    custom_avatar_url: Optional[str] = None
 
     discord_id: Optional[int] = None
     google_id: Optional[int] = None

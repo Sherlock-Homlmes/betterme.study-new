@@ -172,7 +172,7 @@ export const usePomodoroStore = createGlobalState(() => {
 		const response = await fetchWithAuth(`${API_URL}/pomodoros/`, {
 			method: "POST",
 		});
-		if (response.ok) {
+		if (response?.ok) {
 			firstFetchStartPomodoro.value = true;
 			currentPomodoroSection.value = await response.json();
 		} else {
@@ -192,7 +192,7 @@ export const usePomodoroStore = createGlobalState(() => {
 				body: JSON.stringify({ action: action }),
 			},
 		);
-		if (!response.ok) throw new Error(`Fail to ${action} pomodoro section`);
+		if (!response?.ok) throw new Error(`Fail to ${action} pomodoro section`);
 	};
 
 	const deletePomodoro = async () => {
@@ -200,7 +200,7 @@ export const usePomodoroStore = createGlobalState(() => {
 		const response = await fetchWithAuth(`${API_URL}/pomodoros/_last`, {
 			method: "DELETE",
 		});
-		if (response.ok) {
+		if (response?.ok) {
 			currentPomodoroSection.value = null;
 		}
 	};
