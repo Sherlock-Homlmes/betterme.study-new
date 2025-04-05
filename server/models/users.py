@@ -51,8 +51,10 @@ class Users(Document):
             "facebook_id": self.facebook_id,
             "google_id": self.google_id,
             "name": self.name,
+            "custom_name": self.custom_name,
             "email": self.email,
             "avatar_url": self.avatar,
+            "custom_avatar_url": self.custom_avatar_url,
         }
 
 
