@@ -1,0 +1,14 @@
+{
+	// https://nuxt.com/docs/guide/concepts/typescript
+	"extends": "./.nuxt/tsconfig.json",
+	"compilerOptions": {
+		"strictNullChecks": true,
+		"baseUrl": ".",
+		"verbatimModuleSyntax": true,
+		"paths": {
+			"@components/*": ["/src/components/*.vue"],
+			"@types/*": ["/src/types/*"],
+			"@utils/*": ["/src/utils/*"]
+		}
+	}
+}

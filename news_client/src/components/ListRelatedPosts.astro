@@ -1,0 +1,47 @@
+---
+import { cn } from "@/utils";
+import { Image } from "astro:assets";
+import { fetchLink } from "src/utils/config";
+import type { GetPostListResponse } from "@/types/responses";
+import { IvolunteerPageTagsEnum } from "@/types/enums";
+
+type Props = {
+	tags: IvolunteerPageTagsEnum[];
+	currentPostId: string;
+};
+const { tags, currentPostId } = Astro.props;
+
+const match_tag_str = tags.join(",");
+const response = await fetch(
+	`${fetchLink}/posts?per_page=6&match_tags=${match_tag_str}`,
+);
+let posts = (await response.json()) as GetPostListResponse[];
+---
+
+<section class={cn(`flex flex-col md:flex-row sm:justify-between gap-8`)}>
+	{
+		posts.length > 0 ? (
+			posts.filter(post => post.id !== currentPostId).map((post) => {
+				return (
+					<div class='flex flex-wrap gap-2 justify-center'>
+							<Image
+								src={post.banner_img}
+								width={320}
+								height={200}
+								format='webp'
+								class='w-32 h-20 object-cover'
+								alt={`img of ${post.title}`}
+							/>
+						<header class='flex justify-center items-center'>
+							<a class='font-medium hover:underline' href={`/posts/${post.slug}_${post.id}/`}>
+								{post.title}
+							</a>
+						</header>
+					</div>
+				)
+			})
+		) : (
+			<span class='text-gray-500'>Không có bài viết liên quan. 😢</span>
+		)
+	}
+</section>

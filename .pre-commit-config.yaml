@@ -16,15 +16,29 @@ repos:
     rev: "v1.9.4"
     hooks:
     -   id: biome-format
-        name: "client formatter"
+        name: "clock client formatter"
         additional_dependencies: ["@biomejs/biome@1.9.4"]
-        files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
+        files: "^clock_client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
+    -   id: biome-format
+        name: "news client formatter"
+        additional_dependencies: ["@biomejs/biome@1.9.4"]
+        files: "^news_client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue|astro)$"
+    -   id: biome-format
+        name: "admin news client formatter"
+        additional_dependencies: ["@biomejs/biome@1.9.4"]
+        files: "^admin_news_client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
 
   - repo: https://github.com/haocheng6/mirrors-oxlint
     rev: v0.16.2
     hooks:
     -   id: oxlint
-        name: "client linter"
+        name: "clock client linter"
+        files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
+    -   id: oxlint
+        name: "news client linter"
+        files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue|astro)$"
+    -   id: oxlint
+        name: "admin news client linter"
         files: "^client\/.*\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|vue)$"
 
 

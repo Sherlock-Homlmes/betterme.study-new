@@ -1,0 +1,78 @@
+---
+import ListTagsV2 from "@/components/ListTagsV2";
+import ListPostsV2 from "@/components/ListPostsV2";
+import TitlePage from "@/components/TitlePage";
+import Pagination from "@/components/Pagination";
+import BaseLayout from "@/layouts/BaseLayout";
+import { fetchLink } from "src/utils/config";
+import type { GetPostListResponse } from "@/types/responses";
+import { translation } from "@/utils";
+
+export interface Props {
+	// custom_query?: object;
+	custom_title?: string;
+	custom_head_title?: string;
+}
+const {
+	// custom_query = {},
+	custom_title = "BetterMe-Better everyday",
+	custom_head_title = "Home",
+} = Astro.props;
+
+if (
+	["betterme-news-scholarship.pages.dev", "scholarship.betterme.news"].includes(
+		Astro.url.host,
+	) &&
+	Astro.url.pathname !== "/en/"
+)
+	return Astro.redirect(`/en/`);
+
+const t = translation(Astro.url);
+
+const currentPage = Astro.url.searchParams.get("page");
+if (!currentPage || !parseInt(currentPage))
+	Astro.url.searchParams.set("page", "1");
+Astro.url.searchParams.set("per_page", "23");
+const response = await fetch(`${fetchLink}/posts?` + Astro.url.searchParams);
+const postsData = ((await response.json()) as GetPostListResponse[]).map(
+	(postData) => {
+		return {
+			...postData,
+			deadline: postData.deadline
+				? postData.deadline.split("-").reverse().join("/")
+				: null,
+		};
+	},
+);
+
+let page = {
+	currentPage: 1,
+	lastPage: 1,
+};
+if (
+	response.headers.get("x-current-page") &&
+	response.headers.get("x-total-count") &&
+	response.headers.get("x-per-page")
+) {
+	const totalPosts: number = parseInt(response.headers.get("x-total-count"));
+	const currentPage: number = parseInt(response.headers.get("x-current-page"));
+	const perPage: number = parseInt(response.headers.get("x-per-page"));
+	page.currentPage = currentPage;
+	page.lastPage = Math.ceil(totalPosts / perPage);
+}
+---
+
+<BaseLayout title={custom_head_title}>
+	<TitlePage title={custom_title} />
+	<slot name='list-tags'>
+		<ListTagsV2 />
+	</slot>
+
+	<div>
+		<h2 class='text-lg font-medium tracking-wide text-end'>{t('home.latest_post')}</h2>
+		<ListPostsV2 posts={postsData} />
+	</div>
+	<div>
+		<Pagination page={page} />
+	</div>
+</BaseLayout>

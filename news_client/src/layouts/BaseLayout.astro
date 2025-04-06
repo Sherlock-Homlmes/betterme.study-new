@@ -1,0 +1,42 @@
+---
+import BaseHead from "@/components/BaseHead";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import ProviderTheme from "@/components/ProviderTheme";
+import TwSizeIndicator from "@/components/TwSizeIndicator";
+export interface Props {
+	title: string;
+	description?: string;
+	keywords: string[];
+	ogImage?: string | undefined;
+	articleDate?: string | undefined;
+	createdAt: string;
+	updatedAt: string | null;
+}
+const { ...props } = Astro.props;
+---
+
+<html lang='en' class='scroll-smooth'>
+	<head>
+		<BaseHead
+			{...props}
+		/>
+		<ProviderTheme />
+		<script
+			async
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9628590149452797" crossorigin="anonymous"
+		>
+		</script>
+	</head>
+
+	<body class='bg-white text-stone-950 dark:bg-[#0a0910] dark:text-white w-full h-full'>
+		<main
+			class='px-5 sm:mx-auto sm:max-w-2xl sm:px-8 lg:px-0 antialiased md:max-w-6xl grid gap-12 mt-4 overflow-hidden md:overflow-visible'
+		>
+			<Header />
+			<slot />
+			<Footer />
+		</main>
+		<TwSizeIndicator />
+	</body>
+</html>

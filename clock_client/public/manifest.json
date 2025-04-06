@@ -1,0 +1,25 @@
+{
+	"manifest_version": 3,
+	"name": "Test Extension Pomodoro",
+	"version": "1.0.0",
+	"description": "aaaa",
+	"action": {
+		"default_popup": "index.html"
+	},
+	"chrome_url_overrides": {
+		"newtab": "index.html"
+	},
+	"permissions": [],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"/nuxt/*",
+				"/img/*",
+				"/favicon.svg",
+				"/favicon.ico",
+				"/fonts/*"
+			],
+			"matches": ["<all_urls>"]
+		}
+	]
+}

@@ -1,0 +1,13 @@
+---
+import ListPosts from "@/pages/index";
+
+const matchSearch = Astro.url.searchParams.get("match_search") ?? "";
+if (matchSearch === "") return Astro.redirect(`/`);
+---
+
+<ListPosts
+    custom_head_title="Search"
+    custom_title={matchSearch}
+>
+	<div class='hidden sm:block w-full bottom-0 border-b-2 -z-40 dark:border-gray-600' slot="list-tags"></div>
+</ListPosts>

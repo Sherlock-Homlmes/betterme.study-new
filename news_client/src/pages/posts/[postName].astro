@@ -1,0 +1,113 @@
+---
+import BlogPostV2 from "@/layouts/BlogPostV2";
+import Share from "@/components/Share";
+import { fetchLink } from "src/utils/config";
+import ListRelatedPosts from "@/components/ListRelatedPosts";
+import type { GetPostResponse } from "@/types/responses";
+import { IvolunteerPageTagsEnum } from "@/types/enums";
+import { translation } from "@/utils";
+
+const t = translation(Astro.url);
+const { postName } = Astro.params;
+const postNameElement = postName?.split("_");
+const postId =
+	postNameElement.length === 1 ? postNameElement[0] : postNameElement[1];
+const response = await fetch(`${fetchLink}/posts/${postId}`);
+let postData = (await response.json()) as GetPostResponse;
+const postSlug = `${postData.slug}_${postData.id}`;
+if (postSlug !== postName || !Astro.url.pathname.endsWith("/")) {
+	return Astro.redirect(`/posts/${postSlug}/`);
+}
+postData = {
+	...postData,
+	other_information: {
+		...postData.other_information,
+		deadline: postData.other_information?.deadline
+			? postData.other_information.deadline.split("-").reverse().join("/")
+			: null,
+	},
+};
+---
+<BlogPostV2
+	postData={postData}
+>
+	<div class='grid grid-cols-1 md:grid-cols-[20%_auto] gap-10 mt-8'>
+
+		<aside class='md:flex flex-col gap-8 hidden'>
+			<Share />
+			<div id="toc" class='sticky top-24 self-start hidden md:block transition-all duration-200'></div>
+		</aside>
+
+		<!-- post -->
+		<article class='max-w-full w-full'>
+			<div class='prose prose-md dark:prose-invert mb-12 min-w-full'>
+				<em>{postData.description}</em>
+			</div>
+			<div class='prose prose-md dark:prose-invert mb-4 min-w-full' set:html={postData.content}></div>
+			<div class="grid justify-items-end">
+				<!-- TODO: refactor this -->
+				<a	href={
+						postData.author === 'Ivolunteer.vn'
+							? `https://ivolunteer.vn/${postData.author_link}`
+							: '#'
+					}
+					class="justify-self-end bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center"
+					target={
+						postData.author === 'Ivolunteer.vn'
+							? "_blank"
+							: "_parent"
+					}
+				>
+					<svg class="w-3 h-3 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+						<path fill="currentColor" d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"/>
+						<path fill="#fff" d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"/>
+					</svg>
+					Source
+				</a>
+			</div>
+
+			<!-- related posts -->
+			<footer class="mt-4">
+				<h2 class='flex justify-center font-bold text-lg dark:text-white mb-2'>-------{t("post.related_posts")}-------</h2>
+				<ListRelatedPosts tags={postData.tags as IvolunteerPageTagsEnum[]} currentPostId={postData.id} />
+			</footer>
+		</article>
+
+	</div>
+</BlogPostV2>
+
+<script type="text/partytown">
+const tocElements = document.getElementsByTagName("h4");
+const toc = [];
+// Get element info and generate id for content heading
+for (const ele of Array.from(tocElements)) {
+	const randomId = (Math.random() + 1).toString(36);
+	ele.id = randomId
+	toc.push({
+		id: randomId,
+		name: ele.textContent,
+		childrent: [],
+	})
+}
+// Add TOC elements into HTML
+const tocComponent = document.getElementById("toc");
+if (tocComponent) {
+	const tocHTMLElements = toc.map((x) => `
+		<li class='flex flex-col'>
+			<a
+				href='#${x.id}'
+				class="bg-slate-200 dark:bg-slate-800 dark:hover:bg-indigo-400 hover:bg-indigo-300 hover:text-white  py-1 px-4 dark:text-white rounded-full mb-2 first-letter:uppercase w-fit line-clamp-2"
+			>
+				${x.name}
+			</a>
+		</li>`
+	)
+	tocComponent.innerHTML = `
+		<nav class='max-w-xs dark:text-black'>
+			<h1 class='font-bold mb-3 text-2xl dark:text-white'>Table of content</h1>
+			<ul class='[text-wrap:balance] flex flex-col gap-1'>
+				${tocHTMLElements.join('')}
+			</ul>
+		</nav>`
+}
+</script>

@@ -1,0 +1,27 @@
+---
+import PostCardV2 from "@/components/PostCardV2";
+import type { GetPostListResponse } from "@/types/responses";
+
+type Props = {
+	posts: GetPostListResponse[];
+};
+
+const { posts } = Astro.props;
+const currentDate = new Date();
+const isPostExpired = (deadline: string) => {
+	if (!deadline) return false;
+	const dateParts = deadline.split("/");
+	const expiredDate = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+	return expiredDate <= currentDate;
+};
+---
+
+<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-8 mt-3  md:[&>*:first-child]:col-span-2">
+	{
+		posts.map((post, idx) => {
+			return (
+				<PostCardV2 index={ idx } postData={ post } shouldShowExpiredTag={isPostExpired(post.deadline)} />
+			)
+		})
+	}
+</section>

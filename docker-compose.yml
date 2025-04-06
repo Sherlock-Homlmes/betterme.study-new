@@ -9,23 +9,50 @@ services:
       - 80:80
       - 443:443
     depends_on:
-      - client
+      - clock-client
+      - news-client
+      - news-admin-client
       - server
       - file-service
     restart: on-failure
     networks:
-      - app-network
+      - nginx-net
 
-  client:
+  clock-client:
     build:
       context: ./
-      dockerfile: ./others/docker/client/Dockerfile
+      dockerfile: ./others/docker/clock_client/Dockerfile
     volumes:
       - .:/var/task
-    working_dir: /var/task/client
+    working_dir: /var/task/clock_client
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     networks:
-      - app-network
+      - nginx-net
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+
+  news-client:
+    build:
+      context: ./
+      dockerfile: ./others/docker/news_client/Dockerfile
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/news_client
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    networks:
+      - nginx-net
+    command:
+      ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
+
+  news-admin-client:
+    build:
+      context: ./
+      dockerfile: ./others/docker/news_admin_client/Dockerfile
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/news_admin_client
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    networks:
+      - nginx-net
     command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
 
   server:
@@ -40,7 +67,8 @@ services:
       - HOME=/tmp
       - ENV=DEV
     networks:
-      - app-network
+      - nginx-net
+      - mongo-db
     command:
       ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
     entrypoint: ["poetry", "run"]
@@ -57,15 +85,28 @@ services:
       - HOME=/tmp
       - ENV=DEV
     networks:
-      - app-network
+      - nginx-net
     command:
       ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
     entrypoint: ["poetry", "run"]
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - mongo-db
+    volumes:
+      - ./others/data/mongodb:/data/db
 
     # TODO: add local mongo
     # TODO: add local local s3
 
 #Docker Networks
 networks:
-  app-network:
+  nginx-net:
+    driver: bridge
+  mongo-db:
     driver: bridge
