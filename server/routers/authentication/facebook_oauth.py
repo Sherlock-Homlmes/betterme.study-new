@@ -15,8 +15,7 @@ from beanie.odm.operators.update.general import Set
 from . import router
 from .auth import auth_handler
 from models import Users
-from other_modules.time_modules import vn_now
-from other_modules.json_modules import mongodb_to_json
+from utils.time_modules import vn_now
 
 authorization_base_url = "https://www.facebook.com/dialog/oauth"
 token_url = "https://graph.facebook.com/oauth/access_token"
@@ -68,5 +67,5 @@ async def facebook_oauth(request: Request):
     )
     user = await Users.find_one(Users.facebook_id == facebook_user["id"])
 
-    token = auth_handler.encode_token(mongodb_to_json(user.get_info()))
+    token = auth_handler.encode_token(user.get_info())
     return {"token": token}

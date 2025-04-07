@@ -34,6 +34,29 @@ class Settings(BaseSettings):
     # TODO: change this to ENVEnum when lib support
     ENV: str = ENVEnum.DEV.value
 
+    SECRET_KEY: str = "NoNeed"
+    ENCRYPT_KEY: str = "NoNeed"
+
+    DATABASE_URL: str
+
+    AWS_ACCESS_KEY_ID: str = "NoNeed"
+    AWS_ACCESS_ACCESS_KEY: str = "NoNeed"
+    AWS_BUCKET: str = "NoNeed"
+
+    TINY_PNG_API_KEY: str = "NoNeed"
+
+    DISCORD_BOT_TOKEN: str = "NoNeed"
+    DISCORD_OAUTH_URL: str = "NoNeed"
+    DISCORD_CLIENT_ID: str = "NoNeed"
+    DISCORD_CLIENT_SECRET: str = "NoNeed"
+    DISCORD_REDIRECT_URL: str = "NoNeed"
+
+    FACEBOOK_APP_ID: str = "NoNeed"
+    FACEBOOK_ACCESS_TOKEN: str = "NoNeed"
+    FACEBOOK_APP_SECRET: str = "NoNeed"
+
+    GEMINI_AI_API_KEY: str = "NoNeed"
+
 
 settings = Settings()
 is_dev_env = settings.ENV == ENVEnum.DEV.value

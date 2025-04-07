@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix="/api/auth",
+    prefix="/auth",
     tags=["Auth"],
     responses={404: {"description": "Not found"}},
 )

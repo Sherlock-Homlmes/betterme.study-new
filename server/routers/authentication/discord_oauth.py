@@ -18,8 +18,7 @@ from all_env import (
     SELF_URL,
 )
 from models import Users
-from other_modules.time_modules import vn_now
-from other_modules.json_modules import mongodb_to_json
+from utils.time_modules import vn_now
 
 
 discord = DiscordOAuthClient(
@@ -70,7 +69,7 @@ async def discord_oauth(code: str):
     )
     user = await Users.find_one(Users.discord_id == discord_user["id"])
 
-    token = auth_handler.encode_token(mongodb_to_json(user.get_info()))
+    token = auth_handler.encode_token(user.get_info())
     return {"token": token}
 
 

@@ -9,6 +9,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+build/
 develop-eggs/
 dist/
 downloads/
@@ -42,6 +43,7 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
+.cache
 .ruff_cache
 nosetests.xml
 coverage.xml
@@ -155,10 +157,16 @@ tests.py
 store_files/
 store_files/*
 test.py
+server/scrap/data/post/*
+server/scrap/data/page/*
+server/scrap/data/media/*
+!server/scrap/data/post/__init__.json
+!server/scrap/data/page/__init__.json
+
 
 # ---------- Client ----------
 # dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
 
@@ -174,9 +182,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+pnpm-debug.log*
 
 # local env files
 .env*.local
+.env.production
 
 # typescript
 *.tsbuildinfo
@@ -188,27 +198,10 @@ others/data/
 
 # build output
 dist/
+
 # generated types
 .astro/
 
-# dependencies
-node_modules/
-
-
 tina-lock.json
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
-.DS_Store
-
-node_modules
+client(store)

@@ -7,19 +7,18 @@ from typing import Optional
 
 # local
 from . import router
-from .schemas import RegisterUser, RegisterUserResponse, LoginUser
+from schemas.auth import RegisterUser, RegisterUserResponse, LoginUser
 from .jwt_auth import auth_handler
 from .google_oauth import GoogleOauth2
 from .facebook_oauth import FaceBookOauth2
 
 from models import Users
-from other_modules.time_modules import vn_now
-from other_modules.json_modules import mongodb_to_json
+from utils.time_modules import vn_now
 from all_env import DISCORD_OAUTH_URL
 
 
-@router.post("/register", status_code=201, response_model=RegisterUserResponse)
-async def register(user: RegisterUser):
+@router.post("/register", status_code=201)
+async def register(user: RegisterUser) -> RegisterUserResponse:
     print(user)
     user_exist = await Users.find_one(Users.email == user.email)
     if user_exist:
@@ -33,7 +32,7 @@ async def register(user: RegisterUser):
         name=user.name,
     )
     await user.insert()
-    return JSONResponse(status_code=201, content=mongodb_to_json(user.get_info()))
+    return user.get_info()
 
 
 @router.post("/login")

@@ -10,7 +10,7 @@ from fastapi import HTTPException
 # local
 from ..users import UserSettings
 
-from other_modules.time_modules import vn_now
+from utils.time_modules import vn_now
 
 
 class PomodoroStatusEnum(str, Enum):

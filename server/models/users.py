@@ -7,15 +7,20 @@ from pydantic import EmailStr, ValidationError, validator, Field, BaseModel
 from beanie import Document, Link, Insert, after_event
 
 # local
-from other_modules.time_modules import vn_now
+from utils.time_modules import vn_now
+
+
+class UserRoleEnum(Enum):
+    OWNER = "owner"
+    ADMIN = "admin_news"
+    USER = "user"
 
 
 class Users(Document):
     email: Optional[EmailStr] = None
     password: Optional[str] = None
     user_type: str
-    joined_at: datetime.datetime = vn_now()
-    last_logged_in_at: datetime.datetime = vn_now()
+    roles: List[UserRoleEnum] = [UserRoleEnum.USER]
     locale: Optional[str] = None
 
     name: str
@@ -28,6 +33,9 @@ class Users(Document):
     discord_id: Optional[int] = None
     google_id: Optional[int] = None
     facebook_id: Optional[int] = None
+
+    joined_at: datetime.datetime = vn_now()
+    last_logged_in_at: datetime.datetime = vn_now()
 
     @validator("user_type")
     def name_must_contain_space(cls, v: str):

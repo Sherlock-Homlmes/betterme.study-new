@@ -14,8 +14,7 @@ from models import Users
 from all_env import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URL
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 from . import router
-from other_modules.time_modules import vn_now
-from other_modules.json_modules import mongodb_to_json
+from utils.time_modules import vn_now
 
 scope = (
     "https://www.googleapis.com/auth/userinfo.email",
@@ -75,5 +74,5 @@ async def google_oauth(request: Request):
     )
     user = await Users.find_one(Users.google_id == google_user["id"])
 
-    token = auth_handler.encode_token(mongodb_to_json(user.get_info()))
+    token = auth_handler.encode_token(user.get_info())
     return {"token": token}

@@ -56,7 +56,7 @@ const mainStore = useMain();
           dark
           no-default-style
           no-content-theme
-          href="https://betterme.news"
+          href="https://news.betterme.study"
           inner-class="flex flex-row items-center gap-1 text-black"
           bg-class="bg-yellow-300"
         >

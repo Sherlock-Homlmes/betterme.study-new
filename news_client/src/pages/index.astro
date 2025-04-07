@@ -20,9 +20,10 @@ const {
 } = Astro.props;
 
 if (
-	["betterme-news-scholarship.pages.dev", "scholarship.betterme.news"].includes(
-		Astro.url.host,
-	) &&
+	[
+		"betterme-news-scholarship.pages.dev",
+		"scholarship.news.betterme.study",
+	].includes(Astro.url.host) &&
 	Astro.url.pathname !== "/en/"
 )
 	return Astro.redirect(`/en/`);

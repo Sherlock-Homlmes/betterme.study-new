@@ -69,8 +69,7 @@ export const useAuthStore = createGlobalState(() => {
 		if (response?.ok) userInfo.value = await response.json();
 		else {
 			userInfo.value = null;
-			showError("Fail to get user information");
-			throw new Error();
+			throw new Error("Fail to get user information");
 		}
 	};
 

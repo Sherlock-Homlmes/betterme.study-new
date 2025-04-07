@@ -7,7 +7,7 @@ from enum import Enum
 
 # local
 
-from other_modules.time_modules import vn_now
+from utils.time_modules import vn_now
 
 
 class TaskStatusEnum(str, Enum):
