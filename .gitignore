@@ -205,3 +205,6 @@ dist/
 tina-lock.json
 
 client(store)
+
+serviceworker.js
+workbox-*.js
