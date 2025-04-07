@@ -11,7 +11,7 @@ import ChangeTracker from "../utils/changeTracker";
 
 const changeTracker = new ChangeTracker();
 export const defaultSettings = {
-	language: "vi",
+	language: "en",
 	visuals: {
 		pomodoro_study: [255, 107, 107],
 		pomodoro_rest: [244, 162, 97],

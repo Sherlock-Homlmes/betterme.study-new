@@ -3,9 +3,9 @@ import { LanguageIcon } from "vue-tabler-icons";
 import OnboardingPage from "./onboardingPage.vue";
 import OnboardingHeader from "./onboardingHeader.vue";
 import OptionGroup from "~~/components/base/optionGroup.vue";
-import { useSettings } from "~~/stores/settings";
+import { useAuthStore } from "~~/stores/auth";
 
-const settingsStore = useSettings();
+const { userSettings } = useAuthStore();
 </script>
 
 <template>
@@ -24,9 +24,9 @@ const settingsStore = useSettings();
     <OptionGroup
       class="w-full"
       :choices="$languages"
-      :value="settingsStore.lang"
+      :value="userSettings.language"
       :override-text="{ title: $languages, description: {} }"
-      @input="(newLang) => { settingsStore.lang = newLang }"
+      @input="(newLang) => { userSettings.language = newLang }"
     />
   </OnboardingPage>
 </template>

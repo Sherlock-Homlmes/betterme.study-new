@@ -203,42 +203,43 @@ export default defineNuxtConfig({
 	/**
 	 * i18n settings
 	 */
-	// i18n: {
-	//   locales: [
-	//     { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
-	//     { code: 'hu', name: 'Magyar', iso: 'hu-HU', file: 'hu.json' },
-	//     { code: 'hr', name: 'Hrvatski', iso: 'hr-HR', file: 'hr.json' },
-	//     { code: 'fr', name: 'Français', iso: 'fr-FR', file: 'fr.json' }
-	//   ],
-	//   defaultLocale: 'en',
-	//   lazy: true,
-	//   langDir: 'i18n/',
-	//   parsePages: false,
-	//   vueI18n: {
-	//     fallbackLocale: 'en'
-	//   },
-	//   // vuex: false,
-	//   // Routes generation strategy, can be set to one of the following:
-	//   // - 'no_prefix': routes won't be prefixed
-	//   // - 'prefix_except_default': add locale prefix for every locale except default
-	//   // - 'prefix': add locale prefix for every locale
-	//   // - 'prefix_and_default': add locale prefix for every locale and default
-	//   strategy: 'no_prefix',
-	//   detectBrowserLanguage: {
-	//     // If enabled, a cookie is set once a user has been redirected to his
-	//     // preferred language to prevent subsequent redirections
-	//     // Set to false to redirect every time
-	//     useCookie: true,
-	//     // Set to override the default domain of the cookie. Defaults to host of the site.
-	//     cookieDomain: null,
-	//     // Cookie name
-	//     cookieKey: 'lang',
-	//     // Set to always redirect to value stored in the cookie, not just once
-	//     alwaysRedirect: false,
-	//     // If no locale for the browsers locale is a match, use this one as a fallback
-	//     fallbackLocale: 'en'
-	//   }
-	// },
+	i18n: {
+		locales: [
+			{ code: "en", name: "English", iso: "en-US", file: "en.json" },
+			{ code: "vi", name: "Vietnamese", iso: "Tiếng Việt", file: "vi.json" },
+			// { code: 'hu', name: 'Magyar', iso: 'hu-HU', file: 'hu.json' },
+			// { code: 'hr', name: 'Hrvatski', iso: 'hr-HR', file: 'hr.json' },
+			// { code: 'fr', name: 'Français', iso: 'fr-FR', file: 'fr.json' }
+		],
+		defaultLocale: "en",
+		lazy: true,
+		langDir: "i18n/",
+		parsePages: false,
+		vueI18n: {
+			fallbackLocale: "en",
+		},
+		// vuex: false,
+		// Routes generation strategy, can be set to one of the following:
+		// - 'no_prefix': routes won't be prefixed
+		// - 'prefix_except_default': add locale prefix for every locale except default
+		// - 'prefix': add locale prefix for every locale
+		// - 'prefix_and_default': add locale prefix for every locale and default
+		strategy: "no_prefix",
+		detectBrowserLanguage: {
+			// If enabled, a cookie is set once a user has been redirected to his
+			// preferred language to prevent subsequent redirections
+			// Set to false to redirect every time
+			useCookie: true,
+			// Set to override the default domain of the cookie. Defaults to host of the site.
+			cookieDomain: null,
+			// Cookie name
+			cookieKey: "lang",
+			// Set to always redirect to value stored in the cookie, not just once
+			alwaysRedirect: false,
+			// If no locale for the browsers locale is a match, use this one as a fallback
+			fallbackLocale: "en",
+		},
+	},
 
 	// sitemap: {
 	//   hostname: process.env.URL ? process.env.URL : 'https://another-pomodoro.netlify.app'

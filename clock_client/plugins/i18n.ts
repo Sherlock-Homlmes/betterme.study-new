@@ -1,9 +1,6 @@
 import { createI18n } from "vue-i18n";
-import type { PiniaPluginContext } from "pinia";
-
 import messages from "@intlify/unplugin-vue-i18n/messages";
-import { useSettings } from "~~/stores/settings";
-
+import { useAuthStore } from "~~/stores/auth";
 interface Language {
 	/// The name of the language written in that language (eg. "magyar" for Hungarian)
 	name: string;
@@ -87,7 +84,7 @@ const getClientLocale = (): string | undefined => {
 	return "en";
 };
 
-export default defineNuxtPlugin(({ vueApp, $pinia }) => {
+export default defineNuxtPlugin(({ vueApp }) => {
 	const i18n = createI18n({
 		legacy: false,
 		globalInjection: true,
@@ -97,6 +94,7 @@ export default defineNuxtPlugin(({ vueApp, $pinia }) => {
 
 	const changeLocaleDynamic = async (newLocale: string) => {
 		if (Object.keys(languages).includes(newLocale)) {
+			console.log(newLocale);
 			// Load locale dynamically if it has not been loaded yet
 			if (!i18n.global.availableLocales.includes(newLocale)) {
 				const newLocaleMessages = await import(`@/i18n/${newLocale}.json`);
@@ -112,35 +110,24 @@ export default defineNuxtPlugin(({ vueApp, $pinia }) => {
 	vueApp.use(i18n);
 
 	// Register store lang change watcher
-	const installPiniaI18nPlugin = () => {
-		const router = useRouter();
-		const PiniaI18nPlugin = ({ store }: PiniaPluginContext) => {
-			// if settings.lang changes, update app locale
-			if (store.$id === "settings") {
-				const changeSubscription = () => {
-					store.$subscribe(() => {
-						if (store.$state.lang) {
-							changeLocaleDynamic(store.$state.lang);
-						}
-					});
-				};
-
-				changeSubscription();
-				router.afterEach(changeSubscription);
-			}
-		};
-		$pinia.use(PiniaI18nPlugin);
+	const installI18nPlugin = () => {
+		const { userSettings } = useAuthStore();
+		changeLocaleDynamic(userSettings.value.language);
+		watch(
+			() => userSettings.value.language,
+			(newValue) => changeLocaleDynamic(newValue),
+			{ immediate: true },
+		);
 	};
-
-	installPiniaI18nPlugin();
 
 	onNuxtReady(() => {
 		if (!process.server) {
-			const settingsStore = useSettings();
-			if (settingsStore.lang === undefined) {
-				settingsStore.lang = getClientLocale();
+			const { userSettings } = useAuthStore();
+			if (userSettings.value.language === undefined) {
+				userSettings.value.lang = getClientLocale();
 			}
 		}
+		installI18nPlugin();
 	});
 
 	return {
