@@ -4,7 +4,7 @@
 from fastapi import APIRouter
 
 # local
-from schemas.news_admin import (
+from schemas.user import (
     # params
     # payload
     PostAIPromtPayload,
@@ -12,7 +12,7 @@ from schemas.news_admin import (
     # enums
     ResponseStatusEnum,
 )
-from services.gemini import create_gemini_post_suggestion
+from services.gemini import chat_with_gemini
 
 router = APIRouter(
     tags=["AI"],
@@ -21,8 +21,8 @@ router = APIRouter(
 
 
 @router.post(
-    "/ai/post_prompts",
+    "/ai",
     status_code=ResponseStatusEnum.ACCEPTED.value,
 )
-def ai_post_info_suggestion(payload: PostAIPromtPayload):
-    return {"data": create_gemini_post_suggestion(payload)}
+async def ai_chat(payload: PostAIPromtPayload):
+    return {"data": await chat_with_gemini(payload.context)}

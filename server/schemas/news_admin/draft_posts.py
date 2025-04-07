@@ -2,14 +2,13 @@
 from typing import Union
 
 # libraries
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 # local
 from .enums import (
     OriginCrawlPagesEnum,
 )
 from .crawlers import GetCrawlersIvolunteerDataResponse
-from .enums import AIPromtTypeEnum
 
 
 class GetDraftPostListResponse(BaseModel):
@@ -19,9 +18,3 @@ class GetDraftPostListResponse(BaseModel):
     original_data: GetCrawlersIvolunteerDataResponse
     draft_data: GetCrawlersIvolunteerDataResponse
     post: Union[str, None]
-
-
-# ai.py
-class PostAIPromtPayload(BaseModel):
-    prompt_type: AIPromtTypeEnum
-    context: str = Field(min_length=1, max_length=6000)

@@ -10,7 +10,9 @@ from schemas.news_admin import (
 from base.settings import settings
 
 genai.configure(api_key=settings.GEMINI_AI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+prompt_model = genai.GenerativeModel("gemini-2.0-flash-lite")
+common_model = genai.GenerativeModel("gemini-2.0-flash-lite")
+
 ai_prompt_data_map = {
     AIPromtTypeEnum.TITLE: "Viết lại title trên ngắn gọn chuẩn SEO trong 1 câu",
     AIPromtTypeEnum.DESCRIPTION: "Viết lại description trên ngắn gọn chuẩn SEO trong 1 đoạn văn",
@@ -18,7 +20,13 @@ ai_prompt_data_map = {
 }
 
 
-def ask_gemini(payload: PostAIPromtPayload) -> str:
+def create_gemini_post_suggestion(payload: PostAIPromtPayload) -> str:
     context = f"{payload.context}\n{ai_prompt_data_map[payload.prompt_type]}"
-    response = model.generate_content(context)
+    response = prompt_model.generate_content(context)
+    return response.text
+
+
+async def chat_with_gemini(context: str) -> str:
+    chat = common_model.start_chat()
+    response = await chat.send_message_async(context)
     return response.text

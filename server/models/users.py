@@ -10,9 +10,9 @@ from beanie import Document, Link, Insert, after_event
 from utils.time_modules import vn_now
 
 
-class UserRoleEnum(Enum):
+class UserRoleEnum(str, Enum):
     OWNER = "owner"
-    ADMIN = "admin_news"
+    NEWS_ADMIN = "news_admin"
     USER = "user"
 
 
@@ -63,6 +63,7 @@ class Users(Document):
             "email": self.email,
             "avatar_url": self.avatar,
             "custom_avatar_url": self.custom_avatar_url,
+            "roles": self.roles,
         }
 
 

@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
 from all_env import SECRET_KEY
+from models import UserRoleEnum
 
 
 class AuthHandler:
@@ -42,6 +43,12 @@ class AuthHandler:
 
     def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
         return self.decode_token(auth.credentials)
+
+    def news_admin_auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        user = self.decode_token(auth.credentials)
+        if UserRoleEnum.NEWS_ADMIN not in user["roles"]:
+            raise HTTPException(status_code=403, detail="Permission denied")
+        return user
 
 
 auth_handler = AuthHandler()
