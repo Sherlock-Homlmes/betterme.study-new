@@ -1124,7 +1124,8 @@ optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "master.tar.gz", hash = "sha256:1734fb064a73ae3837acf233f4c0a577c54e0da4a2ee63ab7c9f3271dcc44a3a"},
+    {file = "yt_dlp-2025.3.31-py3-none-any.whl", hash = "sha256:8ecb3aa218a3bebe431119f513a8972b9b9d992edf67168c00ab92329a03baec"},
+    {file = "yt_dlp-2025.3.31.tar.gz", hash = "sha256:1bfe0e660d1a70a09e27b2d58f92e30b1e2e362cc487829f2f824346ae49fb91"},
 ]
 
 [package.extras]
@@ -1137,11 +1138,7 @@ secretstorage = ["cffi", "secretstorage"]
 static-analysis = ["autopep8 (>=2.0,<3.0)", "ruff (>=0.11.0,<0.12.0)"]
 test = ["pytest (>=8.1,<9.0)", "pytest-rerunfailures (>=14.0,<15.0)"]
 
-[package.source]
-type = "url"
-url = "https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz"
-
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13.0"
-content-hash = "23f4bb299f3fe5d1bbd81a502d58541703bc49d0123146c46a08a210aeab7e8e"
+content-hash = "51e3b1fe062a3ef2403249b95a12be870f156a74c495dac32debcd986447a046"

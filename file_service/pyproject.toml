@@ -7,7 +7,6 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13.0"
-yt-dlp = {url = "https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz"}
 ffmpeg-python = "^0.2.0"
 boto3 = "<1.36.0"
 fastapi = "^0.115.12"
@@ -16,6 +15,7 @@ pydantic = "^2.11.1"
 pydantic-settings = "^2.8.1"
 pillow = "^11.1.0"
 beanie = "^1.29.0"
+yt-dlp = "^2025.3.31"
 
 [tool.ruff]
 line-length = 100
@@ -24,8 +24,6 @@ line-length = 100
 "__init__.py" = ["E402", "F401", "F403", "F405"]
 "main.py" = ["F403"]
 "scripts.py" = ["E711"]
-
-[tool.poetry.group.dev.dependencies]
 
 [build-system]
 requires = ["poetry-core"]
