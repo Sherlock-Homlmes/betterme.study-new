@@ -44,9 +44,15 @@
         :placeholder="$t('ai.type_message')"
         @keyup.enter="sendMsg"
         class="flex-grow p-2 border rounded bg-surface-light dark:bg-surface-dark border-outline-light dark:border-outline-dark mr-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary-light dark:focus:ring-primary-dark"
+        autofocus
       />
       <button @click="sendMsg" class="p-2 px-4 rounded disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
-        {{ $t('ai.buttons.send') }}
+        <!-- {{ $t('ai.buttons.send') }} -->
+        <SendIcon/>
+
+      </button>
+      <button v-if='history.length >= 2' @click="deleteChannel" class="ml-1 p-2 px-4 rounded disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
+        <TrashIcon/>
       </button>
     </div>
   </div>
@@ -54,7 +60,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted, computed, watch } from "vue";
-import { LoaderIcon } from "vue-tabler-icons";
+import { LoaderIcon, TrashIcon, SendIcon, UploadIcon } from "vue-tabler-icons";
 import { useAuthStore } from "../../stores/auth"; // Changed to relative path
 import { useAIChatStore } from "../../stores/aichat"; // Changed to relative path
 import { marked } from "marked"; // Changed to relative path
@@ -72,9 +78,9 @@ const {
 	loadingMessage,
 	getAllChannels,
 	createChannel,
+	deleteChannel,
 	getHistory,
 	sendMessage,
-	selectedLanguage,
 	newMessage,
 } = useAIChatStore();
 // not show loading if the load time is low
@@ -106,6 +112,14 @@ const typeMessage = (message: string) => {
 watchArray(
 	() => history.value,
 	(newList, _oldList, added, _removed) => {
+		if (!newList.length) {
+			history.value.push({
+				content: "Hello! How can I help you today?",
+				sender: "bot",
+			});
+			return;
+		}
+
 		if (added.length != 1 || added[0].sender != "bot") return;
 		botNewAnswerIdx.value = newList.length - 1;
 		typeMessage(added[0].content);
@@ -124,8 +138,6 @@ const scrollToBottom = () => {
 };
 
 // MVP
-// TODO: channels select
-// TODO: delete channel
 // TODO: file upload
 
 // V1
@@ -135,9 +147,12 @@ const scrollToBottom = () => {
 // V3
 // TODO: monitor sharing and answer
 
-// UX implement
+// UX improve
 // TODO: cancel button while bot answering
 // TODO: scroll down button
+
+// performance improve
+// TODO: add pagination to chat history
 
 // Convert markdown to html
 const messageContent = (markdown: string) => {
@@ -151,13 +166,9 @@ watchOnce(
 	async () => {
 		await getAllChannels();
 		if (!channels.value.length) await createChannel();
-		selectedChannelId.value = channels.value[channels.value.length - 1].id;
+		if (!selectedChannelId.value)
+			selectedChannelId.value = channels.value[0].id;
 		await getHistory();
-		if (!history.value.length)
-			history.value.push({
-				content: "Hello! How can I help you today?",
-				sender: "bot",
-			});
 		scrollToBottom();
 	},
 );

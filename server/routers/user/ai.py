@@ -33,7 +33,11 @@ router = APIRouter(
 async def get_ai_chat_channels(
     user: Users = Depends(auth_handler.auth_wrapper),
 ) -> List[GetChannelResponse]:
-    return await ChatChannels.find({"user_id": user["id"], "active": True}).to_list()
+    return (
+        await ChatChannels.find({"user_id": user["id"], "active": True})
+        .sort(-ChatChannels.id)
+        .to_list()
+    )
 
 
 @router.get(

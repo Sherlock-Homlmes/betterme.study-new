@@ -7,17 +7,34 @@ export const useAIChatStore = createGlobalState(() => {
 	const { showError } = useErrorStore();
 	const { isAuth } = useAuthStore();
 
-	const selectedChannelId = ref<string | null>(null);
-	const channelIds = useLocalStorage("AIChatChannelIds", []);
-	const channels = ref([]);
-	const history = ref<
+	const selectedChannelId = useLocalStorage<string | null>(
+		"selectedChannelId",
+		null,
+	);
+	const channels = useLocalStorage("AIChatChannels", []);
+	const channelIds = computed(() =>
+		channels.value.map((channel) => channel.id),
+	);
+	const history = computed<
 		{
 			id?: string;
 			content: string;
 			sender: "bot" | "user";
 		}[]
-	>([]);
-	const selectedLanguage = ref("en"); // Default language
+	>({
+		get() {
+			const channelInfo = channels.value.find(
+				(channel) => channel.id === selectedChannelId.value,
+			);
+			return channelInfo?.history ?? [];
+		},
+		set(newVal) {
+			const channelInfo = channels.value.find(
+				(channel) => channel.id === selectedChannelId.value,
+			);
+			channelInfo.history = newVal;
+		},
+	});
 	const newMessage = ref("");
 	const loadingChannel = ref(false);
 	const loadingMessage = ref(false);
@@ -35,6 +52,13 @@ export const useAIChatStore = createGlobalState(() => {
 
 	async function createChannel() {
 		if (!isAuth.value) return;
+		const emptyChannel = channels.value.find(
+			(channel) => channel.history?.length <= 1,
+		);
+		if (emptyChannel) {
+			selectedChannelId.value = emptyChannel.id;
+			return;
+		}
 
 		const response = await fetchWithAuth(`${API_URL}/channels/`, {
 			method: "POST",
@@ -42,7 +66,7 @@ export const useAIChatStore = createGlobalState(() => {
 		if (response?.ok) {
 			const channel = await response.json();
 			selectedChannelId.value = channel.id;
-			channels.value.push({ ...channel, history: [] });
+			channels.value = [{ ...channel, history: [] }].concat(channels.value);
 			history.value = [];
 		} else showError("Failed to create channel");
 	}
@@ -98,6 +122,33 @@ export const useAIChatStore = createGlobalState(() => {
 		scrollFunc();
 	}
 
+	async function deleteChannel() {
+		if (!isAuth.value) return;
+		if (history.value.length <= 1) return;
+		const response = await fetchWithAuth(
+			`${API_URL}/channels/${selectedChannelId.value}`,
+			{ method: "DELETE" },
+		);
+		if (response?.ok) {
+			if (channels.value.length <= 1) await createChannel();
+			else {
+				selectedChannelId.value = channels.value[0].id;
+			}
+			channels.value = channels.value.filter(
+				(channel) => channel.id === selectedChannelId.value,
+			);
+		} else showError("Failed to delete channel");
+		loadingMessage.value = false;
+	}
+
+	watch(selectedChannelId, async (newSelectedChannelId) => {
+		const channelInfo = channels.value.find(
+			(channel) => channel.id === newSelectedChannelId,
+		);
+		if (channelInfo) history.value = channelInfo.history;
+		else await getHistory();
+	});
+
 	return {
 		selectedChannelId,
 		channelIds,
@@ -107,9 +158,9 @@ export const useAIChatStore = createGlobalState(() => {
 		loadingMessage,
 		getAllChannels,
 		createChannel,
+		deleteChannel,
 		getHistory,
 		sendMessage,
-		selectedLanguage,
 		newMessage,
 	};
 });
