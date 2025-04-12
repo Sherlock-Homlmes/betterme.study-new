@@ -52,7 +52,7 @@ export const useAIChatStore = createGlobalState(() => {
 
 	async function createChannel() {
 		if (!isAuth.value) return;
-		console.log(channels.value.length);
+		if (loadingChannel.value || loadingMessage.value) return;
 		if (channels.value.length >= 13) {
 			showError(
 				"You've reached the channel limit. Close unused channels to continue.",
@@ -158,6 +158,10 @@ export const useAIChatStore = createGlobalState(() => {
 			}
 		});
 	};
+	const changeChannel = (channelId: string) => {
+		if (loadingChannel.value || loadingMessage.value) return;
+		selectedChannelId.value = channelId;
+	};
 
 	watch(selectedChannelId, async (newSelectedChannelId) => {
 		const channelInfo = channels.value.find(
@@ -170,6 +174,7 @@ export const useAIChatStore = createGlobalState(() => {
 
 	return {
 		selectedChannelId,
+		changeChannel,
 		channelIds,
 		channels,
 		history,

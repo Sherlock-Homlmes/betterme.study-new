@@ -48,12 +48,19 @@
         class="flex-grow p-2 border rounded bg-surface-light dark:bg-surface-dark border-outline-light dark:border-outline-dark mr-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary-light dark:focus:ring-primary-dark"
         autofocus
       />
-      <button @click="sendMsg" class="p-2 px-4 rounded disabled:bg-gray-100 dark:disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
-        <!-- {{ $t('ai.buttons.send') }} -->
+      <button
+        @click="sendMsg"
+        class="p-2 px-4 rounded disabled:bg-gray-100 dark:disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm"
+        :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'
+      >
         <SendIcon/>
-
       </button>
-      <button v-if='history.length >= 2' @click="deleteChannel" class="ml-1 p-2 px-4 rounded disabled:bg-gray-100  dark:disabled:bg-gray-100 disabled:text-gray-300  bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
+      <button
+        v-if='history.length >= 2'
+        @click="deleteChannel"
+        class="ml-1 p-2 px-4 rounded disabled:bg-gray-100  dark:disabled:bg-gray-100 disabled:text-gray-300  bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm"
+        :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'
+      >
         <TrashIcon/>
       </button>
     </div>
@@ -145,6 +152,7 @@ watchArray(
 // TODO: cancel button while bot answering
 // TODO: scroll down button
 // TODO: drop zone
+// TODO: better channel switch handle when loading
 
 // performance improve
 // TODO: add pagination to chat history

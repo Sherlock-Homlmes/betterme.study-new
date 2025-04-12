@@ -3,8 +3,9 @@
     <div v-if='isAuth'>
       <div class="relative z-[-1]">
         <button
-          class="absolute top-0 left-[-50px] top-[80px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
+          class="absolute top-0 left-[-50px] top-[80px] w-full p-4 text-sm disabled:bg-gray-100 dark:disabled:bg-gray-100 disabled:text-gray-300 text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
           @click='createChannel'
+          :disabled='loadingMessage || loadingChannel'
         >
           <PlusIcon/>
         </button>
@@ -13,10 +14,11 @@
     <div v-if="channelIds.length > 1" >
       <div class="relative z-[-1]" v-for='(channelId, idx) in channelIds' :key="channelId">
         <button
-          class="absolute top-0 left-[-50px] hover:left-[-60px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
+          class="absolute top-0 left-[-50px] hover:left-[-60px] w-full p-4 text-sm disabled:bg-gray-100 dark:disabled:bg-gray-100 disabled:text-gray-300 text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
           :class="{'left-[-70px] outline outline-offset-[-3px]': selectedChannelId === channelId}"
           :style="{top: `${80+56*(idx+1)}px`}"
-          @click='selectedChannelId = channelId'
+          :disabled='(loadingMessage || loadingChannel) && selectedChannelId !== channelId'
+          @click='changeChannel(channelId)'
         >
           <MessageIcon/>
         </button>
@@ -109,7 +111,14 @@ import { useAIChatStore } from "../../stores/aichat"; // Changed to relative pat
 
 const runtimeConfig = useRuntimeConfig();
 const { isAuth } = useAuthStore();
-const { selectedChannelId, channelIds, createChannel } = useAIChatStore();
+const {
+	selectedChannelId,
+	channelIds,
+	createChannel,
+	changeChannel,
+	loadingChannel,
+	loadingMessage,
+} = useAIChatStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
 const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
