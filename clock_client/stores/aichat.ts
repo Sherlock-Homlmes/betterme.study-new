@@ -86,7 +86,7 @@ export const useAIChatStore = createGlobalState(() => {
 		} else showError("Failed to get history");
 	}
 
-	async function sendMessage(scrollFunc: Function = () => {}) {
+	async function sendMessage() {
 		if (!isAuth.value) return;
 		const content = newMessage.value.trim();
 		if (!content) return;
@@ -102,7 +102,7 @@ export const useAIChatStore = createGlobalState(() => {
 				return;
 			}
 		}
-		scrollFunc();
+		scrollToBottom();
 
 		const response = await fetchWithAuth(
 			`${API_URL}/channels/${selectedChannelId.value}/chats`,
@@ -119,7 +119,7 @@ export const useAIChatStore = createGlobalState(() => {
 			history.value.push(data);
 		} else showError("Failed to send message");
 		loadingMessage.value = false;
-		scrollFunc();
+		scrollToBottom();
 	}
 
 	async function deleteChannel() {
@@ -141,12 +141,24 @@ export const useAIChatStore = createGlobalState(() => {
 		loadingMessage.value = false;
 	}
 
+	// Scroll to bottom of the chat
+	const messagesContainer = ref<HTMLElement | null>(null);
+	const scrollToBottom = () => {
+		nextTick(() => {
+			if (messagesContainer.value) {
+				messagesContainer.value.scrollTop =
+					messagesContainer.value.scrollHeight;
+			}
+		});
+	};
+
 	watch(selectedChannelId, async (newSelectedChannelId) => {
 		const channelInfo = channels.value.find(
 			(channel) => channel.id === newSelectedChannelId,
 		);
 		if (channelInfo) history.value = channelInfo.history;
 		else await getHistory();
+		scrollToBottom();
 	});
 
 	return {
@@ -162,5 +174,7 @@ export const useAIChatStore = createGlobalState(() => {
 		getHistory,
 		sendMessage,
 		newMessage,
+		messagesContainer,
+		scrollToBottom,
 	};
 });

@@ -1,9 +1,9 @@
 <template>
   <section class="fixed z-40 w-full h-full p-0 md:p-4 md:max-w-screen-sm">
-
+    <div v-if='isAuth'>
       <div class="relative z-[-1]">
         <button
-          class="absolute top-0 left-[-50px] top-[80px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-primary-darkon dark:text-red-400"
+          class="absolute top-0 left-[-50px] top-[80px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
           @click='createChannel'
         >
           <PlusIcon/>
@@ -13,7 +13,7 @@
     <div v-if="channelIds.length > 1" >
       <div class="relative z-[-1]" v-for='(channelId, idx) in channelIds' :key="channelId">
         <button
-          class="absolute top-0 left-[-50px] hover:left-[-60px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-primary-darkon dark:text-red-400"
+          class="absolute top-0 left-[-50px] hover:left-[-60px] w-full p-4 text-sm text-white rounded-lg bg-primary dark:bg-surface-darkvariant dark:text-white"
           :class="{'left-[-70px] outline outline-offset-[-3px]': selectedChannelId === channelId}"
           :style="{top: `${80+56*(idx+1)}px`}"
           @click='selectedChannelId = channelId'
@@ -22,6 +22,7 @@
         </button>
       </div>
     </div>
+</div>
 
     <div class="flex flex-col h-full overflow-hidden rounded-none shadow-lg bg-surface-light text-surface-onlight md:rounded-xl md:dark:ring-1 dark:ring-surface-ondark dark:ring-opacity-20 ring-inset dark:bg-surface-dark dark:text-surface-ondark" :style="{ 'padding-top': `${mobileSettingsStore.padding.top}px`, 'padding-bottom': `${mobileSettingsStore.padding.bottom}px` }">
       <h1 class="px-4 mt-4 text-xl font-bold uppercase">

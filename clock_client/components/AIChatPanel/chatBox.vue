@@ -37,7 +37,9 @@
     </div>
 
     <div class="flex items-center p-2 border-t bg-surface-light dark:bg-surface-dark border-outline-light dark:border-outline-dark">
-      <!-- Input field: grow, padding, border, rounded -->
+      <!-- <UploadIcon class='mr-2 text-gray-800 dark:text-white cursor-pointer'>
+        <input id="dropzone-file" type="file" class="hidden" />
+      </UploadIcon> -->
       <input
         v-model="newMessage"
         type="text"
@@ -46,12 +48,12 @@
         class="flex-grow p-2 border rounded bg-surface-light dark:bg-surface-dark border-outline-light dark:border-outline-dark mr-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary-light dark:focus:ring-primary-dark"
         autofocus
       />
-      <button @click="sendMsg" class="p-2 px-4 rounded disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
+      <button @click="sendMsg" class="p-2 px-4 rounded disabled:bg-gray-100 dark:disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
         <!-- {{ $t('ai.buttons.send') }} -->
         <SendIcon/>
 
       </button>
-      <button v-if='history.length >= 2' @click="deleteChannel" class="ml-1 p-2 px-4 rounded disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
+      <button v-if='history.length >= 2' @click="deleteChannel" class="ml-1 p-2 px-4 rounded disabled:bg-gray-100  dark:disabled:bg-gray-100 disabled:text-gray-300  bg-primary dark:bg-surface-darkvariant text-white hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
         <TrashIcon/>
       </button>
     </div>
@@ -82,6 +84,8 @@ const {
 	getHistory,
 	sendMessage,
 	newMessage,
+	messagesContainer,
+	scrollToBottom,
 } = useAIChatStore();
 // not show loading if the load time is low
 const loadingChannelDebounced = refDebounced(loadingChannel, 1500);
@@ -90,7 +94,7 @@ const botNewAnswerIdx = ref();
 
 const sendMsg = async () => {
 	if (botNewAnswerIdx.value) return;
-	await sendMessage(scrollToBottom);
+	await sendMessage();
 };
 
 // Set animation to bot answer
@@ -127,29 +131,20 @@ watchArray(
 	{ immediate: true, deep: true },
 );
 
-// Scroll to bottom of the chat
-const messagesContainer = ref<HTMLElement | null>(null);
-const scrollToBottom = () => {
-	nextTick(() => {
-		if (messagesContainer.value) {
-			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-		}
-	});
-};
-
-// MVP
-// TODO: file upload
-
 // V1
-// TODO: advanced config
+// TODO: file upload
+// TODO: mobile channel select
 // V2
-// TODO: voice recognition and answer
+// TODO: advanced config
 // V3
+// TODO: voice recognition and answer
+// V4
 // TODO: monitor sharing and answer
 
 // UX improve
 // TODO: cancel button while bot answering
 // TODO: scroll down button
+// TODO: drop zone
 
 // performance improve
 // TODO: add pagination to chat history
