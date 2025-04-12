@@ -65,6 +65,7 @@ export const useAuthStore = createGlobalState(() => {
 
 	// actions
 	const getCurrentUser = async () => {
+		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/auth/self`);
 		if (response?.ok) userInfo.value = await response.json();
 		else {
