@@ -4,7 +4,7 @@ from typing import Optional, List, Any, Tuple
 
 
 # libraries
-from beanie import Document, Link, Insert, after_event, before_event
+from beanie import Document, Link, Insert, after_event
 from fastapi import HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field, field_validator
 
@@ -16,10 +16,11 @@ from schemas.news_admin.enums import OriginCrawlPagesEnum, ResponseStatusEnum
 from schemas.common_types import OtherPostInfo
 
 from models.users import Users
-from utils.time_modules import Time, date_to_str
+from utils.time_modules import date_to_str
 from services.discord_bot.news import send_news, send_noti_to_subcribers
 from services.tebi import upload_image
 from utils.text_convertion import gen_slug
+from utils.time_modules import vn_now
 
 
 class FacebookPostInfo(BaseModel):
@@ -30,7 +31,7 @@ class FacebookPostInfo(BaseModel):
 # TODO: after create process: change title, insert to search engine, caching
 class Posts(Document):
     # info
-    created_at: Optional[datetime.datetime] = None
+    created_at: datetime.datetime = Field(default_factory=vn_now)
     # TODO: remove optional and None
     created_by: Optional[Link[Users]] = None
     updated_at: Optional[datetime.datetime] = None
@@ -189,11 +190,6 @@ class Posts(Document):
         return post
 
     ### Events
-    @before_event(Insert)
-    async def set_created_at(self):
-        now = Time().now
-        self.created_at = now
-
     @after_event(Insert)
     async def save_id_to_draft_post(self):
         pass

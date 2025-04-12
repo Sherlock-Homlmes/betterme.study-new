@@ -94,7 +94,6 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 	const changeLocaleDynamic = async (newLocale: string) => {
 		if (Object.keys(languages).includes(newLocale)) {
-			console.log(newLocale);
 			// Load locale dynamically if it has not been loaded yet
 			if (!i18n.global.availableLocales.includes(newLocale)) {
 				const newLocaleMessages = await import(`@/i18n/${newLocale}.json`);

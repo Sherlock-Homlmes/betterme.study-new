@@ -26,7 +26,8 @@ def create_gemini_post_suggestion(payload: PostAIPromtPayload) -> str:
     return response.text
 
 
-async def chat_with_gemini(context: str) -> str:
+async def chat_with_gemini(context: str, history=[]) -> str:
     chat = common_model.start_chat()
+    chat.history = history
     response = await chat.send_message_async(context)
     return response.text

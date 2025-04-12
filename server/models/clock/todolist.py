@@ -29,8 +29,8 @@ class TodoList(Document):
     task_category_ids: Optional[List[str]] = Field(default=[], max_items=10)
 
     # TODO: fix to event
-    created_at: datetime.datetime = vn_now()
-    updated_at: datetime.datetime = vn_now()
+    created_at: datetime.datetime = Field(default_factory=vn_now)
+    updated_at: Optional[datetime.datetime] = None
 
     # TODO: fix to enum
     @validator("necessary")

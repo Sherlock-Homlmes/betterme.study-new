@@ -1,4 +1,11 @@
 {
+	"ai": {
+		"heading": "AI Assistant",
+		"just_a_sec": "Just a sec...",
+		"buttons": {
+			"send": "send"
+		}
+	},
 	"general": {
 		"or": "or"
 	},

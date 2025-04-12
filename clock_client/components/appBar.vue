@@ -1,5 +1,10 @@
 <script setup>
-import { SettingsIcon, ChecklistIcon, UserIcon } from "vue-tabler-icons";
+import {
+	SettingsIcon,
+	ChecklistIcon,
+	UserIcon,
+	MessageChatbotIcon,
+} from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
 import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
@@ -22,6 +27,19 @@ const settingsStore = useSettings();
     </div>
     <div v-show="settingsStore.schedule.visibility.enabled && settingsStore.schedule.visibility.showSectionType" class="flex-shrink overflow-hidden text-lg whitespace-pre select-none text-ellipsis text-surface-onlight dark:text-surface-ondark" v-text="$t('section.' + getCurrentItem.type).toLowerCase()" />
     <div class="flex-grow" />
+    <CButton
+      circle
+      :theme="openPanels.ai ? ButtonTheme.Primary : ButtonTheme.Neutral"
+      :importance="ButtonImportance.Tonal"
+      class="transition rounded-full h-11"
+      no-content-theme
+      no-padding
+      inner-class="p-1"
+      :aria-label="$t('appbar.ai')"
+      @click="openPanels.ai = !openPanels.ai"
+    >
+      <MessageChatbotIcon class="inline-block" />
+    </CButton>
     <CButton
       circle
       :theme="openPanels.todo ? ButtonTheme.Primary : ButtonTheme.Neutral"

@@ -1,7 +1,7 @@
 {
 	"name": "another-pomodoro",
 	"description": "Free and open-source productivity timer, right from your browser. Built to be simple.",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"private": true,
 	"scripts": {
 		"build": "nuxi build",
@@ -19,8 +19,9 @@
 		"release": "standard-version"
 	},
 	"dependencies": {
-		"@vueuse/core": "^11.1.0",
-		"@vueuse/nuxt": "^11.1.0",
+		"@vueuse/core": "^13.0.0",
+		"@vueuse/nuxt": "^13.0.0",
+		"marked": "^15.0.8",
 		"pinia": "^2.1.7",
 		"vue": "^3.4.21",
 		"vue-tabler-icons": "^2.21.0"

@@ -3,10 +3,11 @@ import datetime
 from typing import List, Optional, Union
 
 # libraries
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, Field
 
 # local
 from utils.text_convertion import gen_slug
+from utils.time_modules import vn_now
 
 
 # TODO: remove duplicate code(using project beanie)
@@ -38,7 +39,7 @@ class GetPostListResponse(BaseModel):
 class GetPostResponse(BaseModel):
     id: str
     # info
-    created_at: datetime.datetime
+    created_at: datetime.datetime = Field(default_factory=vn_now)
     updated_at: Optional[str] = None
 
     # content

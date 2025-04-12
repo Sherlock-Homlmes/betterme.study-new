@@ -1,4 +1,11 @@
 {
+	"ai": {
+		"heading": "Trợ lý AI",
+		"just_a_sec": "Chờ mình xíu nhé...",
+		"buttons": {
+			"send": "Gừi"
+		}
+	},
 	"general": {
 		"or": "hoặc"
 	},
