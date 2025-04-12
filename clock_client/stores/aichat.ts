@@ -52,6 +52,13 @@ export const useAIChatStore = createGlobalState(() => {
 
 	async function createChannel() {
 		if (!isAuth.value) return;
+		console.log(channels.value.length);
+		if (channels.value.length >= 13) {
+			showError(
+				"You've reached the channel limit. Close unused channels to continue.",
+			);
+			return;
+		}
 		const emptyChannel = channels.value.find(
 			(channel) => channel.history?.length <= 1,
 		);
