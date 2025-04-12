@@ -2,6 +2,7 @@
 	"ai": {
 		"heading": "AI Assistant",
 		"just_a_sec": "Just a sec...",
+		"type_message": "Type your message...",
 		"buttons": {
 			"send": "send"
 		}
@@ -31,7 +32,8 @@
 	},
 	"appbar": {
 		"settings": "Open settings",
-		"todo": "Open task list"
+		"todo": "Open task list",
+		"ai": "ai"
 	},
 	"timer": {
 		"approximate": {

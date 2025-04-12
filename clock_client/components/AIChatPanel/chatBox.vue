@@ -41,11 +41,11 @@
       <input
         v-model="newMessage"
         type="text"
-        placeholder="Type your message..."
+        :placeholder="$t('ai.type_message')"
         @keyup.enter="sendMsg"
         class="flex-grow p-2 border rounded bg-surface-light dark:bg-surface-dark border-outline-light dark:border-outline-dark mr-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary-light dark:focus:ring-primary-dark"
       />
-      <button @click="sendMsg" class="p-2 px-4 rounded  disabled:bg-gray-100 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
+      <button @click="sendMsg" class="p-2 px-4 rounded disabled:bg-gray-100 disabled:text-gray-300 bg-primary dark:bg-primary-dark text-white dark:text-primary-darkon dark:text-on-primary-dark hover:opacity-90 text-sm" :disabled='loadingMessage || loadingChannel || botNewAnswerIdx'>
         {{ $t('ai.buttons.send') }}
       </button>
     </div>
@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted, computed, watch } from "vue";
-import { MicrophoneIcon, LoaderIcon } from "vue-tabler-icons";
+import { LoaderIcon } from "vue-tabler-icons";
 import { useAuthStore } from "../../stores/auth"; // Changed to relative path
 import { useAIChatStore } from "../../stores/aichat"; // Changed to relative path
 import { marked } from "marked"; // Changed to relative path

@@ -2,6 +2,7 @@
 	"ai": {
 		"heading": "Trợ lý AI",
 		"just_a_sec": "Chờ mình xíu nhé...",
+		"type_message": "Nhập tin nhắn của bạn...",
 		"buttons": {
 			"send": "Gừi"
 		}
@@ -31,7 +32,8 @@
 	},
 	"appbar": {
 		"settings": "Mở cài đặt",
-		"todo": "Mở danh sách nhiệm vụ"
+		"todo": "Mở danh sách nhiệm vụ",
+		"ai": "ai"
 	},
 	"timer": {
 		"approximate": {
