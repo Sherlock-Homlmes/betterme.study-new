@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from models import Audios
-from .schemas.audios import AudioMappingCreate, AudioMappingResponse
+from schemas.audios import AudioMappingCreate, AudioMappingResponse
 from .utils import download_audio
 from utils.tebi import upload_audio
 from yt_dlp.utils import DownloadError

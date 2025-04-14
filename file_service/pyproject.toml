@@ -16,6 +16,8 @@ pydantic-settings = "^2.8.1"
 pillow = "^11.1.0"
 beanie = "^1.29.0"
 yt-dlp = "^2025.3.31"
+aiohttp = "^3.11.16"
+aiofiles = "^24.1.0"
 
 [tool.ruff]
 line-length = 100

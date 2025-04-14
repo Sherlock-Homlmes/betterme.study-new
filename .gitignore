@@ -191,7 +191,10 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 
-.cache/*
+file_service/assets/audios/*
+file_service/assets/images/*
+!file_service/assets/audios/keep.py
+!file_service/assets/images/keep.py
 !.cache/audios/keep.py
 !.cache/images/keep.py
 others/data/

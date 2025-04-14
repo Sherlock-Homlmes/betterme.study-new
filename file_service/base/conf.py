@@ -5,6 +5,7 @@ from functools import lru_cache
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -61,3 +62,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/files", StaticFiles(directory="assets"), name="files")

@@ -3,12 +3,13 @@
 from fastapi import APIRouter, Depends
 
 # local
-from routers import audios
+from routers import audios, images
 from .conf import app
 
 non_auth_modules = []
 auth_modules = [
     audios,
+    images,
 ]
 
 router = APIRouter(

@@ -9,7 +9,7 @@ import tempfile
 
 
 # --- Main Download Function ---
-def download_audio(url, output_path=".cache/audios") -> str:
+def download_audio(url, output_path="assets/audios") -> str:
     """
     Downloads audio from a supported URL (YouTube, SoundCloud, etc.) using yt-dlp
     and converts it to MP3 using ffmpeg.
