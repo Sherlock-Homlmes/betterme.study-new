@@ -1,5 +1,6 @@
 from typing import Optional, List
 import random
+import io
 import uuid  # For unique filenames
 from pathlib import Path
 
@@ -15,12 +16,11 @@ class LeaderboardInfo(BaseModel):
 
 
 def generate_leaderboard_image(
-    request: Request,  # Add request parameter
     leaderboard_data: dict,
     start_idx: int,
     target_idx: Optional[int] = None,
-) -> str:
-    """Generates a leaderboard image and returns its public URL."""
+) -> io.BytesIO:
+    """Generates a leaderboard image and returns an in-memory byte stream."""
     is_top = start_idx == 0
     foreground_img = Image.open(
         "./assets/top_leaderboard.png" if is_top else "./assets/leaderboard.png"
@@ -70,6 +70,4 @@ def generate_leaderboard_image(
     img_name = f"{uuid.uuid4()}.png"
     img_path = f"./assets/images/{img_name}"
     final_img.save(img_path)
-
-    img_url = request.url_for("files", path=f"images/{img_name}")
-    return str(img_url)
+    return img_path

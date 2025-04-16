@@ -23,7 +23,3 @@ class CreateLeaderboardImagePayload(BaseModel):
     leaderboard_data: List[LeaderboardEntry]
     start_idx: int
     target_idx: Optional[int] = None
-
-
-class CreateLeaderboardImageResponse(BaseModel):
-    link: str

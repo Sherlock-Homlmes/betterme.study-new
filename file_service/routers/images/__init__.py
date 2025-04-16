@@ -1,6 +1,7 @@
 import asyncio
-from fastapi import APIRouter, Request  # Import Request
-from schemas.images import CreateLeaderboardImagePayload, CreateLeaderboardImageResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse, FileResponse
+from schemas.images import CreateLeaderboardImagePayload
 
 from .leaderboard import generate_leaderboard_image
 from utils.image_handle import save_image
@@ -19,8 +20,7 @@ router = APIRouter(
 )
 async def create_leaderboard_image(
     payload: CreateLeaderboardImagePayload,
-    request: Request,  # Add request parameter
-) -> CreateLeaderboardImageResponse:
+):
     """
     Create a leaderboard image from given data and return its URL
     """
@@ -35,8 +35,4 @@ async def create_leaderboard_image(
     for user_data, saved_path in zip(payload.leaderboard_data, user_avatar_image_paths):
         user_data.img = saved_path
 
-    # Generate the leaderboard image using the updated payload, passing the request
-    img_url = generate_leaderboard_image(request=request, **payload.dict())
-    # TODO: add background task to delete image after 30 minutes
-
-    return CreateLeaderboardImageResponse(link=img_url)
+    return FileResponse(generate_leaderboard_image(**payload.dict()))
