@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 
 # local
 from routers import audios, images
+from routers.authorization_handler import auth
 from .conf import app
 
 non_auth_modules = []
@@ -24,5 +25,5 @@ for module in auth_modules:
     app.include_router(
         module.router,
         prefix="/api",
-        # dependencies=[Depends(auth_handler.auth_wrapper)],
+        dependencies=[Depends(auth)],
     )

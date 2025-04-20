@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     # TODO: change this to ENVEnum when lib support
     ENV: str = ENVEnum.DEV.value
 
+    SECRET_KEY: str
     DATABASE_URL: str
 
     AWS_ACCESS_KEY_ID: str

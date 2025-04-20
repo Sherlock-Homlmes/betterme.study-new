@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from models import Audios
 from schemas.audios import AudioMappingCreate, AudioMappingResponse
 from .utils import download_audio
@@ -20,6 +20,7 @@ router = APIRouter(
 )
 async def create_audio_mapping(
     payload: AudioMappingCreate,
+    background_tasks: BackgroundTasks,
 ) -> AudioMappingResponse:
     """
     Creates a new audio mapping record in the database.
@@ -28,6 +29,7 @@ async def create_audio_mapping(
     # Check if mapping already exists (optional, but good practice)
     old_audio = await Audios.find_one(Audios.audio_url == str(payload.audio_url))
     if old_audio:
+        background_tasks.add_task(old_audio.increase_request_time)
         return AudioMappingResponse(link=old_audio.storage_url)
 
     audio_name = download_audio(payload.audio_url)
