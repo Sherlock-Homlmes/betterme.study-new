@@ -21,7 +21,8 @@
 	},
 	"appbar": {
 		"settings": "Otvori postavke",
-		"todo": "Otvori popis zadataka"
+		"todo": "Otvori popis zadataka",
+    "music": "Glazba"
 	},
 	"timer": {
 		"approximate": {

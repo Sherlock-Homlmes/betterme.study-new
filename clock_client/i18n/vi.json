@@ -33,7 +33,8 @@
 	"appbar": {
 		"settings": "Mở cài đặt",
 		"todo": "Mở danh sách nhiệm vụ",
-		"ai": "ai"
+		"ai": "ai",
+    "music": "Âm nhạc"
 	},
 	"timer": {
 		"approximate": {

@@ -7,6 +7,7 @@ import {
 } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
+import { MusicIcon } from "vue-tabler-icons";
 import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
 import { useOpenPanels } from "@/stores/openpanels";
 import { useSettings } from "~~/stores/settings";
@@ -27,6 +28,19 @@ const settingsStore = useSettings();
     </div>
     <div v-show="settingsStore.schedule.visibility.enabled && settingsStore.schedule.visibility.showSectionType" class="flex-shrink overflow-hidden text-lg whitespace-pre select-none text-ellipsis text-surface-onlight dark:text-surface-ondark" v-text="$t('section.' + getCurrentItem.type).toLowerCase()" />
     <div class="flex-grow" />
+    <CButton
+      circle
+      :aria-label="$t('appbar.music')"
+      :importance="ButtonImportance.Filled"
+      :theme="ButtonTheme.Neutral"
+      class="h-11"
+      no-content-theme
+      no-padding
+      inner-class="p-1"
+      @click="openPanels.music = !openPanels.music"
+    >
+      <MusicIcon class="inline-block" />
+    </CButton>
     <CButton
       circle
       :theme="openPanels.ai ? ButtonTheme.Primary : ButtonTheme.Neutral"

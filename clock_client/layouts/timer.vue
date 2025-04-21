@@ -4,6 +4,7 @@ import SettingsPanel from '@/components/settings/settingsPanel.vue'
 import UserSettingPanel from '@/components/userSettingPanel/index.vue'
 import AIChatPanel from '@/components/AIChatPanel/index.vue'
 import TodoList from '~~/components/todoList/todoList.vue'
+import MusicPanel from '~~/components/MusicPanel.vue'
 import { useOpenPanels } from '~~/stores/openpanels'
 import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useSettings } from '~~/stores/settings'
@@ -38,6 +39,9 @@ useHead(() => {
     </transition>
     <transition enter-from-class="translate-y-full" enter-active-class="duration-300 ease-out" leave-to-class="translate-y-full" leave-active-class="duration-150 ease-in">
       <AIChatPanel v-show="openPanels.ai" class="right-0" />
+    </transition>
+    <transition enter-from-class="translate-y-full" enter-active-class="duration-300 ease-out" leave-to-class="translate-y-full" leave-active-class="duration-150 ease-in">
+      <MusicPanel v-show="openPanels.music" class="right-0" />
     </transition>
     <slot />
   </div>

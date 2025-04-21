@@ -19,6 +19,11 @@
 		"stop": "Reset timer",
 		"advance": "Go to next section"
 	},
+	"appbar": {
+		"settings": "Ouvrir les paramètres",
+		"todo": "Ouvrir la liste des tâches",
+		"music": "Musique"
+	},
 	"timer": {
 		"approximate": {
 			"hours": "heure | heures",
