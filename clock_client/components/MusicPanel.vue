@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
-import { useSound } from '@vueuse/sound'
+import { computed, reactive, ref, watch, onUnmounted } from "vue";
+import { useSound } from "@vueuse/sound";
+import { useStorage, useRefHistory } from "@vueuse/core";
 import { useMobileSettings } from "@/stores/platforms/mobileSettings";
 import { useAuthStore } from "@/stores/auth";
 import { useOpenPanels } from "@/stores/openpanels";
 
 import {
 	XIcon as CloseIcon,
-  PlayerPlayIcon,
-  PlayerPauseIcon,
-  PlayerTrackPrevIcon,
-  PlayerTrackNextIcon,
-  VolumeIcon,
-  VolumeOffIcon,
-  RepeatIcon,
+	PlayerPlayIcon,
+	PlayerPauseIcon,
+	PlayerTrackPrevIcon,
+	PlayerTrackNextIcon,
+	VolumeIcon,
+	VolumeOffIcon,
+	RepeatIcon,
 } from "vue-tabler-icons";
 
 import { ButtonImportance } from "@/components/base/types/button";
@@ -32,29 +33,129 @@ const state = reactive({
 });
 
 // Loop state
-const isLooping = ref(false)
+const isLooping = ref(false);
+
+// Volume state with persistence and history
+const volumeLevel = useStorage("music-volume", 0.75); // Persisted volume
+const { history, undo, redo } = useRefHistory(volumeLevel, { capacity: 10 }); // History for unmute
+const isVolumeSliderVisible = ref(false);
+const currentTime = ref(0);
+const isSeeking = ref(false); // To prevent updates while dragging slider
+let playbackInterval: ReturnType<typeof setInterval> | null = null;
+
+// Helper function for formatting time
+const formatTime = (seconds: number): string => {
+	if (isNaN(seconds) || seconds === Infinity) {
+		return "00:00";
+	}
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = Math.floor(seconds % 60);
+	return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+};
 
 // Sound setup
-const { play, pause, isPlaying } = useSound('/audio/musical/sample.mp3', {
-  // Remove loop option here
-  onend: () => {
-    if (isLooping.value) {
-      play(); // Re-play if looping is enabled
-    }
-  }
-})
+const { play, pause, isPlaying, volume, duration, sound } = useSound(
+	"/audio/musical/sample.mp3",
+	{
+		volume: volumeLevel,
+		interrupt: true, // Allow seeking while playing
+		onplay: () => {
+			if (sound.value && currentTime.value) {
+				sound.value.seek(currentTime.value);
+			}
+			if (playbackInterval) clearInterval(playbackInterval); // Clear existing interval if any
+			playbackInterval = setInterval(() => {
+				if (sound.value && !isSeeking.value) {
+					// Only update if not actively seeking
+					const currentSeek = sound.value.seek();
+					// Howler returns seek time in seconds, ensure it's a number
+					if (typeof currentSeek === "number") {
+						currentTime.value = currentSeek;
+					}
+				}
+			}, 25);
+			// TODO: Update time roughly depend on duration
+			// CURRENT: Update time roughly 40 times per second
+		},
+		onpause: () => {
+			if (playbackInterval) clearInterval(playbackInterval);
+			playbackInterval = null;
+		},
+		onend: () => {
+			if (playbackInterval) clearInterval(playbackInterval);
+			playbackInterval = null;
+			currentTime.value = 0; // Reset time on end unless looping
+			if (isLooping.value && sound.value) {
+				// Howler's loop doesn't reset seek, so manually seek to 0 then play
+				sound.value.seek(0);
+				play();
+			} else {
+				isPlaying.value = false; // Ensure isPlaying reflects the state
+			}
+		},
+	},
+);
+
+// Computed properties for display
+const formattedCurrentTime = computed(() => formatTime(currentTime.value));
+const formattedDuration = computed(() =>
+	formatTime((duration.value ?? 0) / 1000),
+);
+
+// Function to handle seeking from the input range
+const handleSeek = (event: Event) => {
+	const target = event.target as HTMLInputElement;
+	const seekTime = parseFloat(target.value);
+	if (sound.value && !isNaN(seekTime)) {
+		sound.value.seek(seekTime); // seekTime is already in seconds
+		currentTime.value = seekTime; // Immediately update visual state
+	}
+	isSeeking.value = false; // Allow interval updates again
+};
+
+// Update currentTime visually while dragging
+const onSliderInput = (event: Event) => {
+	isSeeking.value = true; // Prevent interval updates
+	const target = event.target as HTMLInputElement;
+	currentTime.value = parseFloat(target.value);
+};
+
+// Cleanup interval on component unmount
+onUnmounted(() => {
+	if (playbackInterval) {
+		clearInterval(playbackInterval);
+	}
+});
 
 const togglePlay = () => {
-  if (isPlaying.value) {
-    pause()
-  } else {
-    play()
-  }
-}
+	if (isPlaying.value) {
+		pause();
+	} else {
+		if (sound.value) {
+			sound.value.seek(currentTime.value * 1000);
+		}
+		play();
+	}
+};
 
 const toggleLoop = () => {
-  isLooping.value = !isLooping.value
-}
+	isLooping.value = !isLooping.value;
+};
+
+// Function to toggle mute/unmute
+const toggleMute = () => {
+	if (volumeLevel.value === 0) {
+		// Find the last non-zero volume in history
+		const lastVolume = history.value.find(
+			(entry) => entry.snapshot > 0,
+		)?.snapshot;
+		volumeLevel.value = lastVolume || 0.75; // Restore or default to 0.75
+	} else {
+		volumeLevel.value = 0; // Mute
+	}
+};
+
+// Removed the watch function as direct binding should handle it
 </script>
 
 <template>
@@ -87,75 +188,115 @@ const toggleLoop = () => {
           <p class="text-sm text-gray-600 dark:text-gray-400">Artist Name</p>
         </div>
 
-        <!-- Progress Bar Placeholder -->
-        <div class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-full mb-4">
-          <div class="h-full w-1/4 bg-primary-light dark:bg-primary-dark rounded-full"></div>
+        <!-- Interactive Progress Bar -->
+        <div v-if="duration && duration > 0" class="w-full max-w-md mb-4 px-2">
+          <input
+            type="range"
+            min="0"
+            :max="duration ? duration / 1000 : 0"
+            step="0.01"
+            :value="currentTime"
+            @input="onSliderInput"
+            @change="handleSeek"
+            class="w-full h-2 bg-primary-container rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
+            aria-label="Seek slider"
+          />
+          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <span>{{ formattedCurrentTime }}</span>
+            <span>{{ formattedDuration }}</span>
+          </div>
         </div>
 
-        <!-- Playback Controls -->
-        <div class="flex items-center w-full max-w-xs mb-4 align-items-center" style="display: flex;">
 
-          <!-- Main Controls (Centered) -->
-          <div class="flex items-center justify-center">
+        <!-- Combined Controls Row -->
+        <div class="flex items-center justify-center space-x-4 w-full max-w-md mb-4">
+
+          <!-- Volume Control -->
+          <div
+            class="relative"
+            @mouseenter="isVolumeSliderVisible = true"
+            @mouseleave="isVolumeSliderVisible = false"
+          >
+            <ControlButton
+              :importance="ButtonImportance.Text"
+              circle
+              @click="toggleMute"
+            >
+              <VolumeOffIcon v-if="volumeLevel === 0" class="w-6 h-6" />
+              <VolumeIcon v-else class="w-6 h-6" />
+            </ControlButton>
+            <!-- Horizontal Slider - appears on hover -->
+            <Transition name="slide-fade">
+              <input
+                v-if="isVolumeSliderVisible"
+                v-model.number="volumeLevel"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-20 h-2 bg-primary-container rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
+                aria-label="Volume"
+              />
+            </Transition>
+          </div>
+
+          <!-- Playback Controls Group -->
+          <div class="flex items-center justify-center space-x-2">
             <ControlButton :importance="ButtonImportance.Text" circle>
               <PlayerTrackPrevIcon />
             </ControlButton>
             <ControlButton :importance="ButtonImportance.Text" circle class="w-12 h-12" @click="togglePlay">
-              <!-- Toggle between Play and Pause -->
-              <PlayerPauseIcon v-if="isPlaying" class="w-6 h-6" />
-              <PlayerPlayIcon v-else class="w-6 h-6" />
-            </ControlButton>
-            <ControlButton :importance="ButtonImportance.Text" circle>
-              <PlayerTrackNextIcon />
-            </ControlButton>
-          <!-- Repeat Button (Right Aligned within this container) -->
+            <!-- Toggle between Play and Pause -->
+            <PlayerPauseIcon v-if="isPlaying" class="w-6 h-6" />
+            <PlayerPlayIcon v-else class="w-6 h-6" />
+          </ControlButton>
+          <ControlButton :importance="ButtonImportance.Text" circle>
+            <PlayerTrackNextIcon />
+          </ControlButton>
           <ControlButton
             :importance="ButtonImportance.Text"
             circle
-            class="items-center"
-            style="vertical-align: middle; display: flex; align-items: center; margin-top: auto; margin-bottom: auto; align-self: center;"
             @click="toggleLoop"
-            :class="{
-              'bg-primary-light dark:bg-primary-dark text-white dark:text-black': isLooping,
-              'text-gray-600 dark:text-gray-400': !isLooping
-            }"
+            :bgClass="isLooping ? 'border-2 border-primary-light dark:border-primary-dark bg-primary-light dark:bg-primary-dark' : 'border-2 border-transparent'"
+            :innerClass="isLooping ? 'text-gray-600 dark:text-gray-400' : ''"
           >
-            <RepeatIcon class="w-6 h-6" />
-          </ControlButton>
+              <RepeatIcon class="w-6 h-6" />
+            </ControlButton>
           </div>
-
         </div>
-
-        <!-- Volume Control Placeholder -->
-        <div class="flex items-center justify-center space-x-2 w-full">
-           <VolumeOffIcon class="w-5 h-5 text-gray-600 dark:text-gray-400" />
-           <div class="w-1/2 h-1 bg-gray-300 dark:bg-gray-600 rounded-full">
-             <div class="h-full w-3/4 bg-primary-light dark:bg-primary-dark rounded-full"></div>
-           </div>
-           <VolumeIcon class="w-5 h-5 text-gray-600 dark:text-gray-400" />
-        </div>
-
+        <!-- Removed old Volume Control Placeholder -->
       </div>
     </div>
   </section>
 </template>
 
-<style lang="scss" scoped>
-// ===== TAB TRANSITIONS =====
-.tab-transition-enter-active,
-.tab-transition-leave-active {
-  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
-  // transition: opacity 0.5s ease-out;
-  position: relative;
-}
+<style lang="scss">
+.music-slider {
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #a7373a;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 
-.tab-transition-enter-from {
-  transform: translateY(10px);
-  opacity: 0;
-}
+  &::-moz-range-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #a7373a;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 
-.tab-transition-leave-to {
-  transform: translateY(-10px);
-  opacity: 0;
+  &::-ms-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #a7373a;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 }
 </style>
