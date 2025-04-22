@@ -22,7 +22,7 @@
 	"appbar": {
 		"settings": "Abrir configurações",
 		"todo": "Abrir lista de tarefas",
-    "music": "Música"
+		"music": "Música"
 	},
 	"timer": {
 		"approximate": {

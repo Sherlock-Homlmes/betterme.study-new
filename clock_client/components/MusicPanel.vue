@@ -35,7 +35,7 @@ const state = reactive({
 
 // --- Audio State ---
 // Initialize with empty string to satisfy useSound's type requirement (MaybeRef<string>)
-const blobUrl = ref<string>(''); // Ref to hold the Blob URL for useSound
+const blobUrl = ref<string>(""); // Ref to hold the Blob URL for useSound
 const audioDataLoaded = ref(false); // Flag to indicate if audio is ready
 const isLooping = ref(false);
 const volumeLevel = useStorage("music-volume", 0.75); // Persisted volume
@@ -46,107 +46,117 @@ const isSeeking = ref(false); // To prevent updates while dragging slider
 let playbackInterval: ReturnType<typeof setInterval> | null = null;
 
 // --- IndexedDB Logic ---
-const dbName = 'musicDB';
+const dbName = "musicDB";
 const dbVersion = 1;
-const objectStoreName = 'audio';
+const objectStoreName = "audio";
 
 const initDB = (): Promise<IDBDatabase> => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(dbName, dbVersion);
-    request.onerror = (event: Event) => {
-      console.error('IndexedDB error:', (event.target as IDBRequest).error);
-      reject((event.target as IDBRequest).error);
-    };
-    request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains(objectStoreName)) {
-        const objectStore = db.createObjectStore(objectStoreName, { keyPath: 'id' });
-        objectStore.createIndex('name', 'name', { unique: false });
-      } else {
-      }
-    };
-    request.onsuccess = (event: Event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      resolve(db);
-    };
-  });
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open(dbName, dbVersion);
+		request.onerror = (event: Event) => {
+			console.error("IndexedDB error:", (event.target as IDBRequest).error);
+			reject((event.target as IDBRequest).error);
+		};
+		request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+			const db = (event.target as IDBOpenDBRequest).result;
+			if (!db.objectStoreNames.contains(objectStoreName)) {
+				const objectStore = db.createObjectStore(objectStoreName, {
+					keyPath: "id",
+				});
+				objectStore.createIndex("name", "name", { unique: false });
+			} else {
+			}
+		};
+		request.onsuccess = (event: Event) => {
+			const db = (event.target as IDBOpenDBRequest).result;
+			resolve(db);
+		};
+	});
 };
 
 const getAudioFromDB = (db: IDBDatabase, id: number): Promise<any | null> => {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([objectStoreName], 'readonly');
-    const objectStore = transaction.objectStore(objectStoreName);
-    const request = objectStore.get(id);
-    request.onsuccess = (event: Event) => {
-      resolve((event.target as IDBRequest).result);
-    };
-    request.onerror = (event: Event) => {
-      console.error('Error getting audio from DB:', (event.target as IDBRequest).error);
-      reject((event.target as IDBRequest).error);
-    };
-  });
+	return new Promise((resolve, reject) => {
+		const transaction = db.transaction([objectStoreName], "readonly");
+		const objectStore = transaction.objectStore(objectStoreName);
+		const request = objectStore.get(id);
+		request.onsuccess = (event: Event) => {
+			resolve((event.target as IDBRequest).result);
+		};
+		request.onerror = (event: Event) => {
+			console.error(
+				"Error getting audio from DB:",
+				(event.target as IDBRequest).error,
+			);
+			reject((event.target as IDBRequest).error);
+		};
+	});
 };
 
-const storeAudioInDB = (db: IDBDatabase, audioData: ArrayBuffer, id: number, name: string): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([objectStoreName], 'readwrite');
-    const objectStore = transaction.objectStore(objectStoreName);
-    const request = objectStore.put({ id: id, name: name, data: audioData });
-    request.onsuccess = () => {
-      resolve(true);
-    };
-    request.onerror = (event: Event) => {
-      console.error('Error storing audio', (event.target as IDBRequest).error);
-      reject((event.target as IDBRequest).error);
-    };
-  });
+const storeAudioInDB = (
+	db: IDBDatabase,
+	audioData: ArrayBuffer,
+	id: number,
+	name: string,
+): Promise<boolean> => {
+	return new Promise((resolve, reject) => {
+		const transaction = db.transaction([objectStoreName], "readwrite");
+		const objectStore = transaction.objectStore(objectStoreName);
+		const request = objectStore.put({ id: id, name: name, data: audioData });
+		request.onsuccess = () => {
+			resolve(true);
+		};
+		request.onerror = (event: Event) => {
+			console.error("Error storing audio", (event.target as IDBRequest).error);
+			reject((event.target as IDBRequest).error);
+		};
+	});
 };
 
 const loadAndSetAudio = async () => {
-  let db: IDBDatabase | null = null;
-  try {
-    db = await initDB();
-    const audioId = 1; // Using a fixed ID for the sample audio
-    const audioName = 'sample';
-    const existingAudio = await getAudioFromDB(db, audioId);
+	let db: IDBDatabase | null = null;
+	try {
+		db = await initDB();
+		const audioId = 1; // Using a fixed ID for the sample audio
+		const audioName = "sample";
+		const existingAudio = await getAudioFromDB(db, audioId);
 
-    let audioData: ArrayBuffer;
+		let audioData: ArrayBuffer;
 
-    if (existingAudio && existingAudio.data instanceof ArrayBuffer) {
-      audioData = existingAudio.data;
-    } else {
-      // Fetch the default audio file if not found in DB
-      const response = await fetch('/audio/musical/sample.mp3');
-      if (!response.ok) {
-        throw new Error(`Failed to fetch audio: ${response.statusText}`);
-      }
-      audioData = await response.arrayBuffer();
-      await storeAudioInDB(db, audioData, audioId, audioName);
-    }
+		if (existingAudio && existingAudio.data instanceof ArrayBuffer) {
+			audioData = existingAudio.data;
+		} else {
+			// Fetch the default audio file if not found in DB
+			const response = await fetch("/audio/musical/sample.mp3");
+			if (!response.ok) {
+				throw new Error(`Failed to fetch audio: ${response.statusText}`);
+			}
+			audioData = await response.arrayBuffer();
+			await storeAudioInDB(db, audioData, audioId, audioName);
+		}
 
-    // Create Blob URL
-    const blob = new Blob([audioData], { type: 'audio/mp3' }); // Changed MIME type to audio/mp3
-    // Check if blobUrl is not the initial empty string before revoking
-    if (blobUrl.value && blobUrl.value !== '') {
-        URL.revokeObjectURL(blobUrl.value); // Revoke previous URL if exists
-    }
-    blobUrl.value = URL.createObjectURL(blob);
-    audioDataLoaded.value = true; // Mark audio as ready
-
-  } catch (error) {
-    console.error('Error loading/setting audio:', error);
-    audioDataLoaded.value = false; // Ensure loaded state is false on error
-    // Check if blobUrl is not the initial empty string before revoking
-    if (blobUrl.value && blobUrl.value !== '') { // Clean up potentially stale blob URL on error
-        URL.revokeObjectURL(blobUrl.value);
-        blobUrl.value = ''; // Reset to empty string
-    }
-    // Handle error appropriately (e.g., show a message to the user)
-  } finally {
-      if (db) {
-          db.close(); // Close the DB connection
-      }
-  }
+		// Create Blob URL
+		const blob = new Blob([audioData], { type: "audio/mp3" }); // Changed MIME type to audio/mp3
+		// Check if blobUrl is not the initial empty string before revoking
+		if (blobUrl.value && blobUrl.value !== "") {
+			URL.revokeObjectURL(blobUrl.value); // Revoke previous URL if exists
+		}
+		blobUrl.value = URL.createObjectURL(blob);
+		audioDataLoaded.value = true; // Mark audio as ready
+	} catch (error) {
+		console.error("Error loading/setting audio:", error);
+		audioDataLoaded.value = false; // Ensure loaded state is false on error
+		// Check if blobUrl is not the initial empty string before revoking
+		if (blobUrl.value && blobUrl.value !== "") {
+			// Clean up potentially stale blob URL on error
+			URL.revokeObjectURL(blobUrl.value);
+			blobUrl.value = ""; // Reset to empty string
+		}
+		// Handle error appropriately (e.g., show a message to the user)
+	} finally {
+		if (db) {
+			db.close(); // Close the DB connection
+		}
+	}
 };
 
 // --- Sound Setup ---
@@ -156,18 +166,22 @@ const { play, pause, isPlaying, duration, sound, stop } = useSound(
 		volume: volumeLevel.value, // Set initial volume from the ref
 		interrupt: true,
 		html5: true, // Often helps with Blob URLs and seeking accuracy
-		format: ['mp3'], // Explicitly tell Howler the format
+		format: ["mp3"], // Explicitly tell Howler the format
 		onplay: () => {
-            // Attempt seek only if sound is loaded and currentTime > 0
-            if (sound.value && currentTime.value > 0 && sound.value.state() === 'loaded') {
-                sound.value.seek(currentTime.value);
-            }
+			// Attempt seek only if sound is loaded and currentTime > 0
+			if (
+				sound.value &&
+				currentTime.value > 0 &&
+				sound.value.state() === "loaded"
+			) {
+				sound.value.seek(currentTime.value);
+			}
 			if (playbackInterval) clearInterval(playbackInterval);
 			playbackInterval = setInterval(() => {
 				// Update currentTime only if sound exists, is playing, and not currently seeking
 				if (sound.value && !isSeeking.value && sound.value.playing()) {
 					const currentSeek = sound.value.seek();
-					if (typeof currentSeek === 'number') {
+					if (typeof currentSeek === "number") {
 						currentTime.value = currentSeek;
 					}
 				}
@@ -177,38 +191,44 @@ const { play, pause, isPlaying, duration, sound, stop } = useSound(
 			if (playbackInterval) clearInterval(playbackInterval);
 			playbackInterval = null;
 		},
-		onend: (id: number | undefined) => { // Howler passes soundId (number) or undefined if not applicable
+		onend: (id: number | undefined) => {
+			// Howler passes soundId (number) or undefined if not applicable
 			if (playbackInterval) clearInterval(playbackInterval);
 			playbackInterval = null;
-                currentTime.value = 0;
-            if (isLooping.value && sound.value) {
-                play(); // Re-play for loop
-            }
+			currentTime.value = 0;
+			if (isLooping.value && sound.value) {
+				play(); // Re-play for loop
+			}
 		},
-        onstop: () => {
-            // Handle explicit stop if needed (e.g., via stop() call)
-            if (playbackInterval) clearInterval(playbackInterval);
-            playbackInterval = null;
-        },
-        onloaderror: (id: number | null, err: unknown) => { // id might be null if load fails early
-            console.error('Sound load error:', id, err);
-            audioDataLoaded.value = false; // Mark as not loaded
-            // Clean up blob URL if loading failed
-            // Check if blobUrl is not the initial empty string before revoking
-            if (blobUrl.value && blobUrl.value !== '') { URL.revokeObjectURL(blobUrl.value); blobUrl.value = ''; }
-        },
-        onplayerror: (id: number | null, err: unknown) => { // id might be null
-            console.error('Sound play error:', id, err);
-            if (playbackInterval) clearInterval(playbackInterval);
-            playbackInterval = null;
-            // Consider setting isPlaying to false if useSound doesn't handle it reliably on error
-        },
-        onload: () => {
-             if (sound.value) {
-                const soundDuration = sound.value.duration();
-                 // useSound's duration ref should update automatically. Log to confirm.
-            }
-        }
+		onstop: () => {
+			// Handle explicit stop if needed (e.g., via stop() call)
+			if (playbackInterval) clearInterval(playbackInterval);
+			playbackInterval = null;
+		},
+		onloaderror: (id: number | null, err: unknown) => {
+			// id might be null if load fails early
+			console.error("Sound load error:", id, err);
+			audioDataLoaded.value = false; // Mark as not loaded
+			// Clean up blob URL if loading failed
+			// Check if blobUrl is not the initial empty string before revoking
+			if (blobUrl.value && blobUrl.value !== "") {
+				URL.revokeObjectURL(blobUrl.value);
+				blobUrl.value = "";
+			}
+		},
+		onplayerror: (id: number | null, err: unknown) => {
+			// id might be null
+			console.error("Sound play error:", id, err);
+			if (playbackInterval) clearInterval(playbackInterval);
+			playbackInterval = null;
+			// Consider setting isPlaying to false if useSound doesn't handle it reliably on error
+		},
+		onload: () => {
+			if (sound.value) {
+				const soundDuration = sound.value.duration();
+				// useSound's duration ref should update automatically. Log to confirm.
+			}
+		},
 	},
 );
 
@@ -226,13 +246,15 @@ const formatTime = (seconds: number): string => {
 const formattedCurrentTime = computed(() => formatTime(currentTime.value));
 // Use the duration ref from useSound, converting from milliseconds if necessary
 // (Check @vueuse/sound docs - assuming it provides duration in ms)
-const formattedDuration = computed(() => formatTime((duration.value ?? 0) / 1000));
+const formattedDuration = computed(() =>
+	formatTime((duration.value ?? 0) / 1000),
+);
 
 // --- Playback Control Methods ---
 const handleSeek = (event: Event) => {
 	const target = event.target as HTMLInputElement;
 	const seekTime = parseFloat(target.value);
-	if (sound.value && !isNaN(seekTime) && sound.value.state() === 'loaded') {
+	if (sound.value && !isNaN(seekTime) && sound.value.state() === "loaded") {
 		sound.value.seek(seekTime); // seekTime is already in seconds
 		currentTime.value = seekTime; // Immediately update visual state
 	}
@@ -242,30 +264,30 @@ const handleSeek = (event: Event) => {
 const onSliderInput = (event: Event) => {
 	isSeeking.value = true; // Prevent interval updates while dragging
 	const target = event.target as HTMLInputElement;
-    // Update visual time immediately while dragging
+	// Update visual time immediately while dragging
 	currentTime.value = parseFloat(target.value);
 };
 
 const togglePlay = () => {
-    if (!audioDataLoaded.value || !sound.value) return; // Don't toggle if not ready
+	if (!audioDataLoaded.value || !sound.value) return; // Don't toggle if not ready
 
 	if (isPlaying.value) {
 		pause();
 	} else {
-        // Optional: Seek before playing if needed, though onplay handles it too
-        // if (currentTime.value > 0 && sound.value.state() === 'loaded') {
-        //     sound.value.seek(currentTime.value);
-        // }
+		// Optional: Seek before playing if needed, though onplay handles it too
+		// if (currentTime.value > 0 && sound.value.state() === 'loaded') {
+		//     sound.value.seek(currentTime.value);
+		// }
 		play();
 	}
 };
 
 const toggleLoop = () => {
 	isLooping.value = !isLooping.value;
-    // Optional: Update Howler's loop state if using its native looping
-    // if (sound.value) {
-    //     sound.value.loop(isLooping.value);
-    // }
+	// Optional: Update Howler's loop state if using its native looping
+	// if (sound.value) {
+	//     sound.value.loop(isLooping.value);
+	// }
 };
 
 const toggleMute = () => {
@@ -283,35 +305,34 @@ const toggleMute = () => {
 // --- Watchers ---
 // Watch volumeLevel (user input) to update the actual sound volume
 watch(volumeLevel, (newVolume) => {
-  if (sound.value) {
-    sound.value.volume(newVolume);
-  }
+	if (sound.value) {
+		sound.value.volume(newVolume);
+	}
 });
 
 // --- Lifecycle Hooks ---
 onMounted(() => {
-  loadAndSetAudio(); // Load audio from DB/fetch on mount
+	loadAndSetAudio(); // Load audio from DB/fetch on mount
 });
 
 onUnmounted(() => {
-    // Stop sound and cleanup Howler instance
+	// Stop sound and cleanup Howler instance
 	if (sound.value) {
-        stop(); // Use the stop function from useSound
-        sound.value.unload(); // Important to free Howler resources
-    }
-    // Clear interval
+		stop(); // Use the stop function from useSound
+		sound.value.unload(); // Important to free Howler resources
+	}
+	// Clear interval
 	if (playbackInterval) {
 		clearInterval(playbackInterval);
-        playbackInterval = null;
+		playbackInterval = null;
 	}
-    // Revoke Blob URL to free memory
-    // Check if blobUrl is not the initial empty string before revoking
-	if (blobUrl.value && blobUrl.value !== '') {
+	// Revoke Blob URL to free memory
+	// Check if blobUrl is not the initial empty string before revoking
+	if (blobUrl.value && blobUrl.value !== "") {
 		URL.revokeObjectURL(blobUrl.value);
-        blobUrl.value = ''; // Reset to initial empty string state
+		blobUrl.value = ""; // Reset to initial empty string state
 	}
 });
-
 </script>
 
 <template>
