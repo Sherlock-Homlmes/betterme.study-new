@@ -8,12 +8,12 @@ services:
     ports:
       - 80:80
       - 443:443
-    depends_on:
-      - clock-client
-      - news-client
-      - news-admin-client
-      - server
-      - file-service
+    # depends_on:
+    #   - clock-client
+    #   - news-client
+    #   - news-admin-client
+    #   - server
+    #   - file-service
     restart: on-failure
     networks:
       - nginx-net
