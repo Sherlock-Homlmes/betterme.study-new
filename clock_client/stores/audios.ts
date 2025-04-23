@@ -38,7 +38,7 @@ export const useLocalAudioDBStore = createGlobalState(() => {
 				resolve(db);
 			};
 		});
-	}
+	};
 
 	const getAudioFromDB = (db: IDBDatabase, id: number): Promise<any | null> => {
 		return new Promise((resolve, reject) => {
@@ -72,7 +72,10 @@ export const useLocalAudioDBStore = createGlobalState(() => {
 				resolve(true);
 			};
 			request.onerror = (event: Event) => {
-				console.error("Error storing audio", (event.target as IDBRequest).error);
+				console.error(
+					"Error storing audio",
+					(event.target as IDBRequest).error,
+				);
 				reject((event.target as IDBRequest).error);
 			};
 		});
@@ -129,9 +132,9 @@ export const useLocalAudioDBStore = createGlobalState(() => {
 		blobUrl,
 		audioDataLoaded,
 		getAudioFromDB,
-		loadAndSetAudio
-	}
-})
+		loadAndSetAudio,
+	};
+});
 
 export const useAudioStore = createGlobalState(() => {
 	const API_URL = useRuntimeConfig().public.API_URL;
@@ -139,7 +142,7 @@ export const useAudioStore = createGlobalState(() => {
 	const { isAuth } = useAuthStore();
 
 	// state
-    const tracks = useStorage('audioTracks', [])
+	const tracks = useStorage("audioTracks", []);
 
 	// getters
 
@@ -147,19 +150,19 @@ export const useAudioStore = createGlobalState(() => {
 	const getAudioTracksInfo = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/audios`);
-		if (response?.ok) tracks.value = await response.json()
+		if (response?.ok) tracks.value = await response.json();
 		else {
 			const errorMsg = "Failed to get audio tracks";
 			showError(errorMsg);
 			throw new Error(errorMsg);
 		}
 	};
-    const downloadAudioTracks = async () =>{}
+	const downloadAudioTracks = async () => {};
 
 	const createAudioTrack = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/audios`, "POST");
-		if (response?.ok) console.log(await response.json())
+		if (response?.ok) console.log(await response.json());
 		else {
 			const errorMsg = "Failed to get audio track";
 			showError(errorMsg);
@@ -170,7 +173,7 @@ export const useAudioStore = createGlobalState(() => {
 	const deleteAudioTrack = async () => {
 		if (!isAuth.value) return;
 		const response = await fetchWithAuth(`${API_URL}/audios`, "DELETE");
-		if (response?.ok) console.log()
+		if (response?.ok) console.log();
 		else {
 			const errorMsg = "Failed to delete audio track";
 			showError(errorMsg);
@@ -178,20 +181,20 @@ export const useAudioStore = createGlobalState(() => {
 		}
 	};
 
-	const getCurrentTrack = () => {}
-	const getNextTrack = () => {}
-	const getPreviousTrack = () => {}
+	const getCurrentTrack = () => {};
+	const getNextTrack = () => {};
+	const getPreviousTrack = () => {};
 
 	return {
 		// state
 		// getters
 		// actions
-getAudioTracksInfo,
-downloadAudioTracks,
-        createAudioTrack,
-deleteAudioTrack,
-getCurrentTrack,
-getNextTrack,
-getPreviousTrack,
+		getAudioTracksInfo,
+		downloadAudioTracks,
+		createAudioTrack,
+		deleteAudioTrack,
+		getCurrentTrack,
+		getNextTrack,
+		getPreviousTrack,
 	};
 });

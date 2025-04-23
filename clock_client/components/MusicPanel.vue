@@ -7,7 +7,6 @@ import { useAuthStore } from "@/stores/auth";
 import { useOpenPanels } from "@/stores/openpanels";
 import { useLocalAudioDBStore, useAudioStore } from "@/stores/audios";
 
-
 import {
 	XIcon as CloseIcon,
 	PlayerPlayIcon,
@@ -25,8 +24,8 @@ import ControlButton from "@/components/base/uiButton.vue";
 // --- Standard Component Setup ---
 const runtimeConfig = useRuntimeConfig();
 const { isAuth } = useAuthStore();
-const { blobUrl, audioDataLoaded, loadAndSetAudio} = useLocalAudioDBStore()
-const {} = useAudioStore()
+const { blobUrl, audioDataLoaded, loadAndSetAudio } = useLocalAudioDBStore();
+const {} = useAudioStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
 
@@ -44,7 +43,6 @@ const isVolumeSliderVisible = ref(false);
 const currentTime = ref(0);
 const isSeeking = ref(false); // To prevent updates while dragging slider
 let playbackInterval: ReturnType<typeof setInterval> | null = null;
-
 
 // --- Sound Setup ---
 const { play, pause, isPlaying, duration, sound, stop } = useSound(
