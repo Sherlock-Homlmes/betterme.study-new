@@ -5,6 +5,8 @@ import { useStorage, useRefHistory } from "@vueuse/core";
 import { useMobileSettings } from "@/stores/platforms/mobileSettings";
 import { useAuthStore } from "@/stores/auth";
 import { useOpenPanels } from "@/stores/openpanels";
+import { useLocalAudioDBStore, useAudioStore } from "@/stores/audios";
+
 
 import {
 	XIcon as CloseIcon,
@@ -23,10 +25,10 @@ import ControlButton from "@/components/base/uiButton.vue";
 // --- Standard Component Setup ---
 const runtimeConfig = useRuntimeConfig();
 const { isAuth } = useAuthStore();
+const { blobUrl, audioDataLoaded, loadAndSetAudio} = useLocalAudioDBStore()
+const {} = useAudioStore()
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
-const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
-const isMobile = computed(() => runtimeConfig.public.PLATFORM === "mobile");
 
 const state = reactive({
 	activeTab: 1,
@@ -35,8 +37,6 @@ const state = reactive({
 
 // --- Audio State ---
 // Initialize with empty string to satisfy useSound's type requirement (MaybeRef<string>)
-const blobUrl = ref<string>(""); // Ref to hold the Blob URL for useSound
-const audioDataLoaded = ref(false); // Flag to indicate if audio is ready
 const isLooping = ref(false);
 const volumeLevel = useStorage("music-volume", 0.75); // Persisted volume
 const { history, undo, redo } = useRefHistory(volumeLevel, { capacity: 10 }); // History for unmute
@@ -45,119 +45,6 @@ const currentTime = ref(0);
 const isSeeking = ref(false); // To prevent updates while dragging slider
 let playbackInterval: ReturnType<typeof setInterval> | null = null;
 
-// --- IndexedDB Logic ---
-const dbName = "musicDB";
-const dbVersion = 1;
-const objectStoreName = "audio";
-
-const initDB = (): Promise<IDBDatabase> => {
-	return new Promise((resolve, reject) => {
-		const request = indexedDB.open(dbName, dbVersion);
-		request.onerror = (event: Event) => {
-			console.error("IndexedDB error:", (event.target as IDBRequest).error);
-			reject((event.target as IDBRequest).error);
-		};
-		request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-			const db = (event.target as IDBOpenDBRequest).result;
-			if (!db.objectStoreNames.contains(objectStoreName)) {
-				const objectStore = db.createObjectStore(objectStoreName, {
-					keyPath: "id",
-				});
-				objectStore.createIndex("name", "name", { unique: false });
-			} else {
-			}
-		};
-		request.onsuccess = (event: Event) => {
-			const db = (event.target as IDBOpenDBRequest).result;
-			resolve(db);
-		};
-	});
-};
-
-const getAudioFromDB = (db: IDBDatabase, id: number): Promise<any | null> => {
-	return new Promise((resolve, reject) => {
-		const transaction = db.transaction([objectStoreName], "readonly");
-		const objectStore = transaction.objectStore(objectStoreName);
-		const request = objectStore.get(id);
-		request.onsuccess = (event: Event) => {
-			resolve((event.target as IDBRequest).result);
-		};
-		request.onerror = (event: Event) => {
-			console.error(
-				"Error getting audio from DB:",
-				(event.target as IDBRequest).error,
-			);
-			reject((event.target as IDBRequest).error);
-		};
-	});
-};
-
-const storeAudioInDB = (
-	db: IDBDatabase,
-	audioData: ArrayBuffer,
-	id: number,
-	name: string,
-): Promise<boolean> => {
-	return new Promise((resolve, reject) => {
-		const transaction = db.transaction([objectStoreName], "readwrite");
-		const objectStore = transaction.objectStore(objectStoreName);
-		const request = objectStore.put({ id: id, name: name, data: audioData });
-		request.onsuccess = () => {
-			resolve(true);
-		};
-		request.onerror = (event: Event) => {
-			console.error("Error storing audio", (event.target as IDBRequest).error);
-			reject((event.target as IDBRequest).error);
-		};
-	});
-};
-
-const loadAndSetAudio = async () => {
-	let db: IDBDatabase | null = null;
-	try {
-		db = await initDB();
-		const audioId = 1; // Using a fixed ID for the sample audio
-		const audioName = "sample";
-		const existingAudio = await getAudioFromDB(db, audioId);
-
-		let audioData: ArrayBuffer;
-
-		if (existingAudio && existingAudio.data instanceof ArrayBuffer) {
-			audioData = existingAudio.data;
-		} else {
-			// Fetch the default audio file if not found in DB
-			const response = await fetch("/audio/musical/sample.mp3");
-			if (!response.ok) {
-				throw new Error(`Failed to fetch audio: ${response.statusText}`);
-			}
-			audioData = await response.arrayBuffer();
-			await storeAudioInDB(db, audioData, audioId, audioName);
-		}
-
-		// Create Blob URL
-		const blob = new Blob([audioData], { type: "audio/mp3" }); // Changed MIME type to audio/mp3
-		// Check if blobUrl is not the initial empty string before revoking
-		if (blobUrl.value && blobUrl.value !== "") {
-			URL.revokeObjectURL(blobUrl.value); // Revoke previous URL if exists
-		}
-		blobUrl.value = URL.createObjectURL(blob);
-		audioDataLoaded.value = true; // Mark audio as ready
-	} catch (error) {
-		console.error("Error loading/setting audio:", error);
-		audioDataLoaded.value = false; // Ensure loaded state is false on error
-		// Check if blobUrl is not the initial empty string before revoking
-		if (blobUrl.value && blobUrl.value !== "") {
-			// Clean up potentially stale blob URL on error
-			URL.revokeObjectURL(blobUrl.value);
-			blobUrl.value = ""; // Reset to empty string
-		}
-		// Handle error appropriately (e.g., show a message to the user)
-	} finally {
-		if (db) {
-			db.close(); // Close the DB connection
-		}
-	}
-};
 
 // --- Sound Setup ---
 const { play, pause, isPlaying, duration, sound, stop } = useSound(
@@ -274,20 +161,12 @@ const togglePlay = () => {
 	if (isPlaying.value) {
 		pause();
 	} else {
-		// Optional: Seek before playing if needed, though onplay handles it too
-		// if (currentTime.value > 0 && sound.value.state() === 'loaded') {
-		//     sound.value.seek(currentTime.value);
-		// }
 		play();
 	}
 };
 
 const toggleLoop = () => {
 	isLooping.value = !isLooping.value;
-	// Optional: Update Howler's loop state if using its native looping
-	// if (sound.value) {
-	//     sound.value.loop(isLooping.value);
-	// }
 };
 
 const toggleMute = () => {
