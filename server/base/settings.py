@@ -57,6 +57,9 @@ class Settings(BaseSettings):
 
     GEMINI_AI_API_KEY: str = "NoNeed"
 
+    FILE_SERVICE_URL: str = "https://file-service.betterme.study"
+    FILE_SERVICE_SECRET_KEY: str = "NoNeed"
+
 
 settings = Settings()
 is_dev_env = settings.ENV == ENVEnum.DEV.value
