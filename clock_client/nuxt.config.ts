@@ -76,7 +76,7 @@ export default defineNuxtConfig({
 
 	app: {
 		head: {
-			title: "betterme.study",
+			titleTemplate: '%s | betterme.study',
 			meta: [
 				{ charset: "utf-8" },
 				{
@@ -163,7 +163,7 @@ export default defineNuxtConfig({
 		// Doc: https://github.com/nuxt-community/stylelint-module
 		"@vueuse/nuxt",
 		"@pinia/nuxt",
-		// '@nuxtjs/sitemap'
+		// '@nuxtjs/sitemap', // TODO: Re-commented sitemap module again
 		"nuxt-lodash",
 	],
 	lodash: {
@@ -242,7 +242,7 @@ export default defineNuxtConfig({
 	},
 
 	// sitemap: {
-	//   hostname: process.env.URL ? process.env.URL : 'https://another-pomodoro.netlify.app'
+	//   hostname: process.env.URL ? process.env.URL : 'https://clock.betterme.study'
 	// },
 
 	/*

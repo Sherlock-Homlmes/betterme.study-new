@@ -91,9 +91,11 @@ const remainingTimeString = computed(() => {
 });
 
 const pageTitle = computed(() => {
-	return getCurrentItem.value
+  console.log(timerState.value)
+  if([1,2,3].includes(timerState.value)) return (remainingTimeString.value ? `(${remainingTimeString.value}) ` : '') + (getCurrentItem.value
 		? t("section." + getCurrentItem.value.type).toLowerCase()
-		: "Pomodoro";
+		: "Pomodoro")
+  return 'Pomodoro Timer & Study Tools'
 });
 
 const progressBarSchedules = computed(() => {
@@ -112,7 +114,7 @@ onBeforeMount(async () => {
   <section
     class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50"
   >
-    <Title>{{ (remainingTimeString ? `(${remainingTimeString}) ` : '') + pageTitle }}</Title>
+    <Title>{{ pageTitle }}</Title>
 
     <!-- Dark mode background override -->
     <div class="absolute w-full h-full dark:bg-gray-900" />
@@ -135,6 +137,8 @@ onBeforeMount(async () => {
         'padding-bottom': `${mobileSettingsStore.padding.bottom}px`
       }"
     >
+      <!-- Add H1 heading for SEO -->
+      <h1 class="absolute -left-[9999px] top-auto">Pomodoro Timer and Online Study Tools</h1>
       <AppBar />
       <TimerSwitch
         key="timerswitch"

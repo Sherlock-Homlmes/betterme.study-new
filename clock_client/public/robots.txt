@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap directive should be uncommented and path verified once sitemap generation is working
+# Sitemap: http://clock.local.betterme.study/sitemap.xml
