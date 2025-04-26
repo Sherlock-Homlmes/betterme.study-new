@@ -82,7 +82,7 @@ export default defineNuxtConfig({
 				{
 					name: "viewport",
 					content:
-						"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+						"width=device-width, initial-scale=1.0, maximum-scale=1.0",
 				},
 				{
 					hid: "description",
