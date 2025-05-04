@@ -30,19 +30,6 @@ const settingsStore = useSettings();
     <div class="flex-grow" />
     <CButton
       circle
-      :aria-label="$t('appbar.music')"
-      :importance="ButtonImportance.Filled"
-      :theme="ButtonTheme.Neutral"
-      class="h-11"
-      no-content-theme
-      no-padding
-      inner-class="p-1"
-      @click="openPanels.music = !openPanels.music"
-    >
-      <MusicIcon class="inline-block" />
-    </CButton>
-    <CButton
-      circle
       :theme="openPanels.ai ? ButtonTheme.Primary : ButtonTheme.Neutral"
       :importance="ButtonImportance.Tonal"
       class="transition rounded-full h-11"
@@ -66,6 +53,20 @@ const settingsStore = useSettings();
       @click="openPanels.todo = !openPanels.todo"
     >
       <ChecklistIcon class="inline-block" />
+    </CButton>
+
+    <CButton
+      circle
+      :aria-label="$t('appbar.music')"
+      :importance="ButtonImportance.Filled"
+      :theme="ButtonTheme.Neutral"
+      class="h-11"
+      no-content-theme
+      no-padding
+      inner-class="p-1"
+      @click="openPanels.music = !openPanels.music"
+    >
+      <MusicIcon class="inline-block" />
     </CButton>
 
     <CButton

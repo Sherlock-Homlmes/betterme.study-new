@@ -4,7 +4,7 @@ import SettingsPanel from '@/components/settings/settingsPanel.vue'
 import UserSettingPanel from '@/components/userSettingPanel/index.vue'
 import AIChatPanel from '@/components/AIChatPanel/index.vue'
 import TodoList from '~~/components/todoList/todoList.vue'
-import MusicPanel from '~~/components/MusicPanel.vue'
+import MusicPanel from '~~/components/MusicPanel/index.vue'
 import { useOpenPanels } from '~~/stores/openpanels'
 import { usePomodoroStore } from "~~/stores/pomodoros";
 import { useSettings } from '~~/stores/settings'
