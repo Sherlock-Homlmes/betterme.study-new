@@ -33,7 +33,8 @@
 	"appbar": {
 		"settings": "Open settings",
 		"todo": "Open task list",
-		"ai": "ai"
+		"ai": "ai",
+		"music": "Music"
 	},
 	"timer": {
 		"approximate": {

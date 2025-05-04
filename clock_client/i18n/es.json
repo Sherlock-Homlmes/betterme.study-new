@@ -21,7 +21,8 @@
 	},
 	"appbar": {
 		"settings": "Abrir ajustes",
-		"todo": "Abrir lista de tareas"
+		"todo": "Abrir lista de tareas",
+		"music": "Música"
 	},
 	"timer": {
 		"approximate": {

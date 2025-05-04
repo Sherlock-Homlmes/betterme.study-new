@@ -7,6 +7,7 @@ import {
 } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "~~/components/base/uiButton.vue";
+import { MusicIcon } from "vue-tabler-icons";
 import ScheduleView from "@/components/schedule/scheduleDisplay.vue";
 import { useOpenPanels } from "@/stores/openpanels";
 import { useSettings } from "~~/stores/settings";
@@ -52,6 +53,20 @@ const settingsStore = useSettings();
       @click="openPanels.todo = !openPanels.todo"
     >
       <ChecklistIcon class="inline-block" />
+    </CButton>
+
+    <CButton
+      circle
+      :aria-label="$t('appbar.music')"
+      :importance="ButtonImportance.Filled"
+      :theme="ButtonTheme.Neutral"
+      class="h-11"
+      no-content-theme
+      no-padding
+      inner-class="p-1"
+      @click="openPanels.music = !openPanels.music"
+    >
+      <MusicIcon class="inline-block" />
     </CButton>
 
     <CButton

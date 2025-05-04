@@ -3,6 +3,7 @@ from base.database.mongodb.async_db import client
 
 from .users import Users, UserSettings, UserRoleEnum
 
+from .clock.audios import Audios
 from .clock.todolist import TodoList
 from .clock.taskcategories import TaskCategories
 from .clock.pomodoros import Pomodoros, PomodoroStatusEnum
@@ -14,7 +15,15 @@ from .news.secret_keys import SecretKeys
 
 from .discord.users import Users as DiscordUsers
 
-clock_document_models = [Users, UserSettings, TodoList, TaskCategories, Pomodoros, ChatChannels]
+clock_document_models = [
+    Users,
+    UserSettings,
+    TodoList,
+    TaskCategories,
+    Pomodoros,
+    ChatChannels,
+    Audios,
+]
 news_document_models = [
     Posts,
     DraftPosts,

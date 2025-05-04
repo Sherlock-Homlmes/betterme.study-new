@@ -6,6 +6,12 @@ import os
 import sys
 import shutil
 import tempfile
+import time  # Import the time module
+import random
+from fastapi import HTTPException
+from utils.tebi import upload_audio
+from yt_dlp.utils import DownloadError
+from base.database.redis import queue
 
 
 # --- Main Download Function ---
@@ -91,7 +97,6 @@ def download_audio(url, output_path=".cache/audios") -> str:
         # --- Step 2: Convert using ffmpeg-python ---
         final_mp3_filename = f"{original_filename_base}.mp3"
         final_mp3_path = os.path.join(output_path, final_mp3_filename)
-        print(final_mp3_path, 1111111)
 
         # Step 3 (Cleanup) is handled in the finally block
         (
@@ -130,3 +135,26 @@ def download_audio(url, output_path=".cache/audios") -> str:
         return final_mp3_filename
     else:
         raise RuntimeError("Audio download and conversion failed for an unknown reason.")
+
+
+async def process_audio(audio_url: str):
+    """
+    Processes the audio from the given URL.
+    """
+    print(len(queue), "lenth")
+    if len(queue) > 0:
+        print("Worker is sleeping...")
+        sleep_time = random.randint(10, 25)
+        time.sleep(sleep_time)
+
+    audio_name = download_audio(audio_url)
+    try:
+        storage_url = upload_audio(audio_name)
+    except DownloadError as e1:
+        print(e1)
+        raise HTTPException(status_code=400, detail="Invalid audio source")
+    except RuntimeError as e2:
+        print(e2)
+        raise HTTPException(status_code=400, detail="Server error in when processing")
+    time.sleep(10)  # Sleep for 10 seconds after processing
+    return {"link": storage_url}

@@ -18,6 +18,8 @@ beanie = "^1.29.0"
 yt-dlp = "^2025.3.31"
 aiohttp = "^3.11.16"
 aiofiles = "^24.1.0"
+rq = "^1.16.0"
+redis = "^5.0.4"
 
 [tool.ruff]
 line-length = 100

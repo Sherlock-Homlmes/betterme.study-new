@@ -19,3 +19,13 @@ class AudioMappingCreate(BaseModel):
         if not (re.match(youtube_pattern, v) or re.match(soundcloud_pattern, v)):
             raise ValueError("Invalid audio URL. Only YouTube and SoundCloud URLs are accepted.")
         return v
+
+
+class AudioMappingResponse(BaseModel):
+    """
+    Schema for the response when an audio mapping is created or retrieved.
+    """
+
+    link: str
+    song_img: Optional[str] = None
+    artist_name: Optional[str] = None

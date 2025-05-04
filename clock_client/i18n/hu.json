@@ -21,7 +21,8 @@
 	},
 	"appbar": {
 		"settings": "Beállítások megnyitása",
-		"todo": "Teendők megnyitása"
+		"todo": "Teendők megnyitása",
+		"music": "Zene"
 	},
 	"timer": {
 		"approximate": {
