@@ -25,7 +25,8 @@
 		"marked": "^15.0.8",
 		"pinia": "^2.1.7",
 		"vue": "^3.4.21",
-		"vue-tabler-icons": "^2.21.0"
+		"vue-tabler-icons": "^2.21.0",
+		"vue3-youtube": "^0.1.9"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.24.0",
