@@ -80,7 +80,6 @@ const onPlayerStateChange = (event: any) => {
 	// 0: ended, 1: playing, 2: paused, 3: buffering, 5: video cued
 	if (event.data === 0) {
 		// Video ended
-		console.log("YouTube video ended, looping...");
 		youtubePlayerRef.value?.player?.playVideo(); // Replay the video
 	}
 };
@@ -169,7 +168,7 @@ watchOnce(
 			if (soundPlayer.volume.value !== 0) soundPlayer.play();
 		});
 
-		// await until(() => typeof youtubePlayerRef.value?.player?.playVideo === "function").toBe(true)
+		// await until(() => youtubePlayerRef.value?.ready).toBe(true)
 		// toggleYoutubeMute(true);
 	},
 );

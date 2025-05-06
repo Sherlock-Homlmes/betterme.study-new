@@ -14,14 +14,14 @@ class Audios(Document):
     corresponding storage URL after download.
     """
 
-    created_by: str
+    created_by: Optional[str] = None
     audio_url: Indexed(str, unique=True) = Field(
         description="The original URL of the audio source."
     )
     storage_url: str = Field(description="The URL where the downloaded audio is stored.")
     metadata: Optional[AudioMetadata] = None
-    request_time: int = 1
 
     async def increase_request_time(self):
-        self.request_time += 1
-        await self.save()
+        pass
+        # self.request_time += 1
+        # await self.save()

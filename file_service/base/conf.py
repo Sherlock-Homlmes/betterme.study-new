@@ -41,6 +41,8 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY_ID: str
     AWS_ACCESS_ACCESS_KEY: str
     AWS_BUCKET: str
+    CLOUDFLARE_ACCOUNT_ID: str
+    CLOUDFLARE_R2_PUBLIC_URL: str
 
 
 settings = Settings()

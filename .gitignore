@@ -209,5 +209,5 @@ tina-lock.json
 
 client(store)
 
-serviceworker.js
+# serviceworker.js
 workbox-*.js

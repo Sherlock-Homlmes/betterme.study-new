@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse, FileResponse
 from schemas.images import CreateLeaderboardImagePayload
 
 from .leaderboard import generate_leaderboard_image
-from utils.image_handle import save_image
+from utils.image_module import save_image
 
 router = APIRouter(
     prefix="/images",

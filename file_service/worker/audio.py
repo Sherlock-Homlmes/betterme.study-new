@@ -9,20 +9,24 @@ import tempfile
 import time  # Import the time module
 import random
 from fastapi import HTTPException
-from utils.tebi import upload_audio
+from utils.image_module import upload_audio
 from yt_dlp.utils import DownloadError
 from base.database.redis import queue
+import beanie
+from models import document_models
+from base.database.mongodb import client
+from models.audios import Audios
 
 
 # --- Main Download Function ---
 def download_audio(url, output_path=".cache/audios") -> str:
     """
     Downloads audio from a supported URL (YouTube, SoundCloud, etc.) using yt-dlp
-    and converts it to MP3 using ffmpeg.
+    and converts it to Opus using ffmpeg.
 
     Args:
         url (str): The URL of the audio/video to download.
-        output_path (str): The directory to save the final MP3 file.
+        output_path (str): The directory to save the final Opus file.
                            Defaults to the current directory.
     """
     # Use a temporary directory for the initial download to avoid filename conflicts
@@ -30,14 +34,14 @@ def download_audio(url, output_path=".cache/audios") -> str:
     temp_dir = tempfile.mkdtemp(prefix="audio_dl_")
 
     downloaded_file_path = None
-    final_mp3_path = None
+    final_opus_path = None
     original_filename_base = "unknown_audio"  # Default base name
 
     # --- yt-dlp options ---
     ydl_opts = {
         "format": "bestaudio/best",
         "extractaudio": True,
-        "audioformat": "mp3",
+        "audioformat": "opus",  # Changed to opus
         "outtmpl": {
             "default": os.path.join(temp_dir, "%(title)s.%(ext)s"),
         },
@@ -89,28 +93,39 @@ def download_audio(url, output_path=".cache/audios") -> str:
             )
             raise yt_dlp.utils.DownloadError("Download completed, but no output file found.")
 
-        # Take the first file found in the temp directory
-        downloaded_file_path = os.path.join(temp_dir, downloaded_files[0])
         # Update base name in case it was sanitized differently than expected
-        original_filename_base = os.path.splitext(downloaded_files[0])[0]
+        downloaded_filename = downloaded_files[0]
+        original_filename_base, original_ext = os.path.splitext(downloaded_filename)
 
-        # --- Step 2: Convert using ffmpeg-python ---
-        final_mp3_filename = f"{original_filename_base}.mp3"
-        final_mp3_path = os.path.join(output_path, final_mp3_filename)
+        final_opus_filename = f"{original_filename_base}.opus"
+        final_opus_path = os.path.join(output_path, final_opus_filename)
 
-        # Step 3 (Cleanup) is handled in the finally block
-        (
-            ffmpeg.input(downloaded_file_path)
-            .output(
-                final_mp3_path,
-                audio_bitrate="192k",
-                **{"acodec": "libmp3lame"},  # Specify MP3 codec
+        # --- Step 2: Check if conversion is needed ---
+        if original_ext.lower() == ".opus":
+            print(
+                f"Downloaded file {downloaded_filename} is already in Opus format. Skipping conversion."
             )
-            .overwrite_output()  # Overwrite if MP3 exists
-            .run(
-                cmd="ffmpeg", capture_stdout=True, capture_stderr=True
-            )  # Use ffmpeg command, capture output
-        )
+            # Ensure output directory exists
+            os.makedirs(output_path, exist_ok=True)
+            # Copy the file directly
+            shutil.copy2(os.path.join(temp_dir, downloaded_filename), final_opus_path)
+        else:
+            print(
+                f"Downloaded file {downloaded_filename} is in {original_ext} format. Converting to Opus."
+            )
+            # Convert using ffmpeg-python
+            (
+                ffmpeg.input(os.path.join(temp_dir, downloaded_filename))
+                .output(
+                    final_opus_path,
+                    audio_bitrate="128k",  # Opus is efficient, 128k is good quality
+                    **{"acodec": "libopus"},  # Specify Opus codec
+                )
+                .overwrite_output()  # Overwrite if Opus exists
+                .run(
+                    cmd="ffmpeg", capture_stdout=True, capture_stderr=True
+                )  # Use ffmpeg command, capture output
+            )
 
     except yt_dlp.utils.DownloadError as e:
         raise RuntimeError(f"yt-dlp download error: {e}") from e
@@ -131,8 +146,8 @@ def download_audio(url, output_path=".cache/audios") -> str:
                     file=sys.stderr,
                 )
 
-    if final_mp3_path and os.path.exists(final_mp3_path):
-        return final_mp3_filename
+    if final_opus_path and os.path.exists(final_opus_path):
+        return final_opus_filename
     else:
         raise RuntimeError("Audio download and conversion failed for an unknown reason.")
 
@@ -146,6 +161,7 @@ async def process_audio(audio_url: str):
         print("Worker is sleeping...")
         sleep_time = random.randint(10, 25)
         time.sleep(sleep_time)
+    start_time = time.time()
 
     audio_name = download_audio(audio_url)
     try:
@@ -156,5 +172,13 @@ async def process_audio(audio_url: str):
     except RuntimeError as e2:
         print(e2)
         raise HTTPException(status_code=400, detail="Server error in when processing")
+    await beanie.init_beanie(
+        database=client.file_service,
+        document_models=document_models,
+    )
+    await Audios(
+        audio_url="audio_url",
+        storage_url=storage_url,
+    ).insert()
+    print("--- Took %s seconds ---" % (time.time() - start_time))
     time.sleep(10)  # Sleep for 10 seconds after processing
-    return {"link": storage_url}
