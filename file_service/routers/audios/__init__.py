@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, status
 from fastapi.responses import JSONResponse
 from schemas.audios import AudioMappingCreate
 from worker import process_audio
-from base.database.redis import queue
+from base.database.redis import high_priority_queue, low_priority_queue
 
 router = APIRouter(
     prefix="/audios",
@@ -24,6 +24,14 @@ async def create_audio_mapping(
     Creates a new audio mapping record in the database.
     **audio_url**: The original URL of the audio (e.g., Spotify, YouTube).
     """
-    # Check if mapping already exists (optional, but good practice)
-    queue.enqueue(process_audio, payload.audio_url)
+    audio_url = str(payload.audio_url)
+    if (
+        audio_url.startswith("https://www.youtube.com/watch")
+        or audio_url.startswith("https://youtube.com/watch")
+        or audio_url.startswith("https://www.music.youtube.com/watch")
+        or audio_url.startswith("https://music.youtube.com/watch")
+    ):
+        low_priority_queue.enqueue(process_audio, args=(payload.audio_url, "low"))
+    else:
+        high_priority_queue.enqueue(process_audio, args=(payload.audio_url, "high"))
     return {"message": "Audio processing initiated"}

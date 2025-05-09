@@ -11,7 +11,7 @@ import random
 from fastapi import HTTPException
 from utils.image_module import upload_audio
 from yt_dlp.utils import DownloadError
-from base.database.redis import queue
+from base.database.redis import low_priority_queue, high_priority_queue
 import beanie
 from models import document_models
 from base.database.mongodb import client
@@ -152,12 +152,11 @@ def download_audio(url, output_path=".cache/audios") -> str:
         raise RuntimeError("Audio download and conversion failed for an unknown reason.")
 
 
-async def process_audio(audio_url: str):
+async def process_audio(audio_url: str, priority: str):
     """
     Processes the audio from the given URL.
     """
-    print(len(queue), "lenth")
-    if len(queue) > 0:
+    if priority == "low" and len(low_priority_queue) > 0:
         print("Worker is sleeping...")
         sleep_time = random.randint(10, 25)
         time.sleep(sleep_time)
@@ -181,4 +180,3 @@ async def process_audio(audio_url: str):
         storage_url=storage_url,
     ).insert()
     print("--- Took %s seconds ---" % (time.time() - start_time))
-    time.sleep(10)  # Sleep for 10 seconds after processing

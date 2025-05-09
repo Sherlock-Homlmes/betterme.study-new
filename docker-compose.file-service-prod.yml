@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  file-service:
+    image: bettermie/file-service
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/file_service
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - ENV=DEV
+    networks:
+      - common-net
+    ports:
+      - 8765:8080
+    command:
+      [
+        "uvicorn",
+        "main:app",
+        "--reload",
+        "--host=0.0.0.0",
+        "--port=8080",
+        "--workers=3",
+      ]
+    entrypoint: ["poetry", "run"]
+    depends_on:
+      - file-service-worker
+      - file-service-worker-high-priority
+
+  file-service-worker:
+    image: bettermie/file-service
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/file_service
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - ENV=DEV
+    networks:
+      - common-net
+    command: ["rq", "worker", "high", "low", "--url", "redis://redis:6379"]
+    entrypoint: ["poetry", "run"]
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  file-service-worker-high-priority:
+    image: bettermie/file-service
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/file_service
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - ENV=DEV
+    networks:
+      - common-net
+    command: ["rq", "worker", "high", "--url", "redis://redis:6379"]
+    entrypoint: ["poetry", "run"]
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis:alpine
+    restart: always
+    networks:
+      - common-net
+
+#Docker Networks
+networks:
+  common-net:
+    driver: overlay

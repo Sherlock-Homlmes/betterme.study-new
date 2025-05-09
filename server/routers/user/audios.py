@@ -13,55 +13,6 @@ router = APIRouter(
 )
 
 
-def generate_prefixes(url: str):
-    """Generates all possible prefixes of a given URL."""
-    prefixes = []
-    # Handle scheme and domain
-    # Find where the path starts
-    scheme_end = url.find("://")
-    if scheme_end != -1:
-        # Add prefixes up to scheme://
-        for i in range(1, scheme_end + 3):  # Include ://
-            prefixes.append(url[:i])
-        path_start = url.find("/", scheme_end + 3)
-        if path_start == -1:  # No path, just domain
-            for i in range(scheme_end + 3, len(url) + 1):
-                prefixes.append(url[:i])
-        else:  # Has path
-            # Add prefixes of the domain part including trailing /
-            for i in range(scheme_end + 3, path_start + 1):
-                prefixes.append(url[:i])
-
-            # Add prefixes for each path segment
-            current_prefix = url[:path_start]
-            for segment in url[path_start:].split("/"):
-                if segment:  # Avoid empty segments from double slashes or trailing slash
-                    current_prefix += "/" + segment
-                elif current_prefix and url[len(current_prefix) :].startswith("/"):
-                    # Handle cases like .../path//segment or .../path/
-                    current_prefix += "/"
-                prefixes.append(current_prefix)
-
-    else:  # No scheme, just treat as path
-        parts = url.split("/")
-        current_prefix = ""
-        for part in parts:
-            if current_prefix:
-                current_prefix += "/" + part if part else "/"
-            else:
-                current_prefix = part  # First part
-
-            if current_prefix:
-                prefixes.append(current_prefix)
-
-    # Add the full URL itself
-    if url not in prefixes:
-        prefixes.append(url)
-
-    # Remove duplicates (optional, but good practice)
-    return sorted(list(set(prefixes)))
-
-
 @router.get(
     "/{audio_link:path}",
     summary="Get Audio Mapping",

@@ -95,6 +95,7 @@ services:
     depends_on:
       - redis
       - file-service-worker
+      - file-service-worker-high-priority
 
   file-service-worker:
     build:
@@ -110,7 +111,26 @@ services:
     networks:
       - nginx-net
       - redis-db
-    command: ["rq", "worker", "--url", "redis://redis:6379"]
+    command: ["rq", "worker", "high", "low", "--url", "redis://redis:6379"]
+    entrypoint: ["poetry", "run"]
+    depends_on:
+      - redis
+
+  file-service-worker-high-priority:
+    build:
+      context: ./
+      dockerfile: ./others/docker/file_service/Dockerfile
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/file_service
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - ENV=DEV
+    networks:
+      - nginx-net
+      - redis-db
+    command: ["rq", "worker", "high", "--url", "redis://redis:6379"]
     entrypoint: ["poetry", "run"]
     depends_on:
       - redis
@@ -119,7 +139,7 @@ services:
     image: redis:alpine
     restart: always
     networks:
-      - nginx-net
+      - redis-db
 
   mongo:
     image: mongo
