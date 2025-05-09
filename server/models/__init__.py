@@ -3,7 +3,7 @@ from base.database.mongodb.async_db import client
 
 from .users import Users, UserSettings, UserRoleEnum
 
-from .clock.audios import Audios
+from .file_service.audios import Audios
 from .clock.todolist import TodoList
 from .clock.taskcategories import TaskCategories
 from .clock.pomodoros import Pomodoros, PomodoroStatusEnum
@@ -30,6 +30,7 @@ news_document_models = [
     SecretKeys,
 ]
 discord_document_models = [DiscordUsers]
+file_service_models = [Audios]
 
 
 async def connect_db():
@@ -44,5 +45,10 @@ async def connect_db():
     await beanie.init_beanie(
         database=client.discord_betterme,
         document_models=discord_document_models,
+    )
+
+    await beanie.init_beanie(
+        database=client.file_service,
+        document_models=file_service_models,
     )
     print("Connected to db")

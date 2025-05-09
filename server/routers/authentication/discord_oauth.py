@@ -10,7 +10,7 @@ from beanie.odm.operators.update.general import Set
 
 # local
 from . import router
-from .jwt_auth import auth_handler
+from .auth import auth_handler
 from all_env import (
     DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET,

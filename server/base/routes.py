@@ -16,9 +16,20 @@ from routers.user import posts, user, ai, audios
 from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as admin_posts
 
 api_router = APIRouter()
+
+# single auth method
 non_auth_modules = (authentication, posts)
-auth_modules = (pomodoros, todolist, user, ai, audios)
+auth_modules = (
+    pomodoros,
+    todolist,
+    user,
+    ai,
+)
 news_admin_modules = (crawlers, draft_posts, admin_posts, admin_ai)
+access_key_modules = ()
+
+# multiple auth method
+access_key_or_jwt_modules = (audios,)
 
 router = APIRouter(
     prefix="/api",
@@ -43,6 +54,13 @@ for module in news_admin_modules:
         module.router,
         prefix="/api",
         dependencies=[Depends(auth_handler.news_admin_auth_wrapper)],
+    )
+
+for module in access_key_or_jwt_modules:
+    api_router.include_router(
+        module.router,
+        prefix="/api",
+        dependencies=[Depends(auth_handler.access_token_or_jwt_auth_wrapper)],
     )
 
 

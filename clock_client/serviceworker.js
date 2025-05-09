@@ -21,10 +21,10 @@ if (!self.define) {
 			("document" in self ? document.currentScript.src : "") ||
 			location.href;
 		if (s[a]) return;
-		let r = {};
-		const o = (e) => i(e, a),
-			d = { module: { uri: a }, exports: r, require: o };
-		s[a] = Promise.all(n.map((e) => d[e] || o(e))).then((e) => (c(...e), r));
+		let d = {};
+		const r = (e) => i(e, a),
+			o = { module: { uri: a }, exports: d, require: r };
+		s[a] = Promise.all(n.map((e) => o[e] || r(e))).then((e) => (c(...e), d));
 	};
 }
 define(["./workbox-fa5dbb3c"], function (e) {
@@ -58,9 +58,9 @@ define(["./workbox-fa5dbb3c"], function (e) {
 				{ url: "jsconfig.json", revision: "067bb768824c14fda1bb7415145a9687" },
 				{
 					url: "package-lock.json",
-					revision: "556c88c22418b2595ddb854d830c7289",
+					revision: "62e02482ed25943dc481cde63bb4371d",
 				},
-				{ url: "package.json", revision: "c4c466f617fb6223882bf5bb3652cceb" },
+				{ url: "package.json", revision: "d32f840ee5ee77a7bd72adf469cad45d" },
 				{
 					url: "public/app_manifest.json",
 					revision: "606482bff098f527aa7359fa0a7dca3c",

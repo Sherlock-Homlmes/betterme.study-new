@@ -10,7 +10,7 @@ from mongomock_motor import AsyncMongoMockClient
 # local
 from models import news_document_models, clock_document_models, discord_document_models
 from base.routes import api_router
-from routers.authentication.jwt_auth import auth_handler
+from routers.authentication.auth import auth_handler
 
 app = FastAPI()
 app.include_router(api_router)

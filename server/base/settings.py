@@ -34,8 +34,9 @@ class Settings(BaseSettings):
     # TODO: change this to ENVEnum when lib support
     ENV: str = ENVEnum.DEV.value
 
-    SECRET_KEY: str = "NoNeed"
-    ENCRYPT_KEY: str = "NoNeed"
+    SECRET_KEY: str
+    ENCRYPT_KEY: str
+    ACCESS_KEY: str
 
     DATABASE_URL: str
 
@@ -55,10 +56,10 @@ class Settings(BaseSettings):
     FACEBOOK_ACCESS_TOKEN: str = "NoNeed"
     FACEBOOK_APP_SECRET: str = "NoNeed"
 
-    GEMINI_AI_API_KEY: str = "NoNeed"
+    GEMINI_AI_API_KEY: str
 
     FILE_SERVICE_URL: str = "https://file-service.betterme.study"
-    FILE_SERVICE_SECRET_KEY: str = "NoNeed"
+    FILE_SERVICE_SECRET_KEY: str = "example"
 
 
 settings = Settings()

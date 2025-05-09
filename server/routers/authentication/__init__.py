@@ -7,6 +7,7 @@ router = APIRouter(
 )
 
 from .auth import *
+from .general_auth import *
 from .discord_oauth import *
 from .facebook_oauth import *
 from .google_oauth import *

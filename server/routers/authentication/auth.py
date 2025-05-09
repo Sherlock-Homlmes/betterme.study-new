@@ -1,78 +1,94 @@
-# fastapi
-from fastapi import HTTPException, Depends
-from fastapi.responses import JSONResponse
-
-# default
 from typing import Optional
 
-# local
-from . import router
-from schemas.auth import RegisterUser, RegisterUserResponse, LoginUser
-from .jwt_auth import auth_handler
-from .google_oauth import GoogleOauth2
-from .facebook_oauth import FaceBookOauth2
+#  fastapi
+from fastapi import HTTPException, status, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, APIKeyHeader
 
-from models import Users
-from utils.time_modules import vn_now
-from all_env import DISCORD_OAUTH_URL
+# default
+import jwt
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
 
-
-@router.post("/register", status_code=201)
-async def register(user: RegisterUser) -> RegisterUserResponse:
-    print(user)
-    user_exist = await Users.find_one(Users.email == user.email)
-    if user_exist:
-        raise HTTPException(status_code=400, detail="email is taken")
-
-    hashed_password = auth_handler.get_password_hash(user.password)
-    user = Users(
-        email=user.email,
-        password=hashed_password,
-        user_type="normal",
-        name=user.name,
-    )
-    await user.insert()
-    return user.get_info()
+from base.settings import settings
+from all_env import SECRET_KEY
+from models import UserRoleEnum
 
 
-@router.post("/login")
-async def login(user: LoginUser):
-    # authorize and get JWT token
-    dbuser = await Users.find_one(Users.email == user.email)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not exist")
-    elif not auth_handler.verify_password(user.password, dbuser.password):
-        raise HTTPException(status_code=401, detail="Invalid email and/or password")
+class AuthHandler:
+    security = HTTPBearer()
+    access_key_security = APIKeyHeader(name="Authorization", auto_error=False)
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    secret = SECRET_KEY
 
-    dbuser.last_logged_in_at = vn_now()
-    await dbuser.save()
+    def get_password_hash(self, password):
+        return self.pwd_context.hash(password)
 
-    token = auth_handler.encode_token(dbuser.get_info())
-    return {"token": token}
+    def verify_password(self, plain_password, hashed_password):
+        return self.pwd_context.verify(plain_password, hashed_password)
+
+    def encode_token(self, user):
+        payload = {
+            "exp": datetime.utcnow() + timedelta(days=30),
+            "iat": datetime.utcnow(),
+            "sub": user,
+        }
+        return jwt.encode(payload, self.secret, algorithm="HS256")
+
+    def decode_token(self, token):
+        try:
+            payload = jwt.decode(token, self.secret, algorithms=["HS256"])
+            return payload["sub"]
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Signature has expired"
+            )
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Server error"
+            )
+
+    def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        return self.decode_token(auth.credentials)
+
+    def news_admin_auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        user = self.decode_token(auth.credentials)
+        if UserRoleEnum.NEWS_ADMIN not in user["roles"]:
+            raise HTTPException(status_code=403, detail="Permission denied")
+        return user
+
+    def token_compare(self, token: str) -> bool:
+        if token != f"Bearer {settings.ACCESS_KEY}":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials",
+            )
+        return True
+
+    def access_token_auth_wrapper(self, token: str = Security(access_key_security)) -> bool:
+        return self.token_compare(token)
+
+    def access_token_or_jwt_auth_wrapper(
+        self,
+        token: Optional[str] = Security(access_key_security),
+        auth: Optional[HTTPAuthorizationCredentials] = Security(security),
+    ) -> bool:
+        exception = None
+
+        # Try access token verification
+        try:
+            return self.token_compare(token)
+        except Exception as e:
+            exception = e
+
+        # Try jwt verification
+        try:
+            return self.decode_token(auth.credentials)
+        except Exception as e:
+            exception = e
+
+        raise exception
 
 
-@router.get("/self", dependencies=[Depends(auth_handler.auth_wrapper)])
-def protected(user: Users = Depends(auth_handler.auth_wrapper)):
-    # TODO: refactor this
-    if not user.get("custom_name"):
-        user["custom_name"] = user["name"]
-    if not user.get("custom_avatar"):
-        user["custom_avatar_url"] = user["avatar_url"]
-    return user
-
-
-@router.get("/oauth-link")
-async def get_oauth_link(
-    discord_link: Optional[bool] = False,
-    google_link: Optional[bool] = False,
-    facebook_link: Optional[bool] = False,
-):
-    response = {}
-    if discord_link:
-        response["discord_link"] = DISCORD_OAUTH_URL
-    if google_link:
-        response["google_link"] = GoogleOauth2().get_oauth_url()
-    if facebook_link:
-        response["facebook_link"] = FaceBookOauth2().get_oauth_url()
-
-    return JSONResponse(response, status_code=200)
+auth_handler = AuthHandler()

@@ -177,7 +177,7 @@ async def process_audio(audio_url: str):
         document_models=document_models,
     )
     await Audios(
-        audio_url="audio_url",
+        audio_url=audio_url,
         storage_url=storage_url,
     ).insert()
     print("--- Took %s seconds ---" % (time.time() - start_time))

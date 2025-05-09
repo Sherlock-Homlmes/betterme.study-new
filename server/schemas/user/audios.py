@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field, validator
 import re
+from ..common_types import HttpUrlString
 
 
 class AudioMappingCreate(BaseModel):
@@ -8,7 +9,7 @@ class AudioMappingCreate(BaseModel):
     Schema for creating a new audio mapping.
     """
 
-    audio_url: str = Field(..., description="The original URL of the audio source.")
+    audio_url: HttpUrlString = Field(..., description="The original URL of the audio source.")
 
     @validator("audio_url")
     def validate_audio_url(cls, v):

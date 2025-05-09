@@ -1,9 +1,10 @@
 # default
+from typing import Annotated
 import datetime
 from typing import Optional, Union, Any
 
 # libraries
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl, AfterValidator
 from bson import ObjectId
 from pydantic_core import core_schema
 
@@ -40,3 +41,6 @@ class PyObjectId(str):
             raise ValueError("Invalid ObjectId")
 
         return ObjectId(value)
+
+
+HttpUrlString = Annotated[HttpUrl, AfterValidator(lambda v: str(v))]
