@@ -91,11 +91,15 @@ const remainingTimeString = computed(() => {
 });
 
 const pageTitle = computed(() => {
-  console.log(timerState.value)
-  if([1,2,3].includes(timerState.value)) return (remainingTimeString.value ? `(${remainingTimeString.value}) ` : '') + (getCurrentItem.value
-		? t("section." + getCurrentItem.value.type).toLowerCase()
-		: "Pomodoro")
-  return 'Pomodoro Timer & Study Tools'
+	console.log(timerState.value);
+	if ([1, 2, 3].includes(timerState.value))
+		return (
+			(remainingTimeString.value ? `(${remainingTimeString.value}) ` : "") +
+			(getCurrentItem.value
+				? t("section." + getCurrentItem.value.type).toLowerCase()
+				: "Pomodoro")
+		);
+	return "Pomodoro Timer & Study Tools";
 });
 
 const progressBarSchedules = computed(() => {
