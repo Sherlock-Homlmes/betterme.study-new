@@ -136,10 +136,20 @@ services:
       - redis
 
   redis:
-    image: redis:alpine
+    build:
+      context: ./
+      dockerfile: ./others/docker/redis/Dockerfile
     restart: always
+    ports:
+      - "6379:80"
+    environment:
+      REDIS_PASSWORD: password
     networks:
       - redis-db
+    volumes:
+      - ./others/docker/redis/redis.conf.template:/usr/local/etc/redis/redis.conf.template
+      - ./others/docker/redis/redis-run.sh:/usr/local/etc/redis/redis-run.sh
+    command: ["sh", "/usr/local/etc/redis/redis-run.sh"]
 
   mongo:
     image: mongo

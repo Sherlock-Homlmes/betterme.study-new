@@ -27,6 +27,15 @@ services:
     depends_on:
       - file-service-worker
       - file-service-worker-high-priority
+    deploy:
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: pause
+        monitor: 60s
 
   file-service-worker:
     image: bettermie/file-service
@@ -36,14 +45,27 @@ services:
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
       - HOME=/tmp
-      - ENV=DEV
     networks:
       - common-net
-    command: ["rq", "worker", "high", "low", "--url", "redis://redis:6379"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "low",
+        "--url",
+        "redis://default:password@widespread-nan-betterme-d2ecf9dd.koyeb.app",
+      ]
     entrypoint: ["poetry", "run"]
     deploy:
       restart_policy:
         condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: pause
+        monitor: 60s
 
   file-service-worker-high-priority:
     image: bettermie/file-service
@@ -53,23 +75,31 @@ services:
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
       - HOME=/tmp
-      - ENV=DEV
     networks:
       - common-net
-    command: ["rq", "worker", "high", "--url", "redis://redis:6379"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "--url",
+        "redis://widespread-nan-betterme-d2ecf9dd.koyeb.app",
+      ]
     entrypoint: ["poetry", "run"]
     deploy:
       replicas: 2
       restart_policy:
         condition: on-failure
-
-  redis:
-    image: redis:alpine
-    restart: always
-    networks:
-      - common-net
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: pause
+        monitor: 60s
 
 #Docker Networks
 networks:
   common-net:
-    driver: overlay
+    # driver: overlay
+    driver: bridge
+# docker swarm join-token manager

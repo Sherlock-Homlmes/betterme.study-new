@@ -1,19 +1,14 @@
 import redis
+import time
 from rq import Queue
+from base.conf import settings
 
 try:
     print("Connection to redis...")
-    # redis_client = redis.Redis(
-    #     host="widespread-nan-betterme-d2ecf9dd.koyeb.app",
-    #     port=80,
-    #     username="default",
-    #     password="password",
-    #     socket_connect_timeout=5,
-    #     decode_responses=True,
-    # )
     redis_client = redis.Redis(
-        host="redis",
-        port=6379,
+        host=settings.REDIS_HOST,
+        port=settings.REDIS_PORT,
+        password=settings.REDIS_PASSWORD,
         socket_connect_timeout=5,
         decode_responses=True,
     )

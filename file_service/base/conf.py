@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     CLOUDFLARE_ACCOUNT_ID: str
     CLOUDFLARE_R2_PUBLIC_URL: str
 
+    REDIS_HOST: str = "redis"
+    REDIS_PORT: int = 80
+    REDIS_PASSWORD: str = "password"
+
 
 settings = Settings()
 is_dev_env = settings.ENV == ENVEnum.DEV.value

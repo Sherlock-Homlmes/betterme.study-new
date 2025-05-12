@@ -1,0 +1,3 @@
+bind 0.0.0.0
+port 80
+requirepass __REDIS_PASSWORD_PLACEHOLDER__
