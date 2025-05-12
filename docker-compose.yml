@@ -144,6 +144,7 @@ services:
       - "6379:80"
     environment:
       REDIS_PASSWORD: password
+      TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template
     networks:
       - redis-db
     volumes:
