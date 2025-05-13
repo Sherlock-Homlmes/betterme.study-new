@@ -147,9 +147,6 @@ services:
       TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template
     networks:
       - redis-db
-    volumes:
-      - ./others/redis/redis.conf.template:/usr/local/etc/redis/redis.conf.template
-      - ./others/redis/redis-run.sh:/usr/local/etc/redis/redis-run.sh
     command: ["sh", "/usr/local/etc/redis/redis-run.sh"]
 
   mongo:
