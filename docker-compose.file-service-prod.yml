@@ -97,6 +97,16 @@ services:
         failure_action: pause
         monitor: 60s
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    command: tunnel run --token ${TUNNEL_TOKEN}
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    networks:
+      - common-net
+    restart: unless-stopped
+
 #Docker Networks
 networks:
   common-net:
