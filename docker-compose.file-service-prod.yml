@@ -100,6 +100,6 @@ services:
 #Docker Networks
 networks:
   common-net:
-    # driver: overlay
-    driver: bridge
+    driver: overlay
+    # driver: bridge
 # docker swarm join-token manager
