@@ -148,8 +148,8 @@ services:
     networks:
       - redis-db
     volumes:
-      - ./others/docker/redis/redis.conf.template:/usr/local/etc/redis/redis.conf.template
-      - ./others/docker/redis/redis-run.sh:/usr/local/etc/redis/redis-run.sh
+      - ./others/redis/redis.conf.template:/usr/local/etc/redis/redis.conf.template
+      - ./others/redis/redis-run.sh:/usr/local/etc/redis/redis-run.sh
     command: ["sh", "/usr/local/etc/redis/redis-run.sh"]
 
   mongo:
