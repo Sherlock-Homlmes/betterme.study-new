@@ -12,8 +12,6 @@ services:
       - ENV=DEV
     networks:
       - common-net
-    ports:
-      - 8765:8080
     command:
       ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--workers=3"]
     entrypoint: ["poetry", "run"]
