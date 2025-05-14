@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     CLOUDFLARE_R2_PUBLIC_URL: str
 
     REDIS_HOST: str = "redis"
-    REDIS_PORT: int = 80
+    REDIS_PORT: int = 6379
     REDIS_PASSWORD: str = "password"
 
 
