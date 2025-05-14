@@ -106,12 +106,13 @@ services:
     working_dir: /var/task/file_service
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
-      - HOME=/tmp
-      - ENV=DEV
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: password
     networks:
       - nginx-net
       - redis-db
-    command: ["rq", "worker", "high", "low", "--url", "redis://redis:6379"]
+    command: ["rq", "worker", "high", "low", "--url", "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
     entrypoint: ["poetry", "run"]
     depends_on:
       - redis
@@ -125,12 +126,13 @@ services:
     working_dir: /var/task/file_service
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
-      - HOME=/tmp
-      - ENV=DEV
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: password
     networks:
       - nginx-net
       - redis-db
-    command: ["rq", "worker", "high", "--url", "redis://redis:6379"]
+    command: ["rq", "worker", "high", "--url", "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
     entrypoint: ["poetry", "run"]
     depends_on:
       - redis
@@ -141,7 +143,7 @@ services:
       dockerfile: ./others/docker/redis/Dockerfile
     restart: always
     ports:
-      - "6379:80"
+      - "6379:6379"
     environment:
       REDIS_PASSWORD: password
       TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template

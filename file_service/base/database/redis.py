@@ -1,7 +1,6 @@
 import redis
-import time
 from rq import Queue
-from base.conf import settings
+from base.conf import settings, is_prod_env
 
 try:
     print("Connection to redis...")
@@ -11,6 +10,7 @@ try:
         password=settings.REDIS_PASSWORD,
         socket_connect_timeout=5,
         decode_responses=True,
+        ssl=is_prod_env,
     )
     redis_client.ping()
     print("Successfully connected to Redis!")
