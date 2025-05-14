@@ -15,14 +15,7 @@ services:
     ports:
       - 8765:8080
     command:
-      [
-        "uvicorn",
-        "main:app",
-        "--reload",
-        "--host=0.0.0.0",
-        "--port=8080",
-        "--workers=3",
-      ]
+      ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--workers=3"]
     entrypoint: ["poetry", "run"]
     deploy:
       restart_policy:
@@ -46,7 +39,15 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     networks:
       - common-net
-    command: ["rq", "worker", "high", "low", "--url", "rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "low",
+        "--url",
+        "rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
+      ]
     entrypoint: ["poetry", "run"]
     deploy:
       restart_policy:
@@ -70,7 +71,14 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     networks:
       - common-net
-    command: ["rq", "worker", "high", "--url", "rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "--url",
+        "rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
+      ]
     entrypoint: ["poetry", "run"]
     deploy:
       replicas: 2
@@ -85,7 +93,7 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflared-tunnel
+    container_name: file-service-cloudflared-tunnel
     command: tunnel run --token ${TUNNEL_TOKEN}
     environment:
       TUNNEL_TOKEN: ${TUNNEL_TOKEN}
@@ -95,9 +103,9 @@ services:
       - file-service
     restart: unless-stopped
 
-#Docker Networks
+# TODO: enable docker swarm when image to arm ready
 networks:
   common-net:
-    driver: overlay
-    # driver: bridge
+    # driver: overlay
+    driver: bridge
 # docker swarm join-token manager

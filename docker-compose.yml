@@ -87,8 +87,6 @@ services:
     networks:
       - nginx-net
       - redis-db
-    ports:
-      - 8765:8080
     command:
       ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
     entrypoint: ["poetry", "run"]
@@ -112,7 +110,15 @@ services:
     networks:
       - nginx-net
       - redis-db
-    command: ["rq", "worker", "high", "low", "--url", "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "low",
+        "--url",
+        "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
+      ]
     entrypoint: ["poetry", "run"]
     depends_on:
       - redis
@@ -132,7 +138,14 @@ services:
     networks:
       - nginx-net
       - redis-db
-    command: ["rq", "worker", "high", "--url", "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0"]
+    command:
+      [
+        "rq",
+        "worker",
+        "high",
+        "--url",
+        "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
+      ]
     entrypoint: ["poetry", "run"]
     depends_on:
       - redis
@@ -142,8 +155,6 @@ services:
       context: ./
       dockerfile: ./others/docker/redis/Dockerfile
     restart: always
-    ports:
-      - "6379:6379"
     environment:
       REDIS_PASSWORD: password
       TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template
