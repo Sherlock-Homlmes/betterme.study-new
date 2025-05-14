@@ -1,5 +1,5 @@
 import beanie
-from base.database.mongodb.async_db import client
+from base.database.mongodb import client
 
 from .users import Users, UserSettings, UserRoleEnum
 
