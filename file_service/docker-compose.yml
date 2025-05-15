@@ -16,6 +16,7 @@ services:
       ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--workers=3"]
     entrypoint: ["poetry", "run"]
     deploy:
+      mode: global
       restart_policy:
         condition: on-failure
       update_config:
@@ -48,6 +49,7 @@ services:
       ]
     entrypoint: ["poetry", "run"]
     deploy:
+      mode: global
       restart_policy:
         condition: on-failure
       update_config:
@@ -79,7 +81,7 @@ services:
       ]
     entrypoint: ["poetry", "run"]
     deploy:
-      replicas: 2
+      replicas: 6
       restart_policy:
         condition: on-failure
       update_config:
@@ -99,7 +101,10 @@ services:
       - common-net
     depends_on:
       - file-service
-    restart: unless-stopped
+    deploy:
+      mode: global
+      restart_policy:
+        condition: unless-stopped
 
 networks:
   common-net:
