@@ -101,9 +101,8 @@ services:
       - file-service
     restart: unless-stopped
 
-# TODO: enable docker swarm when image to arm ready
 networks:
   common-net:
-    # driver: overlay
-    driver: bridge
+    driver: overlay
+    # driver: bridge
 # docker swarm join-token manager
