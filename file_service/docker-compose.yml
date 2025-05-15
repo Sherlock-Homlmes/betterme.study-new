@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   file-service:
-    image: bettermie/file-service
+    image: bettermie/file-service:1.0.1
     volumes:
       - .:/var/task/file_service
     working_dir: /var/task/file_service
@@ -26,7 +26,7 @@ services:
         monitor: 60s
 
   file-service-worker:
-    image: bettermie/file-service
+    image: bettermie/file-service:1.0.1
     volumes:
       - .:/var/task/file_service
     working_dir: /var/task/file_service
@@ -58,7 +58,7 @@ services:
         monitor: 60s
 
   file-service-worker-high-priority:
-    image: bettermie/file-service
+    image: bettermie/file-service:1.0.1
     volumes:
       - .:/var/task/file_service
     working_dir: /var/task/file_service
