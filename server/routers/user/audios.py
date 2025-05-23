@@ -46,12 +46,11 @@ async def get_audio_mapping(
 
     if not audio:
         async with aiohttp.ClientSession() as session:
-            headers = {"Authorization": settings.FILE_SERVICE_SECRET_KEY}
-            url = settings.FILE_SERVICE_URL + "/api/audios"
+            print(1111, settings.FILE_SERVICE_SECRET_KEY)
             res = await session.post(
-                url=url,
+                url=settings.FILE_SERVICE_URL + "/api/audios",
                 json={"audio_url": audio_url},
-                headers=headers,
+                headers={"Authorization": settings.FILE_SERVICE_SECRET_KEY},
             )
             if res.status != 202:
                 raise HTTPException(
