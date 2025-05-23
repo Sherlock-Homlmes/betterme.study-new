@@ -56,6 +56,13 @@ for module in news_admin_modules:
         dependencies=[Depends(auth_handler.news_admin_auth_wrapper)],
     )
 
+for module in access_key_modules:
+    api_router.include_router(
+        module.router,
+        prefix="/api",
+        dependencies=[Depends(auth_handler.access_token_auth_wrapper)],
+    )
+
 for module in access_key_or_jwt_modules:
     api_router.include_router(
         module.router,

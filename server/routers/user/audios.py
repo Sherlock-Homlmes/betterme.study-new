@@ -1,7 +1,7 @@
 import aiohttp
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException
 
-from schemas.user import AudioMappingCreate
+from schemas.user import validate_audio_url
 from base.settings import settings
 from models import Audios
 from pydantic import HttpUrl
@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get(
+@router.put(
     "/{audio_link:path}",
     summary="Get Audio Mapping",
     description="Get a new mapping between an original audio URL and its storage URL.",
@@ -24,7 +24,7 @@ async def get_audio_mapping(
     """
     Gets a new audio mapping record in the database.
     """
-    audio_url = str(audio_link)
+    audio_url = validate_audio_url(audio_link)
     if audio_url.startswith("https://www.youtube.com/watch"):
         audio = await Audios.find_one(
             {
@@ -45,33 +45,12 @@ async def get_audio_mapping(
         audio = await Audios.find_one(Audios.audio_url == audio_url)
 
     if not audio:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Audio not found")
-
-    return {"link": audio.storage_url}
-
-
-@router.post(
-    "/",
-    status_code=status.HTTP_202_ACCEPTED,
-    summary="Create Audio Mapping",
-    description="Create a new mapping between an original audio URL and its storage URL.",
-)
-async def create_audio_mapping(
-    payload: AudioMappingCreate,
-):
-    """
-    Creates a new audio mapping record in the database.
-    """
-    try:
-        await get_audio_mapping(payload.audio_url)
-        return {"message": "Audio already created"}
-    except HTTPException:
         async with aiohttp.ClientSession() as session:
             headers = {"Authorization": settings.FILE_SERVICE_SECRET_KEY}
             url = settings.FILE_SERVICE_URL + "/api/audios"
             res = await session.post(
                 url=url,
-                json=payload.dict(),
+                json={"audio_url": audio_url},
                 headers=headers,
             )
             if res.status != 202:
@@ -79,3 +58,5 @@ async def create_audio_mapping(
                     status_code=500, detail="Unexpected error happened when processing audio url"
                 )
             return {"message": "Audio processing initiated"}
+
+    return {"link": audio.storage_url}
