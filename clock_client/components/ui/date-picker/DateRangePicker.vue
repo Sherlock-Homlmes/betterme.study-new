@@ -1,103 +1,94 @@
 <script setup lang="ts">
-import type { DateValue } from "@internationalized/date"
-import type { DateRange } from "reka-ui"
+import type { DateValue } from "@internationalized/date";
+import type { DateRange } from "reka-ui";
 
-import type { Grid } from "reka-ui/date"
-import type { Ref } from "vue"
-import {
-  CalendarDate,
+import type { Grid } from "reka-ui/date";
+import type { Ref } from "vue";
+import { CalendarDate, isEqualMonth } from "@internationalized/date";
 
-  isEqualMonth,
-} from "@internationalized/date"
-
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { RangeCalendarRoot, useDateFormatter } from "reka-ui";
+import { createMonth, toDate } from "reka-ui/date";
+import { ref, watch } from "vue";
+import { cn } from "@/utils/index";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-vue-next"
-import { RangeCalendarRoot, useDateFormatter } from "reka-ui"
-import { createMonth, toDate } from "reka-ui/date"
-import { ref, watch } from "vue"
-import { cn } from "@/utils/index"
-import { Button, buttonVariants } from "@/components/ui/button"
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  RangeCalendarCell,
-  RangeCalendarCellTrigger,
-  RangeCalendarGrid,
-  RangeCalendarGridBody,
-  RangeCalendarGridHead,
-  RangeCalendarGridRow,
-  RangeCalendarHeadCell,
-} from "@/components/ui/range-calendar"
+	RangeCalendarCell,
+	RangeCalendarCellTrigger,
+	RangeCalendarGrid,
+	RangeCalendarGridBody,
+	RangeCalendarGridHead,
+	RangeCalendarGridRow,
+	RangeCalendarHeadCell,
+} from "@/components/ui/range-calendar";
 
 const value = ref({
-  start: new CalendarDate(2022, 1, 20),
-  end: new CalendarDate(2022, 1, 20).add({ days: 20 }),
-}) as Ref<DateRange>
+	start: new CalendarDate(2022, 1, 20),
+	end: new CalendarDate(2022, 1, 20).add({ days: 20 }),
+}) as Ref<DateRange>;
 
-const locale = ref("en-US")
-const formatter = useDateFormatter(locale.value)
+const locale = ref("en-US");
+const formatter = useDateFormatter(locale.value);
 
-const placeholder = ref(value.value.start) as Ref<DateValue>
-const secondMonthPlaceholder = ref(value.value.end) as Ref<DateValue>
+const placeholder = ref(value.value.start) as Ref<DateValue>;
+const secondMonthPlaceholder = ref(value.value.end) as Ref<DateValue>;
 
 const firstMonth = ref(
-  createMonth({
-    dateObj: placeholder.value,
-    locale: locale.value,
-    fixedWeeks: true,
-    weekStartsOn: 0,
-  }),
-) as Ref<Grid<DateValue>>
+	createMonth({
+		dateObj: placeholder.value,
+		locale: locale.value,
+		fixedWeeks: true,
+		weekStartsOn: 0,
+	}),
+) as Ref<Grid<DateValue>>;
 const secondMonth = ref(
-  createMonth({
-    dateObj: secondMonthPlaceholder.value,
-    locale: locale.value,
-    fixedWeeks: true,
-    weekStartsOn: 0,
-  }),
-) as Ref<Grid<DateValue>>
+	createMonth({
+		dateObj: secondMonthPlaceholder.value,
+		locale: locale.value,
+		fixedWeeks: true,
+		weekStartsOn: 0,
+	}),
+) as Ref<Grid<DateValue>>;
 
 function updateMonth(reference: "first" | "second", months: number) {
-  if (reference === "first") {
-    placeholder.value = placeholder.value.add({ months })
-  }
-  else {
-    secondMonthPlaceholder.value = secondMonthPlaceholder.value.add({
-      months,
-    })
-  }
+	if (reference === "first") {
+		placeholder.value = placeholder.value.add({ months });
+	} else {
+		secondMonthPlaceholder.value = secondMonthPlaceholder.value.add({
+			months,
+		});
+	}
 }
 
 watch(placeholder, (_placeholder) => {
-  firstMonth.value = createMonth({
-    dateObj: _placeholder,
-    weekStartsOn: 0,
-    fixedWeeks: false,
-    locale: locale.value,
-  })
-  if (isEqualMonth(secondMonthPlaceholder.value, _placeholder)) {
-    secondMonthPlaceholder.value = secondMonthPlaceholder.value.add({
-      months: 1,
-    })
-  }
-})
+	firstMonth.value = createMonth({
+		dateObj: _placeholder,
+		weekStartsOn: 0,
+		fixedWeeks: false,
+		locale: locale.value,
+	});
+	if (isEqualMonth(secondMonthPlaceholder.value, _placeholder)) {
+		secondMonthPlaceholder.value = secondMonthPlaceholder.value.add({
+			months: 1,
+		});
+	}
+});
 
 watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
-  secondMonth.value = createMonth({
-    dateObj: _secondMonthPlaceholder,
-    weekStartsOn: 0,
-    fixedWeeks: false,
-    locale: locale.value,
-  })
-  if (isEqualMonth(_secondMonthPlaceholder, placeholder.value))
-    placeholder.value = placeholder.value.subtract({ months: 1 })
-})
+	secondMonth.value = createMonth({
+		dateObj: _secondMonthPlaceholder,
+		weekStartsOn: 0,
+		fixedWeeks: false,
+		locale: locale.value,
+	});
+	if (isEqualMonth(_secondMonthPlaceholder, placeholder.value))
+		placeholder.value = placeholder.value.subtract({ months: 1 });
+});
 </script>
 
 <template>
