@@ -15,14 +15,10 @@ module.exports = {
 				body: ["Lexend", "sans-serif"],
 				sans: ["Lexend", "sans-serif"],
 			},
-			colors: {
-				/* derived from Material Theme Builder - seeds:
-        - primary: #F77272
-        - secondary: #72F798
-        - tertiary: #aa8c5c
-        - neutral: #998e8d
-        */
+    		colors: {
+
 				primary: {
+    				// DEFAULT: 'hsl(var(--primary))',
 					DEFAULT: "#a7373a",
 					container: "#ffdad8",
 					oncontainer: "#410007",
@@ -30,8 +26,10 @@ module.exports = {
 					darkon: "#670311",
 					darkcontainer: "#871f25",
 					darkoncontainer: "#ffdad8",
+    				foreground: 'hsl(var(--primary-foreground))'
 				},
 				secondary: {
+    				// DEFAULT: 'hsl(var(--secondary))',
 					DEFAULT: "#006d34",
 					container: "#78fc9d",
 					oncontainer: "#00210b",
@@ -39,40 +37,79 @@ module.exports = {
 					darkon: "#003918",
 					darkcontainer: "#005225",
 					darkoncontainer: "#78fc9d",
-				},
-				surface: {
-					light: "#fffbff",
-					onlight: "#201a1a",
-					variant: "#f4dddc",
-					onvariant: "#524342",
-					outline: "#857372",
-					dark: "#201a1a",
-					ondark: "#ede0de",
-					darkvariant: "#524342",
-					ondarkvariant: "#d7c1c0",
-					darkoutline: "#a08c8b",
-				},
-				error: {
-					light: "#ba1a1a",
-					onlight: "#ffffff",
-					lightcontainer: "#ffdad6",
-					onlightcontainer: "#410002",
-					dark: "#ffb4ab",
-					ondark: "#690005",
-					darkcontainer: "#93000a",
-					ondarkcontainer: "#ffdad6",
-				},
-				work: "#FF6B6B",
-				shortpause: "#F4A261",
-				longpause: "#2EC4B6",
-				theme: "#F87171",
-				themed: "rgb(var(--theme) / <alpha-value>)",
-			},
-		},
-	},
+    				foreground: 'hsl(var(--secondary-foreground))'
+    			},
+    			surface: {
+    				light: '#fffbff',
+    				onlight: '#201a1a',
+    				variant: '#f4dddc',
+    				onvariant: '#524342',
+    				outline: '#857372',
+    				dark: '#201a1a',
+    				ondark: '#ede0de',
+    				darkvariant: '#524342',
+    				ondarkvariant: '#d7c1c0',
+    				darkoutline: '#a08c8b'
+    			},
+    			error: {
+    				light: '#ba1a1a',
+    				onlight: '#ffffff',
+    				lightcontainer: '#ffdad6',
+    				onlightcontainer: '#410002',
+    				dark: '#ffb4ab',
+    				ondark: '#690005',
+    				darkcontainer: '#93000a',
+    				ondarkcontainer: '#ffdad6'
+    			},
+    			work: '#FF6B6B',
+    			shortpause: '#F4A261',
+    			longpause: '#2EC4B6',
+    			theme: '#F87171',
+    			themed: 'rgb(var(--theme) / <alpha-value>)',
+    			background: 'hsl(var(--background))',
+    			foreground: 'hsl(var(--foreground))',
+    			card: {
+    				DEFAULT: 'hsl(var(--card))',
+    				foreground: 'hsl(var(--card-foreground))'
+    			},
+    			popover: {
+    				DEFAULT: 'hsl(var(--popover))',
+    				foreground: 'hsl(var(--popover-foreground))'
+    			},
+    			muted: {
+    				DEFAULT: 'hsl(var(--muted))',
+    				foreground: 'hsl(var(--muted-foreground))'
+    			},
+    			accent: {
+    				DEFAULT: 'hsl(var(--accent))',
+    				foreground: 'hsl(var(--accent-foreground))'
+    			},
+    			destructive: {
+    				DEFAULT: 'hsl(var(--destructive))',
+    				foreground: 'hsl(var(--destructive-foreground))'
+    			},
+    			border: 'hsl(var(--border))',
+    			input: 'hsl(var(--input))',
+    			ring: 'hsl(var(--ring))',
+    			chart: {
+    				'1': 'hsl(var(--chart-1))',
+    				'2': 'hsl(var(--chart-2))',
+    				'3': 'hsl(var(--chart-3))',
+    				'4': 'hsl(var(--chart-4))',
+    				'5': 'hsl(var(--chart-5))'
+    			}
+    		},
+    		borderRadius: {
+    			lg: 'var(--radius)',
+    			md: 'calc(var(--radius) - 2px)',
+    			sm: 'calc(var(--radius) - 4px)'
+    		}
+    	}
+    },
 	future: {
 		// TODO only in Tailwind 3.1
 		// only apply hover classes when @media hover:hover and pointer:fine
 		hoverOnlyWhenSupported: true,
 	},
+    plugins: [require("tailwindcss-animate")]
 };

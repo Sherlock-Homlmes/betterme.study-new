@@ -18,6 +18,7 @@ import { ButtonImportance } from "../base/types/button";
 import { AppPlatform } from "~~/platforms/platforms";
 
 import SettingsItemV2 from "~~/components/settings/settingsItemV2.vue";
+import DateRangePicker from "@/components/ui/date-picker/DateRangePicker.vue";
 
 const { userInfo, getCurrentUser } = useAuthStore();
 const runtimeConfig = useRuntimeConfig();
@@ -52,5 +53,6 @@ const updateUserInfo = async () => {
 <template>
   <div class="flex flex-col items-center">
     <div class="inline-block text-2xl font-bold">Coming soon...</div>
+	<DateRangePicker />
   </div>
 </template>
