@@ -19,6 +19,8 @@
 		"release": "standard-version"
 	},
 	"dependencies": {
+		"@unovis/ts": "^1.6.1",
+		"@unovis/vue": "^1.6.1",
 		"@vueuse/core": "^13.9.0",
 		"@vueuse/nuxt": "^13.0.0",
 		"@vueuse/sound": "^2.1.3",
