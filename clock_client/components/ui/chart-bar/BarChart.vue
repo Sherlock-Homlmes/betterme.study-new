@@ -11,7 +11,7 @@ import {
 } from "@unovis/vue";
 import { useMounted } from "@vueuse/core";
 import { computed, ref } from "vue";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/index.ts";
 import {
 	ChartCrosshair,
 	ChartLegend,
