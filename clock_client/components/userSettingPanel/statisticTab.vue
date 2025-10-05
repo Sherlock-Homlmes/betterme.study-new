@@ -111,23 +111,25 @@ const formatTime = (minutes: number): string => {
 
     <!-- Chart -->
     <div v-if="!loading && !error && formattedData.length > 0" class="w-full max-w-4xl mx-auto">
-      <BarChart
-        index="name"
-        :data="getFormattedData(t('user_settings.tabs.statistic.study_time'))"
-        :categories="[t('user_settings.tabs.statistic.study_time')]"
-        :custom-tooltip="ChartTooltipTime"
-        :x-formatter="(tick, i, ticks) => {
-          // Always show the label for each data point
-          return formattedData[i]?.name || ''
-        }"
-        :y-formatter="(tick, i) => {
-          return typeof tick === 'number'
-            ? `${tick}m`
-            : ''
-        }"
-        :rounded-corners="4"
-        class="h-64"
-      />
+      <ClientOnly>
+        <BarChart
+          index="name"
+          :data="getFormattedData(t('user_settings.tabs.statistic.study_time'))"
+          :categories="[t('user_settings.tabs.statistic.study_time')]"
+          :custom-tooltip="ChartTooltipTime"
+          :x-formatter="(tick, i, ticks) => {
+            // Always show the label for each data point
+            return formattedData[i]?.name || ''
+          }"
+          :y-formatter="(tick, i) => {
+            return typeof tick === 'number'
+              ? `${tick}m`
+              : ''
+          }"
+          :rounded-corners="4"
+          class="h-64"
+        />
+      </ClientOnly>
     </div>
 
     <!-- No Data State -->
