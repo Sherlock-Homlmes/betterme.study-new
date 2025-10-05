@@ -128,13 +128,17 @@ watch(() => props.modelValue, (newValue) => {
           <template v-if="value.end">
             {{
               formatter.custom(toDate(value.start), {
-                dateStyle: "medium",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
               })
             }}
             -
             {{
               formatter.custom(toDate(value.end), {
-                dateStyle: "medium",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
               })
             }}
           </template>
@@ -142,7 +146,9 @@ watch(() => props.modelValue, (newValue) => {
           <template v-else>
             {{
               formatter.custom(toDate(value.start), {
-                dateStyle: "medium",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
               })
             }}
           </template>
