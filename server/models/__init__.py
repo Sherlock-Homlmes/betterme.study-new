@@ -14,6 +14,7 @@ from .news.draft_posts import DraftPosts
 from .news.secret_keys import SecretKeys
 
 from .discord.users import Users as DiscordUsers
+from .discord.user_daily_study_time import UserDailyStudyTimes
 
 clock_document_models = [
     Users,
@@ -29,7 +30,7 @@ news_document_models = [
     DraftPosts,
     SecretKeys,
 ]
-discord_document_models = [DiscordUsers]
+discord_document_models = [DiscordUsers, UserDailyStudyTimes]
 file_service_models = [Audios]
 
 

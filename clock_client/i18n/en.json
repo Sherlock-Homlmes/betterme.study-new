@@ -309,7 +309,16 @@
 				}
 			},
 			"statistic": {
-				"heading": "Statistic"
+				"heading": "Statistic",
+				"study_time": "Study time",
+				"hours": "h",
+				"minutes": "m",
+				"total_study_time": "Total study time",
+				"study_days": "Study days",
+				"avg_time_per_day": "Avg time/day",
+				"study_streak": "Study streak",
+				"loading_statistics": "Loading statistics...",
+				"no_data": "No data available for the selected date range."
 			}
 		}
 	},

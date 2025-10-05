@@ -39,7 +39,7 @@ const props = withDefaults(
 	>(),
 	{
 		type: "grouped",
-		margin: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+		margin: () => ({ top: 0, bottom: 60, left: 0, right: 0 }),
 		filterOpacity: 0.2,
 		roundedCorners: 0,
 		showXAxis: true,
@@ -115,9 +115,12 @@ const selectorsBar = computed(() =>
         v-if="showXAxis"
         type="x"
         :tick-format="xFormatter ?? ((v: number) => data[v]?.[index])"
+        :tick-values="data.map((_, i) => i)"
         :grid-line="false"
         :tick-line="false"
         tick-text-color="hsl(var(--vis-text-color))"
+        :tick-text-angle="40"
+        tick-text-align="left"
       />
       <VisAxis
         v-if="showYAxis"

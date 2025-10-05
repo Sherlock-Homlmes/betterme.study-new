@@ -37,7 +37,7 @@ const state = reactive({
 </script>
 
 <template>
-  <section class="fixed z-40 w-full h-full p-0 md:p-4 md:max-w-screen-sm">
+  <section class="fixed z-40 w-full h-full p-0 md:p-4 md:max-w-3xl">
     <div class="flex flex-col h-full overflow-hidden rounded-none shadow-lg bg-surface-light text-surface-onlight md:rounded-xl md:dark:ring-1 dark:ring-surface-ondark dark:ring-opacity-20 ring-inset dark:bg-surface-dark dark:text-surface-ondark" :style="{ 'padding-top': `${mobileSettingsStore.padding.top}px`, 'padding-bottom': `${mobileSettingsStore.padding.bottom}px` }">
       <h1 class="px-4 mt-4 mb-2 text-xl font-bold uppercase">
         <span>{{ $t('user_settings.heading') }}</span>

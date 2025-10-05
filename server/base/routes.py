@@ -12,6 +12,7 @@ from routers import authentication
 
 from routers.user.study_tools import pomodoros, todolist
 from routers.user import posts, user, ai, audios
+from routers import statistics
 
 from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as admin_posts
 
@@ -24,6 +25,7 @@ auth_modules = (
     todolist,
     user,
     ai,
+    statistics,
 )
 news_admin_modules = (crawlers, draft_posts, admin_posts, admin_ai)
 access_key_modules = ()

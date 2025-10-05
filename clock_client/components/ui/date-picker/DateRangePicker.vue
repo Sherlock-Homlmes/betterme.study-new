@@ -27,7 +27,15 @@ import {
 	RangeCalendarHeadCell,
 } from "@/components/ui/range-calendar";
 
-const value = ref({
+const props = defineProps<{
+	modelValue?: DateRange;
+}>();
+
+const emit = defineEmits<{
+	'update:modelValue': [value: DateRange];
+}>();
+
+const value = ref(props.modelValue || {
 	start: new CalendarDate(2022, 1, 20),
 	end: new CalendarDate(2022, 1, 20).add({ days: 20 }),
 }) as Ref<DateRange>;
@@ -89,6 +97,18 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
 	if (isEqualMonth(_secondMonthPlaceholder, placeholder.value))
 		placeholder.value = placeholder.value.subtract({ months: 1 });
 });
+
+// Watch for value changes and emit to parent
+watch(value, (newValue) => {
+	emit('update:modelValue', newValue);
+}, { deep: true });
+
+// Watch for prop changes
+watch(() => props.modelValue, (newValue) => {
+	if (newValue && newValue !== value.value) {
+		value.value = newValue;
+	}
+}, { deep: true });
 </script>
 
 <template>

@@ -305,7 +305,16 @@
 				}
 			},
 			"statistic": {
-				"heading": "Thống kê"
+				"heading": "Thống kê",
+				"study_time": "Thời gian học",
+				"hours": "giờ",
+				"minutes": "phút",
+				"total_study_time": "Tổng thời gian học",
+				"study_days": "Số ngày học",
+				"avg_time_per_day": "TB thời gian/ngày",
+				"study_streak": "Streak ngày học",
+				"loading_statistics": "Đang tải thống kê...",
+				"no_data": "Không có dữ liệu cho khoảng thời gian đã chọn."
 			}
 		}
 	},
