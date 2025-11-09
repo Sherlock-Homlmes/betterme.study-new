@@ -1,6 +1,6 @@
 # default
 import datetime
-from typing import Optional, List
+from typing import Optional
 from collections import defaultdict
 
 # libraries
@@ -8,10 +8,10 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 
 # local
 from routers.authentication import auth_handler
-from models import Users, Pomodoros, PomodoroStatusEnum
+from models import Users
 
 from models.discord.user_daily_study_time import UserDailyStudyTimes
-from api.schemas import StatisticsResponse, StatisticDataItem
+from schemas.user_daily_study_time import StatisticsResponse, StatisticDataItem
 
 router = APIRouter(
     tags=["Statistics"],

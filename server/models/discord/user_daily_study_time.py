@@ -10,7 +10,7 @@ from pydantic import validator
 from cache import AsyncTTL
 
 # local
-from api.schemas import UserStatsGetResponse, DataUserDailyStudyTime
+from schemas.user_daily_study_time import UserStatsGetResponse, DataUserDailyStudyTime
 
 
 class UserDailyStudyTimes(Document):
