@@ -1,3 +1,11 @@
+### change dir ###
+import sys
+from pathlib import Path
+
+root_dir = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(root_dir))
+### change dir ###
+
 # default
 
 # libraries
@@ -53,7 +61,7 @@ async def clean_db(init_db):
     models = [*news_document_models, *clock_document_models, *discord_document_models]
 
     for model in models:
-        await model.get_motor_collection().drop()
-        await model.get_motor_collection().drop_indexes()
+        await model.get_pymongo_collection().drop()
+        await model.get_pymongo_collection().drop_indexes()
 
     return None

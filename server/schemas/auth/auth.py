@@ -1,5 +1,6 @@
 # lib
 from pydantic import BaseModel, EmailStr, Field
+from models import UserRoleEnum
 
 
 class RegisterUser(BaseModel):
@@ -12,6 +13,7 @@ class RegisterUserResponse(BaseModel):
     id: str
     name: str
     avatar: str
+    roles: UserRoleEnum
 
 
 class LoginUser(BaseModel):

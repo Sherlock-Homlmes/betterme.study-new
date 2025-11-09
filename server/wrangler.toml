@@ -1,0 +1,7 @@
+name = "betterme-study-api"
+main = "cloudflare-worker.py"
+compatibility_flags = ["python_workers"]
+compatibility_date = "2025-09-11"
+
+[vars]
+API_HOST = "api.betterme.study"

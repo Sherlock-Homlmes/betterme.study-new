@@ -1,8 +1,2 @@
-FROM python:3.9
-
-RUN pip install --upgrade pip
-RUN pip install poetry
-
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+FROM ghcr.io/astral-sh/uv:python3.14-bookworm
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/

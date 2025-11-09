@@ -10,11 +10,9 @@ async def test_get_oauth_link(client):
     OUTPUT:
         Get discord link
     """
-    response = client.get("/api/auth/oauth-link")
+    response = client.get("/api/auth/oauth-link?discord_link=true")
     assert response.status_code == 200
-    assert (
-        response.json()["discord_link"] == "https://discord.com/api/oauth2/xxxxxxxxxxxxxxxxxxxxxx"
-    )
+    assert response.json() == {"discord_link": "xxxxxx"}
 
 
 @pytest.mark.asyncio
@@ -32,8 +30,10 @@ async def test_get_self_successfully(auth_client):
         "id": "111111111111111111111111",
         "discord_id": "111111111111111111",
         "name": "khoitm",
+        "custom_name": "khoitm",
         "email": "dbsiksfikf@gmail.com",
         "avatar_url": "https://cdn.discordapp.com/avatars/111111111111111111/11111111111111111111111111111111.png",
+        "custom_avatar_url": "https://cdn.discordapp.com/avatars/111111111111111111/11111111111111111111111111111111.png",
         "roles": ["owner", "admin"],
     }
 
