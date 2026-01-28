@@ -1,0 +1,15 @@
+@reference tailwindcss;
+
+.transition-slidein-enter-active,
+.transition-slidein-leave-active {
+  transform: translateZ(0); /* transform-gpu */
+  transition-property: transform, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.transition-slidein-enter-from,
+.transition-slidein-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}

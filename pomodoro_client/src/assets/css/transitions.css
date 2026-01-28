@@ -1,0 +1,26 @@
+@import '../../assets/transitions/fade.css';
+@import '../../assets/transitions/slidein.css';
+
+.layout-enter-active,
+.layout-leave-active {
+  /* @apply transition-all duration-1000; */
+  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  opacity: 0;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  /* @apply opacity-0; */
+  opacity: 0;
+
+  clip-path: circle(0%);
+}
+
+.layout-enter-to,
+.layout-leave-from {
+  /* @apply opacity-100; */
+  opacity: 1;
+
+  clip-path: circle(100%);
+}

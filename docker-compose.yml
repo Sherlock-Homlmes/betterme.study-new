@@ -18,19 +18,22 @@ services:
     networks:
       - nginx-net
 
-  clock-client:
+  pomodoro-client:
     build:
       context: ./
-      dockerfile: ./others/docker/clock_client/Dockerfile
+      dockerfile: ./others/docker/pomodoro_client/Dockerfile
     volumes:
       - .:/var/task
-    working_dir: /var/task/clock_client
+    working_dir: /var/task/pomodoro_client
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
-      - ENV=DEV
+      - VITE_API_URL=http://localhost/api
+      - TAURI_DEV_HOST=0.0.0.0
     networks:
       - nginx-net
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+    ports:
+      - "1420:1420"
+    command: ["bun", "run", "dev"]
 
   news-client:
     build:
