@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onBeforeMount } from "vue";
+import { ref, computed, defineAsyncComponent, onBeforeMount } from "vue";
 import { useI18n } from "vue-i18n";
+import {useIntervalFn, useTitle} from "@vueuse/core";
+
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from "@/stores/settings";
 import { runtimeConfig } from "@/config/runtimeConfig";
@@ -58,7 +60,6 @@ const iconSvg = computed(
 <circle cx="16" cy="16" r="14" fill="currentColor" /></svg>`,
 );
 
-// definePageMeta({ layout: "timer", layoutTransition: false });
 // useHead({
 // 	link: [
 // 		{
@@ -98,6 +99,7 @@ const pageTitle = computed(() => {
 		);
 	return "Pomodoro Timer & Study Tools";
 });
+useTitle(pageTitle)
 
 const progressBarSchedules = computed(() => {
 	const numSchedules = userSettings.value.visuals.show_progress_bar ? 2 : 1;
@@ -118,8 +120,6 @@ onBeforeMount(async () => {
 
 <template lang="pug">
 section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
-  //- Title {{ pageTitle }}
-
   // Dark mode background override
   div(class="absolute w-full h-full dark:bg-gray-900")
 
@@ -147,7 +147,7 @@ section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
     )
     TimerControls(class="mb-8")
   TutorialView(v-if='!isOnboarded')
-  //- TimerPIPMode(v-if='userSettings.visuals.show_pip_mode')
+  TimerPIPMode(v-if='userSettings.visuals.show_pip_mode')
 </template>
 
 <style lang="scss" scoped>
