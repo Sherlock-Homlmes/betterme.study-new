@@ -17,7 +17,7 @@ import { onBeforeMount } from "vue";
 const openPanels = useOpenPanels();
 const settingsStore = useSettings();
 const tasklistStore = useTasklist();
-const { tasks, getTaskList, patchTask, deleteTask, moveTask } = useTaskStore();
+const { tasks, getTaskList, moveTask } = useTaskStore();
 
 onBeforeMount(async () => {
 	await getTaskList();

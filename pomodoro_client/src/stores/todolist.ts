@@ -78,7 +78,10 @@ export const useTaskStore = createGlobalState(() => {
 	};
 
 	const deleteTask = async (taskId: string) => {
-		if (!isAuth.value) return;
+		if (!isAuth.value) {
+			tasks.value = tasks.value.filter((task) => task.id !== taskId);
+			return
+		};
 		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
 			method: "DELETE",
 		});
