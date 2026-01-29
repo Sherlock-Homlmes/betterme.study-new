@@ -1,4 +1,9 @@
 {
+	"meta": {
+		"title": "Đồng hồ Pomodoro & Công cụ Học tập",
+		"description": "Tập trung cùng Betterme: Pomodoro và công cụ tăng năng suất miễn phí, không quảng cáo, được thiết kế cho công việc và học tập. Hoạt động mượt mà trên mọi nền tảng.",
+		"keywords": "betterme, pomodoro, ứng dụng pomodoro, đồng hồ pomodoro, đồng hồ tăng năng suất, đồng hồ cà chua, đồng hồ tập trung, công cụ năng suất, miễn phí, không quảng cáo"
+	},
 	"ai": {
 		"heading": "Trợ lý AI",
 		"just_a_sec": "Chờ mình xíu nhé...",
@@ -51,8 +56,8 @@
 		"heading": "Cài đặt",
 		"tabs": {
 			"main": "Chính",
-			"timer": "Lịch trình",
-			"display": "Hiển thị",
+			"timer": "Đồng hồ",
+			"display": "Nhạc",
 			"audio": "Âm thanh",
 			"about": "Giới thiệu"
 		},
@@ -80,7 +85,7 @@
 			"supportBody": "Tham gia cộng đồng học tập Betterme để  kết nối với mọi người và mở khóa thêm nhiều tính năng nhé!",
 			"mobileSupport": "Do những quy định được áp dụng bởi Google Play Store, tôi không thể hiển thị cho bạn bất kỳ liên kết nào bên trong ứng dụng di động để quyên góp cho dự án.",
 			"share": "hoặc chia sẻ ứng dụng trên mạng xã hội:",
-			"discord_betterme": "Discord Betterme",
+			"discord_betterme": "Discord server",
 			"betterme_news": "Betterme news"
 		},
 		"values": {

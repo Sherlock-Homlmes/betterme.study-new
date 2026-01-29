@@ -5,7 +5,16 @@ import DiscordOAuth from '@/pages/auth/discord-oauth.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
+    redirect: '/en'
+  },
+  {
+    path: '/en',
+    name: 'home-en',
+    component: Index,
+  },
+  {
+    path: '/vi',
+    name: 'home-vi',
     component: Index,
   },
   {

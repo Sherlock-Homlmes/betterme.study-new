@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent, onBeforeMount } from "vue";
+import { ref, watch, computed, defineAsyncComponent, onBeforeMount, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import {useIntervalFn, useTitle} from "@vueuse/core";
+import { useHead } from "@vueuse/head";
 
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from "@/stores/settings";
@@ -19,6 +20,8 @@ import { AppPlatform } from "@/platforms/platforms";
 
 import { useMobileSettings } from "@/stores/platforms/mobileSettings";
 import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter()
 
 // components
 const AppBar = defineAsyncComponent(() => import("@/components/appBar.vue"));
@@ -60,16 +63,6 @@ const iconSvg = computed(
 <circle cx="16" cy="16" r="14" fill="currentColor" /></svg>`,
 );
 
-// useHead({
-// 	link: [
-// 		{
-// 			rel: "icon",
-// 			type: "image/svg+xml",
-// 			href: iconSvg,
-// 		},
-// 	],
-// });
-
 useTicker();
 
 // Load appropriate platform module based on runtime config
@@ -97,9 +90,27 @@ const pageTitle = computed(() => {
 				? t("section." + getCurrentItem.value.type).toLowerCase()
 				: "Pomodoro")
 		);
-	return "Pomodoro Timer & Study Tools";
+	return t('meta.title');
 });
-useTitle(pageTitle)
+const headData = computed(()=>({
+  htmlAttrs: {
+    lang: userSettings.value?.language || 'en',
+  },
+  title: pageTitle.value,
+  meta: [
+    { name: 'description', content: t('meta.description') },
+    { name: 'keywords', content: t('meta.keywords') },
+
+    // Open Graph cho Facebook/Zalo
+    { property: 'og:title', content: t('meta.title') },
+    { property: 'og:description', content: t('meta.description') },
+
+    // Twitter Card
+    { name: 'twitter:title', content: t('meta.title') },
+    { name: 'twitter:description', content: t('meta.description') }
+  ]
+}))
+useHead(headData)
 
 const progressBarSchedules = computed(() => {
 	const numSchedules = userSettings.value.visuals.show_progress_bar ? 2 : 1;
@@ -116,6 +127,14 @@ onBeforeMount(async () => {
 	if (isAuth.value) await getCurrentUserSetting();
 	loading.value = false;
 });
+  // language
+watch(
+  () => userSettings.value?.language,
+  (newValue) => {
+    router.replace({ name: `home-${newValue}` })
+  },
+  {immediate: true}
+)
 </script>
 
 <template lang="pug">

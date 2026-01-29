@@ -1,4 +1,9 @@
 {
+	"meta": {
+		"title": "Pomodoro Timer & Study Tools",
+		"description": "Boost your focus with Betterme: The free, ad-free productivity timer and Pomodoro tool designed for work and study. Works seamlessly on all platforms.",
+		"keywords": "betterme, pomodoro, pomodoro app, pomodoro timer, productivity timer, tomato timer, focus timer, pomodoro clock, productivity tool, free, no ads"
+	},
 	"ai": {
 		"heading": "AI Assistant",
 		"just_a_sec": "Just a sec...",
@@ -51,8 +56,8 @@
 		"heading": "Settings",
 		"tabs": {
 			"main": "Main",
-			"timer": "Schedule",
-			"display": "Display",
+			"timer": "Clock",
+			"display": "Music",
 			"audio": "Audio",
 			"about": "About"
 		},
@@ -80,7 +85,7 @@
 			"supportBody": "Join Betterme Discord study community to communicate with other people and unlock more new features!",
 			"mobileSupport": "Due to the rules enforced by the Google Play Store, I cannot show you any links inside the mobile app to donate to the project.",
 			"share": "or share the app on social media:",
-			"discord_betterme": "Discord Betterme",
+			"discord_betterme": "Discord server",
 			"betterme_news": "Betterme news"
 		},
 		"values": {

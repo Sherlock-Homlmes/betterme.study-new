@@ -21,10 +21,10 @@ const mainStore = useMain();
 
 <template>
   <div class="flex flex-col items-center">
-    <img src="/favicon.svg" width="64" height="64" class="inline-block p-2 mb-1 bg-red-200 rounded-lg">
+    <img src="/favicon.svg" width="64" height="64" class="inline-block p-2 mb-1 bg-red-200 rounded-lg" alt='app-icon'>
     <div>
       <div class="inline-block text-2xl font-bold">
-        Betterme.study
+        Betterme Pomodoro
       </div>
       <sup class="text-base" v-text="mainStore.version" />
     </div>

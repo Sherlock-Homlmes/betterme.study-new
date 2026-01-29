@@ -11,7 +11,7 @@ const { userSettings } = useAuthStore();
 <template>
   <OnboardingPage>
     <div class="py-3 flex gap-2 text-3xl flex-col md:flex-row justify-center items-center">
-      <img width="40" height="40" class="w-10" src="/favicon.svg">
+      <img width="40" height="40" class="w-10" src="/favicon.svg" alt='app-icon'>
       <span v-text="$t('tutorials.onboarding.pages.0.title')" />
     </div>
 

@@ -4,8 +4,8 @@ import {computed, reactive} from "vue";
 import {
 	XIcon as CloseIcon,
 	AdjustmentsIcon as TabIconGeneral,
-	AlarmIcon as TabIconSchedule,
-	ArtboardIcon as TabIconVisuals,
+	AlarmIcon as TabIconClock,
+	MusicIcon as TabIconMusic,
 	InfoCircleIcon as InfoIcon,
 	InfoCircleIcon as TabIconAbout,
 } from "vue-tabler-icons";
@@ -87,33 +87,14 @@ notificationsStore.updateEnabled();
               @input="(newLang) => { userSettings.language = newLang }"
             />
             <Divider />
-            <SettingsItemV2 :type="Control.Check" path="visuals.enable_adaptive_ticking" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.show_progress_bar" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.show_pip_mode" />
             <!-- <SettingsItem v-if="isWeb" :type="Control.Check" path="timerControls.enableKeyboardShortcuts" /> -->
             <!-- <SettingsItem :type="Control.Option" path="sectionEndAction" :choices="{continue: 'continue', stop: 'stop', skip: 'skip'}" /> -->
 
-            <template v-if="isWeb">
-              <Divider />
-              <SettingsItemV2 :type="Control.Check" path="visuals.enable_audio" />
-              <!-- <SettingsItem
-                :type="Control.Check"
-                path="permissions.notifications"
-                :disabled="notificationsStore.enabled === NotificationPermission.Denied"
-                @input="(newValue) => {
-                  if (newValue === true) {
-                    eventsStore.recordEvent('permission.notification')
-                  }
-                }"
-              /> -->
-            </template>
-
-            <template v-if="isMobile">
-              <Divider />
-              <SettingsItem :type="Control.Check" path="mobile.notifications.sectionOver" />
-              <SettingsItem :type="Control.Check" path="mobile.notifications.persistent" />
-            </template>
-
-            <Divider />
             <template v-if="isWeb && !isAuth">
+              <Divider />
               <SettingsItem :type="Control.Empty" path="manage" />
               <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
                 <ButtonControl default-style :importance="ButtonImportance.Filled" @click='state.activeTab = 5' class="col-start-1 col-end-4">
@@ -130,9 +111,9 @@ notificationsStore.updateEnabled();
 
           </div>
 
-          <!-- Schedule -->
+          <!-- Clock -->
           <div v-else-if="state.activeTab === 2" :key="2" class="grid grid-cols-1 gap-2 py-3 px-4">
-            <SettingsItemV2 :type="Control.Number" path="pomodoro_settings.long_rest_time_interval" :min="1" :max="10" />
+            <SettingsItemV2 :type="Control.Option" path="visuals.timer_show" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
             <Divider />
 
             <SettingsItem
@@ -153,18 +134,34 @@ notificationsStore.updateEnabled();
               <InfoIcon />
               <span v-text="$t('settings.scheduleMinTime')" />
             </div>
+            <SettingsItemV2 :type="Control.Number" path="pomodoro_settings.long_rest_time_interval" :min="1" :max="10" />
           </div>
 
-          <!-- Display -->
+          <!-- Music -->
           <div v-else-if="state.activeTab === 3" :key="3" class="grid grid-cols-1 gap-2 py-3 px-4">
             <!-- <SettingsItem :type="Control.Empty" path="visuals.theme" />
             <ThemeSettings /> -->
-            <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.enable_adaptive_ticking" />
+            <template v-if="isWeb">
+              <SettingsItemV2 :type="Control.Check" path="visuals.enable_audio" />
+              <!-- <SettingsItem
+                :type="Control.Check"
+                path="permissions.notifications"
+                :disabled="notificationsStore.enabled === NotificationPermission.Denied"
+                @input="(newValue) => {
+                  if (newValue === true) {
+                    eventsStore.recordEvent('permission.notification')
+                  }
+                }"
+              /> -->
+            </template>
+
+            <template v-if="isMobile">
+              <SettingsItem :type="Control.Check" path="mobile.notifications.sectionOver" />
+              <SettingsItem :type="Control.Check" path="mobile.notifications.persistent" />
+            </template>
             <Divider />
             <!-- <SettingsItem :type="Control.Option" path="currentTimer" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" /> -->
-            <SettingsItemV2 :type="Control.Option" path="visuals.timer_show" :choices="{traditional: 'traditional', approximate: 'approximate', percentage: 'percentage'}" />
-            <SettingsItemV2 :type="Control.Check" path="visuals.show_progress_bar" />
-            <SettingsItemV2 :type="Control.Check" path="visuals.show_pip_mode" />
             <!-- TODO Audio volume control -->
           </div>
 
@@ -190,12 +187,12 @@ notificationsStore.updateEnabled();
         </TabHeader>
         <TabHeader :active="state.activeTab === 2" :text="$t('settings.tabs.timer')" @click="state.activeTab = 2">
           <template #icon>
-            <TabIconSchedule role="presentation" />
+            <TabIconClock role="presentation" />
           </template>
         </TabHeader>
         <TabHeader :active="state.activeTab === 3" :text="$t('settings.tabs.display')" @click="state.activeTab = 3">
           <template #icon>
-            <TabIconVisuals role="presentation" />
+            <TabIconMusic role="presentation" />
           </template>
         </TabHeader>
         <TabHeader :active="state.activeTab === 4" :text="$t('settings.tabs.about')" @click="state.activeTab = 4">
@@ -209,7 +206,6 @@ notificationsStore.updateEnabled();
 </template>
 
 <style lang="scss" scoped>
-// ===== TAB TRANSITIONS =====
 .tab-transition-enter-active,
 .tab-transition-leave-active {
   transition: transform 0.2s ease-out, opacity 0.2s ease-out;

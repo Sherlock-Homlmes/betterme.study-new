@@ -1,5 +1,5 @@
-<template>
-  <p>Loading...</p>
+<template lang="pug">
+  p Loading...
 </template>
 
 <script setup lang="ts">
