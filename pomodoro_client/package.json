@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:extension": "vite build --mode=extension",
-    "build:desktop": "vite build --mode=desktop",
-    "build:mobile": "vite build --mode=mobile",
+    "build:tauri": "tauri build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
