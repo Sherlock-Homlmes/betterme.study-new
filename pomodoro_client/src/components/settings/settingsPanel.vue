@@ -39,8 +39,10 @@ import { useEvents } from "@/stores/events";
 import { useOpenPanels } from "@/stores/openpanels";
 import { Control } from "@/components/settings/types/settingsItem";
 
+import {usePlatformStore} from "@/stores/platforms";
 import { useAuthStore } from "@/stores/auth";
 import { usePomodoroStore } from "@/stores/pomodoros";
+
 const { isAuth, loading, getActiveSchedulePreset, applyPreset, userSettings } =
 	useAuthStore();
 const eventsStore = useEvents();
@@ -48,8 +50,8 @@ const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
 const notificationsStore = useNotifications();
 const settingsStore = useSettings();
-const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
-const isMobile = computed(() => runtimeConfig.public.PLATFORM === "mobile");
+const {isWeb, isDesktop, isExtension, isMobile} = usePlatformStore();
+const isWebBase = computed(()=> isWeb.value || isDesktop.value || isExtension.value)
 
 const state = reactive({
 	activeTab: 1,
@@ -89,11 +91,11 @@ notificationsStore.updateEnabled();
             <Divider />
             <SettingsItemV2 :type="Control.Check" path="visuals.dark_mode" />
             <SettingsItemV2 :type="Control.Check" path="visuals.show_progress_bar" />
-            <SettingsItemV2 :type="Control.Check" path="visuals.show_pip_mode" />
+            <SettingsItemV2 :type="Control.Check" path="visuals.show_pip_mode" v-if='isWeb || isDesktop' />
             <!-- <SettingsItem v-if="isWeb" :type="Control.Check" path="timerControls.enableKeyboardShortcuts" /> -->
             <!-- <SettingsItem :type="Control.Option" path="sectionEndAction" :choices="{continue: 'continue', stop: 'stop', skip: 'skip'}" /> -->
 
-            <template v-if="isWeb && !isAuth">
+            <template v-if="isWebBase && !isAuth">
               <Divider />
               <SettingsItem :type="Control.Empty" path="manage" />
               <div class="grid grid-flow-col grid-cols-12 gap-1 mt-1">
@@ -142,7 +144,7 @@ notificationsStore.updateEnabled();
             <!-- <SettingsItem :type="Control.Empty" path="visuals.theme" />
             <ThemeSettings /> -->
             <SettingsItemV2 :type="Control.Check" path="visuals.enable_adaptive_ticking" />
-            <template v-if="isWeb">
+            <template v-if="isWebBase">
               <SettingsItemV2 :type="Control.Check" path="visuals.enable_audio" />
               <!-- <SettingsItem
                 :type="Control.Check"

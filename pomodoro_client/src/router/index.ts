@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory, type RouteRecordRaw } from 'vue-router';
+import {runtimeConfig} from '@/config/runtimeConfig';
 import Index from '@/pages/index.vue';
 import DiscordOAuth from '@/pages/auth/discord-oauth.vue';
 
@@ -25,7 +26,9 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: runtimeConfig.public.PLATFORM === 'extension'
+  ? createWebHashHistory()
+  : createWebHistory(),
   routes,
 });
 

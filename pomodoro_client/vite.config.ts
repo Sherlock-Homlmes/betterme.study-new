@@ -3,7 +3,6 @@ import vue from "@vitejs/plugin-vue";
 import tailwindcss from '@tailwindcss/vite'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { fileURLToPath, URL } from "node:url";
-import WebfontDownload from 'unplugin-fonts/vite';
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
@@ -16,12 +15,6 @@ export default defineConfig(async () => ({
     tailwindcss(),
     VueI18nPlugin({
       include: './src/i18n/**',
-    }),
-    WebfontDownload({
-      google: {
-        families: ['Lexend:wght@400;700'],
-        display: 'swap',
-      },
     }),
   ],
 

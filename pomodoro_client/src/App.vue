@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { useEventListener } from '@vueuse/core'
 import Alert from "@/components/base/uiAlert.vue";
 import { TimerLayout } from "@/layouts";
 import {useAuthStore} from "@/stores/auth";
+import {usePomodoroStore, TimerState} from "@/stores/pomodoros";
+const { timerState } = usePomodoroStore();
 
 const { isDarkMode } = useAuthStore();
 
@@ -35,6 +37,12 @@ const { isDarkMode } = useAuthStore();
 	// 		}
 	// 	}
 	// });
+useEventListener(window, 'beforeunload', (event) => {
+  if (timerState.value === TimerState.RUNNING) {
+    event.preventDefault()
+    event.returnValue = ''
+  }
+})
 </script>
 
 <template lang='pug'>

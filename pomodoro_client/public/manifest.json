@@ -1,25 +1,50 @@
 {
 	"manifest_version": 3,
-	"name": "Test Extension Pomodoro",
+	"name": "Betterme Pomodoro Timer",
+	"short_name": "Betterme Pomodoro",
 	"version": "1.0.0",
-	"description": "aaaa",
+	"description": "Boost your focus with Betterme: The free, ad-free productivity timer and Pomodoro tool designed for work and study.",
 	"action": {
-		"default_popup": "index.html"
+		"default_icon": {
+			"16": "icon.png",
+			"48": "icon.png",
+			"128": "icon.png"
+		}
 	},
-	"chrome_url_overrides": {
-		"newtab": "index.html"
+	"side_panel": {
+		"default_path": "index.html"
 	},
-	"permissions": [],
+	"icons": {
+		"16": "icon.png",
+		"48": "icon.png",
+		"128": "icon.png"
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"permissions": [
+		"storage",
+		"sidePanel"
+	],
+	"host_permissions": [
+		"*://*.betterme.page/*"
+	],
 	"web_accessible_resources": [
 		{
 			"resources": [
-				"/nuxt/*",
+				"/assets/*",
 				"/img/*",
+				"/audio/*",
 				"/favicon.svg",
 				"/favicon.ico",
-				"/fonts/*"
+				"/icon.png",
+				"/icon_monochrome.png",
+				"/index.html"
 			],
 			"matches": ["<all_urls>"]
 		}
-	]
+	],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
+	}
 }

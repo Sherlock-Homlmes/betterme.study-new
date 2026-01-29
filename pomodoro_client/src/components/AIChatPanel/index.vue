@@ -113,8 +113,6 @@ const {
 } = useAIChatStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
-const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
-const isMobile = computed(() => runtimeConfig.public.PLATFORM === "mobile");
 
 const state = reactive({
 	activeTab: 1,

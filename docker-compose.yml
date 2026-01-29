@@ -33,7 +33,9 @@ services:
       - nginx-net
     ports:
       - "1420:1420"
+      - "4173:4173"
     command: ["bun", "run", "dev"]
+    # command: ["bun", "run", "preview"]
 
   news-client:
     build:

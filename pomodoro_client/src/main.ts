@@ -5,6 +5,7 @@ import i18nPlugin from "./plugins/i18n";
 import { createHead } from "@vueuse/head"
 import router from './router';
 import "./assets/css/tailwind.css";
+import "./assets/css/fonts.css";
 import "./assets/css/transitions.css";
 import "./assets/css/disable_tap_highlight.css";
 

@@ -4,7 +4,7 @@
 export interface RuntimeConfig {
 	public: {
 		API_URL: string;
-		PLATFORM: 'mobile' | 'web';
+		PLATFORM: 'web' | 'desktop' | 'extension' | 'mobile';
 		URL: string;
 		PACKAGE_VERSION: string;
 	};
@@ -13,7 +13,7 @@ export interface RuntimeConfig {
 export const runtimeConfig: RuntimeConfig = {
 	public: {
 		API_URL: import.meta.env.VITE_API_URL || 'https://api.betterme.study',
-		PLATFORM: (import.meta.env.VITE_PLATFORM as 'mobile' | 'web') || 'web',
+		PLATFORM: (import.meta.env.VITE_PLATFORM as 'web' | 'desktop' | 'extension' | 'mobile') || 'web',
 		URL: import.meta.env.VITE_URL || 'https://betterme.study',
 		PACKAGE_VERSION: import.meta.env.VITE_PACKAGE_VERSION || '0.2.0',
 	},

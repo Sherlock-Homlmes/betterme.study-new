@@ -3,7 +3,6 @@ import { ref, watch, computed, defineAsyncComponent, onBeforeMount, onMounted } 
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
-import { useSchemaOrg, defineSoftwareApp } from '@vueuse/schema-org'
 
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from "@/stores/settings";
@@ -19,6 +18,7 @@ import TimerControls from "@/components/timer/controls/controlsNew.vue";
 import TimerPIPMode from "@/components/timer/PIPMode.vue";
 import { AppPlatform } from "@/platforms/platforms";
 
+import {usePlatformStore} from "@/stores/platforms";
 import { useMobileSettings } from "@/stores/platforms/mobileSettings";
 import { useAuthStore } from "@/stores/auth";
 
@@ -30,6 +30,7 @@ const TutorialView = defineAsyncComponent(
 	() => import("@/components/tutorial/_tutorialView.vue"),
 );
 
+const {isWeb, isDesktop, isExtension, isMobile} = usePlatformStore();
 const settingsStore = useSettings();
 const mobileSettingsStore = useMobileSettings();
 const {
@@ -67,9 +68,9 @@ const iconSvg = computed(
 useTicker();
 
 // Load appropriate platform module based on runtime config
-if (runtimeConfig.public.PLATFORM === AppPlatform.web) {
+if (isWeb.value || isDesktop.value || isExtension.value) {
 	useWeb();
-} else if (runtimeConfig.public.PLATFORM === AppPlatform.mobile) {
+} else if (isMobile.value) {
 	useMobile();
 }
 
@@ -194,7 +195,7 @@ section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
     )
     TimerControls(class="mb-8")
   TutorialView(v-if='!isOnboarded')
-  TimerPIPMode(v-if='userSettings.visuals.show_pip_mode')
+  TimerPIPMode(v-if='userSettings.visuals.show_pip_mode && (isWeb || isDesktop)')
 </template>
 
 <style lang="scss" scoped>
