@@ -3,6 +3,7 @@ import { ref, watch, computed, defineAsyncComponent, onBeforeMount, onMounted } 
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
+import { useSchemaOrg, defineSoftwareApp } from '@vueuse/schema-org'
 
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from "@/stores/settings";
@@ -48,7 +49,7 @@ const {
 	isOnboarded,
 } = useAuthStore();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const iconSvg = computed(
 	() => `data:image/svg+xml,
@@ -92,24 +93,51 @@ const pageTitle = computed(() => {
 		);
 	return t('meta.title');
 });
-const headData = computed(()=>({
-  htmlAttrs: {
-    lang: userSettings.value?.language || 'en',
-  },
-  title: pageTitle.value,
-  meta: [
-    { name: 'description', content: t('meta.description') },
-    { name: 'keywords', content: t('meta.keywords') },
+const headData = computed(()=>{
+  const htmlLangMapper = {
+    'en': 'en-US',
+    'vi': 'vi-VI',
+  }
+  return {
+    htmlAttrs: {
+      lang: htmlLangMapper[locale.value],
+    },
+    title: pageTitle.value,
+    meta: [
+      { name: 'description', content: t('meta.description') },
+      { name: 'keywords', content: t('meta.keywords') },
 
-    // Open Graph cho Facebook/Zalo
-    { property: 'og:title', content: t('meta.title') },
-    { property: 'og:description', content: t('meta.description') },
+      // Open Graph cho Facebook/Zalo
+      { property: 'og:title', content: t('meta.title') },
+      { property: 'og:description', content: t('meta.description') },
 
-    // Twitter Card
-    { name: 'twitter:title', content: t('meta.title') },
-    { name: 'twitter:description', content: t('meta.description') }
-  ]
-}))
+      // Twitter Card
+      { name: 'twitter:title', content: t('meta.title') },
+      { name: 'twitter:description', content: t('meta.description') }
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: `https://pomodoro.betterme.page/${locale.value}`
+      },
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: t('meta.title'),
+          description: t('meta.description'),
+          url: `https://pomodoro.betterme.page/${locale.value}`,
+          applicationCategory: 'UtilitiesApplication',
+          operatingSystem: 'Web Browser',
+          inLanguage: locale.value
+        })
+      }
+    ]
+  }
+})
 useHead(headData)
 
 const progressBarSchedules = computed(() => {

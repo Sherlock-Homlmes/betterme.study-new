@@ -11,7 +11,7 @@ import "./assets/css/disable_tap_highlight.css";
 
 const app = createApp(App);
 const pinia = createPinia();
-const head = createHead()
+const head = createHead();
 
 app.use(pinia);
 app.use(i18nPlugin);
