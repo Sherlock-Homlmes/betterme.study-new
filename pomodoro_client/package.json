@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:extension": "vite build --mode=extension",
+    "build:extension": "VITE_PLATFORM=desktop vite build",
     "build:tauri": "tauri build",
     "preview": "vite preview",
     "tauri": "tauri"
@@ -15,6 +15,7 @@
     "@intlify/unplugin-vue-i18n": "^11.0.3",
     "@tailwindcss/vite": "^4.1.18",
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.6.0",
     "@tauri-apps/plugin-opener": "^2",
     "@unovis/vue": "^1.6.2",
     "@vueuse/core": "^14.1.0",

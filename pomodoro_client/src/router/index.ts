@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, createWebHashHistory, type RouteRecordR
 import {runtimeConfig} from '@/config/runtimeConfig';
 import Index from '@/pages/index.vue';
 import DiscordOAuth from '@/pages/auth/discord-oauth.vue';
+import DesktopPIPView from '@/pages/DesktopPIPView.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,6 +25,14 @@ const routes: RouteRecordRaw[] = [
     component: DiscordOAuth,
   },
 ];
+if(runtimeConfig.public.PLATFORM === 'extension' || runtimeConfig.public.PLATFORM === 'desktop')
+routes.push(
+  {
+    path: '/pip-view',
+    name: 'pip-view',
+    component: DesktopPIPView,
+  },
+)
 
 const router = createRouter({
   history: runtimeConfig.public.PLATFORM === 'extension'

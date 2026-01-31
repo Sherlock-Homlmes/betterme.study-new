@@ -15,7 +15,6 @@ import { useMobile } from "@/platforms/mobile";
 import TimerSwitch from "@/components/timer/display/_timerSwitch.vue";
 import TimerProgress from "@/components/timer/timerProgress.vue";
 import TimerControls from "@/components/timer/controls/controlsNew.vue";
-import TimerPIPMode from "@/components/timer/PIPMode.vue";
 import { AppPlatform } from "@/platforms/platforms";
 
 import {usePlatformStore} from "@/stores/platforms";
@@ -26,10 +25,11 @@ const router = useRouter()
 
 // components
 const AppBar = defineAsyncComponent(() => import("@/components/appBar.vue"));
-const TutorialView = defineAsyncComponent(
-	() => import("@/components/tutorial/_tutorialView.vue"),
-);
+const TutorialView = defineAsyncComponent(() => import("@/components/tutorial/_tutorialView.vue"));
+const WebPIPMode = defineAsyncComponent(() => import("@/components/timer/WebPIPMode.vue"));
+const DesktopPIPMode = defineAsyncComponent(() => import("@/components/timer/DesktopPIPMode.vue"));
 
+const { t, locale } = useI18n();
 const {isWeb, isDesktop, isExtension, isMobile} = usePlatformStore();
 const settingsStore = useSettings();
 const mobileSettingsStore = useMobileSettings();
@@ -49,8 +49,6 @@ const {
 	loading,
 	isOnboarded,
 } = useAuthStore();
-
-const { t, locale } = useI18n();
 
 const iconSvg = computed(
 	() => `data:image/svg+xml,
@@ -195,7 +193,8 @@ section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
     )
     TimerControls(class="mb-8")
   TutorialView(v-if='!isOnboarded')
-  TimerPIPMode(v-if='userSettings.visuals.show_pip_mode && (isWeb || isDesktop)')
+  DesktopPIPMode(v-if='userSettings.visuals.show_pip_mode && isDesktop')
+  WebPIPMode(v-if='userSettings.visuals.show_pip_mode && isWeb')
 </template>
 
 <style lang="scss" scoped>

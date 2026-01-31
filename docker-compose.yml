@@ -27,6 +27,7 @@ services:
     working_dir: /var/task/pomodoro_client
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
+      - VITE_PLATFORM=web
       - VITE_API_URL=http://localhost/api
       - TAURI_DEV_HOST=0.0.0.0
     networks:

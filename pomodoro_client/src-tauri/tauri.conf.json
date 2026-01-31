@@ -4,17 +4,30 @@
   "version": "0.1.0",
   "identifier": "com.linuxdragon.betterme-study-pomodoro",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "VITE_PLATFORM=desktop bun run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "vite build --mode=desktop",
+    "beforeBuildCommand": "VITE_PLATFORM=desktop vite build",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "betterme-study-pomodoro",
+        "label": "main",
+        "title": "Betterme Pomodoro",
         "width": 800,
         "height": 600
+      },
+      {
+        "label": "pip",
+        "title": "",
+        "width": 300,
+        "height": 150,
+        "resizable": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "decorations": false,
+        "visible": false,
+        "url": "/pip-view"
       }
     ],
     "security": {
@@ -25,11 +38,7 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/favicon.png"
     ]
   }
 }

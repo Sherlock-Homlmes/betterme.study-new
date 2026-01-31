@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { TimerState, usePomodoroStore } from "@/stores/pomodoros";
+import { useTimerSync } from "@/composables/useTimerSync";
 
 const { t } = useI18n();
-const { timerState, timerString, getCurrentItem } = usePomodoroStore();
+const { timerState, getCurrentItem } = usePomodoroStore();
+const { timerString } = useTimerSync();
 const running = computed(() => timerState.value === TimerState.RUNNING);
 
 const emit = defineEmits<{ (event: "tick", timeString: string): void }>();
