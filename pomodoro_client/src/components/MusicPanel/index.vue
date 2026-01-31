@@ -234,7 +234,7 @@ const closePanel = () => {
 							min="0"
 							max="1"
 							step="0.01"
-							class="w-24 h-2 bg-primary-container rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
+							class="w-24 h-2 bg-transparent rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
 							aria-label="YouTube Volume"
 						/>
 					</div>
@@ -267,7 +267,7 @@ const closePanel = () => {
 								min="0"
 								max="1"
 								step="0.01"
-								class="w-24 h-2 bg-primary-container rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
+								class="w-24 h-2 bg-transparent rounded-lg appearance-none cursor-pointer dark:bg-primary-darkcontainer music-slider"
 								:aria-label="`${soundPlayer.name} Volume`"
 							/>
 						</div>
@@ -278,34 +278,44 @@ const closePanel = () => {
 	</section>
 </template>
 
-<style lang="scss">
-.music-slider {
-	&::-webkit-slider-thumb {
-		appearance: none;
-		width: 16px;
-		height: 16px;
-		background: #a7373a;
-		border-radius: 50%;
-		cursor: pointer;
+<style lang="scss" scoped>
+@import "@/assets/css/tailwind.css";
+
+@mixin range-track {
+	@apply h-1 min-w-0 rounded-full bg-primary/20 dark:bg-primary-dark/20 active:bg-primary/40 dark:active:bg-primary-dark/40;
+}
+
+@mixin range-thumb {
+	@apply rounded-full border-none bg-primary dark:bg-primary-dark scale-90 transition-all duration-300 active:scale-125 appearance-none size-4 -mt-1.5;
+
+	&:focus {
+		@apply ring ring-primary dark:ring-primary-dark;
+	}
+}
+
+:deep(.music-slider) {
+	&::-moz-range-thumb {
+		@include range-thumb;
 	}
 
-	&::-moz-range-thumb {
-		appearance: none;
-		width: 16px;
-		height: 16px;
-		background: #a7373a;
-		border-radius: 50%;
-		cursor: pointer;
-		border: none;
+	&::-moz-range-track {
+		@include range-track;
 	}
 
 	&::-ms-thumb {
-		appearance: none;
-		width: 16px;
-		height: 16px;
-		background: #a7373a;
-		border-radius: 50%;
-		cursor: pointer;
+		@include range-thumb;
+	}
+
+	&::ms-track {
+		@include range-track;
+	}
+
+	&::-webkit-slider-thumb {
+		@include range-thumb;
+	}
+
+	&::-webkit-slider-runnable-track {
+		@include range-track;
 	}
 }
 </style>

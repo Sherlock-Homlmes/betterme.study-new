@@ -65,7 +65,7 @@ const checkEnter = (event: KeyboardEvent) => {
       :value="data.taskTitle"
       type="text"
       required
-      class="flex-grow block min-w-0 p-0 bg-transparent border-none dark:bg-transparent focus:ring-transparent focus:ring-offset-0 dark:focus:bg-transparent peer"
+      class="flex-grow block min-w-0 p-0 bg-transparent border-none dark:bg-transparent focus:ring-transparent focus:ring-offset-0 dark:focus:bg-transparent outline-none peer"
       :placeholder="$t('tasks.addPlaceholder')"
       @input="e => data.taskTitle = (e.target as HTMLInputElement)?.value"
       @keyup="checkEnter"

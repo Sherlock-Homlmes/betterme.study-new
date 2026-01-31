@@ -127,7 +127,7 @@ watch(
 
 <template>
   <div
-    class="relative flex flex-row items-center px-2 py-3 transition-all duration-200 border-l-8 rounded-md hover:shadow-sm border-themed md:py-2"
+    class="relative flex flex-row items-center px-2 py-3 transition-all duration-200 border-l-8 rounded-md hover:shadow-sm border-themed group md:py-2"
     :class="[{ 'opacity-50 line-through italic': props.item.status === TaskStatus.DONE, 'cursor-move': showReorder, 'ring ring-themed': state.dragged || props.droptarget, 'bg-themed !text-white': props.manage && state.editing }, props.manage && state.editing ? 'bg-themed' : 'bg-surface-light dark:bg-surface-dark hover:shadow-md hover:ring-1 hover:ring-themed']"
     :style="{ '--theme': settingsStore.getColor(props.item.section, ColorMethod.modern) }"
     draggable="true"
@@ -167,7 +167,7 @@ watch(
           :importance="ButtonImportance.Text"
           class="-m-3 md:-m-2"
           inner-class="p-3 md:p-2"
-          bg-class="ring-themed bg-themed"
+          bg-class="ring-themed group-hover:bg-themed"
           @click="deleteTask(props.item.id)"
         >
           <TrashIcon size="18" />

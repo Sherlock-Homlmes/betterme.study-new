@@ -60,6 +60,7 @@ export default {
 				longpause: "#2EC4B6",
 				theme: "#F87171",
 				themed: "rgb(var(--theme) / <alpha-value>)",
+				"themed-color": "var(--theme-color)",
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
 				card: {

@@ -68,7 +68,7 @@ const updateInput = (newValue: string) => {
 <template>
   <div class="flex flex-row items-center gap-2">
     <input
-      class="relative h-3 min-w-0 bg-transparent appearance-none group isolate w-full"
+      class="input-number-range relative h-3 min-w-0 bg-transparent appearance-none group isolate w-full"
       :value="state.value"
       :min="props.min"
       :max="props.max"
@@ -94,27 +94,29 @@ const updateInput = (newValue: string) => {
   }
 }
 
-::-moz-range-thumb {
-  @include range-thumb;
-}
+:deep(.input-number-range) {
+  &::-moz-range-thumb {
+    @include range-thumb;
+  }
 
-::-moz-range-track {
-  @include range-track;
-}
+  &::-moz-range-track {
+    @include range-track;
+  }
 
-::-ms-thumb {
-  @include range-thumb;
-}
+  &::-ms-thumb {
+    @include range-thumb;
+  }
 
-::ms-track {
-  @include range-track;
-}
+  &::ms-track {
+    @include range-track;
+  }
 
-::-webkit-slider-thumb {
-  @include range-thumb;
-}
+  &::-webkit-slider-thumb {
+    @include range-thumb;
+  }
 
-::-webkit-slider-runnable-track {
-  @include range-track;
+  &::-webkit-slider-runnable-track {
+    @include range-track;
+  }
 }
 </style>
