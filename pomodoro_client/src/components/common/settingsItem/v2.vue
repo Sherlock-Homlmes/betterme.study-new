@@ -3,7 +3,7 @@ import { computed, defineAsyncComponent } from "vue";
 import {get, set} from 'lodash'
 import { useSettings } from "@/stores/settings";
 import OptionGroup from "@/components/base/optionGroup.vue";
-import { Control } from "@/components/settings/types/settingsItem";
+import { Control } from "./type";
 import { useAuthStore } from "@/stores/auth";
 
 const controls: Record<Control, unknown> = {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ButtonControl from "@/components/base/uiButton.vue";
-import { ButtonImportance } from "../base/types/button";
+import { ButtonImportance } from "@/components/base/types/button";
 import { useAuthStore } from "@/stores/auth";
 
 const downloadSettings = () => {
@@ -20,8 +20,7 @@ const downloadSettings = () => {
 };
 </script>
 
-<template>
-  <ButtonControl default-style :importance="ButtonImportance.Filled" @click="downloadSettings">
-    <span v-text="$t('settings.manage.buttons.save')" />
-  </ButtonControl>
+<template lang="pug">
+ButtonControl(default-style :importance="ButtonImportance.Filled" @click="downloadSettings")
+  span(v-text="$t('settings.manage.buttons.save')")
 </template>

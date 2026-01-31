@@ -57,7 +57,6 @@
 		"tabs": {
 			"main": "Chính",
 			"timer": "Đồng hồ",
-			"display": "Nhạc",
 			"audio": "Âm thanh",
 			"about": "Giới thiệu"
 		},
@@ -288,6 +287,10 @@
 				"enable_adaptive_ticking": {
 					"_title": "Kích hoạt tích tắc thích ứng",
 					"_description": "Bộ hẹn giờ sẽ tích tắc ít thường xuyên hơn khi ở chế độ nền"
+				},
+				"enable_music_when_visit_site": {
+					"_title": "Kích hoạt âm nhạc khi mở ứng dụng",
+					"_description": "Tự động phát nhạc khi mở ứng dụng"
 				}
 			},
 			"reset": {

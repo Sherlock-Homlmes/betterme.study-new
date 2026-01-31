@@ -55,19 +55,20 @@ const settingsStore = useSettings();
       <ChecklistIcon class="inline-block" />
     </CButton>
 
+
     <CButton
       circle
-      :aria-label="$t('appbar.music')"
+      :aria-label="$t('appbar.settings')"
       :importance="ButtonImportance.Filled"
       :theme="ButtonTheme.Neutral"
       class="h-11"
       no-content-theme
       no-padding
       inner-class="p-1"
-      @click="openPanels.music = !openPanels.music"
-      key='music'
+      @click="openPanels.user = !openPanels.user"
+      key='user'
     >
-      <MusicIcon class="inline-block" />
+      <UserIcon class="inline-block" />
     </CButton>
 
     <CButton
@@ -83,21 +84,6 @@ const settingsStore = useSettings();
       key='setting'
     >
       <SettingsIcon class="inline-block" />
-    </CButton>
-
-    <CButton
-      circle
-      :aria-label="$t('appbar.settings')"
-      :importance="ButtonImportance.Filled"
-      :theme="ButtonTheme.Neutral"
-      class="h-11"
-      no-content-theme
-      no-padding
-      inner-class="p-1"
-      @click="openPanels.user = !openPanels.user"
-      key='user'
-    >
-      <UserIcon class="inline-block" />
     </CButton>
   </div>
 </template>

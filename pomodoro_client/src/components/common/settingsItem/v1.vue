@@ -2,7 +2,7 @@
 import { computed, defineAsyncComponent } from "vue";
 import { useSettings } from "@/stores/settings";
 import OptionGroup from "@/components/base/optionGroup.vue";
-import { Control } from "@/components/settings/types/settingsItem";
+import { Control } from "./type";
 
 const controls: Record<Control, unknown> = {
 	check: defineAsyncComponent(() => import("@/components/base/uiToggle.vue")),

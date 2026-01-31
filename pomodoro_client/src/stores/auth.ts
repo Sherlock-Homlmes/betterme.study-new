@@ -30,6 +30,7 @@ export const defaultSettings = {
 		show_pip_mode: true,
 
 		enable_audio: true,
+		enable_music_when_visit_site: true,
 		enable_adaptive_ticking: true,
 		auto_start_next_time: true,
 		custom_audios: [],

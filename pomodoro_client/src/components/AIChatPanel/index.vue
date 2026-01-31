@@ -98,8 +98,8 @@ import { ButtonImportance } from "../base/types/button";
 import ControlButton from "../base/uiButton.vue"; // Changed to relative path
 import Divider from "../base/uiDivider.vue"; // Changed to relative path
 
-import TabHeader from "../settings/panel/tabHeader.vue"; // Changed to relative path
-import LoginTab from "../settings/loginTab.vue"; // Changed to relative path
+import TabHeader from "@/components/common/panel/tabHeader.vue";
+import LoginTab from "@/components/common/loginTab.vue"; // Changed to relative path
 import ChatBox from "./chatBox.vue"; // Corrected casing
 import { useAIChatStore } from "../../stores/aichat"; // Changed to relative path
 const { isAuth } = useAuthStore();

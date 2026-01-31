@@ -20,10 +20,10 @@ import { ButtonImportance } from "../base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
 import Divider from "@/components/base/uiDivider.vue";
 
-import TabHeader from "@/components/settings/panel/tabHeader.vue";
+import TabHeader from "@/components/common/panel/tabHeader.vue";
 import InfoTab from "@/components/userSettingPanel/infoTab.vue";
 import StatisticTab from "@/components/userSettingPanel/statisticTab.vue";
-import LoginTab from "@/components/settings/loginTab.vue";
+import LoginTab from "@/components/common/loginTab.vue";
 const { isAuth } = useAuthStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from "vue";
 import { type Store } from "pinia";
-import { ButtonImportance } from "../base/types/button";
+import { ButtonImportance } from "@/components/base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useTasklist } from "@/stores/tasklist";
@@ -62,9 +62,8 @@ const importFile = () => {
 };
 </script>
 
-<template>
-  <Button default-style :importance="ButtonImportance.Filled" @click="openFileDialog">
-    <input ref="fileinput" accept=".json" type="file" hidden @change="importFile">
-    <span v-text="$t('settings.manage.buttons.load')" />
-  </Button>
+<template lang="pug">
+Button(default-style :importance="ButtonImportance.Filled" @click="openFileDialog")
+  input(ref="fileinput" accept=".json" type="file" hidden @change="importFile")
+  span(v-text="$t('settings.manage.buttons.load')")
 </template>

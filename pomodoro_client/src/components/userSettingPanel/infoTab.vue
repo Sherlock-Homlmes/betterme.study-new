@@ -11,7 +11,7 @@ import _ from "lodash";
 
 import { useMain } from "@/stores/main";
 import { useAuthStore } from "@/stores/auth";
-import { Control } from "@/components/settings/types/settingsItem";
+import { Control } from "@/components/common/settingsItem/type";
 import { fetchWithAuth } from "@/utils/betterFetch";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
@@ -20,7 +20,7 @@ import InputForm from "@/components/base/inputForm.vue";
 import { ButtonImportance } from "../base/types/button";
 import { AppPlatform } from "@/platforms/platforms";
 
-import SettingsItemV2 from "@/components/settings/settingsItemV2.vue";
+import SettingsItemV2 from "@/components/common/settingsItem/v2.vue";
 
 const { userInfo, getCurrentUser } = useAuthStore();
 const API_URL = runtimeConfig.public.API_URL;
