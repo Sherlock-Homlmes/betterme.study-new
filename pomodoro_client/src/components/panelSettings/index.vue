@@ -7,6 +7,7 @@ import {
 	AlarmIcon as TabIconClock,
 	MusicIcon as TabIconMusic,
 	InfoCircleIcon as TabIconAbout,
+	UserIcon as TabIconAccount,
 } from "vue-tabler-icons";
 
 import { ButtonImportance } from "../base/types/button";
@@ -19,6 +20,7 @@ import ClockSettingTab from "./clockTab.vue";
 import AudioSettingTab from "./audioTab/index.vue";
 import AboutTab from "./aboutTab.vue";
 import LoginTab from "@/components/common/loginTab.vue";
+import UserSettingTab from "./userSettingTab.vue";
 
 
 import { useOpenPanels } from "@/stores/openpanels";
@@ -53,15 +55,13 @@ Panel
         CloseIcon(:aria-label="$t('settings.buttons.close')")
 
   template(#content)
-    div(v-if="!loading || !isAuth")
-      div.relative.w-full
-        CoreSettingTab(v-if="state.activeTab === 1" @openLogin="state.activeTab = 5")
-        ClockSettingTab(v-else-if="state.activeTab === 2")
-        AudioSettingTab(v-show="state.activeTab === 3")
-        div(v-if="state.activeTab === 4" class="grid grid-cols-1 gap-2 py-3 px-4")
-          AboutTab
-        div(v-else-if="state.activeTab === 5" class="grid grid-cols-1 gap-2 py-3 px-4 h-full")
-          LoginTab
+    .relative.w-full.h-full(v-if="!loading || !isAuth")
+      CoreSettingTab(v-if="state.activeTab === 1" @openLogin="state.activeTab = 4")
+      ClockSettingTab(v-else-if="state.activeTab === 2")
+      AudioSettingTab(v-show="state.activeTab === 3")
+      UserSettingTab(v-if="state.activeTab === 4")
+      div(v-else-if="state.activeTab === 5" class="grid grid-cols-1 gap-2 py-3 px-4")
+        AboutTab
 
   template(#footer)
     div.flex.flex-row.flex-none.h-20.p-4
@@ -74,7 +74,10 @@ Panel
       TabHeader(:active="state.activeTab === 3" :text="$t('settings.tabs.audio')" @click="state.activeTab = 3")
         template(#icon)
           TabIconMusic(role="presentation")
-      TabHeader(:active="state.activeTab === 4" :text="$t('settings.tabs.about')" @click="state.activeTab = 4")
+      TabHeader(:active="state.activeTab === 4" :text="$t('settings.tabs.account')" @click="state.activeTab = 4")
+        template(#icon)
+          TabIconAccount(role="presentation")
+      TabHeader(:active="state.activeTab === 5" :text="$t('settings.tabs.about')" @click="state.activeTab = 5")
         template(#icon)
           TabIconAbout(role="presentation")
 </template>

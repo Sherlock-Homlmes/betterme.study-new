@@ -58,7 +58,8 @@
 			"main": "Chính",
 			"timer": "Đồng hồ",
 			"audio": "Âm thanh",
-			"about": "Giới thiệu"
+			"about": "Giới thiệu",
+			"account": "Tài khoản"
 		},
 		"buttons": {
 			"close": "Đóng",
@@ -296,13 +297,8 @@
 			"reset": {
 				"_title": "Đặt lại cài đặt",
 				"_description": "Tất cả cài đặt sẽ được đặt lại sau khi ứng dụng được tải lại"
-			}
-		}
-	},
-	"user_settings": {
-		"heading": "Tài khoản",
-		"tabs": {
-			"info": {
+			},
+			"account": {
 				"heading": "Thông tin",
 				"inputs": {
 					"name": "Tên",
@@ -311,19 +307,22 @@
 				"buttons": {
 					"save": "Lưu"
 				}
-			},
-			"statistic": {
-				"heading": "Thống kê",
-				"study_time": "Thời gian học",
-				"hours": "giờ",
-				"minutes": "phút",
-				"total_study_time": "Tổng thời gian học",
-				"study_days": "Số ngày học",
-				"avg_time_per_day": "TB thời gian/ngày",
-				"study_streak": "Streak ngày học",
-				"loading_statistics": "Đang tải thống kê...",
-				"no_data": "Không có dữ liệu cho khoảng thời gian đã chọn."
 			}
+		}
+	},
+	"statistic": {
+		"heading": "Tài khoản",
+		"content": {
+			"heading": "Thống kê",
+			"study_time": "Thời gian học",
+			"hours": "giờ",
+			"minutes": "phút",
+			"total_study_time": "Tổng thời gian học",
+			"study_days": "Số ngày học",
+			"avg_time_per_day": "TB thời gian/ngày",
+			"study_streak": "Streak ngày học",
+			"loading_statistics": "Đang tải thống kê...",
+			"no_data": "Không có dữ liệu cho khoảng thời gian đã chọn."
 		}
 	},
 	"notification": {

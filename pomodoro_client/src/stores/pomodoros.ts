@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 import { runtimeConfig } from "@/config/runtimeConfig";
 import { createGlobalState } from "@vueuse/core";
+import { fetchWithAuth } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
 import { useSettings, Section, ColorMethod } from "./settings";
 import { useErrorStore } from "./common";

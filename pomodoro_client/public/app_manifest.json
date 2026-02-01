@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
-	"name": "FocusTide: modern & simple Pomodoro app",
-	"short_name": "FocusTide",
-	"description": "Modern and customisable productivity timer, right in your browser!",
+	"name": "Betterme: Pomodoro Timer & Study Tools",
+	"short_name": "Betterme Pomodoro",
+	"description": "Boost your focus with Betterme: The free, ad-free productivity timer and Pomodoro tool designed for work and study. Works seamlessly on all platforms.",
 	"start_url": "/timer?pwa=true",
 	"theme_color": "#F87171",
 	"background_color": "#FEE2E2",

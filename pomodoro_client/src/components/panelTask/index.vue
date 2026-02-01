@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, onBeforeMount } from "vue";
 import { XIcon } from "vue-tabler-icons";
 
 import { ButtonImportance, ButtonTheme } from "../base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
-import TaskItem from "@/components/todoList/todoItem.vue";
-import TaskAdd from "@/components/todoList/addTask.vue";
+import TaskItem from "./todoItem.vue";
+import TaskAdd from "./addTask.vue";
 import { useSettings } from "@/stores/settings";
 import { type Task, useTasklist } from "@/stores/tasklist";
 import { useOpenPanels } from "@/stores/openpanels";
 import { usePomodoroStore } from "@/stores/pomodoros";
-
 import { useTaskStore } from "@/stores/todolist";
-import { onBeforeMount } from "vue";
 
 const openPanels = useOpenPanels();
 const settingsStore = useSettings();

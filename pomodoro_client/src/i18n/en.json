@@ -58,7 +58,8 @@
 			"main": "Main",
 			"timer": "Clock",
 			"audio": "Audio",
-			"about": "About"
+			"about": "About",
+			"account": "Account"
 		},
 		"buttons": {
 			"close": "Close",
@@ -300,13 +301,9 @@
 			"reset": {
 				"_title": "Reset settings",
 				"_description": "All settings will be reset after the app is reloaded"
-			}
-		}
-	},
-	"user_settings": {
-		"heading": "User Information",
-		"tabs": {
-			"info": {
+			},
+
+			"account": {
 				"heading": "Info",
 				"inputs": {
 					"name": "Name",
@@ -315,19 +312,22 @@
 				"buttons": {
 					"save": "Save"
 				}
-			},
-			"statistic": {
-				"heading": "Statistic",
-				"study_time": "Study time",
-				"hours": "h",
-				"minutes": "m",
-				"total_study_time": "Total study time",
-				"study_days": "Study days",
-				"avg_time_per_day": "Avg time/day",
-				"study_streak": "Study streak",
-				"loading_statistics": "Loading statistics...",
-				"no_data": "No data available for the selected date range."
 			}
+		}
+	},
+	"statistic": {
+		"heading": "Statistic",
+		"content": {
+			"heading": "Statistic",
+			"study_time": "Study time",
+			"hours": "h",
+			"minutes": "m",
+			"total_study_time": "Total study time",
+			"study_days": "Study days",
+			"avg_time_per_day": "Avg time/day",
+			"study_streak": "Study streak",
+			"loading_statistics": "Loading statistics...",
+			"no_data": "No data available for the selected date range."
 		}
 	},
 	"notification": {

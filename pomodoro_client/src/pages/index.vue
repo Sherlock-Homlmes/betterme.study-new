@@ -14,7 +14,7 @@ import { useMobile } from "@/platforms/mobile";
 
 import TimerSwitch from "@/components/timer/display/_timerSwitch.vue";
 import TimerProgress from "@/components/timer/timerProgress.vue";
-import TimerControls from "@/components/timer/controls/controlsNew.vue";
+import TimerControls from "@/components/timer/controls.vue";
 import { AppPlatform } from "@/platforms/platforms";
 
 import {usePlatformStore} from "@/stores/platforms";

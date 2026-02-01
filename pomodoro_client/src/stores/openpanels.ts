@@ -1,13 +1,12 @@
-import { defineStore } from "pinia";
+import { createGlobalState } from "@vueuse/core";
+import { ref } from "vue";
 
-const useOpenPanels = defineStore("openpanels", {
-	state: () => ({
+export const useOpenPanels = createGlobalState(
+	() => ref({
 		music: false,
 		ai: false,
 		settings: false,
 		todo: false,
-		user: false,
-	}),
-});
-
-export { useOpenPanels };
+		statistic: false,
+	})
+);
