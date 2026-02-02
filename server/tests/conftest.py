@@ -16,7 +16,7 @@ from fastapi.testclient import TestClient
 from mongomock_motor import AsyncMongoMockClient
 
 # local
-from models import news_document_models, clock_document_models, discord_document_models
+from models import news_document_models, pomodoro_document_models, discord_document_models
 from base.routes import api_router
 from routers.authentication.auth import auth_handler
 
@@ -48,7 +48,7 @@ async def init_db():
     db_client = AsyncMongoMockClient()
     await beanie.init_beanie(database=db_client.betterme_news, document_models=news_document_models)
     await beanie.init_beanie(
-        database=db_client.betterme_study, document_models=clock_document_models
+        database=db_client.betterme_study, document_models=pomodoro_document_models
     )
     await beanie.init_beanie(
         database=db_client.discord_betterme, document_models=discord_document_models
@@ -58,7 +58,7 @@ async def init_db():
 @pytest.fixture(scope="function")
 async def clean_db(init_db):
     await init_db
-    models = [*news_document_models, *clock_document_models, *discord_document_models]
+    models = [*news_document_models, *pomodoro_document_models, *discord_document_models]
 
     for model in models:
         await model.get_pymongo_collection().drop()

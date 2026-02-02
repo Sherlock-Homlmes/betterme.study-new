@@ -1,19 +1,23 @@
 # fastapi
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, APIRouter
 
 # default
 from bson.objectid import ObjectId
 
 # local
-from . import router
-from authentication import auth_handler
-
-from .schemas import TaskCategory
 from models import Users, TaskCategories
+from routers.authentication import auth_handler
+from .schemas import TaskCategory
+
+router = APIRouter(
+    tags=["Task Categories"],
+    prefix="/taskcategories",
+    responses={404: {"description": "Not found"}},
+)
 
 
 @router.get(
-    "/task-categories",
+    "/",
     description="get list of task category",
     dependencies=[Depends(auth_handler.auth_wrapper)],
 )
@@ -27,7 +31,7 @@ async def get_list_of_task_category(user: Users = Depends(auth_handler.auth_wrap
 
 
 @router.get(
-    "/task-categories/{task_id}",
+    "/{task_id}",
     description="get a task category",
     dependencies=[Depends(auth_handler.auth_wrapper)],
 )
@@ -45,7 +49,7 @@ async def get_a_task_category(
 
 
 @router.post(
-    "/task-categories",
+    "/",
     description="create a task category",
     dependencies=[Depends(auth_handler.auth_wrapper)],
     status_code=201,
@@ -60,7 +64,7 @@ async def create_a_task_category(
 
 
 @router.patch(
-    "/task-categories/{task_id}",
+    "/{task_id}",
     description="update a task category",
     dependencies=[Depends(auth_handler.auth_wrapper)],
     status_code=204,
@@ -82,7 +86,7 @@ async def update_a_task_category(
 
 
 @router.delete(
-    "/task-categories/{task_id}",
+    "/{task_id}",
     description="delete a task category",
     dependencies=[Depends(auth_handler.auth_wrapper)],
     status_code=204,

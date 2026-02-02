@@ -11,13 +11,14 @@ from models import Users, Pomodoros, PomodoroStatusEnum
 from .schemas import GetPomodoroResponse, PatchPomodoroPayload
 
 router = APIRouter(
-    tags=["Study tools-Pomodoro"],
+    prefix="/pomodoros",
+    tags=["Study tools - Pomodoro"],
     responses={404: {"description": "Not found"}},
 )
 
 
 @router.get(
-    "/pomodoros",
+    "/",
     description="get list of pomodoro",
 )
 async def get_list_of_pomodoros(
@@ -26,20 +27,8 @@ async def get_list_of_pomodoros(
     return await Pomodoros.find(Pomodoros.user_id == user["id"], sort=[("start_at", -1)]).to_list()
 
 
-# @router.get(
-#     "/pomodoros/_current",
-#     description="get a pomodoro",
-# )
-# async def get_current_pomodoro(
-#     user: Users = Depends(auth_handler.auth_wrapper),
-# ) -> GetPomodoroResponse:
-#     if pomodoro := await Pomodoros.get_last_pomodoro(user["id"]):
-#         return pomodoro
-#     return None
-
-
 @router.get(
-    "/pomodoros/{pomodoro_id}",
+    "/{pomodoro_id}",
     description="get a pomodoro",
 )
 async def get_a_pomodoro(
@@ -54,7 +43,7 @@ async def get_a_pomodoro(
 
 
 @router.post(
-    "/pomodoros",
+    "/",
     description="create a pomodoro",
     status_code=201,
 )
@@ -70,7 +59,7 @@ async def create_a_pomodoro(
 
 
 @router.patch(
-    "/pomodoros/{pomodoro_id}",
+    "/{pomodoro_id}",
     description="update a pomodoro",
     status_code=204,
 )
@@ -96,7 +85,7 @@ async def update_a_pomodoro(
 
 
 @router.delete(
-    "/pomodoros/_last",
+    "/_last",
     description="delete a pomodoro",
     status_code=204,
 )

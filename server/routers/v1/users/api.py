@@ -20,7 +20,6 @@ router = APIRouter(
 @router.get("/users/self/settings")
 async def get_user_setting(user: Users = Depends(auth_handler.auth_wrapper)):
     user_setting = await UserSettings.find_one(UserSettings.user.id == ObjectId(user["id"]))
-    # TODO: refactor
     del user_setting.user
     return user_setting
 

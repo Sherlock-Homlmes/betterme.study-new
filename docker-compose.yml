@@ -69,6 +69,7 @@ services:
       dockerfile: ./others/docker/server/Dockerfile
     volumes:
       - .:/var/task
+      - uv-cache:/root/.cache/uv
     working_dir: /var/task/server
     user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
@@ -78,7 +79,7 @@ services:
       - nginx-net
       - mongo-db
     ports:
-      - "8080:8080"
+      - 8080:8080
     command:
       ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
     entrypoint: ["uv", "run"]
@@ -185,6 +186,9 @@ services:
 
     # TODO: add local mongo
     # TODO: add local local s3
+
+volumes:
+  uv-cache:
 
 #Docker Networks
 networks:

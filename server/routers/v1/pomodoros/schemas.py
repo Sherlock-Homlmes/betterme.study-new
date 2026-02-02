@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, model_validator
 
-from models.clock.pomodoros import PomodoroStatusEnum
+from models.pomodoro.pomodoros import PomodoroStatusEnum
 
 
 class GetPomodoroResponse(BaseModel):

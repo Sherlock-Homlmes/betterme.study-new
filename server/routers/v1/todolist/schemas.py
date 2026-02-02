@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, model_validator
 from typing import Optional, List
 
 # local
-from models.clock.todolist import TaskStatusEnum
+from models.pomodoro.tasks import TaskStatusEnum
 
 
 class Task(BaseModel):

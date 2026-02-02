@@ -14,13 +14,14 @@ from models import Users, TodoList
 from utils.time_modules import vn_now
 
 router = APIRouter(
-    tags=["Study tools-Todolist"],
+    prefix="/todolist",
+    tags=["Study tools - Todolist"],
     responses={404: {"description": "Not found"}},
 )
 
 
 @router.get(
-    "/todolist",
+    "/",
     description="get list of task",
 )
 async def get_list_of_task(
@@ -33,7 +34,7 @@ async def get_list_of_task(
 
 
 @router.get(
-    "/todolist/{task_id}",
+    "/{task_id}",
     description="get a task",
 )
 async def get_a_task(
@@ -48,7 +49,7 @@ async def get_a_task(
 
 
 @router.post(
-    "/todolist",
+    "/",
     description="create a task",
     status_code=201,
 )
@@ -59,7 +60,7 @@ async def create_a_task(task: Task, user: Users = Depends(auth_handler.auth_wrap
 
 
 @router.patch(
-    "/todolist/{task_id}",
+    "/{task_id}",
     description="update a todo",
     status_code=204,
 )
@@ -82,7 +83,7 @@ async def update_a_task(
 
 
 @router.delete(
-    "/todolist/{task_id}",
+    "/{task_id}",
     description="delete a task",
     status_code=204,
 )
