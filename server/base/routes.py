@@ -11,7 +11,7 @@ from routers.authentication.auth import auth_handler
 from routers import authentication
 
 from routers.user.study_tools import pomodoros, todolist
-from routers.user import posts, user, ai, audios
+from routers.user import posts, user, ai, audios, livekit
 from routers import statistics
 
 from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as admin_posts
@@ -19,7 +19,7 @@ from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as a
 api_router = APIRouter()
 
 # single auth method
-non_auth_modules = (authentication, posts)
+non_auth_modules = (authentication, posts, livekit)
 auth_modules = (
     pomodoros,
     todolist,

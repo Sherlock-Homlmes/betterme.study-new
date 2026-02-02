@@ -716,6 +716,35 @@ wheels = [
 ]
 
 [[package]]
+name = "livekit-api"
+version = "0.8.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "livekit-protocol" },
+    { name = "protobuf" },
+    { name = "pyjwt" },
+    { name = "types-protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ef/79/5af8fa53316fd924b9ac3170c20861564476551cafd4f2f221a75de299c2/livekit_api-0.8.2.tar.gz", hash = "sha256:dd334266b6c3da1214ae646b4080a5aaba7acf4c216ebf4343a72390c277dec8", size = 13141, upload-time = "2025-02-05T21:18:36.321Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/1e/c6a0815d5abb99396af1e4a892c48fc0a4ce4ebbc4af5bbf535c786429bd/livekit_api-0.8.2-py3-none-any.whl", hash = "sha256:cafff157a4cdd8046315d16e29a1509a8a319163ffbbe604196d4e80884734f4", size = 15375, upload-time = "2025-02-05T21:18:34.53Z" },
+]
+
+[[package]]
+name = "livekit-protocol"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "protobuf" },
+    { name = "types-protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/df/6c/f5f7cb226441b3a357c2ea5444899b133dd13a5875894c6a9cd52fc5aa74/livekit_protocol-1.1.2.tar.gz", hash = "sha256:4550bf78fb9d365f19ea9875e565d86a2fb798854c8bd2e9100d7f7640dd9072", size = 79620, upload-time = "2026-01-20T01:27:23.437Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/f9/40e81d1b126d79a00b4a8a472a4f7c655b0a7736bb4d08f936be550b3bd8/livekit_protocol-1.1.2-py3-none-any.whl", hash = "sha256:8a26d592a87f5f70fee23aa88e47490727158ee8799c82742585aa8f73b160c5", size = 98854, upload-time = "2026-01-20T01:27:22.139Z" },
+]
+
+[[package]]
 name = "markdown-it-py"
 version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1373,6 +1402,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "fastapi-discord" },
     { name = "google-generativeai" },
+    { name = "livekit-api" },
     { name = "orjson" },
     { name = "passlib" },
     { name = "pillow" },
@@ -1414,6 +1444,7 @@ requires-dist = [
     { name = "fastapi-discord", specifier = "<=0.2.7" },
     { name = "google-generativeai", specifier = ">=0.8.4,<0.9.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27.0,<0.28.0" },
+    { name = "livekit-api", specifier = ">=0.8.0,<0.9.0" },
     { name = "mongomock-motor", marker = "extra == 'dev'", specifier = "==0.0.34" },
     { name = "orjson", specifier = ">=3.10.3,<4.0.0" },
     { name = "passlib", specifier = ">=1.7.4,<2.0.0" },
@@ -1513,6 +1544,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8f/28/7c85c8032b91dbe79725b6f17d2fffc595dff06a35c7a30a37bef73a1ab4/typer-0.20.0.tar.gz", hash = "sha256:1aaf6494031793e4876fb0bacfa6a912b551cf43c1e63c800df8b1a866720c37", size = 106492, upload-time = "2025-10-20T17:03:49.445Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/78/64/7713ffe4b5983314e9d436a90d5bd4f63b6054e2aca783a3cfc44cb95bbf/typer-0.20.0-py3-none-any.whl", hash = "sha256:5b463df6793ec1dca6213a3cf4c0f03bc6e322ac5e16e13ddd622a889489784a", size = 47028, upload-time = "2025-10-20T17:03:47.617Z" },
+]
+
+[[package]]
+name = "types-protobuf"
+version = "4.25.0.20240417"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/21/757620113af23233496c04b8a66e0201e78695495b1db8e676672608588b/types-protobuf-4.25.0.20240417.tar.gz", hash = "sha256:c34eff17b9b3a0adb6830622f0f302484e4c089f533a46e3f147568313544352", size = 53340, upload-time = "2024-04-17T02:17:05.755Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ef/78/6f0351f80a682c4005775c7e1fd2b17235b88d87c85ef59214bd1f60ff60/types_protobuf-4.25.0.20240417-py3-none-any.whl", hash = "sha256:e9b613227c2127e3d4881d75d93c93b4d6fd97b5f6a099a0b654a05351c8685d", size = 67896, upload-time = "2024-04-17T02:17:04.205Z" },
 ]
 
 [[package]]

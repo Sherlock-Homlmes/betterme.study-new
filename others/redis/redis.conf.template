@@ -1,2 +1,3 @@
 bind 0.0.0.0
+port __REDIS_PORT_PLACEHOLDER__
 requirepass __REDIS_PASSWORD_PLACEHOLDER__
