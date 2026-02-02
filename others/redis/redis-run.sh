@@ -1,2 +1,2 @@
 set -e
-sed "s#__REDIS_PASSWORD_PLACEHOLDER__#$REDIS_PASSWORD#g" $TEMPLATE_PATH | redis-server - "$@"
+sed -e "s#__REDIS_PASSWORD_PLACEHOLDER__#$REDIS_PASSWORD#g" -e "s#__REDIS_PORT_PLACEHOLDER__#$REDIS_PORT#g" $TEMPLATE_PATH | redis-server - "$@"

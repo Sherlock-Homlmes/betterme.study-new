@@ -4,6 +4,7 @@ import {
 	ChecklistIcon,
 	ChartBarIcon,
 	MessageChatbotIcon,
+	VideoIcon,
 } from "vue-tabler-icons";
 import { ButtonImportance, ButtonTheme } from "./base/types/button";
 import CButton from "@/components/base/uiButton.vue";
@@ -35,6 +36,12 @@ const appBarButtons = [
 		panel: 'statistic',
 		icon: ChartBarIcon,
 		ariaLabel: 'appbar.settings',
+	},
+	{
+		key: 'voiceChannel',
+		panel: 'voiceChannel',
+		icon: VideoIcon,
+		ariaLabel: 'appbar.voiceChannel',
 	},
 	{
 		key: 'setting',

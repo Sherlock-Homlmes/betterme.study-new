@@ -61,6 +61,10 @@ class Settings(BaseSettings):
     FILE_SERVICE_URL: str = "https://file-service.betterme.study"
     FILE_SERVICE_SECRET_KEY: str = "NoNeed"
 
+    LIVEKIT_API_KEY: str = "devkey"
+    LIVEKIT_API_SECRET: str = "secretsecret"
+    LIVEKIT_URL: str = "ws://localhost:7880"
+
 
 settings = Settings()
 is_dev_env = settings.ENV == ENVEnum.DEV.value

@@ -29,6 +29,7 @@ services:
     environment:
       - VITE_PLATFORM=web
       - VITE_API_URL=http://localhost:8080/api
+      - VITE_LIVEKIT_URL=ws://localhost:7880
       - TAURI_DEV_HOST=0.0.0.0
     networks:
       - nginx-net
@@ -38,30 +39,30 @@ services:
     command: ["bun", "run", "dev"]
     # command: ["bun", "run", "preview"]
 
-  news-client:
-    build:
-      context: ./
-      dockerfile: ./others/docker/news_client/Dockerfile
-    volumes:
-      - .:/var/task
-    working_dir: /var/task/news_client
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    networks:
-      - nginx-net
-    command:
-      ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
+  # news-client:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./others/docker/news_client/Dockerfile
+  #   volumes:
+  #     - .:/var/task
+  #   working_dir: /var/task/news_client
+  #   user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+  #   networks:
+  #     - nginx-net
+  #   command:
+  #     ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
 
-  news-admin-client:
-    build:
-      context: ./
-      dockerfile: ./others/docker/news_admin_client/Dockerfile
-    volumes:
-      - .:/var/task
-    working_dir: /var/task/news_admin_client
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    networks:
-      - nginx-net
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+  # news-admin-client:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./others/docker/news_admin_client/Dockerfile
+  #   volumes:
+  #     - .:/var/task
+  #   working_dir: /var/task/news_admin_client
+  #   user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+  #   networks:
+  #     - nginx-net
+  #   command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
 
   server:
     build:
@@ -84,89 +85,13 @@ services:
       ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
     entrypoint: ["uv", "run"]
 
-  file-service:
-    build:
-      context: ./
-      dockerfile: ./others/docker/file_service/Dockerfile
-    volumes:
-      - .:/var/task
-    working_dir: /var/task/file_service
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    environment:
-      - HOME=/tmp
-      - ENV=DEV
-    networks:
-      - nginx-net
-      - redis-db
-    command:
-      ["uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8080"]
-    entrypoint: ["poetry", "run"]
-    depends_on:
-      - redis
-      - file-service-worker
-      - file-service-worker-high-priority
-
-  file-service-worker:
-    build:
-      context: ./
-      dockerfile: ./others/docker/file_service/Dockerfile
-    volumes:
-      - .:/var/task
-    working_dir: /var/task/file_service
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: password
-    networks:
-      - nginx-net
-      - redis-db
-    command:
-      [
-        "rq",
-        "worker",
-        "high",
-        "low",
-        "--url",
-        "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
-      ]
-    entrypoint: ["poetry", "run"]
-    depends_on:
-      - redis
-
-  file-service-worker-high-priority:
-    build:
-      context: ./
-      dockerfile: ./others/docker/file_service/Dockerfile
-    volumes:
-      - .:/var/task
-    working_dir: /var/task/file_service
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: password
-    networks:
-      - nginx-net
-      - redis-db
-    command:
-      [
-        "rq",
-        "worker",
-        "high",
-        "--url",
-        "redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0",
-      ]
-    entrypoint: ["poetry", "run"]
-    depends_on:
-      - redis
-
   redis:
     build:
       context: ./
       dockerfile: ./others/docker/redis/Dockerfile
     restart: always
     environment:
+      REDIS_PORT: 6379
       REDIS_PASSWORD: password
       TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template
     networks:
@@ -186,6 +111,25 @@ services:
 
     # TODO: add local mongo
     # TODO: add local local s3
+
+  livekit:
+    image: livekit/livekit-server:latest
+    restart: on-failure
+    ports:
+      - "7880:7880"
+      - "7881:7881"
+      - "7882:7882/udp"
+    volumes:
+      - ./others/livekit/livekit.yaml:/etc/livekit.yaml
+    environment:
+      LIVEKIT_KEYS: "devkey: secretsecret"
+      REDIS_ADDRESS: redis:6379
+    networks:
+      - nginx-net
+      - redis-db
+    depends_on:
+      - redis
+    command: ["--config", "/etc/livekit.yaml"]
 
 volumes:
   uv-cache:
