@@ -1,0 +1,97 @@
+# default
+from typing import List
+from bson.objectid import ObjectId
+
+# libraries
+from fastapi import APIRouter, HTTPException, Depends
+
+# local
+from routers.authentication import auth_handler
+
+from .schemas import Task, PatchTaskPayload, GetTaskResponse
+from models import Users, Tasks
+
+from utils.time_modules import vn_now
+
+router = APIRouter(
+    prefix="/tasks",
+    tags=["Study tools - Tasks"],
+    responses={404: {"description": "Not found"}},
+)
+
+
+@router.get(
+    "/",
+    description="get list of task",
+)
+async def get_list_of_task(
+    user: Users = Depends(auth_handler.auth_wrapper),
+) -> List[GetTaskResponse]:
+    return await Tasks.find(
+        Tasks.user_id == user["id"],
+        sort=("index", 1),
+    ).to_list()
+
+
+@router.get(
+    "/{task_id}",
+    description="get a task",
+)
+async def get_a_task(
+    task_id: str, user: Users = Depends(auth_handler.auth_wrapper)
+) -> GetTaskResponse:
+    if task := await Tasks.find_one(
+        Tasks.id == ObjectId(task_id),
+        Tasks.user_id == user["id"],
+    ):
+        return task
+    raise HTTPException(status_code=404, detail="Task not exist")
+
+
+@router.post(
+    "/",
+    description="create a task",
+    status_code=201,
+)
+async def create_a_task(task: Task, user: Users = Depends(auth_handler.auth_wrapper)):
+    task = Tasks(**task.__dict__, user_id=user["id"])
+    await task.insert()
+    return task
+
+
+@router.patch(
+    "/{task_id}",
+    description="update a todo",
+    status_code=204,
+)
+async def update_a_task(
+    task_id: str, payload: PatchTaskPayload, user: Users = Depends(auth_handler.auth_wrapper)
+):
+    update_fields = payload.model_dump(mode="json", exclude_unset=True)
+    if not update_fields:
+        return
+
+    if task := await Tasks.find_one(
+        Tasks.id == ObjectId(task_id),
+        Tasks.user_id == user["id"],
+    ):
+        # TODO: validate task categories
+        await task.set({**update_fields, "updated_at": vn_now()})
+        return
+
+    raise HTTPException(status_code=404, detail="Task not exist")
+
+
+@router.delete(
+    "/{task_id}",
+    description="delete a task",
+    status_code=204,
+)
+async def delete_a_task(task_id: str, user: Users = Depends(auth_handler.auth_wrapper)):
+    if task := await Tasks.find_one(
+        Tasks.id == ObjectId(task_id),
+        Tasks.user_id == user["id"],
+    ):
+        await task.delete()
+        return
+    raise HTTPException(status_code=404, detail="Task not exist")
