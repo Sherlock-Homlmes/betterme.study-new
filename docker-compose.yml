@@ -95,8 +95,6 @@ services:
       TEMPLATE_PATH: /usr/local/etc/redis/redis.conf.template
     networks:
       - redis-db
-    ports:
-      - "6379:6379"
     command: ["sh", "/usr/local/etc/redis/redis-run.sh"]
 
   mongo:

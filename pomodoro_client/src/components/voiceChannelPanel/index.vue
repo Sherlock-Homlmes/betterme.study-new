@@ -4,7 +4,7 @@ import { Room, RoomEvent, RemoteParticipant, RemoteTrack, RemoteTrackPublication
 import { useOpenPanels } from '@/stores/openpanels'
 import { XIcon, MicrophoneIcon, MicrophoneOffIcon, VideoIcon, VideoOffIcon, PhoneIcon } from 'vue-tabler-icons'
 import { runtimeConfig } from '@/config/runtimeConfig'
-import { useUserMedia } from '@vueuse/core'
+import { useDevicesList } from '@vueuse/core'
 
 const openPanels = useOpenPanels()
 
@@ -26,13 +26,15 @@ const LIVEKIT_SECRET = 'secretsecret'
 
 const remoteParticipants = computed(() => Array.from(participants.value.values()))
 
-// Use vueuse for media permissions
-const { stream: mediaStream, start, stop, enabled } = useUserMedia({
-	constraints: {
-		video: true,
-		audio: true,
-	},
+// Use vueuse for device permissions
+const {
+	videoInputs: cameras,
+	audioInputs: microphones,
+} = useDevicesList({
+	requestPermissions: true,
 })
+
+const mediaStream = ref<MediaStream | null>(null)
 
 // Get individual tracks from the stream
 function getAudioTrack() {
@@ -45,6 +47,33 @@ function getVideoTrack() {
 	if (!mediaStream.value) return null
 	const tracks = mediaStream.value.getVideoTracks()
 	return tracks.length > 0 ? tracks[0] : null
+}
+
+async function startMedia() {
+	try {
+		const constraints: MediaStreamConstraints = {
+			audio: microphones.value && microphones.value.length > 0
+				? { deviceId: microphones.value[0].deviceId }
+				: true,
+			video: cameras.value && cameras.value.length > 0
+				? { deviceId: cameras.value[0].deviceId }
+				: true,
+		}
+		const stream = await navigator.mediaDevices.getUserMedia(constraints)
+		mediaStream.value = stream
+	} catch (error) {
+		console.error('Failed to get media stream:', error)
+		throw error
+	}
+}
+
+function stopMedia() {
+	if (mediaStream.value) {
+		mediaStream.value.getTracks().forEach(track => track.stop())
+		mediaStream.value = null
+	}
+	localVideoTrack.value = null
+	localAudioTrack.value = null
 }
 
 async function connectToRoom() {
@@ -86,9 +115,7 @@ async function disconnectFromRoom() {
 	participants.value.clear()
 	localVideoTrack.value = null
 	localAudioTrack.value = null
-	if (isMicEnabled.value || isCameraEnabled.value) {
-		stopMedia()
-	}
+	stopMedia()
 }
 
 async function toggleMicrophone() {
@@ -104,7 +131,7 @@ async function toggleMicrophone() {
 		} else {
 			// Enable microphone
 			if (!mediaStream.value) {
-				await start()
+				await startMedia()
 			}
 			const audioTrack = getAudioTrack()
 			if (audioTrack) {
@@ -133,7 +160,7 @@ async function toggleCamera() {
 		} else {
 			// Enable camera
 			if (!mediaStream.value) {
-				await start()
+				await startMedia()
 			}
 			const videoTrack = getVideoTrack()
 			if (videoTrack) {
@@ -151,12 +178,6 @@ async function toggleCamera() {
 	} catch (error) {
 		console.error('Failed to toggle camera:', error)
 	}
-}
-
-function stopMedia() {
-	stop()
-	localVideoTrack.value = null
-	localAudioTrack.value = null
 }
 
 function handleTrackSubscribed(
