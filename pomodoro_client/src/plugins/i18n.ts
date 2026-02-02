@@ -81,7 +81,6 @@ export default function setupI18n(app: App) {
   );
 
   // Logic đồng bộ với Store của VueUse
-  // VueUse composable chạy tốt mà không cần inject pinia
   const installI18nPlugin = () => {
     const { userSettings } = useAuthStore(); // <--- Gọi thẳng như này
 

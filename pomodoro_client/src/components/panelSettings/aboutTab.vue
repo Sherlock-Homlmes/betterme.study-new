@@ -8,13 +8,11 @@ import {
 import { ButtonImportance } from "../base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { AppPlatform } from "@/platforms/platforms";
-import { useMain } from "@/stores/main";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
 const isMobile = computed(
 	() => runtimeConfig.public.PLATFORM === AppPlatform.mobile,
 );
-const mainStore = useMain();
 </script>
 
 <template lang="pug">
@@ -22,7 +20,7 @@ div.flex.flex-col.items-center
   img(src="/favicon.svg" width="64" height="64" class="inline-block p-2 mb-1 bg-red-200 rounded-lg" alt='app-icon')
   div
     div.inline-block.text-2xl.font-bold Betterme Pomodoro
-    sup.text-base(v-text="mainStore.version")
+    sup.text-base(v-text="runtimeConfig.public.PACKAGE_VERSION")
   div(v-text="$t('settings.about.madeby')")
 
   div.flex.flex-col.items-center.justify-center.mt-8.text-center

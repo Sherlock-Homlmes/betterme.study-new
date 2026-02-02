@@ -4,12 +4,10 @@ import { BrandDiscordIcon, BrandGoogleIcon } from "vue-tabler-icons";
 import { ButtonImportance } from "../base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { AppPlatform } from "@/platforms/platforms";
-import { useMain } from "@/stores/main";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
 const { API_URL, PLATFORM } = runtimeConfig.public;
 const isMobile = computed(() => PLATFORM === AppPlatform.mobile);
-const mainStore = useMain();
 const oauthLink = reactive({
 	discord_link: null,
 	google_link: null,

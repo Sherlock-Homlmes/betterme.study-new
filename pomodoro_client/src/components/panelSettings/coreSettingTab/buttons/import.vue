@@ -1,24 +1,10 @@
 <script setup lang="ts">
 import { ref, type Ref } from "vue";
-import { type Store } from "pinia";
 import { ButtonImportance } from "@/components/base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const fileinput: Ref<HTMLInputElement | null> = ref(null);
-
-function filterImportedObject(
-	store: Store,
-	objectToImport: Record<string, unknown>,
-) {
-	const storeKeys = Object.keys(store.$state);
-	return Object.keys(objectToImport)
-		.filter((key) => storeKeys.includes(key))
-		.reduce(
-			(prev, key) => Object.assign(prev, { [key]: objectToImport[key] }),
-			{},
-		);
-}
 
 const openFileDialog = () => {
 	fileinput.value?.click();

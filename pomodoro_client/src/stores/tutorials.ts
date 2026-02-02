@@ -1,31 +1,30 @@
-import { defineStore } from "pinia";
+import {ref, computed} from "vue";
+import { createGlobalState } from "@vueuse/core";
 
-export const useTutorials = defineStore("tutorials", {
-	state: () => ({
-		openTutorials: [] as string[],
-	}),
+export const useTutorialStore = createGlobalState(()=>{
+	const openTutorials=ref<string[]>([]);
+	const isTutorialOpen = computed(() => {
+		return (tutorialId: string) => openTutorials.value.indexOf(tutorialId) === 0;
+	})
+	const currentTutorial = computed(() => {
+		return openTutorials.value.length > 0 ? openTutorials.value[0] : null;
+	});
 
-	getters: {
-		isTutorialOpen: (state) => {
-			return (tutorialId: string) =>
-				state.openTutorials.indexOf(tutorialId) === 0;
-		},
 
-		currentTutorial: (state) => state.openTutorials[0] ?? null,
-	},
-
-	actions: {
-		openTutorial(tutorialId: string) {
-			if (!this.openTutorials.includes(tutorialId)) {
-				this.openTutorials.push(tutorialId);
-			}
-		},
-
-		closeTutorial(tutorialId: string) {
-			const tutorialIndex = this.openTutorials.indexOf(tutorialId);
-			if (tutorialIndex >= 0) {
-				this.openTutorials.splice(tutorialIndex, 1);
-			}
-		},
-	},
+	const openTutorial = (tutorialId: string) => {
+		if (!openTutorials.value.includes(tutorialId)) openTutorials.value.push(tutorialId);
+	}
+	const closeTutorial = (tutorialId: string) => {
+		const tutorialIndex = openTutorials.value.indexOf(tutorialId);
+		if (tutorialIndex >= 0) {
+			openTutorials.value.splice(tutorialIndex, 1);
+		}
+	}
+	return {
+		openTutorials,
+		isTutorialOpen,
+		currentTutorial,
+		openTutorial,
+		closeTutorial,
+	};
 });
