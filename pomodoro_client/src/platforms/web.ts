@@ -2,7 +2,7 @@ import { reactive, computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useSettings } from "@/stores/settings";
-import { useNotifications } from "@/stores/notifications";
+// import { useNotifications } from "@/stores/notifications";
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { EventType, useEvents } from "@/stores/events";
 
@@ -14,8 +14,8 @@ interface SoundSettings {
 export function useWeb() {
 	const settingsStore = useSettings();
 	const { timerState, getSchedule } = usePomodoroStore();
-	const notificationsStore = useNotifications();
-	const eventsStore = useEvents();
+	// const notificationsStore = useNotifications();
+	const {events, recordEvent} = useEvents();
 	const i18n = useI18n();
 
 	const state = reactive({
@@ -28,7 +28,7 @@ export function useWeb() {
 	});
 
 	const lastEvent = computed(() => {
-		const lastEventArray = eventsStore.events.slice(-1);
+		const lastEventArray = events.value.slice(-1);
 		return lastEventArray.length > 0 ? lastEventArray[0] : null;
 	});
 
@@ -38,24 +38,24 @@ export function useWeb() {
 		}
 	});
 
-	eventsStore.$subscribe(() => {
-		if (
-			eventsStore.lastEvent !== null &&
-			eventsStore.lastEvent._event === EventType.NOTIFICATIONS_ENABLED &&
-			window.Notification &&
-			window.Notification.permission === "default"
-		) {
-			window.Notification.requestPermission().then(
-				(newNotificationPermission) => {
-					settingsStore.$patch({
-						permissions: {
-							notifications: newNotificationPermission === "granted",
-						},
-					});
-				},
-			);
-		}
-	});
+	// eventsStore.$subscribe(() => {
+	// 	if (
+	// 		eventsStore.lastEvent !== null &&
+	// 		eventsStore.lastEvent._event === EventType.NOTIFICATIONS_ENABLED &&
+	// 		window.Notification &&
+	// 		window.Notification.permission === "default"
+	// 	) {
+	// 		window.Notification.requestPermission().then(
+	// 			(newNotificationPermission) => {
+	// 				settingsStore.$patch({
+	// 					permissions: {
+	// 						notifications: newNotificationPermission === "granted",
+	// 					},
+	// 				});
+	// 			},
+	// 		);
+	// 	}
+	// });
 
 	onMounted(() => {
 		// // sound set watcher
@@ -78,7 +78,7 @@ export function useWeb() {
 		// )
 
 		// Register app started notification
-		eventsStore.recordEvent(EventType.APP_STARTED);
+		recordEvent(EventType.APP_STARTED);
 
 		// check if timer is already running
 		if (timerState.value === 1) {
@@ -102,7 +102,7 @@ export function useWeb() {
 		}
 
 		// Check permissions
-		notificationsStore.updateEnabled();
+		// notificationsStore.updateEnabled();
 	});
 
 	/**

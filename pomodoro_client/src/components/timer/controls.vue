@@ -81,9 +81,9 @@ const advance = async () => {
 };
 </script>
 
-<template>
-  <div class="flex items-center justify-center gap-5 md:gap-8">
-    <CButton
+<template lang='pug'>
+div(class="flex items-center justify-center gap-5 md:gap-8")
+    CButton(
       circle
       inner-class="p-5"
       :theme="ButtonTheme.Secondary"
@@ -92,11 +92,10 @@ const advance = async () => {
       :class="{ 'scale-0 opacity-0 pointer-events-none' : !isRunning }"
       :aria-label="$t('controls.stop')"
       @click="reset"
-    >
-      <PlayerStopIcon :size="24" />
-    </CButton>
+    )
+      PlayerStopIcon(:size="24")
 
-    <CButton
+    CButton(
       :aria-label="$t('controls.play')"
       inner-class="p-6 px-8 transition"
       bg-class="rounded-full"
@@ -104,12 +103,11 @@ const advance = async () => {
       :theme="ButtonTheme.NeutralDark"
       :importance="ButtonImportance.Filled"
       @click="playPause"
-    >
-      <PlayerPlayIcon v-if="timerState !== TimerState.RUNNING" :size="28" />
-      <PlayerPauseIcon v-else :size="28" />
-    </CButton>
+    )
+      PlayerPlayIcon(v-if="timerState !== TimerState.RUNNING" :size="28")
+      PlayerPauseIcon(v-else :size="28")
 
-    <CButton
+    CButton(
       v-if='timerState !== TimerState.COMPLETED'
       :aria-label="$t('controls.advance')"
       circle
@@ -119,8 +117,6 @@ const advance = async () => {
       class="h-16 transition"
       :class="{ 'scale-0 opacity-0 pointer-events-none' : timerState === TimerState.RUNNING }"
       @click="advance()"
-    >
-      <PlayerTrackNextIcon :size="24" />
-    </CButton>
-  </div>
+    )
+      PlayerTrackNextIcon(:size="24")
 </template>

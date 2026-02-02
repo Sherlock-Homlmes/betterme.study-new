@@ -3,18 +3,15 @@ import { computed, defineEmits, defineProps, reactive, ref } from "vue";
 import { nextTick, type Ref, type PropType, watch } from "vue";
 import { MenuIcon, TrashIcon, PencilIcon } from "vue-tabler-icons";
 import { ButtonImportance } from "../base/types/button";
-import { TaskState, useTasklist, type Task } from "@/stores/tasklist";
-import { useTaskStore } from "@/stores/todolist";
-import { TaskStatus } from "@/stores/todolist";
+import { useTaskStore, TaskStatus, type Task } from "@/stores/tasks";
 import { useSettings, ColorMethod } from "@/stores/settings";
 import Button from "@/components/base/uiButton.vue";
-import ChangeTracker from "../../utils/changeTracker";
+import ChangeTracker from "@/utils/changeTracker";
 
 // declare refs
 const editbox: Ref<HTMLInputElement | null> = ref(null);
 
 const changeTracker = new ChangeTracker();
-const tasksStore = useTasklist();
 const settingsStore = useSettings();
 const { patchTask, deleteTask } = useTaskStore();
 
@@ -55,7 +52,7 @@ const emit = defineEmits<{
 }>();
 
 const handleEdit = (newValue: string) => {
-	if (isValid.value && props.item.title !== displayedTitle.value)
+	if (props.item.title !== displayedTitle.value)
 		props.item.title = newValue;
 	state.editedTitle = null;
 };
@@ -80,15 +77,6 @@ const displayedTitle = computed({
 		state.editedTitle = newValue;
 	},
 });
-const isValid = computed(
-	() =>
-		!tasksStore.tasks.some(
-			(task) =>
-				task.id !== props.item.id &&
-				task.title === displayedTitle.value &&
-				task.section === props.item.section,
-		),
-);
 
 watch(
 	() => state.editing,

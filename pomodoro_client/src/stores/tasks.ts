@@ -12,6 +12,24 @@ export enum TaskStatus {
 	EXPIRED = "EXPIRED",
 }
 
+export interface Task {
+	id: number;
+	title: string;
+	description: string | null;
+	priority: number;
+    status: TaskStatus
+    index: number
+    // necessary: string
+    // difficult: number
+    // deadline: datetime.datetime
+    // task_category_ids: string[]
+}
+
+export enum TaskMoveDirection {
+	up = 1,
+	down = -1,
+}
+
 export const useTaskStore = createGlobalState(() => {
 	const API_URL = runtimeConfig.public.API_URL;
 	const { isAuth } = useAuthStore();

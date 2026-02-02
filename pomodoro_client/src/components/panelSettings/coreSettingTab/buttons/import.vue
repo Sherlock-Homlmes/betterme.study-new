@@ -4,7 +4,6 @@ import { type Store } from "pinia";
 import { ButtonImportance } from "@/components/base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { useAuthStore } from "@/stores/auth";
-import { useTasklist } from "@/stores/tasklist";
 
 const fileinput: Ref<HTMLInputElement | null> = ref(null);
 
@@ -49,11 +48,7 @@ const importFile = () => {
 			const importedValues = JSON.parse(fileContents as string);
 
 			const { userSettings } = useAuthStore();
-			// const tasklistStore = useTasklist();
 			userSettings.value = importedValues.userSettings;
-			// tasklistStore.$patch(
-			// 	filterImportedObject(tasklistStore, importedValues.tasklist),
-			// );
 		} catch (err) {
 			console.warn(err);
 		}

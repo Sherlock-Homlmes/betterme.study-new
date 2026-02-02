@@ -7,18 +7,16 @@ import ControlButton from "@/components/base/uiButton.vue";
 import TaskItem from "./todoItem.vue";
 import TaskAdd from "./addTask.vue";
 import { useSettings } from "@/stores/settings";
-import { type Task, useTasklist } from "@/stores/tasklist";
 import { useOpenPanels } from "@/stores/openpanels";
 import { usePomodoroStore } from "@/stores/pomodoros";
-import { useTaskStore } from "@/stores/todolist";
+import { useTaskStore, type Task } from "@/stores/tasks";
 
 const openPanels = useOpenPanels();
 const settingsStore = useSettings();
-const tasklistStore = useTasklist();
 const { tasks, getTaskList, moveTask } = useTaskStore();
 
-onBeforeMount(async () => {
-	await getTaskList();
+onBeforeMount(() => {
+	getTaskList();
 });
 
 const state = reactive({

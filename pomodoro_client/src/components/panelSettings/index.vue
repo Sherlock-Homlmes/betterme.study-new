@@ -26,7 +26,6 @@ import UserSettingTab from "./userSettingTab.vue";
 import { useOpenPanels } from "@/stores/openpanels";
 import { usePlatformStore } from "@/stores/platforms";
 import { useAuthStore } from "@/stores/auth";
-import { useNotifications } from "@/stores/notifications";
 
 const { isAuth, loading } = useAuthStore();
 const openPanels = useOpenPanels();

@@ -1,7 +1,7 @@
+import { onMounted } from "vue";
 import { useMobileSettings } from "@/stores/platforms/mobileSettings";
-import { useEvents, EventType } from "@/stores/events";
-import { useSettings } from "@/stores/settings";
-import { usePomodoroStore } from "@/stores/pomodoros";
+// import { useEvents, EventType } from "@/stores/events";
+// import { useSettings } from "@/stores/settings";
 
 interface FlutterJavascriptChannel {
 	postMessage(message: string): void;
@@ -29,9 +29,9 @@ declare global {
 
 export function useMobile() {
 	const mobileSettingsStore = useMobileSettings();
-	const eventsStore = useEvents();
-	const settingsStore = useSettings();
-	const scheduleStore = useSchedule();
+	// const eventsStore = useEvents();
+	// const settingsStore = useSettings();
+	// const scheduleStore = useSchedule();
 
 	onMounted(() => {
 		console.info("Mobile platform loaded");
@@ -60,42 +60,42 @@ export function useMobile() {
 		};
 
 		// register store watcher
-		eventsStore.$subscribe(() => {
-			window.NativeFramework.postMessage(
-				JSON.stringify({
-					type: FlutterMessageType.appEvent,
-					payload: eventsStore.lastEvent,
-				} as FlutterMessage),
-			);
+		// eventsStore.$subscribe(() => {
+		// 	window.NativeFramework.postMessage(
+		// 		JSON.stringify({
+		// 			type: FlutterMessageType.appEvent,
+		// 			payload: eventsStore.lastEvent,
+		// 		} as FlutterMessage),
+		// 	);
 
-			if (
-				eventsStore.lastEvent._event === EventType.TIMER_FINISH &&
-				settingsStore.mobile.notifications.sectionOver
-			) {
-				window.NativeFramework.postMessage(
-					JSON.stringify({
-						type: FlutterMessageType.showNotification,
-						payload: {
-							title: "Hello",
-							description: "This is a test notification :)",
-						},
-					} as FlutterMessage),
-				);
-			}
-		});
+		// 	if (
+		// 		eventsStore.lastEvent._event === EventType.TIMER_FINISH &&
+		// 		settingsStore.mobile.notifications.sectionOver
+		// 	) {
+		// 		window.NativeFramework.postMessage(
+		// 			JSON.stringify({
+		// 				type: FlutterMessageType.showNotification,
+		// 				payload: {
+		// 					title: "Hello",
+		// 					description: "This is a test notification :)",
+		// 				},
+		// 			} as FlutterMessage),
+		// 		);
+		// 	}
+		// });
 
-		scheduleStore.$subscribe(() => {
-			const currentItem = scheduleStore.getCurrentItem;
-			window.NativeFramework.postMessage(
-				JSON.stringify({
-					type: FlutterMessageType.tick,
-					payload: {
-						remaining_ms: currentItem.length - currentItem.timeElapsed,
-						length_ms: currentItem.length,
-					},
-				} as FlutterMessage),
-			);
-		});
+		// scheduleStore.$subscribe(() => {
+		// 	const currentItem = scheduleStore.getCurrentItem;
+		// 	window.NativeFramework.postMessage(
+		// 		JSON.stringify({
+		// 			type: FlutterMessageType.tick,
+		// 			payload: {
+		// 				remaining_ms: currentItem.length - currentItem.timeElapsed,
+		// 				length_ms: currentItem.length,
+		// 			},
+		// 		} as FlutterMessage),
+		// 	);
+		// });
 
 		window.NativeFramework.postMessage(
 			JSON.stringify({

@@ -1,8 +1,7 @@
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, nextTick } from "vue";
 
 import { TimerState, usePomodoroStore } from "@/stores/pomodoros";
 import { SectionEndAction, useSettings } from "@/stores/settings";
-import { useTasklist } from "@/stores/tasklist";
 import { useEvents, EventType } from "@/stores/events";
 
 interface TickState {
@@ -15,8 +14,7 @@ export function useTicker() {
 	const settingsStore = useSettings();
 	const { items, getCurrentItem, timerState, advance, lockInfo } =
 		usePomodoroStore();
-	const tasklistStore = useTasklist();
-	const eventsStore = useEvents();
+	const {recordEvent} = useEvents();
 
 	const state = reactive<TickState>({
 		/** Timestamp of the last tick */
@@ -47,10 +45,6 @@ export function useTicker() {
 	watch(scheduleId, (newValue, oldValue) => {
 		if (newValue !== oldValue) {
 			resetTimer();
-
-			if (settingsStore.tasks.removeCompletedTasks) {
-				tasklistStore.removeCompleted();
-			}
 		}
 	});
 
@@ -163,7 +157,7 @@ export function useTicker() {
 			timeElapsed.value - elapsedDelta < timeOriginal.value;
 		if (nextState === TimerState.RUNNING && isTimerJustFinished) {
 			// timer completed, notify participants
-			eventsStore.recordEvent(EventType.TIMER_FINISH);
+			recordEvent(EventType.TIMER_FINISH);
 
 			if (settingsStore.sectionEndAction === SectionEndAction.Stop) {
 				timerState.value = TimerState.COMPLETED;
@@ -177,7 +171,7 @@ export function useTicker() {
 
 	/** Starts or resumes the timer */
 	const startTimer = () => {
-		eventsStore.recordEvent(EventType.TIMER_START);
+		recordEvent(EventType.TIMER_START);
 		lockInfo({
 			length: timeOriginal.value,
 			type: getCurrentItem.value.type,
@@ -189,7 +183,7 @@ export function useTicker() {
 		clearTickHandle();
 		timerTick({ nextState: stop ? TimerState.STOPPED : TimerState.PAUSED });
 
-		eventsStore.recordEvent(
+		recordEvent(
 			stop ? EventType.TIMER_STOP : EventType.TIMER_PAUSE,
 		);
 

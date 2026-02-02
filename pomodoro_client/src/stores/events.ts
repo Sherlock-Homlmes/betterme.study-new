@@ -1,24 +1,24 @@
-import { defineStore } from "pinia";
+import { ref, computed, watch } from "vue";
+import { createGlobalState } from "@vueuse/core";
 
-export const useEvents = defineStore("events", {
-	state: () => ({
-		events: [] as Event[],
-		maxEventsToKeep: 200,
-	}),
+export const useEvents = createGlobalState(() => {
+	const events = ref<Event[]>([]);
+	const maxEventsToKeep = ref<number>(200);
 
-	getters: {
-		lastEvent: (state) =>
-			state.events.length > 0 ? state.events[state.events.length - 1] : null,
-	},
+	const lastEvent = computed(() => events.value.length > 0 ? events.value[events.value.length - 1] : null)
 
-	actions: {
-		recordEvent(eventType, eventData = undefined) {
-			this.events.push(
-				new Event(eventType, { data: eventData, timestamp: new Date() }),
-			);
-			this.events.splice(0, this.events.length - this.maxEventsToKeep);
-		},
-	},
+	const recordEvent = (eventType: EventType, eventData: unknown = undefined) => {
+		events.value.push(
+			new Event(eventType, { data: eventData, timestamp: new Date() }),
+		);
+		events.value.splice(0, events.value.length - maxEventsToKeep.value);
+	}
+	return {
+		events,
+		maxEventsToKeep,
+		lastEvent,
+		recordEvent,
+	}
 });
 
 export enum EventType {
