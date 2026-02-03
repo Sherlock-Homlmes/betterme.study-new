@@ -73,7 +73,8 @@ watch(youtubeVolume, (newVolume) => {
 
 // Expose for parent component
 defineExpose({
-	onPlayerStateChange,
+	youtubeVideoId,
+	onYoutubePlayerReady
 });
 </script>
 

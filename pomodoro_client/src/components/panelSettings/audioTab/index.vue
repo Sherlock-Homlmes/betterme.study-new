@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from "vue";
-import { watchOnce, useIntersectionObserver, until } from "@vueuse/core";
+import { watchOnce, useIntersectionObserver, useWindowFocus, until } from "@vueuse/core";
 import SettingsItem from "@/components/common/settingsItem/v1.vue";
 import SettingsItemV2 from "@/components/common/settingsItem/v2.vue";
 import Divider from "@/components/base/uiDivider.vue";
@@ -16,11 +16,14 @@ import AmbientSounds from "./AmbientSounds.vue";
 const { isWeb, isDesktop, isExtension, isMobile } = usePlatformStore();
 const isWebBase = isWeb.value || isDesktop.value || isExtension.value;
 
+const firstTimeWindowFocus = ref(false)
+const windowFocus = useWindowFocus()
+
 const openPanels = useOpenPanels();
 const { userSettings } = useAuthStore();
 const shouldPlayMusic = ref(false);
 const shouldLoadMusic = computed(() =>
-  shouldPlayMusic.value || userSettings.value.visuals.enable_music_when_visit_site
+  userSettings.value.visuals.enable_music_when_visit_site && firstTimeWindowFocus.value
 );
 const youtubePlayerRef = ref<InstanceType<typeof YouTubePlayer> | null>(null);
 const ambientSoundsRef = ref<InstanceType<typeof AmbientSounds> | null>(null);
@@ -38,6 +41,8 @@ const { stop } = useIntersectionObserver(
 
 // Resume ambient sounds when tab opens or auto-play on app load
 onMounted(async () => {
+  await until(windowFocus).toBe(true)
+  firstTimeWindowFocus.value = true
   await until(shouldLoadMusic).toBe(true)
 
   // Resume ambient sounds that were playing or auto-play if enabled
@@ -65,7 +70,6 @@ onMounted(async () => {
       }
     });
   }
-  youtubePlayerRef.value?.onYoutubePlayerReady();
 });
 </script>
 
