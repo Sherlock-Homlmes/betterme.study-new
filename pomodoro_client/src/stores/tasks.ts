@@ -31,7 +31,7 @@ export enum TaskMoveDirection {
 }
 
 export const useTaskStore = createGlobalState(() => {
-	const API_URL = runtimeConfig.public.API_URL;
+	const TASK_API_URL = `${runtimeConfig.public.API_URL}/v2/tasks`;
 	const { isAuth } = useAuthStore();
 	const { showError } = useErrorStore();
 
@@ -44,7 +44,7 @@ export const useTaskStore = createGlobalState(() => {
 	// actions
 	const getTaskList = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/todolist`);
+		const response = await fetchWithAuth(TASK_API_URL);
 		if (response?.ok) tasks.value = await response.json();
 		else {
 			const errorMsg = "Failed to get newest task list";
@@ -69,7 +69,7 @@ export const useTaskStore = createGlobalState(() => {
 		const index = isEmpty(tasks.value)
 			? 1
 			: Math.max(...tasks.value.map((task) => task.index)) + 1;
-		const response = await fetchWithAuth(`${API_URL}/todolist`, {
+		const response = await fetchWithAuth(TASK_API_URL, {
 			method: "POST",
 			body: JSON.stringify({ title, index }),
 		});
@@ -84,7 +84,7 @@ export const useTaskStore = createGlobalState(() => {
 	const patchTask = async (taskId: string, change = {}) => {
 		if (!isAuth.value) return;
 		if (isEmpty(change)) return;
-		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
+		const response = await fetchWithAuth(`${TASK_API_URL}/${taskId}`, {
 			method: "PATCH",
 			body: JSON.stringify(change),
 		});
@@ -100,7 +100,7 @@ export const useTaskStore = createGlobalState(() => {
 			tasks.value = tasks.value.filter((task) => task.id !== taskId);
 			return
 		};
-		const response = await fetchWithAuth(`${API_URL}/todolist/${taskId}`, {
+		const response = await fetchWithAuth(`${TASK_API_URL}/${taskId}`, {
 			method: "DELETE",
 		});
 		if (response?.ok)

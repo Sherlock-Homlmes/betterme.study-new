@@ -24,8 +24,8 @@ div(class="relative w-screen h-screen")
     StatisticPanel(v-show="openPanels.statistic" class="right-0")
   transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
     AIChatPanel(v-show="openPanels.ai" class="right-0")
-  transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
-    VoiceChannelPanel(v-show="openPanels.voiceChannel" class="right-0")
+  //- transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
+  //-   VoiceChannelPanel(v-show="openPanels.voiceChannel" class="right-0")
   slot
 </template>
 
