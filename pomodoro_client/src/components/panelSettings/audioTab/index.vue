@@ -25,16 +25,6 @@ const shouldLoadMusic = computed(() =>
 const youtubePlayerRef = ref<InstanceType<typeof YouTubePlayer> | null>(null);
 const ambientSoundsRef = ref<InstanceType<typeof AmbientSounds> | null>(null);
 
-// Watch for YouTube video ID changes to stop ambient sounds
-watchOnce(
-	() => youtubePlayerRef.value?.youtubeVideoId,
-	(newVideoId) => {
-		if (newVideoId && ambientSoundsRef.value?.soundPlayers) {
-			ambientSoundsRef.value.soundPlayers.forEach(player => player.stop());
-		}
-	}
-);
-
 const audioTabRef = ref(null)
 const { stop } = useIntersectionObserver(
   audioTabRef,
@@ -75,6 +65,7 @@ onMounted(async () => {
       }
     });
   }
+  youtubePlayerRef.value?.onYoutubePlayerReady();
 });
 </script>
 

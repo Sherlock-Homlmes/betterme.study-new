@@ -92,6 +92,7 @@ class UserVisualSettings(BaseModel):
     show_progress_bar: Optional[bool] = False
     show_pip_mode: Optional[bool] = True
 
+    enable_music_when_visit_site: Optional[bool] = True
     enable_audio: Optional[bool] = True
     enable_adaptive_ticking: Optional[bool] = True
     auto_start_next_time: Optional[bool] = True

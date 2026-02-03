@@ -73,20 +73,7 @@ watch(youtubeVolume, (newVolume) => {
 
 // Expose for parent component
 defineExpose({
-	youtubeVideoId,
-	play: () => {
-		const player = youtubePlayerRef.value?.player;
-		if (player && typeof player.playVideo === "function") {
-			player.playVideo();
-		}
-	},
-	setVolume: (volume: number) => {
-		youtubeVolume.value = volume;
-		const player = youtubePlayerRef.value?.player;
-		if (player && typeof player.setVolume === "function") {
-			player.setVolume(volume * 100);
-		}
-	},
+	onPlayerStateChange,
 });
 </script>
 
