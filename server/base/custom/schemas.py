@@ -4,6 +4,9 @@ from pydantic import BaseModel, Field
 class BaseSchema(BaseModel):
     pass
 
+    class Config:
+        from_attributes = True
+
     def get_db_query(self):
         data = self.model_dump(exclude_none=True)
         if self.page is not None and self.per_page is not None:

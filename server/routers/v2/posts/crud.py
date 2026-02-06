@@ -13,7 +13,7 @@ from utils.beanie_odm import (
     count_total,
     cursor_pipeline_rearrange,
 )
-from .schemas import GetPostResponse, GetPostListResponse
+from .schemas import GetPostListResponse
 
 
 class PostListProject(GetPostListResponse):
@@ -40,9 +40,9 @@ class PostCRUD(BaseCRUD[DBPost]):
     def __init__(selfn):
         super().__init__(DBPost)
 
-    async def get_list(self, params) -> List[GetPostListResponse]:
-        find_queries, agg_queries = DBPost.build_query(params)
-        cursor = DBPost.find(
+    async def get_list(self, params) -> List[DBPost]:
+        find_queries, agg_queries = self.model.build_query(params)
+        cursor = self.model.find(
             find_queries,
             skip=params.per_page * (params.page - 1),
             limit=params.per_page,
@@ -55,26 +55,26 @@ class PostCRUD(BaseCRUD[DBPost]):
         total_count = await count_total(cursor)
         return posts, total_count
 
-    async def get_related_list(self, post_id) -> List[GetPostListResponse]:
+    async def get_related_list(self, post_id) -> List[DBPost]:
         try:
-            post = await DBPost.get(post_id)
+            post = await self.model.get(post_id)
         except (AttributeError, ValidationError):
             raise NotFound(detail="Post not found")
 
         # TODO: only get not expired posts(when lib support datetime.date)
         posts = await (
-            DBPost
+            self.model
             # find post that have same tags
-            .find(ElemMatch(DBPost.tags, {"$in": post.tags}))
+            .find(ElemMatch(self.model.tags, {"$in": post.tags}))
             .aggregate([{"$sample": {"size": 3}}], projection_model=PostListProject)
             .to_list()
         )
 
         return posts
 
-    async def get_one(self, post_id, params, background_tasks) -> GetPostResponse:
+    async def get_one(self, post_id, params, background_tasks) -> DBPost:
         try:
-            post = await DBPost.get(post_id)
+            post = await self.model.get(post_id)
             post.id = str(post.id)
             if params.increase_view:
                 background_tasks.add_task(post.increase_view)

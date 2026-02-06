@@ -109,7 +109,7 @@ class BaseCRUD(Generic[ModelType]):
         if not filters:
             raise ValueError("At least one match_ parameter is required")
 
-        query = self.model.find_one(*filters)
+        query = self.model.find_one(*filters, sort=[("start_at", -1)])
         obj = await query
 
         raise_if_missing = kwargs.pop("raise_if_missing", False)
