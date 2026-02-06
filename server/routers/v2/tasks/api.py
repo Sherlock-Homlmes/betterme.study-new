@@ -1,97 +1,61 @@
 # default
 from typing import List
-from bson.objectid import ObjectId
 
 # libraries
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import Response, Depends
 
 # local
-from routers.authentication import auth_handler
-
-from .schemas import Task, PatchTaskPayload, GetTaskResponse
 from models import Users, Tasks
+from base.custom.crud import BaseCRUD
+from base.custom.router import BaseRouter
+from routers.authentication import auth_handler
+from .schemas import GetTaskListQuery, CreateTask, PatchTaskPayload, GetTaskResponse
 
-from utils.time_modules import vn_now
-
-router = APIRouter(
+router = BaseRouter(
     prefix="/tasks",
-    tags=["Study tools - Tasks"],
+    tags=["Study tools - Tasks - V2"],
     responses={404: {"description": "Not found"}},
 )
+task_crud = BaseCRUD(Tasks)
 
 
-@router.get(
-    "/",
-    description="get list of task",
-)
+@router.get_list("/", description="Get list of task")
 async def get_list_of_task(
-    user: Users = Depends(auth_handler.auth_wrapper),
+    response: Response,
+    query: GetTaskListQuery = Depends(),
+    current_user: Users = Depends(auth_handler.auth_wrapper),
 ) -> List[GetTaskResponse]:
-    return await Tasks.find(
-        Tasks.user_id == user["id"],
-        sort=("index", 1),
-    ).to_list()
+    query = query.get_db_query()
+    return await task_crud.get_list(match_user_id=current_user["id"], **query)
 
 
-@router.get(
-    "/{task_id}",
-    description="get a task",
-)
+@router.get("/{task_id}", description="Get a task")
 async def get_a_task(
-    task_id: str, user: Users = Depends(auth_handler.auth_wrapper)
+    task_id: str, current_user: Users = Depends(auth_handler.auth_wrapper)
 ) -> GetTaskResponse:
-    if task := await Tasks.find_one(
-        Tasks.id == ObjectId(task_id),
-        Tasks.user_id == user["id"],
-    ):
-        return task
-    raise HTTPException(status_code=404, detail="Task not exist")
+    return await task_crud.get_one(
+        match_id=task_id, match_user_id=current_user["id"], raise_if_missing=True
+    )
 
 
-@router.post(
-    "/",
-    description="create a task",
-    status_code=201,
-)
-async def create_a_task(task: Task, user: Users = Depends(auth_handler.auth_wrapper)):
-    task = Tasks(**task.__dict__, user_id=user["id"])
-    await task.insert()
-    return task
+@router.post("/", description="Create a task", status_code=201)
+async def create_a_task(
+    payload: CreateTask, current_user: Users = Depends(auth_handler.auth_wrapper)
+) -> GetTaskResponse:
+    data = payload.model_dump()
+    data["user_id"] = current_user["id"]
+    return await task_crud.create(data)
 
 
-@router.patch(
-    "/{task_id}",
-    description="update a todo",
-    status_code=204,
-)
+@router.patch("/{task_id}", description="update a todo", status_code=204)
 async def update_a_task(
-    task_id: str, payload: PatchTaskPayload, user: Users = Depends(auth_handler.auth_wrapper)
+    task_id: str,
+    payload: PatchTaskPayload,
+    current_user: Users = Depends(auth_handler.auth_wrapper),
 ):
-    update_fields = payload.model_dump(mode="json", exclude_unset=True)
-    if not update_fields:
-        return
-
-    if task := await Tasks.find_one(
-        Tasks.id == ObjectId(task_id),
-        Tasks.user_id == user["id"],
-    ):
-        # TODO: validate task categories
-        await task.set({**update_fields, "updated_at": vn_now()})
-        return
-
-    raise HTTPException(status_code=404, detail="Task not exist")
+    return await task_crud.update(data=payload, match_id=task_id, match_user_id=current_user["id"])
 
 
-@router.delete(
-    "/{task_id}",
-    description="delete a task",
-    status_code=204,
-)
-async def delete_a_task(task_id: str, user: Users = Depends(auth_handler.auth_wrapper)):
-    if task := await Tasks.find_one(
-        Tasks.id == ObjectId(task_id),
-        Tasks.user_id == user["id"],
-    ):
-        await task.delete()
-        return
-    raise HTTPException(status_code=404, detail="Task not exist")
+@router.delete("/{task_id}", description="Delete a task", status_code=204)
+async def delete_a_task(task_id: str, current_user: Users = Depends(auth_handler.auth_wrapper)):
+    return await task_crud.delete(match_id=task_id, match_user_id=current_user["id"])

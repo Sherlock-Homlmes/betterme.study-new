@@ -15,6 +15,7 @@ from routers.v1.users.api import router as users_router
 
 from routers.v2.tasks.api import router as tasks_router_v2
 from routers.v2.taskcategories.api import router as taskcategories_router_v2
+from routers.v2.posts.api import router as posts_router_v2
 
 # from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as admin_posts
 # news_admin_modules = (crawlers, draft_posts, admin_posts, admin_ai)
@@ -75,7 +76,13 @@ api_router_v2 = APIRouter(
     prefix="/api/v2",
     responses={404: {"description": "Not found"}},
 )
+non_auth_modules_v2 = (posts_router_v2,)
 auth_modules_v2 = (taskcategories_router_v2, tasks_router_v2)
+
+for module in non_auth_modules_v2:
+    api_router_v2.include_router(
+        module,
+    )
 
 for module in auth_modules_v2:
     api_router_v2.include_router(

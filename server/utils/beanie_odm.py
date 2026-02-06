@@ -51,6 +51,22 @@ async def return_with_pagination(
     response.headers["x-per-page"] = str(per_page)
 
 
+async def count_total(cursor):
+    if isinstance(cursor, AggregationQuery):
+        cursor.aggregation_pipeline.append({"$count": "count"})
+        cursor.projection_model = None
+        cursor.aggregation_pipeline = [
+            query
+            for query in cursor.aggregation_pipeline
+            if not isinstance(query.get("$limit"), int)
+        ]
+        result = await cursor.to_list()
+        return (await cursor.to_list())[0]["count"] if len(result) else 0
+
+    else:
+        return await cursor.count()
+
+
 def cursor_pipeline_rearrange(cursor):
     # Find the index of the $search stage
     search_index = next(

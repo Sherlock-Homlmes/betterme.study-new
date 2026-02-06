@@ -10,7 +10,7 @@ from routers.authentication import auth_handler
 from .schemas import TaskCategory
 
 router = APIRouter(
-    tags=["Task Categories"],
+    tags=["Study tools - Task Categories - V2"],
     prefix="/taskcategories",
     responses={404: {"description": "Not found"}},
 )
