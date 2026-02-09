@@ -14,3 +14,8 @@ class BadRequest(HTTPException):
 class Unauthorized(HTTPException):
     def __init__(self, **kwargs):
         super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, **kwargs)
+
+
+class ServerError(HTTPException):
+    def __init__(self, **kwargs):
+        super().__init__(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, **kwargs)

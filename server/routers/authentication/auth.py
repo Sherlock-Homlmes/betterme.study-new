@@ -1,16 +1,16 @@
-from typing import Optional
-
-#  fastapi
-from fastapi import HTTPException, status, Security
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, APIKeyHeader
-
 # default
-import jwt
-from passlib.context import CryptContext
+from typing import Optional
 from datetime import datetime, timedelta
 
+#  lib
+import jwt
+from fastapi import HTTPException, status, Security, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, APIKeyHeader
+from livekit import api
+from passlib.context import CryptContext
+
+#  local
 from base.settings import settings
-from all_env import SECRET_KEY
 from models import UserRoleEnum
 
 
@@ -18,7 +18,7 @@ class AuthHandler:
     security = HTTPBearer()
     access_key_security = APIKeyHeader(name="Authorization", auto_error=False)
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    secret = SECRET_KEY
+    secret = settings.SECRET_KEY
 
     def get_password_hash(self, password):
         return self.pwd_context.hash(password)
@@ -91,4 +91,29 @@ class AuthHandler:
         raise exception
 
 
+class LivekitWebhookHandler:
+    def __init__(self):
+        token_verifier = api.TokenVerifier(settings.LIVEKIT_API_KEY, settings.LIVEKIT_API_SECRET)
+        self.webhook_receiver = api.WebhookReceiver(token_verifier)
+
+    async def verify(self, request: Request):
+        try:
+            auth_token = request.headers.get("Authorization")
+            if not auth_token:
+                raise HTTPException(status_code=401, detail="No auth token")
+
+            body_bytes = await request.body()
+            body_str = body_bytes.decode("utf-8")
+
+            event = self.webhook_receiver.receive(body_str, auth_token)
+            return event
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            print(f"❌ Livekit verification failed: {e}")
+            raise HTTPException(status_code=401, detail=f"Verification failed: {str(e)}")
+
+
 auth_handler = AuthHandler()
+livekit_webhook_handler = LivekitWebhookHandler()

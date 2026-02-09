@@ -63,7 +63,7 @@ class Settings(BaseSettings):
 
     LIVEKIT_API_KEY: str = "devkey"
     LIVEKIT_API_SECRET: str = "secretsecret"
-    LIVEKIT_URL: str = "ws://localhost:7880"
+    LIVEKIT_URL: str = "ws://livekit:7880"
 
 
 settings = Settings()

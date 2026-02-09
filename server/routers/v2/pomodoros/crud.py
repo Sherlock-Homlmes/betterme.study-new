@@ -15,8 +15,6 @@ class PomodoroCRUD(BaseCRUD[DBPomodoro]):
 
     async def delete_last_section(self, user_id: str) -> DBPomodoro:
         last_pomodoro = await self.get_one(match_user_id=user_id)
-        print(last_pomodoro)
         if last_pomodoro.status == PomodoroStatusEnum.COMPLETED:
             raise BadRequest(detail="Can not delete completed pomodoro section")
         await last_pomodoro.delete()
-        return

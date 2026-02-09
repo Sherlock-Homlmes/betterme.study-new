@@ -60,6 +60,7 @@ async def update_a_pomodoro(
     payload: PatchPomodoroPayload,
     user: Users = Depends(auth_handler.auth_wrapper),
 ):
+    # TODO: refactor
     if pomodoro := await Pomodoros.find_one(
         Pomodoros.id == ObjectId(pomodoro_id),
         Pomodoros.user_id == user["id"],

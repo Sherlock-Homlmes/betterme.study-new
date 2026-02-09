@@ -8,6 +8,7 @@ from .pomodoro.tasks import Tasks
 from .pomodoro.taskcategories import TaskCategories
 from .pomodoro.pomodoros import Pomodoros, PomodoroStatusEnum
 from .pomodoro.aichatchannels import ChatChannels, Chat, SenderEnum
+from .pomodoro.pomodoro_rooms import PomodoroRooms
 
 from .news.posts import Posts, FacebookPostInfo, OtherPostInfo
 from .news.draft_posts import DraftPosts
@@ -23,6 +24,7 @@ pomodoro_document_models = [
     Tasks,
     TaskCategories,
     Pomodoros,
+    PomodoroRooms,
     ChatChannels,
 ]
 news_document_models = [

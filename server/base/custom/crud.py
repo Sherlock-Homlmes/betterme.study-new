@@ -160,6 +160,8 @@ class BaseCRUD(Generic[ModelType]):
 
         return db_obj
 
+    # TODO: this should be update_one
+    # TODO: create another update function
     async def update(self, data: dict[str, Any] | BaseModel, **kwargs) -> ModelType | None:
         """
         Update a record by filters (match_ attributes)
@@ -188,16 +190,42 @@ class BaseCRUD(Generic[ModelType]):
                 return obj
             return None
 
+    # TODO: fix this to handle multiple records
     async def delete(self, **kwargs) -> bool:
         """
         Delete a record by filters (match_ attributes)
         Args:
             match_<attr>: Any (Attributes that will convert to filter the record)
-            check_exist: bool (default: True) - If True, check if record exists before deleting
+            raise_if_missing: bool (default: True) - If True, check if record exists before deleting
         """
-        check_exist = kwargs.pop("check_exist", True)
+        raise_if_missing = kwargs.pop("raise_if_missing", True)
 
-        if check_exist:
+        if raise_if_missing:
+            # Check if record exists using filters
+            obj = await self.get_one(raise_if_missing=True, **kwargs)
+            await obj.delete()
+        else:
+            # Direct delete without checking existence
+            filters = self._get_filter_conditions(**kwargs)
+            if not filters:
+                raise ValueError("At least one match_ parameter is required")
+            obj = await self.model.find_one(*filters)
+            if obj:
+                await obj.delete()
+
+        return True
+
+    # TODO: create another delete function
+    async def delete_one(self, **kwargs) -> bool:
+        """
+        Delete a record by filters (match_ attributes)
+        Args:
+            match_<attr>: Any (Attributes that will convert to filter the record)
+            raise_if_missing: bool (default: True) - If True, check if record exists before deleting
+        """
+        raise_if_missing = kwargs.pop("raise_if_missing", True)
+
+        if raise_if_missing:
             # Check if record exists using filters
             obj = await self.get_one(raise_if_missing=True, **kwargs)
             await obj.delete()

@@ -158,7 +158,7 @@ rtc:
 keys:
   key1: secret1
   key2: secret2
-  devkey: secretsecret
+  devkey: Bearer secretsecret
 # Logging config
 # logging:
 #   # log level, valid values: debug, info, warn, error
@@ -203,14 +203,10 @@ keys:
 
 # Webhooks
 # when configured, LiveKit notifies your URL handler with room events
-# webhook:
-#   # the API key to use in order to sign the message
-#   # this must match one of the keys LiveKit is configured with
-#   api_key: <api_key>
-#   # list of URLs to be notified of room events
-#   urls:
-#     - https://your-host.com/handler
-
+webhook:
+  api_key: "devkey"
+  urls:
+    - "http://server:8080/api/v2/webhooks/livekit"
 # Signal Relay
 # since v1.4.0, a more reliable, psrpc based signal relay is available
 # this gives us the ability to reliably proxy messages between a signal server and RTC node
