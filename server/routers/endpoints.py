@@ -18,6 +18,7 @@ from routers.v2.taskcategories.api import router as taskcategories_router_v2
 from routers.v2.posts.api import router as posts_router_v2
 from routers.v2.pomodoros.api import router as pomodoros_router_v2
 from routers.v2.pomodoro_rooms.api import router as pomodoro_rooms_router_v2
+from routers.v2.pomodoro_rooms.sse import router as pomodoro_rooms_sse_router_v2
 from routers.v2.webhooks.api import router as webhook_v2
 
 # from routers.news_admin import ai as admin_ai, crawlers, draft_posts, posts as admin_posts
@@ -88,6 +89,7 @@ auth_modules_v2 = (
     tasks_router_v2,
     pomodoros_router_v2,
     pomodoro_rooms_router_v2,
+    pomodoro_rooms_sse_router_v2,
 )
 
 for module in non_auth_modules_v2:

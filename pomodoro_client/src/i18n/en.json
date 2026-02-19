@@ -330,6 +330,34 @@
 			"no_data": "No data available for the selected date range."
 		}
 	},
+	"pomodoro_rooms": {
+		"heading": "Pomodoro rooms",
+		"you": "You",
+		"connected": "Connected",
+		"connecting": "Connecting...",
+		"back": "Back",
+		"participants": "{count} participants",
+		"joining_room": "Joining room...",
+		"retry_join": "Retry",
+		"mute_mic": "Mute microphone",
+		"unmute_mic": "Unmute microphone",
+		"turn_off_camera": "Turn off camera",
+		"turn_on_camera": "Turn on camera",
+		"mute_speaker": "Mute speaker",
+		"unmute_speaker": "Unmute speaker",
+		"leave_room": "Leave room",
+		"enable_both": "Enable camera and microphone",
+		"start_screen_share": "Start screen sharing",
+		"stop_screen_share": "Stop screen sharing",
+		"speaking": "Speaking",
+		"available_rooms": "Available rooms",
+		"available": "Available",
+		"refresh": "Refresh",
+		"create_room": "Create room",
+		"errors": {
+			"join_failed": "Failed to join room"
+		}
+	},
 	"notification": {
 		"action": {
 			"ready": "Let's go!"

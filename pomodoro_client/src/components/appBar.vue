@@ -37,12 +37,12 @@ const appBarButtons = [
 		icon: ChartBarIcon,
 		ariaLabel: 'appbar.settings',
 	},
-	// {
-	// 	key: 'voiceChannel',
-	// 	panel: 'voiceChannel',
-	// 	icon: VideoIcon,
-	// 	ariaLabel: 'appbar.voiceChannel',
-	// },
+	{
+		key: 'voiceChannel',
+		panel: 'voiceChannel',
+		icon: VideoIcon,
+		ariaLabel: 'appbar.voiceChannel',
+	},
 	{
 		key: 'setting',
 		panel: 'settings',

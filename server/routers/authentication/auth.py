@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 
 #  lib
 import jwt
-from fastapi import HTTPException, status, Security, Request
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, APIKeyHeader
+from fastapi import HTTPException, status, Security, Request, Cookie, Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, APIKeyHeader, APIKeyCookie
 from livekit import api
 from passlib.context import CryptContext
 
@@ -15,7 +15,8 @@ from models import UserRoleEnum
 
 
 class AuthHandler:
-    security = HTTPBearer()
+    header_security = HTTPBearer(auto_error=False)
+    cookie_security = APIKeyCookie(name="Authorization", auto_error=False)
     access_key_security = APIKeyHeader(name="Authorization", auto_error=False)
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     secret = settings.SECRET_KEY
@@ -49,14 +50,33 @@ class AuthHandler:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Server error"
             )
 
-    def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
-        return self.decode_token(auth.credentials)
+    def auth_wrapper(
+        self,
+        cookie_token: Optional[str] = Security(cookie_security),
+        header_token: Optional[HTTPAuthorizationCredentials] = Security(header_security),
+    ):
+        if not header_token and not cookie_token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorization")
 
-    def news_admin_auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
-        user = self.decode_token(auth.credentials)
-        if UserRoleEnum.NEWS_ADMIN not in user["roles"]:
-            raise HTTPException(status_code=403, detail="Permission denied")
-        return user
+        # Try header verification
+        try:
+            return self.decode_token(header_token.credentials)
+        except Exception as e:
+            exception = e
+
+        # Try cookie verification
+        try:
+            return self.decode_token(cookie_token)
+        except Exception as e:
+            exception = e
+
+        raise exception
+
+    # def news_admin_auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+    #     user = self.decode_token(auth.credentials)
+    #     if UserRoleEnum.NEWS_ADMIN not in user["roles"]:
+    #         raise HTTPException(status_code=403, detail="Permission denied")
+    #     return user
 
     def token_compare(self, token: str) -> bool:
         if token != f"Bearer {settings.ACCESS_KEY}":
@@ -69,26 +89,26 @@ class AuthHandler:
     def access_token_auth_wrapper(self, token: str = Security(access_key_security)) -> bool:
         return self.token_compare(token)
 
-    def access_token_or_jwt_auth_wrapper(
-        self,
-        token: Optional[str] = Security(access_key_security),
-        auth: Optional[HTTPAuthorizationCredentials] = Security(security),
-    ) -> bool:
-        exception = None
+    # def access_token_or_jwt_auth_wrapper(
+    #     self,
+    #     token: Optional[str] = Security(access_key_security),
+    #     auth: Optional[HTTPAuthorizationCredentials] = Security(security),
+    # ) -> bool:
+    #     exception = None
 
-        # Try access token verification
-        try:
-            return self.token_compare(token)
-        except Exception as e:
-            exception = e
+    #     # Try access token verification
+    #     try:
+    #         return self.token_compare(token)
+    #     except Exception as e:
+    #         exception = e
 
-        # Try jwt verification
-        try:
-            return self.decode_token(auth.credentials)
-        except Exception as e:
-            exception = e
+    #     # Try jwt verification
+    #     try:
+    #         return self.decode_token(auth.credentials)
+    #     except Exception as e:
+    #         exception = e
 
-        raise exception
+    #     raise exception
 
 
 class LivekitWebhookHandler:

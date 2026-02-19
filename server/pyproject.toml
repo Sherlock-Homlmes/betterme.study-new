@@ -32,6 +32,9 @@ dependencies = [
     "async-cache>=1.1.1,<2.0.0",
     "aiohttp>=3.11.4",
     "livekit-api>=0.8.0,<0.9.0",
+    "websockets>=15.0.1",
+    "sse-starlette>=3.0.3",
+    "pydash>=8.0.6",
 ]
 
 [project.optional-dependencies]
