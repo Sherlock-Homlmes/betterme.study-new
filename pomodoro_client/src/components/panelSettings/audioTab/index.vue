@@ -74,7 +74,7 @@ onMounted(async () => {
 </script>
 
 <template lang="pug">
-div.grid.grid-cols-1.gap-2.py-3.px-4(ref="audioTabRef")
+div.grid-cols-1.py-3.px-4(ref="audioTabRef")
   // Music controls section
   h2.text-sm.font-bold.uppercase.mb-2 Music Player
   div.flex.flex-col.items-center.space-y-6.py-4(v-if="shouldLoadMusic")

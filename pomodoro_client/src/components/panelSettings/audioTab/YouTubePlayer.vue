@@ -79,7 +79,7 @@ defineExpose({
 </script>
 
 <template lang="pug">
-section(class="w-full max-w-md")
+section(class="w-full max-w-lg")
 	h2(class="text-sm font-bold uppercase mb-2") Youtube Link
 
 	YouTube(
@@ -95,12 +95,11 @@ section(class="w-full max-w-md")
 	)
 
 	div(class="flex items-center space-x-4")
-		input(
-			id="youtube-link"
+		input#youtube-link(
 			v-model="youtubeLink"
 			type="text"
 			placeholder="https://youtu.be/..."
-			class="flex-grow px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-container dark:bg-surface-dark dark:border-surface-ondark dark:text-surface-ondark"
+			class="w-46 sm:flex-grow px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-container dark:bg-surface-dark dark:border-surface-ondark dark:text-surface-ondark"
 		)
 
 		ControlButton(

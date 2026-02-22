@@ -68,14 +68,14 @@ defineExpose({
 </script>
 
 <template lang="pug">
-section(class="w-full max-w-md")
-	h2(class="text-sm font-bold uppercase mb-2") Ambiance
+section(class="w-full max-w-lg")
+	h2(class="text-sm font-bold uppercase") Ambiance
 
-	div(class="space-y-2")
+	div
 		div(
 			v-for="soundPlayer in soundPlayers"
 			:key="soundPlayer.name"
-			class="flex items-center space-x-4 py-2"
+			class="flex items-center space-x-4"
 		)
 			span(class="flex-grow") {{ soundPlayer.name }}
 
