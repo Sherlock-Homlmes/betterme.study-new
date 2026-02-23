@@ -325,6 +325,7 @@
 			"total_study_time": "Total study time",
 			"study_days": "Study days",
 			"avg_time_per_day": "Avg time/day",
+			"pomodoro_count": "Pomodoros completed",
 			"study_streak": "Study streak",
 			"loading_statistics": "Loading statistics...",
 			"no_data": "No data available for the selected date range."

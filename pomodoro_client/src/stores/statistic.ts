@@ -5,6 +5,11 @@ import { useAuthStore } from '@/stores/auth';
 import { fetchWithAuth } from '@/utils/betterFetch';
 import { toDate } from 'reka-ui/date';
 
+export interface StudyTime {
+  total_study_time: number;
+  date_range: string;
+}
+
 export interface StatisticData {
   name: string;
   total: number;
@@ -12,7 +17,12 @@ export interface StatisticData {
 }
 
 export interface StatisticsResponse {
-  daily_study_time_data: StatisticData[];
+  total_study_time: number;
+  study_day_count: number;
+  study_time_per_day: number;
+  longest_streak: number;
+  pomodoro_count: number;
+  data: StudyTime[];
 }
 
 export const useStatistics = () => {
@@ -29,6 +39,7 @@ export const useStatistics = () => {
     averageDailyTime: 0,
     currentStreak: 0,
     streakRange: '',
+    pomodoroCount: 0,
   });
 
   const fetchStatistics = async (dateRange?: DateRange) => {
@@ -41,7 +52,7 @@ export const useStatistics = () => {
     error.value = null;
 
     try {
-      let url = `${API_URL}/statistics`;
+      let url = `${API_URL}/v2/statistics`;
 
       if (dateRange?.start && dateRange?.end) {
         const startDate = toDate(dateRange.start).toISOString().split('T')[0];
@@ -54,20 +65,23 @@ export const useStatistics = () => {
       if (response?.ok) {
         const data: StatisticsResponse = await response.json();
 
-        // Fill in missing dates if date range is specified
-        let processedData = data.daily_study_time_data;
-        if (dateRange?.start && dateRange?.end) {
-          processedData = fillMissingDates(data.daily_study_time_data, dateRange);
-        }
+        // Convert StudyTime data to StatisticData format for chart
+        statisticsData.value = data.data.map(item => ({
+          name: item.date_range,
+          total: item.total_study_time,
+          date: item.date_range // Use date_range as date since it contains the date info
+        }));
 
-        // Apply grouping logic if more than 10 items
-        if (processedData.length > 10) {
-          statisticsData.value = groupDataByPeriod(processedData, 10);
-        } else {
-          statisticsData.value = processedData;
-        }
-        // Calculate summary on frontend
-        calculateSummaryFromData(processedData);
+        // Update summary with data from API
+        summary.value = {
+          totalTime: data.total_study_time,
+          averageSessionTime: data.study_day_count > 0 ? Math.round(data.total_study_time / data.study_day_count) : 0,
+          studyDays: data.study_day_count,
+          averageDailyTime: data.study_time_per_day,
+          currentStreak: data.longest_streak,
+          streakRange: '', // API doesn't provide streak range, could be added later
+          pomodoroCount: data.pomodoro_count || 0,
+        };
       } else {
         // If API doesn't exist yet, generate mock data based on date range
         generateMockData(dateRange);
@@ -178,10 +192,12 @@ export const useStatistics = () => {
   };
 
   const generateMockData = (dateRange?: DateRange) => {
-    const data: StatisticData[] = [];
+    const studyTimes: StudyTime[] = [];
+    let totalStudyTime = 0;
+    let studyDayCount = 0;
 
     if (dateRange?.start && dateRange?.end) {
-      // Generate data for ALL days in the selected date range (including empty days)
+      // Generate data for the selected date range
       const startDate = toDate(dateRange.start);
       const endDate = toDate(dateRange.end);
 
@@ -192,19 +208,26 @@ export const useStatistics = () => {
       while (currentDate <= endDate) {
         // Randomly decide if this day has data (70% chance) or is empty (30% chance)
         const hasData = Math.random() > 0.3;
+        const studyTime = hasData ? Math.floor(Math.random() * 300) + 50 : 0;
 
-        data.push({
-          name: hasMultipleYears
-            ? currentDate.toLocaleDateString('en-GB')
-            : currentDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }),
-          total: hasData ? Math.floor(Math.random() * 300) + 50 : 0, // 0 for empty days
-          date: currentDate.toISOString().split('T')[0],
+        if (studyTime > 0) {
+          studyDayCount++;
+        }
+        totalStudyTime += studyTime;
+
+        const dateRangeStr = hasMultipleYears
+          ? currentDate.toLocaleDateString('en-GB')
+          : currentDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
+
+        studyTimes.push({
+          total_study_time: studyTime,
+          date_range: dateRangeStr,
         });
 
         currentDate.setDate(currentDate.getDate() + 1);
       }
     } else {
-      // Default mock data for last 7 days (including some empty days)
+      // Default mock data for last 7 days
       const today = new Date();
       for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
@@ -212,24 +235,41 @@ export const useStatistics = () => {
 
         // Randomly decide if this day has data (80% chance)
         const hasData = Math.random() > 0.2;
+        const studyTime = hasData ? Math.floor(Math.random() * 300) + 50 : 0;
 
-        data.push({
-          name: date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }),
-          total: hasData ? Math.floor(Math.random() * 300) + 50 : 0,
-          date: date.toISOString().split('T')[0],
+        if (studyTime > 0) {
+          studyDayCount++;
+        }
+        totalStudyTime += studyTime;
+
+        studyTimes.push({
+          total_study_time: studyTime,
+          date_range: date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }),
         });
       }
     }
 
-    // Apply grouping logic if more than 10 items
-    if (data.length > 10) {
-      statisticsData.value = groupDataByPeriod(data, 10);
-    } else {
-      statisticsData.value = data;
-    }
+    // Convert to StatisticData format for chart
+    statisticsData.value = studyTimes.map(item => ({
+      name: item.date_range,
+      total: item.total_study_time,
+      date: item.date_range,
+    }));
 
-    // Calculate summary on frontend
-    calculateSummaryFromData(data);
+    // Calculate summary
+    const totalDays = studyTimes.length;
+    const averageDailyTime = totalDays > 0 ? Math.round(totalStudyTime / totalDays) : 0;
+    const averageSessionTime = studyDayCount > 0 ? Math.round(totalStudyTime / studyDayCount) : 0;
+
+    summary.value = {
+      totalTime: totalStudyTime,
+      averageSessionTime,
+      studyDays: studyDayCount,
+      averageDailyTime,
+      currentStreak: Math.floor(Math.random() * 10) + 1, // Mock streak
+      streakRange: '', // Could be calculated but keeping simple for mock
+      pomodoroCount: Math.floor(Math.random() * 50) + 1, // Mock pomodoro count
+    };
   };
 
   const calculateSummaryFromData = (data: StatisticData[]) => {
@@ -258,6 +298,7 @@ export const useStatistics = () => {
       averageDailyTime: averageDailyTime || 0,
       currentStreak: streak || 0,
       streakRange: streakRange || '',
+      pomodoroCount: 0, // Will be updated by API response
     };
   };
 
