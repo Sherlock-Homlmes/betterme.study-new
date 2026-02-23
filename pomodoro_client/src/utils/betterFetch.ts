@@ -3,6 +3,7 @@ import { useErrorStore } from "@/stores/common";
 // Centralized token management
 class TokenManager {
 	private static readonly TOKEN_KEY = 'Authorization';
+	private static readonly COOKIE_DOMAIN = '.betterme.study'; // Domain for cookie sharing
 	
 	static getToken(): string | null {
 		// Try to get token from cookie first, fallback to localStorage
@@ -20,16 +21,16 @@ class TokenManager {
 		// Set in both localStorage and cookie
 		window.localStorage.setItem(TokenManager.TOKEN_KEY, token);
 		
-		// Set cookie with proper attributes
+		// Set cookie with proper attributes and domain
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 30); // 30 days from now
-		document.cookie = `${TokenManager.TOKEN_KEY}=${token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+		document.cookie = `${TokenManager.TOKEN_KEY}=${token}; expires=${expires.toUTCString()}; path=/; domain=${TokenManager.COOKIE_DOMAIN}; SameSite=Lax`;
 	}
 	
 	static removeToken(): void {
 		// Remove from both localStorage and cookie
 		window.localStorage.removeItem(TokenManager.TOKEN_KEY);
-		document.cookie = `${TokenManager.TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
+		document.cookie = `${TokenManager.TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${TokenManager.COOKIE_DOMAIN}; SameSite=Lax`;
 	}
 }
 
