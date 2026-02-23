@@ -1,7 +1,7 @@
 import { runtimeConfig } from "@/config/runtimeConfig";
 import { createGlobalState, useLocalStorage } from "@vueuse/core";
 import { isEmpty } from "lodash";
-import { fetchWithAuth } from "@/utils/betterFetch";
+import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
 import { useErrorStore } from "./common";
 
@@ -19,6 +19,7 @@ export interface Task {
 	priority: number;
     status: TaskStatus
     index: number
+    section?: string
     // necessary: string
     // difficult: number
     // deadline: datetime.datetime
@@ -36,7 +37,7 @@ export const useTaskStore = createGlobalState(() => {
 	const { showError } = useErrorStore();
 
 	// state
-	const tasks = useLocalStorage("tasks", []);
+	const tasks = useLocalStorage<Task[]>("tasks", []);
 	const enableTodoListTask = useLocalStorage("enableTodoListTask", true);
 
 	// getters
@@ -44,7 +45,7 @@ export const useTaskStore = createGlobalState(() => {
 	// actions
 	const getTaskList = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(TASK_API_URL);
+		const response = await api.get(TASK_API_URL);
 		if (response?.ok) tasks.value = await response.json();
 		else {
 			const errorMsg = "Failed to get newest task list";
@@ -60,8 +61,12 @@ export const useTaskStore = createGlobalState(() => {
 	const postTask = async (title: string) => {
 		if (!isAuth.value) {
 			tasks.value.push({
+				id: Date.now(),
 				title,
+				description: null,
+				priority: 0,
 				status: TaskStatus.DOING,
+				index: tasks.value.length + 1,
 				section: "work",
 			});
 			return;
@@ -69,10 +74,7 @@ export const useTaskStore = createGlobalState(() => {
 		const index = isEmpty(tasks.value)
 			? 1
 			: Math.max(...tasks.value.map((task) => task.index)) + 1;
-		const response = await fetchWithAuth(TASK_API_URL, {
-			method: "POST",
-			body: JSON.stringify({ title, index }),
-		});
+		const response = await api.post(TASK_API_URL, { title, index });
 		if (response?.ok) await getTaskList();
 		else {
 			const errorMsg = "Failed to create task";
@@ -81,13 +83,10 @@ export const useTaskStore = createGlobalState(() => {
 		}
 	};
 
-	const patchTask = async (taskId: string, change = {}) => {
+	const patchTask = async (taskId: number, change = {}) => {
 		if (!isAuth.value) return;
 		if (isEmpty(change)) return;
-		const response = await fetchWithAuth(`${TASK_API_URL}/${taskId}`, {
-			method: "PATCH",
-			body: JSON.stringify(change),
-		});
+		const response = await api.patch(`${TASK_API_URL}/${taskId}`, change);
 		if (!response?.ok) {
 			const errorMsg = "Failed to update task";
 			showError(errorMsg);
@@ -95,14 +94,12 @@ export const useTaskStore = createGlobalState(() => {
 		}
 	};
 
-	const deleteTask = async (taskId: string) => {
+	const deleteTask = async (taskId: number) => {
 		if (!isAuth.value) {
 			tasks.value = tasks.value.filter((task) => task.id !== taskId);
 			return
 		};
-		const response = await fetchWithAuth(`${TASK_API_URL}/${taskId}`, {
-			method: "DELETE",
-		});
+		const response = await api.delete(`${TASK_API_URL}/${taskId}`);
 		if (response?.ok)
 			tasks.value = tasks.value.filter((task) => task.id !== taskId);
 		else {
@@ -112,11 +109,11 @@ export const useTaskStore = createGlobalState(() => {
 		}
 	};
 
-	const moveTask = (task, newIndex: number) => {
+	const moveTask = (task: Task, newIndex: number) => {
 		const oldIndex = tasks.value.indexOf(task);
 		if (oldIndex < 0 || newIndex >= tasks.value.length) return;
 
-		const swapProp = (obj1, obj2, prop) => {
+		const swapProp = (obj1: any, obj2: any, prop: string) => {
 			if (!(prop in obj1) || !(prop in obj2)) return;
 			[obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
 		};

@@ -7,6 +7,7 @@ import {
 } from "@vueuse/core";
 import { useAuthStore } from "./auth";
 import {useErrorStore} from "./common";
+import { api } from "@/utils/betterFetch";
 import _ from "lodash";
 
 export const useLocalAudioDBStore = createGlobalState(() => {
@@ -151,7 +152,7 @@ export const useAudioStore = createGlobalState(() => {
 	// actions
 	const getAudioTracksInfo = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/audios`);
+		const response = await api.get(`${API_URL}/audios`);
 		if (response?.ok) tracks.value = await response.json();
 		else {
 			const errorMsg = "Failed to get audio tracks";
@@ -163,7 +164,7 @@ export const useAudioStore = createGlobalState(() => {
 
 	const createAudioTrack = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/audios`, "POST");
+		const response = await api.post(`${API_URL}/audios`);
 		if (response?.ok) console.log(await response.json());
 		else {
 			const errorMsg = "Failed to get audio track";
@@ -174,7 +175,7 @@ export const useAudioStore = createGlobalState(() => {
 
 	const deleteAudioTrack = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/audios`, "DELETE");
+		const response = await api.delete(`${API_URL}/audios`);
 		if (response?.ok) console.log();
 		else {
 			const errorMsg = "Failed to delete audio track";

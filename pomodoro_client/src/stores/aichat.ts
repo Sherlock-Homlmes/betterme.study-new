@@ -2,7 +2,7 @@ import { createGlobalState, useLocalStorage } from "@vueuse/core";
 import { ref, computed, watch, nextTick } from "vue";
 import { useAuthStore } from "./auth";
 import {useErrorStore} from "./common";
-import { fetchWithAuth } from "@/utils/betterFetch";
+import { api } from "@/utils/betterFetch";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
 export const useAIChatStore = createGlobalState(() => {
@@ -14,7 +14,7 @@ export const useAIChatStore = createGlobalState(() => {
 		"selectedChannelId",
 		null,
 	);
-	const channels = useLocalStorage("AIChatChannels", []);
+	const channels = useLocalStorage<any[]>("AIChatChannels", []);
 	const channelIds = computed(() =>
 		channels.value.map((channel) => channel.id),
 	);
@@ -46,7 +46,7 @@ export const useAIChatStore = createGlobalState(() => {
 		if (!isAuth.value) return;
 
 		loadingChannel.value = true;
-		const response = await fetchWithAuth(`${API_URL}/channels/`);
+		const response = await api.get(`${API_URL}/channels/`);
 		loadingChannel.value = false;
 		if (response?.ok) {
 			channels.value = await response.json();
@@ -70,9 +70,7 @@ export const useAIChatStore = createGlobalState(() => {
 			return;
 		}
 
-		const response = await fetchWithAuth(`${API_URL}/channels/`, {
-			method: "POST",
-		});
+		const response = await api.post(`${API_URL}/channels/`);
 		if (response?.ok) {
 			const channel = await response.json();
 			selectedChannelId.value = channel.id;
@@ -84,12 +82,7 @@ export const useAIChatStore = createGlobalState(() => {
 	async function getHistory() {
 		if (!isAuth.value) return;
 		loadingChannel.value = true;
-		const response = await fetchWithAuth(
-			`${API_URL}/channels/${selectedChannelId.value}`,
-			{
-				method: "GET",
-			},
-		);
+		const response = await api.get(`${API_URL}/channels/${selectedChannelId.value}`);
 		loadingChannel.value = false;
 		if (response?.ok) {
 			history.value = (await response.json()).history;
@@ -114,14 +107,11 @@ export const useAIChatStore = createGlobalState(() => {
 		}
 		scrollToBottom();
 
-		const response = await fetchWithAuth(
+		const response = await api.post(
 			`${API_URL}/channels/${selectedChannelId.value}/chats`,
 			{
-				method: "POST",
-				body: JSON.stringify({
-					content,
-					use_ai: true,
-				}),
+				content,
+				use_ai: true,
 			},
 		);
 		if (response?.ok) {
@@ -135,10 +125,7 @@ export const useAIChatStore = createGlobalState(() => {
 	async function deleteChannel() {
 		if (!isAuth.value) return;
 		if (history.value.length <= 1) return;
-		const response = await fetchWithAuth(
-			`${API_URL}/channels/${selectedChannelId.value}`,
-			{ method: "DELETE" },
-		);
+		const response = await api.delete(`${API_URL}/channels/${selectedChannelId.value}`);
 		if (response?.ok) {
 			if (channels.value.length <= 1) await createChannel();
 			else {

@@ -9,9 +9,9 @@ import _ from "lodash";
 import timerPresets from "@/assets/settings/timerPresets";
 import ChangeTracker from "@/utils/changeTracker";
 import {useErrorStore} from "./common";
-import {fetchWithAuth} from "@/utils/betterFetch";
+import {api, TokenManager} from "@/utils/betterFetch";
 import { isEmpty } from "lodash";
-import { useDark, useToggle } from '@vueuse/core';
+import { useDark } from '@vueuse/core';
 
 const changeTracker = new ChangeTracker();
 export const defaultSettings = {
@@ -75,7 +75,7 @@ export const useAuthStore = createGlobalState(() => {
 
 	// actions
 	const getCurrentUser = async () => {
-		const response = await fetchWithAuth(`${API_URL}/auth/self`);
+		const response = await api.get(`${API_URL}/auth/self`);
 		if (response?.ok) userInfo.value = await response.json();
 		else {
 			userInfo.value = null;
@@ -85,17 +85,14 @@ export const useAuthStore = createGlobalState(() => {
 
 	const getCurrentUserSetting = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/users/self/settings`);
+		const response = await api.get(`${API_URL}/users/self/settings`);
 		if (response?.ok) userSettings.value = await response.json();
 		else showError("Fail to get self setting");
 	};
 
 	const updateCurrentUserSetting = async (data: object) => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/users/self/settings`, {
-			method: "PATCH",
-			body: JSON.stringify(data),
-		});
+		const response = await api.patch(`${API_URL}/users/self/settings`, data);
 		if (!response?.ok) throw showError("Fail to update user setting");
 	};
 
@@ -103,9 +100,8 @@ export const useAuthStore = createGlobalState(() => {
 		const response = await fetch(`${API_URL}/auth/discord-oauth?code=${code}`);
 		const data = await response.json();
 		if (data?.token) {
-			// set auth to localstorage
-			localStorage.removeItem("Authorization");
-			localStorage.setItem("Authorization", data.token);
+			// set auth using TokenManager
+			TokenManager.setToken(data.token);
 			// check if user is accessable or not
 			await getCurrentUser();
 		}

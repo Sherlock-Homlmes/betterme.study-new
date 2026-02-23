@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useEventSource } from '@vueuse/core';
 import { runtimeConfig } from '@/config/runtimeConfig';
-import { fetchWithAuth } from '@/utils/betterFetch';
+import { api } from '@/utils/betterFetch';
 import { UsersIcon, PlusIcon, RefreshIcon, VideoIcon, XIcon as CloseIcon } from 'vue-tabler-icons';
 import { useI18n } from 'vue-i18n';
 import { Loading } from "@/components/ui/loading";
@@ -156,7 +156,7 @@ const fetchRooms = async () => {
   try {
     refreshing.value = true;
     error.value = null;
-    const response = await fetchWithAuth(buildApiUrl('/'));
+    const response = await api.get(buildApiUrl('/'));
     if (!response || !response.ok) {
       throw new Error(`HTTP error! status: ${response?.status || 'unknown'}`);
     }
@@ -187,18 +187,15 @@ const createRoom = async () => {
     creatingRoom.value = true;
     error.value = null;
 
-    const response = await fetchWithAuth(buildApiUrl('/'), {
-      method: 'POST',
-      body: JSON.stringify({
-        room_name: createRoomForm.value.room_name.trim(),
-        limit: createRoomForm.value.limit,
-        room_settings: {
-          pomodoro_study_time: createRoomForm.value.room_settings.pomodoro_study_time * 60,
-          pomodoro_rest_time: createRoomForm.value.room_settings.pomodoro_rest_time * 60,
-          pomodoro_long_rest_time: createRoomForm.value.room_settings.pomodoro_long_rest_time * 60,
-          long_rest_time_interval: createRoomForm.value.room_settings.long_rest_time_interval,
-        },
-      }),
+    const response = await api.post(buildApiUrl('/'), {
+      room_name: createRoomForm.value.room_name.trim(),
+      limit: createRoomForm.value.limit,
+      room_settings: {
+        pomodoro_study_time: createRoomForm.value.room_settings.pomodoro_study_time * 60,
+        pomodoro_rest_time: createRoomForm.value.room_settings.pomodoro_rest_time * 60,
+        pomodoro_long_rest_time: createRoomForm.value.room_settings.pomodoro_long_rest_time * 60,
+        long_rest_time_interval: createRoomForm.value.room_settings.long_rest_time_interval,
+      },
     });
 
     if (!response || !response.ok) {

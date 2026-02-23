@@ -1,7 +1,7 @@
 import { computed, ref } from "vue";
 import { runtimeConfig } from "@/config/runtimeConfig";
 import { createGlobalState } from "@vueuse/core";
-import { fetchWithAuth } from "@/utils/betterFetch";
+import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
 import { useSettings, Section, ColorMethod } from "./settings";
 import { useErrorStore } from "./common";
@@ -170,9 +170,7 @@ export const usePomodoroStore = createGlobalState(() => {
 	const firstFetchStartPomodoro = ref(true);
 	const startPomodoro = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/pomodoros/`, {
-			method: "POST",
-		});
+		const response = await api.post(`${API_URL}/pomodoros/`);
 		if (response?.ok) {
 			firstFetchStartPomodoro.value = true;
 			currentPomodoroSection.value = await response.json();
@@ -186,21 +184,16 @@ export const usePomodoroStore = createGlobalState(() => {
 
 	const pomodoroSectionAction = async (action: string) => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(
+		const response = await api.patch(
 			`${API_URL}/pomodoros/${currentPomodoroSection.value.id}`,
-			{
-				method: "PATCH",
-				body: JSON.stringify({ action: action }),
-			},
+			{ action: action },
 		);
 		if (!response?.ok) throw new Error(`Fail to ${action} pomodoro section`);
 	};
 
 	const deletePomodoro = async () => {
 		if (!isAuth.value) return;
-		const response = await fetchWithAuth(`${API_URL}/pomodoros/_last`, {
-			method: "DELETE",
-		});
+		const response = await api.delete(`${API_URL}/pomodoros/_last`);
 		if (response?.ok) {
 			currentPomodoroSection.value = null;
 		}

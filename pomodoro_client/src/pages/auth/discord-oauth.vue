@@ -5,7 +5,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchWithAuth } from "@/utils/betterFetch";
 import { useAuthStore } from "@/stores/auth";
 
 const route = useRoute();

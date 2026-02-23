@@ -2,7 +2,7 @@ import { ref, computed } from 'vue';
 import type { DateRange } from 'reka-ui';
 import { runtimeConfig } from '@/config/runtimeConfig';
 import { useAuthStore } from '@/stores/auth';
-import { fetchWithAuth } from '@/utils/betterFetch';
+import { api } from '@/utils/betterFetch';
 import { toDate } from 'reka-ui/date';
 
 export interface StudyTime {
@@ -60,7 +60,7 @@ export const useStatistics = () => {
         url += `?start_date=${startDate}&end_date=${endDate}`;
       }
 
-      const response = await fetchWithAuth(url);
+      const response = await api.get(url);
 
       if (response?.ok) {
         const data: StatisticsResponse = await response.json();

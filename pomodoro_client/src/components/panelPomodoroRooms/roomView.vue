@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, computed, watch, markRaw } from 'vue';
 import { Room, RoomEvent, Track, LocalParticipant, RemoteParticipant, Participant, MediaDeviceFailure } from 'livekit-client';
 import { runtimeConfig } from '@/config/runtimeConfig';
-import { fetchWithAuth } from '@/utils/betterFetch';
+import { api } from '@/utils/betterFetch';
 import { useAuthStore } from '@/stores/auth';
 import {
   ChevronLeftIcon,
@@ -73,11 +73,8 @@ const joinRoom = async () => {
     error.value = null;
 
     // Get token from API
-    const response = await fetchWithAuth(buildApiUrl('/join'), {
-      method: 'POST',
-      body: JSON.stringify({
-        livekit_room_name: props.room.livekit_room_name,
-      }),
+    const response = await api.post(buildApiUrl('/join'), {
+      livekit_room_name: props.room.livekit_room_name,
     });
 
     if (!response || !response.ok) {
