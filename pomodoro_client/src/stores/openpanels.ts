@@ -8,6 +8,6 @@ export const useOpenPanels = createGlobalState(
 		settings: false,
 		todo: false,
 		statistic: false,
-		voiceChannel: false,
+		pomodoroRoom: false,
 	})
 );

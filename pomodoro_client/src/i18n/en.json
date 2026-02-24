@@ -39,7 +39,8 @@
 		"settings": "Open settings",
 		"todo": "Open task list",
 		"ai": "ai",
-		"music": "Music"
+		"music": "Music",
+		"pomodoroRoom": "Pomodoro room"
 	},
 	"timer": {
 		"approximate": {
@@ -331,13 +332,12 @@
 			"no_data": "No data available for the selected date range."
 		}
 	},
-	"pomodoro_rooms": {
+	"pomodoroRoom": {
 		"heading": "Pomodoro rooms",
 		"you": "You",
 		"connected": "Connected",
 		"connecting": "Connecting...",
 		"back": "Back",
-		"participants": "{count} participants",
 		"joining_room": "Joining room...",
 		"retry_join": "Retry",
 		"mute_mic": "Mute microphone",
@@ -355,8 +355,27 @@
 		"available": "Available",
 		"refresh": "Refresh",
 		"create_room": "Create room",
+		"no_rooms": "No rooms",
 		"errors": {
 			"join_failed": "Failed to join room"
+		},
+		"minutes": "minutes",
+		"live_connected": "Live connected",
+		"live_disconnected": "Live disconnected",
+		"createDialog": {
+			"title": "Create room",
+			"room_name_label": "Room name",
+			"room_name_placeholder": "Room name",
+			"limit_label": "Room limit",
+			"limit_placeholder": "Room limit",
+			"room_settings_label": "Room setting",
+			"study_time_label": "Study time",
+			"rest_time_label": "Rest time",
+			"long_rest_time_label": "Long rest time",
+			"long_rest_interval_label": "Long rest time",
+			"cancel": "Cancel",
+			"create": "Create",
+			"creating": "Creating"
 		}
 	},
 	"notification": {

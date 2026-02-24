@@ -19,12 +19,12 @@ const openPanels = useOpenPanels();
 const settingsStore = useSettings();
 
 const appBarButtons = [
-	{
-		key: 'ai',
-		panel: 'ai',
-		icon: MessageChatbotIcon,
-		ariaLabel: 'appbar.ai',
-	},
+	// {
+	// 	key: 'ai',
+	// 	panel: 'ai',
+	// 	icon: MessageChatbotIcon,
+	// 	ariaLabel: 'appbar.ai',
+	// },
 	{
 		key: 'todo',
 		panel: 'todo',
@@ -38,10 +38,10 @@ const appBarButtons = [
 		ariaLabel: 'appbar.settings',
 	},
 	{
-		key: 'voiceChannel',
-		panel: 'voiceChannel',
+		key: 'pomodoroRoom',
+		panel: 'pomodoroRoom',
 		icon: VideoIcon,
-		ariaLabel: 'appbar.voiceChannel',
+		ariaLabel: 'appbar.pomodoroRoom',
 	},
 	{
 		key: 'setting',
