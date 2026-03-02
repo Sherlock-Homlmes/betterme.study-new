@@ -39,7 +39,8 @@
 		"settings": "Mở cài đặt",
 		"todo": "Mở danh sách nhiệm vụ",
 		"ai": "ai",
-		"music": "Âm nhạc"
+		"music": "Âm nhạc",
+		"pomodoroRoom": "Phòng Pomodoro"
 	},
 	"timer": {
 		"approximate": {
@@ -58,8 +59,9 @@
 			"main": "Chính",
 			"timer": "Đồng hồ",
 			"audio": "Âm thanh",
-			"about": "Giới thiệu",
-			"account": "Tài khoản"
+			"account": "Tài khoản",
+			"statistic": "Thống kê",
+			"about": "Giới thiệu"
 		},
 		"buttons": {
 			"close": "Đóng",
@@ -309,6 +311,64 @@
 				}
 			}
 		}
+	},
+	"pomodoroRoom": {
+		"heading": "Phòng Pomodoro",
+		"you": "Bạn",
+		"connected": "Đã kết nối",
+		"connecting": "Đang kết nối...",
+		"back": "Quay lại",
+		"joining_room": "Đang tham gia phòng...",
+		"retry_join": "Thử lại",
+		"mute_mic": "Tắt mic",
+		"unmute_mic": "Bật mic",
+		"turn_off_camera": "Tắt camera",
+		"turn_on_camera": "Bật camera",
+		"mute_speaker": "Tắt loa",
+		"unmute_speaker": "Bật loa",
+		"leave_room": "Rời phòng",
+		"enable_both": "Bật camera và mic",
+		"start_screen_share": "Bắt đầu chia sẻ màn hình",
+		"stop_screen_share": "Dừng chia sẻ màn hình",
+		"speaking": "Đang nói",
+		"available_rooms": "Phòng có sẵn",
+		"available": "Có sẵn",
+		"refresh": "Làm mới",
+		"create_room": "Tạo phòng",
+		"no_rooms": "Không có phòng",
+		"search_placeholder": "Tìm kiếm phòng...",
+		"no_search_results": "Không tìm thấy phòng nào khớp với tìm kiếm của bạn.",
+		"errors": {
+			"join_failed": "Tham gia phòng thất bại"
+		},
+		"minutes": "phút",
+		"live_connected": "Đã kết nối trực tiếp",
+		"live_disconnected": "Mất kết nối trực tiếp",
+		"createDialog": {
+			"title": "Tạo phòng",
+			"room_name_label": "Tên phòng",
+			"room_name_placeholder": "Tên phòng",
+			"limit_label": "Giới hạn phòng",
+			"limit_placeholder": "Giới hạn phòng",
+			"room_settings_label": "Cài đặt phòng",
+			"study_time_label": "Thời gian học",
+			"rest_time_label": "Thời gian nghỉ",
+			"long_rest_time_label": "Thời gian nghỉ dài",
+			"long_rest_interval_label": "Khoảng thời gian nghỉ dài",
+			"cancel": "Hủy",
+			"create": "Tạo",
+			"creating": "Đang tạo"
+		},
+		"full": "Đầy",
+		"room_full_message": "Phòng này đã đầy. Vui lòng thử phòng khác.",
+		"time": {
+			"just_now": "Vừa xong",
+			"mins_ago": "{mins} phút trước",
+			"hours_ago": "{hours} giờ trước",
+			"days_ago": "{days} ngày trước"
+		},
+		"loading": "Đang tải phòng...",
+		"retry": "Thử lại"
 	},
 	"statistic": {
 		"heading": "Tài khoản",

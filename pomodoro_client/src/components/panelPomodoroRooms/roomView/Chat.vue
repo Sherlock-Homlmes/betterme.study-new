@@ -51,7 +51,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
       // Sender name
       span(class="text-xs text-gray-500 dark:text-gray-400 mb-1")
         | {{ message.senderName }}
-      
+
       // Message content
       div(
         class="max-w-[70%] px-3 py-2 rounded-2xl break-words"
@@ -60,7 +60,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         // Text message
         p(v-if="message.type === 'text'" class="text-sm")
           | {{ message.content }}
-        
+
         // File message
         div(v-if="message.type === 'file'" class="flex flex-col gap-1")
           p(class="text-sm") {{ message.content }}
@@ -73,7 +73,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
             PaperclipIcon(:size="14")
             span {{ message.fileName }}
             span(v-if="message.fileSize" class="opacity-70") ({{ formatFileSize(message.fileSize) }})
-        
+
         // GIF message
         div(v-if="message.type === 'gif'" class="flex flex-col gap-1")
           p(class="text-sm") {{ message.content }}
@@ -101,7 +101,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         :title="'Upload file'"
       )
         PaperclipIcon(:size="20")
-    
+
     // GIF button
     div(class="relative")
       button(
@@ -110,7 +110,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         :title="'Send GIF'"
       )
         GifIcon(:size="24")
-      
+
       // GIF picker popup
       div(
         v-if="showGifPicker"
@@ -125,7 +125,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
           @click="sendGif(gif)"
           alt="GIF"
         )
-    
+
     // Reaction button
     div(class="relative")
       button(
@@ -134,7 +134,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         :title="'Send reaction'"
       )
         MoodSmileIcon(:size="20")
-      
+
       // Reaction picker popup
       div(
         v-if="showReactionPicker"
@@ -144,12 +144,12 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         button(
           v-for="reaction in commonReactions"
           :key="reaction"
-          @click="sendReaction(reaction); showReactionPicker = false"
+          @click="sendReaction(reaction)"
           class="px-2 py-1 text-lg hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-transform hover:scale-125"
           :title="'Send ' + reaction"
         )
           | {{ reaction }}
-    
+
     // Message input
     input(
       v-model="newMessage"
@@ -158,7 +158,7 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
       @keyup.enter="sendTextMessage"
       class="flex-grow min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
     )
-    
+
     // Send button
     button(
       @click="sendTextMessage"

@@ -1,16 +1,14 @@
 <template lang="pug">
 ResizablePanelGroup(
   direction="horizontal"
-  class="fixed z-40 right-0 h-full md:p-4"
+  class="fixed z-40 right-0 h-full md:p-4 pointer-events-none"
   :style="{ width: panelWidth }"
 )
+  ResizablePanel
+  ResizableHandle(class="opacity-0")
   ResizablePanel(
-    :default-size="70"
-    :min-size="0"
-  )
-  ResizableHandle
-  ResizablePanel(
-    :default-size="30"
+    class="pointer-events-auto"
+    :default-size="40"
     :min-size="30"
     :max-size="100"
   )

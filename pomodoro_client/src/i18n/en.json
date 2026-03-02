@@ -59,8 +59,9 @@
 			"main": "Main",
 			"timer": "Clock",
 			"audio": "Audio",
-			"about": "About",
-			"account": "Account"
+			"account": "Account",
+			"statistic": "Statistics",
+			"about": "About"
 		},
 		"buttons": {
 			"close": "Close",
@@ -356,6 +357,8 @@
 		"refresh": "Refresh",
 		"create_room": "Create room",
 		"no_rooms": "No rooms",
+		"search_placeholder": "Search rooms...",
+		"no_search_results": "No rooms found matching your search.",
 		"errors": {
 			"join_failed": "Failed to join room"
 		},

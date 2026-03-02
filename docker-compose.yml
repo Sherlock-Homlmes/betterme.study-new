@@ -30,6 +30,7 @@ services:
       - VITE_PLATFORM=web
       - VITE_API_URL=http://localhost:8080/api
       - VITE_LIVEKIT_URL=ws://localhost:7880
+      - VITE_COOKIE_DOMAIN=localhost
       - TAURI_DEV_HOST=0.0.0.0
     networks:
       - nginx-net

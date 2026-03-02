@@ -2,7 +2,6 @@
 import {
 	SettingsIcon,
 	ChecklistIcon,
-	ChartBarIcon,
 	MessageChatbotIcon,
 	VideoIcon,
 } from "vue-tabler-icons";
@@ -30,12 +29,6 @@ const appBarButtons = [
 		panel: 'todo',
 		icon: ChecklistIcon,
 		ariaLabel: 'appbar.todo',
-	},
-	{
-		key: 'statistic',
-		panel: 'statistic',
-		icon: ChartBarIcon,
-		ariaLabel: 'appbar.settings',
 	},
 	{
 		key: 'pomodoroRoom',

@@ -3,12 +3,33 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useEventSource } from '@vueuse/core';
 import { runtimeConfig } from '@/config/runtimeConfig';
 import { api } from '@/utils/betterFetch';
-import { UsersIcon, PlusIcon, RefreshIcon, VideoIcon, XIcon as CloseIcon } from 'vue-tabler-icons';
+import { UsersIcon, PlusIcon, RefreshIcon, VideoIcon, XIcon as CloseIcon, SearchIcon, CircleXIcon } from 'vue-tabler-icons';
 import { useI18n } from 'vue-i18n';
 import { Loading } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
 import { ButtonImportance } from "@/components/base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  NumberField,
+  NumberFieldContent,
+  NumberFieldDecrement,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from '@/components/ui/number-field'
+import { Spinner } from '@/components/ui/spinner'
 
 const { t } = useI18n();
 
@@ -29,6 +50,7 @@ const error = ref<string | null>(null);
 const refreshing = ref(false);
 const showCreateModal = ref(false);
 const creatingRoom = ref(false);
+const searchQuery = ref('');
 
 // Create room form
 const createRoomForm = ref({
@@ -202,11 +224,8 @@ const createRoom = async () => {
       throw new Error(`HTTP error! status: ${response?.status || 'unknown'}`);
     }
 
-    const data = await response.json();
-    
-    // Add the new room to the list
-    rooms.value.unshift(data);
-    
+    await response.json();
+
     // Reset form and close modal
     resetCreateForm();
     showCreateModal.value = false;
@@ -256,10 +275,10 @@ const formatDate = (dateString: string) => {
 
   if (diffMins < 1) return t('pomodoroRoom.time.just_now', { default: 'Just now' });
   if (diffMins < 60) return t('pomodoroRoom.time.mins_ago', { mins: diffMins }, { default: `${diffMins}m ago` });
-  
+
   const diffHours = Math.floor(diffMins / 60);
   if (diffHours < 24) return t('pomodoroRoom.time.hours_ago', { hours: diffHours }, { default: `${diffHours}h ago` });
-  
+
   const diffDays = Math.floor(diffHours / 24);
   return t('pomodoroRoom.time.days_ago', { days: diffDays }, { default: `${diffDays}d ago` });
 };
@@ -291,6 +310,18 @@ const sseIndicatorClass = computed(() => {
     : 'bg-red-500';
 });
 
+// Filter rooms based on search query
+const filteredRooms = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return rooms.value;
+  }
+
+  const query = searchQuery.value.toLowerCase().trim();
+  return rooms.value.filter(room =>
+    room.room_name.toLowerCase().includes(query)
+  );
+});
+
 // Lifecycle
 onMounted(() => {
   fetchRooms();
@@ -303,46 +334,151 @@ onUnmounted(() => {
 
 <template lang="pug">
 div(class="flex flex-col h-full")
-  div(class="flex items-end gap-2")
-      Button(
-        variant="outline"
-        size="sm"
-        @click="openCreateModal"
-        class="gap-1"
+  div(class="flex px-4 items-center gap-2")
+    // Search input
+    div(class="relative flex-grow")
+      SearchIcon(class="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary" :size="18")
+      Input(
+        v-model="searchQuery"
+        :placeholder="$t('pomodoroRoom.search_placeholder', { default: 'Search rooms...' })"
+        class="pl-10 pr-10"
       )
-        PlusIcon(:size="16")
-        span {{ $t('pomodoroRoom.create_room', { default: 'Create Room' }) }}
-      Button(
-        variant="ghost"
-        size="sm"
-        @click="refreshRooms"
-        :disabled="refreshing"
-        class="gap-1"
+      CircleXIcon(
+        v-if="searchQuery"
+        @click="searchQuery = ''"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary hover:text-primary/80 cursor-pointer"
+        :size="18"
       )
-        RefreshIcon(:size="16" :class="{ 'animate-spin': refreshing }")
-        span {{ $t('pomodoroRoom.refresh', { default: 'Refresh' }) }}
-  
+
+    // Action buttons
+    Dialog(v-model:open="showCreateModal")
+        form
+          DialogTrigger(as-child)
+            Button(variant="default") {{ $t('pomodoroRoom.create_room', { default: 'Create room' }) }}
+          DialogContent(class="sm:max-w-[425px]")
+            DialogHeader
+              DialogTitle {{ $t('pomodoroRoom.createDialog.title') }}
+            div(class="grid gap-4")
+              // Room name
+              div(class="grid gap-3")
+                Label(for="name-1")
+                  | {{ $t('pomodoroRoom.createDialog.room_name_label') }}
+                  span(class="text-red-500") *
+                Input(
+                  id="name-1" name="room name"
+                  v-model="createRoomForm.room_name"
+                  :placeholder="$t('pomodoroRoom.createDialog.room_name_placeholder')"
+                  @keyup.enter="createRoom"
+                )
+              // Limit
+              NumberField(id="limit" :default-value="5" :min="1" :max="10")
+                Label(for="limit")
+                  | {{ $t('pomodoroRoom.createDialog.limit_label') }}
+                  span(class="text-gray-500") (1-10)
+                NumberFieldContent
+                  NumberFieldDecrement
+                  NumberFieldInput
+                  NumberFieldIncrement
+
+              // Room settings
+              div(class="border-t border-gray-200 dark:border-gray-700 pt-4")
+                h4(class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3")
+                  | {{ $t('pomodoroRoom.createDialog.room_settings_label') }}
+                // Study time
+                NumberField(
+                  id="study_time" class="mb-2"
+                  v-model.number="createRoomForm.room_settings.pomodoro_study_time"
+                  :default-value="25" :min="5" :max="180"
+                )
+                  Label(for="study_time")
+                    | {{ $t('pomodoroRoom.createDialog.study_time_label') }}
+                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                  NumberFieldContent
+                    NumberFieldDecrement
+                    NumberFieldInput
+                    NumberFieldIncrement
+
+                // Rest time
+                NumberField(
+                  id="rest_time" class="mb-2"
+                  v-model.number="createRoomForm.room_settings.pomodoro_rest_time"
+                  :default-value="5" :min="1" :max="180"
+                )
+                  Label(for="rest_time")
+                    | {{ $t('pomodoroRoom.createDialog.rest_time_label') }}
+                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                  NumberFieldContent
+                    NumberFieldDecrement
+                    NumberFieldInput
+                    NumberFieldIncrement
+
+                // Long rest time
+                NumberField(
+                  id="long_rest_time" class="mb-2"
+                  v-model.number="createRoomForm.room_settings.pomodoro_long_rest_time"
+                  :default-value="20" :min="1" :max="180"
+                )
+                  Label(for="long_rest_time")
+                    | {{ $t('pomodoroRoom.createDialog.long_rest_time_label') }}
+                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                  NumberFieldContent
+                    NumberFieldDecrement
+                    NumberFieldInput
+                    NumberFieldIncrement
+
+                // Long rest interval
+                NumberField(
+                  id="long_rest_interval"
+                  v-model.number="createRoomForm.room_settings.long_rest_time_interval"
+                  :default-value="3" :min="2" :max="10"
+                )
+                  Label(for="long_rest_interval")
+                    |{{ $t('pomodoroRoom.createDialog.long_rest_interval_label') }}
+                    span(class="text-gray-500") (2-10)
+                  NumberFieldContent
+                    NumberFieldDecrement
+                    NumberFieldInput
+                    NumberFieldIncrement
+            DialogFooter
+              DialogClose(as-child)
+                Button(
+                  variant="outline"
+                  :disabled="creatingRoom"
+                ) {{ $t('pomodoroRoom.createDialog.cancel') }}
+              Button(
+                type="submit"
+                :disabled="creatingRoom || !createRoomForm.room_name.trim()"
+                @click='createRoom'
+              )
+                Spinner(v-if="creatingRoom")
+                |{{ creatingRoom ? $t('pomodoroRoom.createDialog.creating') : $t('pomodoroRoom.createDialog.create') }}
   // Loading state
   div(v-if="loading" class="flex items-center justify-center py-12 h-full")
     Loading(size="lg" :text="$t('pomodoroRoom.loading', { default: 'Loading rooms...' })")
-  
+
   // Error state
   div(v-else-if="error" class="flex flex-col items-center justify-center py-12 px-4 h-full")
     div(class="text-red-500 dark:text-red-400 mb-4")
       | {{ error }}
     Button(@click="refreshRooms" variant="outline")
       | {{ $t('pomodoroRoom.retry', { default: 'Retry' }) }}
-  
+
   // Empty state
   div(v-else-if="rooms.length === 0" class="flex flex-col items-center justify-center py-12 px-4 h-full")
     VideoIcon(:size="48" class="text-gray-400 dark:text-gray-600 mb-4")
     p(class="text-gray-500 dark:text-gray-400 text-center")
       | {{ $t('pomodoroRoom.no_rooms', { default: 'No rooms available. Be the first to create one!' }) }}
-  
+
+  // No search results
+  div(v-else-if="filteredRooms.length === 0" class="flex flex-col items-center justify-center py-12 px-4 h-full")
+    SearchIcon(:size="48" class="text-gray-400 dark:text-gray-600 mb-4")
+    p(class="text-gray-500 dark:text-gray-400 text-center")
+      | {{ $t('pomodoroRoom.no_search_results', { default: 'No rooms found matching your search.' }) }}
+
   // Room list
   div(v-else class="flex-grow overflow-y-auto p-4 space-y-3")
     div(
-      v-for="room in rooms"
+      v-for="room in filteredRooms"
       :key="room.livekit_room_name"
       class="p-4 rounded-lg border transition-all cursor-pointer hover:shadow-md"
       :class="isRoomFull(room) ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 opacity-60' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500'"
@@ -358,7 +494,7 @@ div(class="flex flex-col h-full")
           :class="isRoomFull(room) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'"
         )
           | {{ isRoomFull(room) ? $t('pomodoroRoom.full', { default: 'Full' }) : $t('pomodoroRoom.available', { default: 'Available' }) }}
-      
+
       // Room info
       div(class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400")
         // Participants
@@ -369,11 +505,11 @@ div(class="flex flex-col h-full")
         // Created time
         div
           | {{ formatDate(room.created_at) }}
-      
+
       // Full room message
       div(v-if="isRoomFull(room)" class="mt-2 text-xs text-red-600 dark:text-red-400")
         | {{ $t('pomodoroRoom.room_full_message', { default: 'This room is full. Please try another room.' }) }}
-  
+
   // SSE Status indicator
   div(class="px-4 py-2 border-t border-gray-200 dark:border-gray-700 text-xs")
     div(class="flex items-center gap-2")
@@ -385,119 +521,4 @@ div(class="flex flex-col h-full")
         :class="sseStatusClass"
       )
         | {{ sseStatusText }}
-  
-  // Create Room Modal
-  div(v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4")
-    div(class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto")
-      // Modal header
-      div(class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700")
-        h3(class="text-lg font-semibold")
-          | {{ $t('pomodoroRoom.createDialog.title', { default: 'Create New Room' }) }}
-        ControlButton(
-          :aria-label="$t('settings.buttons.close')"
-          default-style
-          circle
-          :importance="ButtonImportance.Text"
-          @click="showCreateModal = false"
-        )
-          CloseIcon(:size="20")
-      
-      // Modal body
-      div(class="p-4 space-y-4")
-        // Room name
-        div
-          label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-            | {{ $t('pomodoroRoom.createDialog.room_name_label', { default: 'Room Name' }) }}
-            span(class="text-red-500") *
-          input(
-            v-model="createRoomForm.room_name"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-            :placeholder="$t('pomodoroRoom.createDialog.room_name_placeholder', { default: 'Enter room name' })"
-            @keyup.enter="createRoom"
-          )
-        
-        // Limit
-        div
-          label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-            | {{ $t('pomodoroRoom.createDialog.limit_label', { default: 'Max Participants' }) }}
-            span(class="text-gray-500") (1-10)
-          input(
-            v-model.number="createRoomForm.limit"
-            type="number"
-            min="1"
-            max="10"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-          )
-        
-        // Room settings
-        div(class="border-t border-gray-200 dark:border-gray-700 pt-4")
-          h4(class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3")
-            | {{ $t('pomodoroRoom.createDialog.room_settings_label', { default: 'Pomodoro Settings' }) }}
-          
-          // Study time
-          div
-            label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-              | {{ $t('pomodoroRoom.createDialog.study_time_label', { default: 'Study Time' }) }}
-              span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-            input(
-              v-model.number="createRoomForm.room_settings.pomodoro_study_time"
-              type="number"
-              min="5"
-              max="180"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-            )
-          
-          // Rest time
-          div
-            label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-              | {{ $t('pomodoroRoom.createDialog.rest_time_label', { default: 'Rest Time' }) }}
-              span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-            input(
-              v-model.number="createRoomForm.room_settings.pomodoro_rest_time"
-              type="number"
-              min="1"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-            )
-          
-          // Long rest time
-          div
-            label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-              | {{ $t('pomodoroRoom.createDialog.long_rest_time_label', { default: 'Long Rest Time' }) }}
-              span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-            input(
-              v-model.number="createRoomForm.room_settings.pomodoro_long_rest_time"
-              type="number"
-              min="1"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-            )
-          
-          // Long rest interval
-          div
-            label(class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1")
-              | {{ $t('pomodoroRoom.createDialog.long_rest_interval_label', { default: 'Long Rest Interval' }) }}
-              span(class="text-gray-500") ({{ $t('pomodoroRoom.pomodoros', { default: 'pomodoros' }) }})
-            input(
-              v-model.number="createRoomForm.room_settings.long_rest_time_interval"
-              type="number"
-              min="1"
-              max="10"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-            )
-      
-      // Modal footer
-      div(class="flex items-center justify-end gap-2 p-4 border-t border-gray-200 dark:border-gray-700")
-        Button(
-          variant="ghost"
-          @click="showCreateModal = false"
-          :disabled="creatingRoom"
-        )
-          | {{ $t('pomodoroRoom.createDialog.cancel', { default: 'Cancel' }) }}
-        Button(
-          variant="default"
-          @click="createRoom"
-          :disabled="creatingRoom || !createRoomForm.room_name.trim()"
-        )
-          Loading(v-if="creatingRoom" :size="16" class="mr-1")
-          | {{ creatingRoom ? $t('pomodoroRoom.createDialog.creating') : $t('pomodoroRoom.createDialog.create') }}
 </template>

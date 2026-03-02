@@ -1,10 +1,11 @@
 import { useErrorStore } from "@/stores/common";
+import { runtimeConfig } from "@/config/runtimeConfig";
 
 // Centralized token management
 class TokenManager {
 	private static readonly TOKEN_KEY = 'Authorization';
-	private static readonly COOKIE_DOMAIN = '.betterme.study'; // Domain for cookie sharing
-	
+	private static readonly COOKIE_DOMAIN = runtimeConfig.public.COOKIE_DOMAIN; // Domain for cookie sharing
+
 	static getToken(): string | null {
 		// Try to get token from cookie first, fallback to localStorage
 		const getCookie = (name: string): string | null => {
@@ -13,20 +14,20 @@ class TokenManager {
 			if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
 			return null;
 		};
-		
+
 		return getCookie(TokenManager.TOKEN_KEY) || window.localStorage.getItem(TokenManager.TOKEN_KEY);
 	}
-	
+
 	static setToken(token: string): void {
 		// Set in both localStorage and cookie
 		window.localStorage.setItem(TokenManager.TOKEN_KEY, token);
-		
+
 		// Set cookie with proper attributes and domain
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 30); // 30 days from now
 		document.cookie = `${TokenManager.TOKEN_KEY}=${token}; expires=${expires.toUTCString()}; path=/; domain=${TokenManager.COOKIE_DOMAIN}; SameSite=Lax`;
 	}
-	
+
 	static removeToken(): void {
 		// Remove from both localStorage and cookie
 		window.localStorage.removeItem(TokenManager.TOKEN_KEY);
