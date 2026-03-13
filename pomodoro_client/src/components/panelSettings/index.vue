@@ -2,6 +2,7 @@
 import {reactive} from "vue";
 
 import {
+	SettingsIcon,
 	AdjustmentsIcon as TabIconGeneral,
 	AlarmIcon as TabIconClock,
 	MusicIcon as TabIconMusic,
@@ -29,6 +30,8 @@ const state = reactive({
 
 <template lang="pug">
 Panel(:panel-name="'settings'")
+  template(#header-icon)
+    SettingsIcon(:size="24" class="text-primary-500")
   template(#content)
     div.flex.flex-col.h-full
       div.flex-grow

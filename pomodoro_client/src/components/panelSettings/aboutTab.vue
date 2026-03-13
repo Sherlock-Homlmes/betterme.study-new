@@ -5,7 +5,8 @@ import {
 	BrandDiscordIcon,
 	BrandFacebookIcon,
 } from "vue-tabler-icons";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/base/uiButton.vue";
+import { ButtonImportance } from "@/components/base/types/button";
 import { AppPlatform } from "@/platforms/platforms";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
@@ -30,19 +31,27 @@ div.flex.flex-col.items-center.gap-2.py-6
     div.flex.flex-row.flex-wrap.justify-center.gap-3.mt-2
       a(href="https://discord.gg/betterme" target="_blank" rel="noopener noreferrer")
         Button(
-          variant="default"
-          size="lg"
-          class="bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-700 dark:hover:bg-slate-600 shadow-md cursor-pointer"
+          :importance="ButtonImportance.Filled"
+          dark
+          link
+          no-default-style
+          no-content-theme
+          inner-class="flex flex-row items-center gap-1 text-slate-50 text-gray-50"
+          bg-class="bg-slate-900 dark:bg-slate-700 shadow-md"
         )
-          BrandDiscordIcon(:size="24")
-          span(v-text="$t('settings.about.discord_betterme')")
+          BrandDiscordIcon
+          span(v-text="$t('loginBy.discord')")
       a(href="https://news.betterme.study" target="_blank" rel="noopener noreferrer")
         Button(
-          variant="default"
-          size="lg"
-          class="bg-yellow-400 hover:bg-yellow-500 text-yellow-950 shadow-md cursor-pointer"
+          :importance="ButtonImportance.Filled"
+          dark
+          link
+          no-default-style
+          no-content-theme
+          inner-class="flex flex-row items-center gap-1 text-slate-50 text-gray-50"
+          bg-class="bg-yellow-500 shadow-md"
         )
-          NewsIcon(:size="24")
+          NewsIcon
           span(v-text="$t('settings.about.betterme_news')")
 
     div.mt-5.mb-2.text-sm.font-medium.text-foreground(v-text="$t('settings.about.share')")
@@ -53,9 +62,13 @@ div.flex.flex-col.items-center.gap-2.py-6
         rel="noopener noreferrer"
       )
         Button(
-          variant="default"
-          size="lg"
-          class="bg-[#1877f2] hover:bg-[#166fe5] text-white shadow-md transition-all hover:scale-105 cursor-pointer"
-        )
-          BrandFacebookIcon(:size="24" :aria-label="$t('support.share.facebook')")
+          :importance="ButtonImportance.Filled"
+          dark
+          link
+          no-default-style
+          no-content-theme
+          inner-class="flex flex-row items-center gap-1 text-slate-50 text-gray-50"
+          bg-class="bg-[#1877f2] hover:bg-[#166fe5] text-white shadow-md transition-all hover:scale-105 shadow-md"
+          )
+          BrandFacebookIcon(:aria-label="$t('support.share.facebook')")
 </template>

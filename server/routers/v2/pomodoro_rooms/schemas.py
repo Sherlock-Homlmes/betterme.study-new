@@ -10,7 +10,7 @@ class GetPomodoroRoomResponse(BaseSchema):
     id: IDStr
     room_name: str
     livekit_room_name: str
-    room_settings: PomodoroSectionSettings
+    pomodoro_settings: PomodoroSectionSettings
     limit: int
     created_by: str
     created_at: datetime
@@ -19,7 +19,7 @@ class GetPomodoroRoomResponse(BaseSchema):
 class PostPomodoroRoomPayload(BaseSchema):
     room_name: str
     limit: int = Field(default=5, ge=1, le=10)
-    room_settings: PomodoroSectionSettings
+    pomodoro_settings: PomodoroSectionSettings
 
 
 class JoinRoomPayload(BaseSchema):
@@ -28,3 +28,8 @@ class JoinRoomPayload(BaseSchema):
 
 class JoinRoomResponse(BaseSchema):
     token: str
+
+
+class PatchPomodoroRoomPayload(BaseSchema):
+    room_name: str | None = None
+    pomodoro_settings: PomodoroSectionSettings | None = None

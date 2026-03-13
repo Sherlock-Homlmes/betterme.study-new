@@ -371,7 +371,7 @@
 			"room_name_placeholder": "Room name",
 			"limit_label": "Room limit",
 			"limit_placeholder": "Room limit",
-			"room_settings_label": "Room setting",
+			"pomodoro_settings_label": "Pomodoro setting",
 			"study_time_label": "Study time",
 			"rest_time_label": "Rest time",
 			"long_rest_time_label": "Long rest time",

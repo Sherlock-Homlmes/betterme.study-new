@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { PaperclipIcon, GifIcon, MoodSmileIcon, SendIcon } from 'vue-tabler-icons';
+import { PaperclipIcon, GifIcon, MoodSmileIcon, SendIcon, PlusIcon } from 'vue-tabler-icons';
 import { usePomodoroRoomsStore, type ChatMessage } from '@/stores/pomodoroRooms';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from '@/components/ui/dropdown-menu';
 
 const store = usePomodoroRoomsStore();
 
@@ -8,8 +9,6 @@ const {
   chatMessages,
   newMessage,
   messagesContainer,
-  showGifPicker,
-  showReactionPicker,
   fileInputRef,
   uploadingFile,
   localParticipant,
@@ -86,69 +85,69 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
 
   // Chat input
   div(class="flex items-center gap-2 p-2 border-t border-gray-200 dark:border-gray-700")
-    // File upload
-    div(class="relative")
-      input(
-        ref="fileInputRef"
-        type="file"
-        class="hidden"
-        @change="handleFileChange"
-      )
-      button(
-        @click="fileInputRef?.click()"
-        :disabled="uploadingFile"
-        class="py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 disabled:opacity-50"
-        :title="'Upload file'"
-      )
-        PaperclipIcon(:size="20")
+    // File input (hidden)
+    input(
+      ref="fileInputRef"
+      type="file"
+      class="hidden"
+      @change="handleFileChange"
+    )
 
-    // GIF button
-    div(class="relative")
-      button(
-        @click="showGifPicker = !showGifPicker"
+    // Attachment menu
+    DropdownMenu
+      DropdownMenuTrigger(
+        as-child
         class="py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
-        :title="'Send GIF'"
+        :title="'Add attachment'"
       )
-        GifIcon(:size="24")
+        button
+          PlusIcon(:size="24")
 
-      // GIF picker popup
-      div(
-        v-if="showGifPicker"
-        class="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 grid grid-cols-3 gap-2"
-        style="width: 200px;"
+      DropdownMenuContent(
+        align="start"
+        side="top"
       )
-        img(
-          v-for="(gif, index) in commonGifs"
-          :key="index"
-          :src="gif"
-          class="w-full h-16 object-cover rounded cursor-pointer hover:opacity-80"
-          @click="sendGif(gif)"
-          alt="GIF"
-        )
+        // Upload file option
+        //- DropdownMenuItem(
+          @click="fileInputRef?.click()"
+          :disabled="uploadingFile"
+          )
+          PaperclipIcon(:size="16")
+          span File
 
-    // Reaction button
-    div(class="relative")
-      button(
-        @click="showReactionPicker = !showReactionPicker"
-        class="py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
-        :title="'Send reaction'"
-      )
-        MoodSmileIcon(:size="20")
+        // GIF submenu
+        DropdownMenuSub
+          DropdownMenuSubTrigger
+            GifIcon(:size="16")
+            span &nbsp GIF
 
-      // Reaction picker popup
-      div(
-        v-if="showReactionPicker"
-        class="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex flex-wrap gap-1"
-        style="width: 200px;"
-      )
-        button(
-          v-for="reaction in commonReactions"
-          :key="reaction"
-          @click="sendReaction(reaction)"
-          class="px-2 py-1 text-lg hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-transform hover:scale-125"
-          :title="'Send ' + reaction"
-        )
-          | {{ reaction }}
+          DropdownMenuSubContent
+            div(class="grid grid-cols-3 gap-2 p-2 w-[200px]")
+              img(
+                v-for="(gif, index) in commonGifs"
+                :key="index"
+                :src="gif"
+                class="w-full h-16 object-cover rounded cursor-pointer hover:opacity-80"
+                @click="sendGif(gif)"
+                alt="GIF"
+              )
+
+        // Reaction submenu
+        DropdownMenuSub
+          DropdownMenuSubTrigger
+            MoodSmileIcon(:size="16")
+            span &nbsp Reaction
+
+          DropdownMenuSubContent
+            div(class="flex flex-wrap gap-1 p-2 w-[200px]")
+              button(
+                v-for="reaction in commonReactions"
+                :key="reaction"
+                @click="sendReaction(reaction)"
+                class="px-2 py-1 text-lg hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-transform hover:scale-125"
+                :title="'Send ' + reaction"
+              )
+                | {{ reaction }}
 
     // Message input
     input(

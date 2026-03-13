@@ -9,6 +9,8 @@ import { Loading } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
 import { ButtonImportance } from "@/components/base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
+import { usePomodoroRoomsStore } from '@/stores/pomodoroRooms';
+import { ButtonGroup } from '@/components/ui/button-group';
 
 import {
   Dialog,
@@ -32,6 +34,9 @@ import {
 import { Spinner } from '@/components/ui/spinner'
 
 const { t } = useI18n();
+const {
+  currentRoom,
+} = usePomodoroRoomsStore();
 
 // Room data types
 interface PomodoroRoom {
@@ -41,6 +46,12 @@ interface PomodoroRoom {
   num_participants: number;
   created_by: string;
   created_at: string;
+  pomodoro_settings?: {
+    pomodoro_study_time: number;
+    pomodoro_rest_time: number;
+    pomodoro_long_rest_time?: number;
+    long_rest_time_interval?: number;
+  };
 }
 
 // State
@@ -56,7 +67,7 @@ const searchQuery = ref('');
 const createRoomForm = ref({
   room_name: '',
   limit: 5,
-  room_settings: {
+  pomodoro_settings: {
     pomodoro_study_time: 25,
     pomodoro_rest_time: 5,
     pomodoro_long_rest_time: 20,
@@ -212,11 +223,11 @@ const createRoom = async () => {
     const response = await api.post(buildApiUrl('/'), {
       room_name: createRoomForm.value.room_name.trim(),
       limit: createRoomForm.value.limit,
-      room_settings: {
-        pomodoro_study_time: createRoomForm.value.room_settings.pomodoro_study_time * 60,
-        pomodoro_rest_time: createRoomForm.value.room_settings.pomodoro_rest_time * 60,
-        pomodoro_long_rest_time: createRoomForm.value.room_settings.pomodoro_long_rest_time * 60,
-        long_rest_time_interval: createRoomForm.value.room_settings.long_rest_time_interval,
+      pomodoro_settings: {
+        pomodoro_study_time: createRoomForm.value.pomodoro_settings.pomodoro_study_time * 60,
+        pomodoro_rest_time: createRoomForm.value.pomodoro_settings.pomodoro_rest_time * 60,
+        pomodoro_long_rest_time: createRoomForm.value.pomodoro_settings.pomodoro_long_rest_time * 60,
+        long_rest_time_interval: createRoomForm.value.pomodoro_settings.long_rest_time_interval,
       },
     });
 
@@ -242,7 +253,7 @@ const resetCreateForm = () => {
   createRoomForm.value = {
     room_name: '',
     limit: 5,
-    room_settings: {
+    pomodoro_settings: {
       pomodoro_study_time: 25,
       pomodoro_rest_time: 5,
       pomodoro_long_rest_time: 20,
@@ -333,8 +344,9 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-div(class="flex flex-col h-full")
-  div(class="flex px-4 items-center gap-2")
+div(class="flex flex-col h-full overflow-hidden")
+  // Sticky header
+  div(class="flex-shrink-0 flex px-4 mb-2 items-center gap-2")
     // Search input
     div(class="relative flex-grow")
       SearchIcon(class="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary" :size="18")
@@ -374,25 +386,25 @@ div(class="flex flex-col h-full")
               NumberField(id="limit" :default-value="5" :min="1" :max="10")
                 Label(for="limit")
                   | {{ $t('pomodoroRoom.createDialog.limit_label') }}
-                  span(class="text-gray-500") (1-10)
+                  span(class="text-gray-500") &nbsp(1-10)
                 NumberFieldContent
                   NumberFieldDecrement
                   NumberFieldInput
                   NumberFieldIncrement
 
-              // Room settings
+              // Pomodoro settings
               div(class="border-t border-gray-200 dark:border-gray-700 pt-4")
                 h4(class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3")
-                  | {{ $t('pomodoroRoom.createDialog.room_settings_label') }}
+                  | {{ $t('pomodoroRoom.createDialog.pomodoro_settings_label') }}
                 // Study time
                 NumberField(
                   id="study_time" class="mb-2"
-                  v-model.number="createRoomForm.room_settings.pomodoro_study_time"
+                  v-model.number="createRoomForm.pomodoro_settings.pomodoro_study_time"
                   :default-value="25" :min="5" :max="180"
                 )
                   Label(for="study_time")
                     | {{ $t('pomodoroRoom.createDialog.study_time_label') }}
-                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                    span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes') }})
                   NumberFieldContent
                     NumberFieldDecrement
                     NumberFieldInput
@@ -401,12 +413,12 @@ div(class="flex flex-col h-full")
                 // Rest time
                 NumberField(
                   id="rest_time" class="mb-2"
-                  v-model.number="createRoomForm.room_settings.pomodoro_rest_time"
+                  v-model.number="createRoomForm.pomodoro_settings.pomodoro_rest_time"
                   :default-value="5" :min="1" :max="180"
                 )
                   Label(for="rest_time")
                     | {{ $t('pomodoroRoom.createDialog.rest_time_label') }}
-                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                    span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes') }})
                   NumberFieldContent
                     NumberFieldDecrement
                     NumberFieldInput
@@ -415,12 +427,12 @@ div(class="flex flex-col h-full")
                 // Long rest time
                 NumberField(
                   id="long_rest_time" class="mb-2"
-                  v-model.number="createRoomForm.room_settings.pomodoro_long_rest_time"
+                  v-model.number="createRoomForm.pomodoro_settings.pomodoro_long_rest_time"
                   :default-value="20" :min="1" :max="180"
                 )
                   Label(for="long_rest_time")
                     | {{ $t('pomodoroRoom.createDialog.long_rest_time_label') }}
-                    span(class="text-gray-500") ({{ $t('pomodoroRoom.minutes') }})
+                    span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes') }})
                   NumberFieldContent
                     NumberFieldDecrement
                     NumberFieldInput
@@ -429,12 +441,12 @@ div(class="flex flex-col h-full")
                 // Long rest interval
                 NumberField(
                   id="long_rest_interval"
-                  v-model.number="createRoomForm.room_settings.long_rest_time_interval"
+                  v-model.number="createRoomForm.pomodoro_settings.long_rest_time_interval"
                   :default-value="3" :min="2" :max="10"
                 )
                   Label(for="long_rest_interval")
                     |{{ $t('pomodoroRoom.createDialog.long_rest_interval_label') }}
-                    span(class="text-gray-500") (2-10)
+                    span(class="text-gray-500") &nbsp(2-10)
                   NumberFieldContent
                     NumberFieldDecrement
                     NumberFieldInput
@@ -476,12 +488,12 @@ div(class="flex flex-col h-full")
       | {{ $t('pomodoroRoom.no_search_results', { default: 'No rooms found matching your search.' }) }}
 
   // Room list
-  div(v-else class="flex-grow overflow-y-auto p-4 space-y-3")
+  div(v-else class="flex-grow overflow-y-auto p-4 space-y-3 min-h-0")
     div(
       v-for="room in filteredRooms"
       :key="room.livekit_room_name"
       class="p-4 rounded-lg border transition-all cursor-pointer hover:shadow-md"
-      :class="isRoomFull(room) ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 opacity-60' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500'"
+      :class="currentRoom?.livekit_room_name === room.livekit_room_name ? 'hover:bg-primary-container dark:hover:bg-primary-darkcontainer bg-surface-variant dark:bg-surface-darkvariant border-primary-500 dark:border-primary-500' : (isRoomFull(room) ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 opacity-60' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500')"
       @click="!isRoomFull(room) && selectRoom(room)"
     )
       // Room header
@@ -502,6 +514,14 @@ div(class="flex flex-col h-full")
           UsersIcon(:size="16")
           span
             | {{ room.num_participants }}/{{ room.limit }}
+
+        // Pomodoro settings
+        ButtonGroup(v-if="room.pomodoro_settings" class="ml-auto")
+          Button(variant="outline" size="sm" class="h-6 px-2 text-xs")
+            | {{ Math.floor(room.pomodoro_settings.pomodoro_study_time / 60) }}m
+          Button(variant="outline" size="sm" class="h-6 px-2 text-xs")
+            | {{ Math.floor(room.pomodoro_settings.pomodoro_rest_time / 60) }}m
+
         // Created time
         div
           | {{ formatDate(room.created_at) }}
@@ -510,8 +530,8 @@ div(class="flex flex-col h-full")
       div(v-if="isRoomFull(room)" class="mt-2 text-xs text-red-600 dark:text-red-400")
         | {{ $t('pomodoroRoom.room_full_message', { default: 'This room is full. Please try another room.' }) }}
 
-  // SSE Status indicator
-  div(class="px-4 py-2 border-t border-gray-200 dark:border-gray-700 text-xs")
+  // Sticky footer - SSE Status indicator
+  div(class="flex-shrink-0 px-4 py-2 border-t border-gray-200 dark:border-gray-700 text-xs")
     div(class="flex items-center gap-2")
       div(
         class="w-2 h-2 rounded-full"

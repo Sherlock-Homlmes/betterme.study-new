@@ -22,5 +22,3 @@ export const runtimeConfig: RuntimeConfig = {
 		COOKIE_DOMAIN: import.meta.env.VITE_COOKIE_DOMAIN || '.betterme.study',
 	},
 };
-
-console.log(runtimeConfig)

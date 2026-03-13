@@ -7,19 +7,16 @@ from livekit import api
 from livekit.api import AccessToken, VideoGrants
 from pydash import pick as _pick
 
-from models import PomodoroRooms as DBPomodoroRoom
 from models.pomodoro.pomodoro_rooms import PomodoroSectionSettings
 from base.settings import settings
-from base.custom.crud import BaseCRUD
 from base.custom.http_status import ServerError
 
 
-class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
+class PomodoroRoomCRUD:
     def __init__(self):
         self.livekit = api.LiveKitAPI(
             settings.LIVEKIT_URL, settings.LIVEKIT_API_KEY, settings.LIVEKIT_API_SECRET
         )
-        super().__init__(DBPomodoroRoom)
 
     async def get_list(self, **kwargs) -> List[Dict[str, Any]]:
         """Get list of pomodoro rooms directly from LiveKit."""
@@ -40,8 +37,8 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
                     {
                         "room_name": metadata.get("room_name", room.name),
                         "livekit_room_name": room.name,
-                        "room_settings": metadata.get(
-                            "room_settings", PomodoroSectionSettings().model_dump()
+                        "pomodoro_settings": metadata.get(
+                            "pomodoro_settings", PomodoroSectionSettings().model_dump()
                         ),
                         "limit": room.max_participants,
                         "created_by": metadata.get("created_by", ""),
@@ -64,7 +61,7 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
         # Prepare metadata to store in LiveKit room
         metadata = {
             "room_name": payload.room_name,
-            "room_settings": payload.room_settings.model_dump(),
+            "pomodoro_settings": payload.pomodoro_settings.model_dump(),
             "created_by": user_id,
             "created_at": datetime.now().isoformat(),
         }
@@ -73,7 +70,7 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
             # Create the CreateRoomRequest with proper parameters
             create_request = api.CreateRoomRequest()
             create_request.name = livekit_room_name
-            create_request.empty_timeout = 20  # Auto delete after 20s of being empty
+            create_request.empty_timeout = 1200  # Auto delete after 20s of being empty
             create_request.max_participants = payload.limit
             create_request.metadata = json.dumps(metadata)
 
@@ -82,7 +79,7 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
             return {
                 "room_name": payload.room_name,
                 "livekit_room_name": livekit_room_name,
-                "room_settings": payload.room_settings.model_dump(),
+                "pomodoro_settings": payload.pomodoro_settings.model_dump(),
                 "limit": payload.limit,
                 "created_by": user_id,
                 "created_at": datetime.now(),
@@ -146,8 +143,8 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
                     return {
                         "room_name": metadata.get("room_name", room.name),
                         "livekit_room_name": room.name,
-                        "room_settings": metadata.get(
-                            "room_settings", PomodoroSectionSettings().model_dump()
+                        "pomodoro_settings": metadata.get(
+                            "pomodoro_settings", PomodoroSectionSettings().model_dump()
                         ),
                         "limit": room.max_participants,
                         "created_by": metadata.get("created_by", ""),
@@ -164,3 +161,55 @@ class PomodoroRoomCRUD(BaseCRUD[DBPomodoroRoom]):
 
             traceback.print_exc()
             raise ServerError(detail="Can not get room now. Try later")
+
+    async def update(self, livekit_room_name: str, payload, user_id: str) -> Dict[str, Any]:
+        """Update a pomodoro room's metadata in LiveKit."""
+        try:
+            # Get room info first
+            room = await self.get_room_by_name(livekit_room_name)
+
+            # Check permission: user must be the creator
+            if room["created_by"] != user_id:
+                raise ServerError(detail="You don't have permission to update this room")
+
+            # Get current metadata
+            rooms_response = await self.livekit.room.list_rooms(api.ListRoomsRequest())
+            current_metadata = {}
+
+            for r in rooms_response.rooms:
+                if r.name == livekit_room_name:
+                    if r.metadata:
+                        try:
+                            current_metadata = json.loads(r.metadata)
+                        except json.JSONDecodeError:
+                            current_metadata = {}
+                    break
+
+            # Update metadata with new values
+            if payload.room_name is not None:
+                current_metadata["room_name"] = payload.room_name
+
+            if payload.pomodoro_settings is not None:
+                current_metadata["pomodoro_settings"] = payload.pomodoro_settings.model_dump()
+
+            # Update room metadata using LiveKit API
+            update_request = api.UpdateRoomMetadataRequest()
+            update_request.room = livekit_room_name
+            update_request.metadata = json.dumps(current_metadata)
+
+            await self.livekit.room.update_room_metadata(update_request)
+
+            # Return updated room info
+            updated_room = await self.get_room_by_name(livekit_room_name)
+            updated_room["num_participants"] = room["num_participants"]
+
+            return updated_room
+
+        except ServerError as e:
+            raise e
+        except Exception as e:
+            print(f"Error updating room in LiveKit: {e}")
+            import traceback
+
+            traceback.print_exc()
+            raise ServerError(detail="Can not update room now. Try later")

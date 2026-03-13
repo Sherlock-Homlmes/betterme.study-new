@@ -49,22 +49,21 @@ class Api {
 		return headers;
 	}
 
-	private async handleErrors(response: Response): Promise<Response> {
-		if (!response.ok) {
-			const { showError } = useErrorStore();
-			if (response.status === 500) {
-				showError("Server error. Please contact admin to fix this!");
-			} else {
-				showError(`HTTP error! Status: ${response.status}`);
-			}
-		}
-		return response;
-	}
+	// private async handleErrors(response: Response): Promise<Response> {
+	// 	if (!response.ok) {
+	// 		const { showError } = useErrorStore();
+	// 		if (response.status === 500) {
+	// 			showError("Server error. Please contact admin to fix this!");
+	// 		} else {
+	// 			showError(`HTTP error! Status: ${response.status}`);
+	// 		}
+	// 	}
+	// 	return response;
+	// }
 
 	private async makeRequest(url: string, options: RequestInit): Promise<Response> {
 		try {
-			const response = await fetch(url, options);
-			return await this.handleErrors(response);
+			return await fetch(url, options)
 		} catch (error) {
 			if (error instanceof TypeError) {
 				const { showError } = useErrorStore();

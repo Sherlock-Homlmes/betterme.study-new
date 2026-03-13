@@ -1,24 +1,20 @@
 # default
 from typing import List
-from bson.objectid import ObjectId
 
 # libraries
-from fastapi import HTTPException, Depends, Response
-from pydantic import BaseModel
+from fastapi import Depends, Response
 
 # local
 from routers.authentication import auth_handler
-from models import Users, PomodoroRooms
+from models import Users
 from base.custom.router import BaseRouter
 from .crud import PomodoroRoomCRUD
 from .schemas import (
     PostPomodoroRoomPayload,
-    GetPomodoroRoomResponse,
+    PatchPomodoroRoomPayload,
     JoinRoomPayload,
     JoinRoomResponse,
 )
-from models.pomodoro.pomodoro_rooms import PomodoroSectionSettings
-from datetime import datetime
 
 
 router = BaseRouter(
@@ -67,3 +63,17 @@ async def join_pomodoro_room(
         room_name=room["livekit_room_name"], current_user=current_user
     )
     return JoinRoomResponse(token=token)
+
+
+@router.patch(
+    "/{room_id}",
+    description="update pomodoro room settings",
+    status_code=200,
+)
+async def update_pomodoro_room(
+    room_id: str,
+    payload: PatchPomodoroRoomPayload,
+    current_user: Users = Depends(auth_handler.auth_wrapper),
+) -> dict:
+    """Update a pomodoro room's settings. Only the room creator can update."""
+    return await p_room_crud.update(room_id, payload, current_user["id"])

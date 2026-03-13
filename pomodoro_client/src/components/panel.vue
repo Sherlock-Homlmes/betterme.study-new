@@ -5,25 +5,27 @@ ResizablePanelGroup(
   :style="{ width: panelWidth }"
 )
   ResizablePanel
+    //- TODO: add huong dan -))
   ResizableHandle(class="opacity-0")
   ResizablePanel(
     class="pointer-events-auto"
-    :default-size="40"
-    :min-size="30"
+    :default-size="45"
+    :min-size="39"
     :max-size="100"
   )
     section(class="w-full h-full")
       slot(name="extra-content")
       div(class="flex flex-col h-full overflow-hidden rounded-none shadow-lg bg-surface-light text-surface-onlight md:rounded-xl md:dark:ring-1 dark:ring-surface-ondark dark:ring-opacity-20 ring-inset dark:bg-surface-dark dark:text-surface-ondark" :style="{ 'padding-top': `${mobileSettingsStore.padding.top}px`, 'padding-bottom': `${mobileSettingsStore.padding.bottom}px` }")
-        h1(class="px-4 mt-4 text-xl font-bold uppercase")
-          slot(name="header-icon")
-          span {{ $t(`${panelName}.heading`) }}
+        h2(class="px-4 mt-4 text-xl font-bold uppercase flex items-center justify-between")
+          div(class="flex items-center gap-2")
+            slot(name="header-icon")
+            span {{ $t(`${panelName}.heading`) }}
           ControlButton(
             :aria-label="$t('settings.buttons.close')"
             default-style
             circle
             :importance="ButtonImportance.Text"
-            class="float-right -mt-2 -mr-2"
+            class="-mr-2"
             tabindex="0"
             @click="closePanel"
           )

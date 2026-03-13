@@ -39,12 +39,12 @@ const {
 // Emit
 const emit = defineEmits<{
   leave: [];
+  showLeaveDialog: [];
 }>();
 
 // Leave room handler
 const handleLeaveRoom = () => {
-  leaveRoom();
-  emit('leave');
+  emit('showLeaveDialog');
 };
 
 // Watch for local video ref changes

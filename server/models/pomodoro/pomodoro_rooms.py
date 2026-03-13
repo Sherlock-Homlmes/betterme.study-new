@@ -16,7 +16,7 @@ class PomodoroSectionSettings(BaseModel):
 class PomodoroRooms(Document):
     room_name: str
     livekit_room_name: str
-    room_settings: PomodoroSectionSettings
+    pomodoro_settings: PomodoroSectionSettings
     limit: int
     created_by: str
     created_at: datetime = Field(default_factory=vn_now)

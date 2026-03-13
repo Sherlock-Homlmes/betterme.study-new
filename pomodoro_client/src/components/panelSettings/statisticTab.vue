@@ -10,6 +10,7 @@ import ChartTooltipTime from "@/components/ui/chart/ChartTooltipTime.vue";
 import { useStatistics } from '@/stores/statistic';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from "@/stores/auth";
+import LoginTab from "@/components/common/loginTab.vue";
 
 const { t } = useI18n();
 const { isAuth } = useAuthStore();
@@ -67,7 +68,9 @@ onMounted(async () => {
 </script>
 
 <template lang="pug">
-div(class="flex flex-col items-center space-y-6 px-5")
+div(v-if="!isAuth").grid.grid-cols-1.gap-2.py-3.px-4.h-full
+  LoginTab
+div(v-else class="flex flex-col items-center space-y-6 px-5")
   // Date Range Picker
   div(class="w-full max-w-2xl mx-auto flex justify-center")
     DateRangePicker(v-model="selectedDateRange" @update:modelValue="handleDateRangeChange")
