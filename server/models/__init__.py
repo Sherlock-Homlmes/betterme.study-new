@@ -13,6 +13,7 @@ from .pomodoro.pomodoro_rooms import PomodoroRooms
 from .news.posts import Posts, FacebookPostInfo, OtherPostInfo
 from .news.draft_posts import DraftPosts
 from .news.secret_keys import SecretKeys
+from .news.shorten_links import ShortenLinks
 
 from .discord.users import Users as DiscordUsers
 from .discord.user_daily_study_time import UserDailyStudyTimes
@@ -31,6 +32,7 @@ news_document_models = [
     Posts,
     DraftPosts,
     SecretKeys,
+    ShortenLinks,
 ]
 discord_document_models = [DiscordUsers, UserDailyStudyTimes]
 
