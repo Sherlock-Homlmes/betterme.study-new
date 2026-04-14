@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List
-from models import Chat
+
+# from models import Chat
 from ..common_types import PyObjectId
 
 
@@ -15,4 +16,4 @@ class CreateChatChannelResponse(BaseModel):
 
 class GetChannelResponse(BaseModel):
     id: PyObjectId
-    history: List[Chat] = Field(default=[])
+    # history: List[Chat] = Field(default=[])

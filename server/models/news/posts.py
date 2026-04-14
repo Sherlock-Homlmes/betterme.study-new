@@ -12,13 +12,15 @@ from pydantic import BaseModel, Field, field_validator
 from schemas.news_admin.crawlers import (
     PostCrawlersDataPayload,
 )
-from schemas.news_admin.enums import OriginCrawlPagesEnum, ResponseStatusEnum
+
+# from schemas.news_admin.enums import OriginCrawlPagesEnum, ResponseStatusEnum
 from schemas.common_types import OtherPostInfo
 
 from models.users import Users
 from utils.time_modules import date_to_str
 from services.discord_bot.news import send_news, send_noti_to_subcribers
-from services.tebi import upload_image
+
+# from services.tebi import upload_image
 from utils.text_convertion import gen_slug
 from utils.time_modules import vn_now
 
@@ -73,10 +75,11 @@ class Posts(Document):
     def validate_thumbnail_banner(cls, thumbnail_img: str) -> int:
         if thumbnail_img or cls.banner_img:
             return thumbnail_img
-        raise HTTPException(
-            status_code=ResponseStatusEnum.BAD_REQUEST.value,
-            detail="Thumbnail or banner must be exist",
-        )
+        raise
+        # raise HTTPException(
+        #     status_code=ResponseStatusEnum.BAD_REQUEST.value,
+        #     detail="Thumbnail or banner must be exist",
+        # )
 
     # TODO: make this as general model
     @classmethod
@@ -117,77 +120,78 @@ class Posts(Document):
     async def create_post(
         payload: PostCrawlersDataPayload, background_tasks: BackgroundTasks, user: Users
     ):
-        from .draft_posts import DraftPosts
-        from services.facebook_bot.func import post_to_fb, is_facebook_service_ready
+        return
+        # from .draft_posts import DraftPosts
+        # from services.facebook_bot.func import post_to_fb, is_facebook_service_ready
 
-        draft_post_data = await DraftPosts.find_one(
-            DraftPosts.name == payload.post_name,
-            DraftPosts.source == payload.origin,
-        )
-        if not draft_post_data:
-            raise HTTPException(
-                status_code=ResponseStatusEnum.BAD_REQUEST.value, detail="Not found post"
-            )
-        elif draft_post_data.draft_data.id:
-            raise HTTPException(
-                status_code=ResponseStatusEnum.BAD_REQUEST.value, detail="Post already exist"
-            )
-        current_data = draft_post_data.draft_data
-        banner_img = None
-        if current_data.banner is not None:
-            banner_img = upload_image(current_data.banner)
-        if payload.origin == OriginCrawlPagesEnum.IVOLUNTEER_VN:
-            # TODO: remove date_to_str when lib support
-            other_info = OtherPostInfo()
-            other_info.deadline = (
-                date_to_str(current_data.deadline) if current_data.deadline else None
-            )
-            post = Posts(
-                # info
-                created_by=await Users.get(user["id"]),
-                raw_data=None,
-                # other service
-                # facebook_post=facebook_post,
-                discord_post_id=0,
-                # content
-                title=current_data.title,
-                description=current_data.description,
-                tags=current_data.tags,
-                other_information=other_info,
-                banner_img=banner_img,
-                content=current_data.content,
-                author="Ivolunteer.vn",
-                author_link=draft_post_data.name,
-                # SEO
-                keywords=current_data.keywords,
-                og_img=banner_img,
-            )
-        else:
-            pass
-        await post.insert()
-        # save id to draft post
-        await draft_post_data.set({DraftPosts.draft_data.id: str(post.id)})
+        # draft_post_data = await DraftPosts.find_one(
+        #     DraftPosts.name == payload.post_name,
+        #     DraftPosts.source == payload.origin,
+        # )
+        # if not draft_post_data:
+        #     raise HTTPException(
+        #         status_code=ResponseStatusEnum.BAD_REQUEST.value, detail="Not found post"
+        #     )
+        # elif draft_post_data.draft_data.id:
+        #     raise HTTPException(
+        #         status_code=ResponseStatusEnum.BAD_REQUEST.value, detail="Post already exist"
+        #     )
+        # current_data = draft_post_data.draft_data
+        # banner_img = None
+        # if current_data.banner is not None:
+        #     banner_img = upload_image(current_data.banner)
+        # if payload.origin == OriginCrawlPagesEnum.IVOLUNTEER_VN:
+        #     # TODO: remove date_to_str when lib support
+        #     other_info = OtherPostInfo()
+        #     other_info.deadline = (
+        #         date_to_str(current_data.deadline) if current_data.deadline else None
+        #     )
+        #     post = Posts(
+        #         # info
+        #         created_by=await Users.get(user["id"]),
+        #         raw_data=None,
+        #         # other service
+        #         # facebook_post=facebook_post,
+        #         discord_post_id=0,
+        #         # content
+        #         title=current_data.title,
+        #         description=current_data.description,
+        #         tags=current_data.tags,
+        #         other_information=other_info,
+        #         banner_img=banner_img,
+        #         content=current_data.content,
+        #         author="Ivolunteer.vn",
+        #         author_link=draft_post_data.name,
+        #         # SEO
+        #         keywords=current_data.keywords,
+        #         og_img=banner_img,
+        #     )
+        # else:
+        #     pass
+        # await post.insert()
+        # # save id to draft post
+        # await draft_post_data.set({DraftPosts.draft_data.id: str(post.id)})
 
-        # create discord post
-        discord_post_id = await send_news(data=current_data, is_testing=False, post_id=post.id)
-        # discord_post_id to draft_post
-        post.discord_post_id = discord_post_id
-        await post.save()
-        background_tasks.add_task(send_noti_to_subcribers, current_data, False, post.id)
+        # # create discord post
+        # discord_post_id = await send_news(data=current_data, is_testing=False, post_id=post.id)
+        # # discord_post_id to draft_post
+        # post.discord_post_id = discord_post_id
+        # await post.save()
+        # background_tasks.add_task(send_noti_to_subcribers, current_data, False, post.id)
 
-        # create facebook post
-        if is_facebook_service_ready() and payload.should_create_facebook_post:
-            facebook_post = post_to_fb(
-                origin="Ivolunteer.vn",
-                content="😍 " + current_data.title + "\n" + "😍 " + current_data.description + "\n",
-                comment=f"Xem thêm thông tin tại: https://news.betterme.study/posts/{gen_slug(post.title)}_{post.id}",
-                hashtags=current_data.keywords,
-                image_name=f"scrap/data/media/{current_data.banner}",
-            )
-            post.facebook_post = facebook_post
-            await post.save()
+        # # create facebook post
+        # if is_facebook_service_ready() and payload.should_create_facebook_post:
+        #     facebook_post = post_to_fb(
+        #         origin="Ivolunteer.vn",
+        #         content="😍 " + current_data.title + "\n" + "😍 " + current_data.description + "\n",
+        #         comment=f"Xem thêm thông tin tại: https://news.betterme.study/posts/{gen_slug(post.title)}_{post.id}",
+        #         hashtags=current_data.keywords,
+        #         image_name=f"scrap/data/media/{current_data.banner}",
+        #     )
+        #     post.facebook_post = facebook_post
+        #     await post.save()
 
-        return post
+        # return post
 
     ### Events
     @after_event(Insert)

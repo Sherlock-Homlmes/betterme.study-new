@@ -10,7 +10,6 @@ from . import router
 from schemas.auth import RegisterUser, RegisterUserResponse, LoginUser
 from .auth import auth_handler
 from .google_oauth import GoogleOauth2
-from .facebook_oauth import FaceBookOauth2
 
 from models import Users
 from utils.time_modules import vn_now
@@ -65,14 +64,11 @@ def protected(user: Users = Depends(auth_handler.auth_wrapper)):
 async def get_oauth_link(
     discord_link: Optional[bool] = False,
     google_link: Optional[bool] = False,
-    facebook_link: Optional[bool] = False,
 ):
     response = {}
     if discord_link:
         response["discord_link"] = DISCORD_OAUTH_URL
     if google_link:
         response["google_link"] = GoogleOauth2().get_oauth_url()
-    if facebook_link:
-        response["facebook_link"] = FaceBookOauth2().get_oauth_url()
 
     return JSONResponse(response, status_code=200)

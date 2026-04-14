@@ -235,11 +235,13 @@ const createRoom = async () => {
       throw new Error(`HTTP error! status: ${response?.status || 'unknown'}`);
     }
 
-    await response.json();
+    const createdRoom = await response.json();
 
     // Reset form and close modal
     resetCreateForm();
     showCreateModal.value = false;
+
+    selectRoom(createdRoom);
   } catch (err: any) {
     error.value = err.message || t('pomodoroRoom.errors.create_failed', { default: 'Failed to create room' });
     console.error('Error creating room:', err);
