@@ -1,0 +1,68 @@
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_get_oauth_link(client, mocker):
+    """
+    INPUT:
+        Call oauth link api
+    OUTPUT:
+        Get discord link
+    """
+    mocker.patch(
+        "routers.authentication.general_auth.DISCORD_OAUTH_URL",
+        "https://discord.com/oauth2/authorize?test",
+    )
+    response = client.get("/api/auth/oauth-link?discord_link=true")
+    assert response.status_code == 200
+    assert response.json() == {"discord_link": "https://discord.com/oauth2/authorize?test"}
+
+
+@pytest.mark.asyncio
+async def test_get_self_successfully(auth_client):
+    """
+    INPUT:
+        - Valid token
+        - Call self api
+    OUTPUT:
+        Return self information
+    """
+    response = auth_client.get("/api/auth/self")
+    assert response.status_code == 200
+    assert response.json() == {
+        "id": "111111111111111111111111",
+        "discord_id": "111111111111111111",
+        "name": "khoitm",
+        "custom_name": "khoitm",
+        "email": "dbsiksfikf@gmail.com",
+        "avatar_url": "https://cdn.discordapp.com/avatars/111111111111111111/11111111111111111111111111111111.png",
+        "custom_avatar_url": "https://cdn.discordapp.com/avatars/111111111111111111/11111111111111111111111111111111.png",
+        "roles": ["owner", "admin"],
+    }
+
+
+@pytest.mark.asyncio
+async def test_get_self_fail_because_not_logged_in(client):
+    """
+    INPUT:
+        Call self api
+    OUTPUT:
+        Error not authenticated
+    """
+    response = client.get("/api/auth/self")
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Unauthorization"
+
+
+@pytest.mark.asyncio
+async def test_get_self_fail_because_invalid_token(client):
+    """
+    INPUT:
+        - Invalid token
+        - Call self api
+    OUTPUT:
+        Error invalid token
+    """
+    response = client.get("/api/auth/self", headers={"Authorization": "Bearer aaa"})
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid token"
