@@ -1,0 +1,17 @@
+{
+  "name": "betterme-landing",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0 --port 3000",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.7.10",
+    "@astrojs/starlight": "^0.34.1",
+    "starlight-links-validator": "^0.16.0"
+  }
+}
