@@ -17,11 +17,12 @@ from mongomock_motor import AsyncMongoMockClient
 
 # local
 from models import news_document_models, pomodoro_document_models, discord_document_models
-from base.routes import api_router
+from routers.endpoints import api_router, api_router_v2
 from routers.authentication.auth import auth_handler
 
 app = FastAPI()
 app.include_router(api_router)
+app.include_router(api_router_v2)
 
 
 @pytest.fixture(scope="function", autouse=True)

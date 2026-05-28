@@ -14,9 +14,15 @@ from base.custom.http_status import ServerError
 
 class PomodoroRoomCRUD:
     def __init__(self):
-        self.livekit = api.LiveKitAPI(
-            settings.LIVEKIT_URL, settings.LIVEKIT_API_KEY, settings.LIVEKIT_API_SECRET
-        )
+        self._livekit = None
+
+    @property
+    def livekit(self):
+        if self._livekit is None:
+            self._livekit = api.LiveKitAPI(
+                settings.LIVEKIT_URL, settings.LIVEKIT_API_KEY, settings.LIVEKIT_API_SECRET
+            )
+        return self._livekit
 
     async def get_list(self, **kwargs) -> List[Dict[str, Any]]:
         """Get list of pomodoro rooms directly from LiveKit."""

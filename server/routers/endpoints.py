@@ -3,13 +3,12 @@
 from fastapi import APIRouter, Depends
 
 # local
-from routers.authentication.auth import auth_handler, livekit_webhook_handler
+from routers.authentication.auth import auth_handler
 from routers.authentication import router as authentication_router
 from routers.v1.pomodoros.api import router as pomodoros_router
 from routers.v1.livekit.api import router as livekit_router
 
 # from routers.v1.ai.api import router as ai_router
-from routers.v1.posts.api import router as posts_router
 from routers.v1.statistic.api import router as statistic_router
 from routers.v1.todolist.api import router as tasks_router
 from routers.v1.users.api import router as users_router
@@ -36,7 +35,6 @@ api_router = APIRouter(
 # single auth method
 non_auth_modules = (
     authentication_router,
-    posts_router,
     livekit_router,
 )
 auth_modules = (
