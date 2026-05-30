@@ -8,6 +8,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'BetterMe',
+      head: [
+        { tag: 'link', attrs: { rel: 'alternate', type: 'application/rss+xml', title: 'BetterMe', href: '/rss.xml' } },
+        { tag: 'link', attrs: { rel: 'sitemap', href: '/sitemap-index.xml' } },
+      ],
       customCss: ['./src/styles/docs.css'],
       components: {
         Header: './src/components/Header.astro',
