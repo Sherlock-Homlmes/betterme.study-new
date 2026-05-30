@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+}
+
+:root,
+[data-theme="dark"],
+::backdrop {
+  --sl-color-white: hsl(0, 0%, 100%);
+  --sl-color-gray-1: hsl(30, 4%, 12%);
+  --sl-color-gray-2: hsl(30, 3%, 22%);
+  --sl-color-gray-3: hsl(30, 2%, 40%);
+  --sl-color-gray-4: hsl(30, 2%, 58%);
+  --sl-color-gray-5: hsl(30, 4%, 78%);
+  --sl-color-gray-6: hsl(30, 10%, 92%);
+  --sl-color-black: hsl(40, 33%, 97%);
+
+  --sl-hue-orange: 41;
+  --sl-color-orange-low: hsl(41, 40%, 20%);
+  --sl-color-orange: hsl(41, 36%, 38%);
+  --sl-color-orange-high: hsl(41, 36%, 55%);
+
+  --sl-hue-green: 101;
+  --sl-color-green-low: hsl(101, 39%, 22%);
+  --sl-color-green: hsl(101, 68%, 23%);
+  --sl-color-green-high: hsl(101, 68%, 40%);
+
+  --sl-hue-blue: 234;
+  --sl-color-blue-low: hsl(234, 20%, 20%);
+  --sl-color-blue: hsl(234, 30%, 45%);
+  --sl-color-blue-high: hsl(234, 30%, 65%);
+
+  --sl-hue-purple: 281;
+  --sl-color-purple-low: hsl(281, 20%, 22%);
+  --sl-color-purple: hsl(281, 30%, 50%);
+  --sl-color-purple-high: hsl(281, 30%, 70%);
+
+  --sl-hue-red: 339;
+  --sl-color-red-low: hsl(339, 30%, 22%);
+  --sl-color-red: hsl(339, 50%, 50%);
+  --sl-color-red-high: hsl(339, 50%, 70%);
+
+  --sl-color-accent-low: hsl(41, 40%, 85%);
+  --sl-color-accent: hsl(41, 36%, 38%);
+  --sl-color-accent-high: hsl(41, 36%, 25%);
+
+  --sl-color-text: var(--sl-color-gray-2);
+  --sl-color-text-accent: var(--sl-color-accent-high);
+  --sl-color-text-invert: var(--sl-color-accent-low);
+  --sl-color-bg: var(--sl-color-black);
+  --sl-color-bg-nav: hsl(40, 30%, 94%);
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+  --sl-color-bg-inline-code: var(--sl-color-gray-6);
+  --sl-color-bg-accent: var(--sl-color-accent);
+  --sl-color-hairline-light: var(--sl-color-gray-5);
+  --sl-color-hairline: var(--sl-color-gray-6);
+  --sl-color-hairline-shade: var(--sl-color-gray-6);
+
+  --sl-color-backdrop-overlay: hsla(30, 10%, 10%, 0.66);
+
+  --sl-shadow-sm: 0px 1px 1px hsla(0, 0%, 0%, 0.06), 0px 2px 1px hsla(0, 0%, 0%, 0.06);
+  --sl-shadow-md: 0px 8px 4px hsla(0, 0%, 0%, 0.03), 0px 5px 2px hsla(0, 0%, 0%, 0.03),
+    0px 3px 2px hsla(0, 0%, 0%, 0.06), 0px 1px 1px hsla(0, 0%, 0%, 0.06);
+  --sl-shadow-lg: 0px 25px 7px rgba(0, 0, 0, 0.01), 0px 16px 6px hsla(0, 0%, 0%, 0.03),
+    0px 9px 5px hsla(30, 10%, 10%, 0.08), 0px 4px 4px hsla(0, 0%, 0%, 0.16),
+    0px 4px 2px hsla(0, 0%, 0%, 0.04);
+
+  --sl-font: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --sl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  --sl-line-height: 1.75;
+  --sl-line-height-headings: 1.2;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #faf9f6;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(41, 36%, 38%);
+  }
+}
+
+:root[data-theme="light"],
+:root[data-theme="dark"],
+[data-theme="light"] ::backdrop,
+[data-theme="dark"] ::backdrop {
+  --sl-color-white: hsl(30, 4%, 12%);
+  --sl-color-gray-1: hsl(30, 4%, 12%);
+  --sl-color-gray-2: hsl(30, 3%, 22%);
+  --sl-color-gray-3: hsl(30, 2%, 40%);
+  --sl-color-gray-4: hsl(30, 2%, 58%);
+  --sl-color-gray-5: hsl(30, 4%, 78%);
+  --sl-color-gray-6: hsl(30, 10%, 92%);
+  --sl-color-gray-7: hsl(40, 20%, 96%);
+  --sl-color-black: hsl(0, 0%, 100%);
+
+  --sl-color-accent-high: hsl(41, 36%, 25%);
+  --sl-color-accent: hsl(41, 36%, 38%);
+  --sl-color-accent-low: hsl(41, 40%, 88%);
+
+  --sl-color-text-accent: var(--sl-color-accent);
+  --sl-color-text-invert: var(--sl-color-black);
+  --sl-color-bg-nav: hsl(40, 20%, 96%);
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+  --sl-color-bg-inline-code: var(--sl-color-gray-6);
+  --sl-color-bg-accent: var(--sl-color-accent);
+  --sl-color-hairline-light: var(--sl-color-gray-6);
+  --sl-color-hairline-shade: var(--sl-color-gray-6);
+
+  --sl-color-backdrop-overlay: hsla(30, 5%, 36%, 0.66);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  color: #18181b;
+}
+
+a {
+  color: hsl(41, 36%, 38%);
+}
+
+a:hover {
+  color: hsl(41, 36%, 25%);
+}
+
+[aria-current="page"],
+[aria-current="page"]:hover,
+[aria-current="page"]:focus {
+  color: #ffffff;
+}
+
+.sl-markdown-content code {
+  background: hsl(30, 10%, 92%);
+  border: 1px solid #e4e4e7;
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
+.sl-markdown-content blockquote {
+  border-left-color: hsl(41, 36%, 38%);
+  background: hsl(41, 40%, 95%);
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4) {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  color: #18181b;
+}
+
+.starlight-aside--note {
+  background: #fff;
+  border-left: 4px solid hsl(41, 36%, 38%);
+  color: hsl(41, 36%, 38%);
+
+  .starlight-aside__title {
+    color: black;
+  }
+}
