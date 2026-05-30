@@ -6,7 +6,6 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://betterme.study',
   integrations: [
-    sitemap(),
     starlight({
       title: 'BetterMe',
       customCss: ['./src/styles/docs.css'],
@@ -52,5 +51,6 @@ export default defineConfig({
         },
       ],
     }),
+    sitemap(),
   ],
 });

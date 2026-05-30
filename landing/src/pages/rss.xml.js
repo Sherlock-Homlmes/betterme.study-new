@@ -12,7 +12,7 @@ export async function GET(context) {
       .map((doc) => ({
         title: doc.data.title,
         description: doc.data.description,
-        link: `/docs/${doc.id}/`,
+        link: String(doc.id).replace('.md', ''),
       })),
     customData: '<language>vi</language>',
   });
