@@ -17,7 +17,9 @@ const { getCurrentItem } = usePomodoroStore();
 const openPanels = useOpenPanels();
 const settingsStore = useSettings();
 
-const appBarButtons = [
+const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true'
+
+let appBarButtons = [
 	// {
 	// 	key: 'ai',
 	// 	panel: 'ai',
@@ -43,6 +45,16 @@ const appBarButtons = [
 		ariaLabel: 'appbar.settings',
 	},
 ];
+if(isPreview){
+	appBarButtons = [
+	{
+		key: 'todo',
+		panel: 'todo',
+		icon: ChecklistIcon,
+		ariaLabel: 'appbar.todo',
+	},
+]
+}
 </script>
 
 <template lang="pug">
