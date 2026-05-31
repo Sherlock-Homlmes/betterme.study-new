@@ -51,12 +51,12 @@ let page = {
 	lastPage: 1,
 };
 if (
-	response.headers.get("x-current-page") &&
+	response.headers.get("x-page") &&
 	response.headers.get("x-total-count") &&
 	response.headers.get("x-per-page")
 ) {
 	const totalPosts: number = parseInt(response.headers.get("x-total-count"));
-	const currentPage: number = parseInt(response.headers.get("x-current-page"));
+	const currentPage: number = parseInt(response.headers.get("x-page"));
 	const perPage: number = parseInt(response.headers.get("x-per-page"));
 	page.currentPage = currentPage;
 	page.lastPage = Math.ceil(totalPosts / perPage);
