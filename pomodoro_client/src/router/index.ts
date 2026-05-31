@@ -7,7 +7,7 @@ import DesktopPIPView from '@/pages/DesktopPIPView.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/en'
+    redirect: (to) => ({ path: '/en', query: to.query, hash: to.hash })
   },
   {
     path: '/en',
@@ -23,6 +23,10 @@ const routes: RouteRecordRaw[] = [
     path: '/auth/discord-oauth',
     name: 'discord-oauth',
     component: DiscordOAuth,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: (to) => ({ path: '/en', query: to.query, hash: to.hash }),
   },
 ];
 if(runtimeConfig.public.PLATFORM === 'extension' || runtimeConfig.public.PLATFORM === 'desktop')

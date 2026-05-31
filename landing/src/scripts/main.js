@@ -561,7 +561,7 @@ async function loadDiscordWidget() {
                     <div class="discord-title">
                         <span class="pulse-dot"></span>
                         <strong style="color: #18181b; font-size: 1.1rem;">${data.name}</strong>
-                        <span class="discord-badge" style="margin-left: 6px;">PARTNER</span>
+                        <span class="discord-badge" style="margin-left: 6px;">Discord's partner</span>
                     </div>
                     <span style="color: #10b981; font-weight: bold; font-size: 0.9rem;">${data.presence_count.toLocaleString()} Online</span>
                 </div>

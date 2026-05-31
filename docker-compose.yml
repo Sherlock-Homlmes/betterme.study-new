@@ -40,19 +40,17 @@ services:
     volumes:
       - .:/var/task
     working_dir: /var/task/pomodoro_client
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
       - VITE_PLATFORM=web
       - VITE_API_URL=http://localhost:8080/api
       - VITE_LIVEKIT_URL=ws://localhost:7880
       - VITE_COOKIE_DOMAIN=localhost
-      - TAURI_DEV_HOST=0.0.0.0
     networks:
       - nginx-net
     ports:
       - "1420:1420"
       - "4173:4173"
-    command: ["bun", "run", "dev"]
+    command: ["bun", "run", "dev", "--", "--host", "0.0.0.0"]
     # command: ["bun", "run", "preview"]
 
   news-client:

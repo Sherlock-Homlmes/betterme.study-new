@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, defineAsyncComponent, onBeforeMount, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
 
@@ -22,6 +22,7 @@ import { useMobileSettings } from "@/stores/platforms/mobileSettings";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter()
+const route = useRoute()
 
 const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true'
 
@@ -160,7 +161,7 @@ onBeforeMount(async () => {
 watch(
   () => userSettings.value?.language,
   (newValue) => {
-    router.replace({ name: `home-${newValue}` })
+    router.replace({ name: `home-${newValue}`, query: route.query, hash: route.hash })
   },
   {immediate: true}
 )

@@ -30,10 +30,10 @@ export default defineConfig(async () => ({
     allowedHosts: allowedHosts || true,
     hmr: host
       ? {
-          protocol: "ws",
-          host,
-          port: 1420,
-        }
+        protocol: "ws",
+        host,
+        port: 1420,
+      }
       : undefined,
     watch: {
       // 3. tell Vite to ignore watching `src-tauri`
