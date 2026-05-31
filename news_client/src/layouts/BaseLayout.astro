@@ -12,6 +12,7 @@ export interface Props {
 	articleDate?: string | undefined;
 	createdAt: string;
 	updatedAt: string | null;
+	isPostExpired?: boolean | null;
 }
 const { ...props } = Astro.props;
 ---

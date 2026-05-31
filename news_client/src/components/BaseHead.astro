@@ -13,6 +13,7 @@ export interface Props {
 	articleDate?: string | undefined;
 	createdAt: string;
 	updatedAt: string | null;
+	isPostExpired?: boolean | null;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
 	keywords = [],
 	createdAt,
 	updatedAt,
+	isPostExpired = false
 } = Astro.props;
 
 const ENVIRONMENT = import.meta.env.ENVIRONMENT;
@@ -37,9 +39,6 @@ const canonicalURL = new URL(
 	canonicalPathNameMap[pathName] ?? pathName,
 	Astro.site,
 );
-const pageSearchParam = Astro.url.searchParams.get("page") ?? "0";
-if (parseInt(pageSearchParam) >= 2 && pathName === "/")
-	canonicalURL.searchParams.set("page", pageSearchParam);
 
 // Media tag
 const socialImageURL = new URL(ogImage ? ogImage : "/open-graph.png", Astro.url)
@@ -51,48 +50,82 @@ const currentLanguage = getLangFromUrl(Astro.url);
 // Schema
 let schemaElement = null;
 let schema = null;
+const organization = {
+  "@type": "Organization",
+  "@id": "https://news.betterme.study/#organization",
+  name: "BetterMe",
+  url: "https://news.betterme.study",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://news.betterme.study/favicon-180x180.png",
+  },
+  description: description,
+  email: "contact@news.betterme.study",
+  sameAs: [
+    "https://betterme.study",
+    "https://www.facebook.com/profile.php?id=61561787097897",
+  ],
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "26 ngõ 84 Yên Hòa",
+    addressLocality: "Cầu Giấy",
+    addressRegion: "Hà Nội",
+    addressCountry: "VN", // ← fix "VI" → "VN"
+    postalCode: "11300",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "contact@news.betterme.study",
+    contactType: "customer support",
+  },
+};
+
 if (pathName.startsWith("/posts/")) {
-	schema = {
-		"@context": "https://schema.org",
-		"@type": "NewsArticle",
-		headline: title,
-		image: [socialImageURL],
-		datePublished: createdAt,
-		dateModified: updatedAt ?? createdAt,
-		author: [
-			{
-				"@type": "Person",
-				name: "Tạ Minh Khôi",
-				url: "https://muctim.tuoitre.vn/nam-sinh-gen-z-thanh-lap-cong-dong-ho-tro-hoc-tap-cho-nguoi-tre-64910.htm",
-			},
-		],
-	};
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description: description,
+    image: [socialImageURL],
+    datePublished: createdAt,
+    dateModified: updatedAt ?? createdAt,
+    author: {
+      "@type": "Person",
+      name: "Tạ Minh Khôi",
+      url: "https://muctim.tuoitre.vn/nam-sinh-gen-z-thanh-lap-cong-dong-ho-tro-hoc-tap-cho-nguoi-tre-64910.htm",
+    },
+    publisher: organization,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://news.betterme.study${pathName}`,
+    },
+  };
 } else {
-	schema = {
-		"@context": "https://schema.org",
-		"@type": "Organization",
-		image: "https://news.betterme.study/favicon-180x180.png",
-		url: "https://news.betterme.study",
-		logo: "https://news.betterme.study/favicon-180x180.png",
-		name: "news.betterme.study",
-		description: description,
-		email: "contact@news.betterme.study",
-		telephone: "+84-332-731-520",
-		address: {
-			"@type": "PostalAddress",
-			streetAddress: "26 ngõ 84 Yên Hòa - Cầu Giấy",
-			addressLocality: "Hà Nội",
-			addressCountry: "VI",
-			addressRegion: "Hà Nội-Việt Nam",
-			postalCode: "11300",
-		},
-		contactPoint: {
-			"@type": "ContactPoint",
-			email: "contact@news.betterme.study",
-			telephone: "+84-332-731-520",
-		},
-		vatID: "8702475760",
-	};
+  schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      organization,
+      {
+        "@type": "WebSite",
+        "@id": "https://news.betterme.study/#website",
+        url: "https://news.betterme.study",
+        name: "BetterMe News",
+        description: description,
+        publisher: {
+          "@id": "https://news.betterme.study/#organization",
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate:
+              "https://news.betterme.study/?search={search_term_string}",
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
 }
 if (schema)
 	schemaElement = `<script type="application/ld+json" is:raw>${JSON.stringify(schema, undefined, 4)}</script>`;
@@ -116,6 +149,9 @@ if (schema)
 		</>
 	)
 }
+{isPostExpired && (
+	<meta name="robots" content="noindex, follow" />
+)}
 <!-- Canonical URL -->
 <link rel='canonical' href={canonicalURL} />
 <meta http-equiv='content-language' content={currentLanguage} />
