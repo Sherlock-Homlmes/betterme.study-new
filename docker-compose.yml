@@ -18,6 +18,21 @@ services:
     networks:
       - nginx-net
 
+  landing:
+    build:
+      context: ./landing
+      dockerfile: ../others/docker/landing/Dockerfile
+    volumes:
+      - ./landing:/app
+      - landing-node-modules:/app/node_modules
+    working_dir: /app
+    networks:
+      - nginx-net
+    ports:
+      - "3001:3000"
+    command: ["npm", "run", "dev"]
+    # command: ["npm", "run", "preview", "--", '--host', "0.0.0.0", "--port", "3000"]
+
   pomodoro-client:
     build:
       context: ./
@@ -40,18 +55,19 @@ services:
     command: ["bun", "run", "dev"]
     # command: ["bun", "run", "preview"]
 
-  # news-client:
-  #   build:
-  #     context: ./
-  #     dockerfile: ./others/docker/news_client/Dockerfile
-  #   volumes:
-  #     - .:/var/task
-  #   working_dir: /var/task/news_client
-  #   user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
-  #   networks:
-  #     - nginx-net
-  #   command:
-  #     ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
+  news-client:
+    build:
+      context: ./
+      dockerfile: ./others/docker/news_client/Dockerfile
+    volumes:
+      - .:/var/task
+    working_dir: /var/task/news_client
+    networks:
+      - nginx-net
+    ports:
+      - "3002:3000"
+    command:
+      ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
 
   # news-admin-client:
   #   build:
@@ -113,20 +129,6 @@ services:
     # TODO: add local mongo
     # TODO: add local local s3
 
-  landing:
-    build:
-      context: ./landing
-      dockerfile: ../others/docker/landing/Dockerfile
-    volumes:
-      - ./landing:/app
-      - landing-node-modules:/app/node_modules
-    working_dir: /app
-    networks:
-      - nginx-net
-    ports:
-      - "3001:3000"
-    command: ["npm", "run", "dev"]
-    # command: ["npm", "run", "preview", "--", '--host', "0.0.0.0", "--port", "3000"]
 
   livekit:
     image: livekit/livekit-server:latest
