@@ -566,7 +566,7 @@ async function loadDiscordWidget() {
                     <span style="color: #10b981; font-weight: bold; font-size: 0.9rem;">${data.presence_count.toLocaleString()} Online</span>
                 </div>
 
-                <div class="voice-channels" style="max-height: 250px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;">
+                <div class="voice-channels" style="max-height: 445px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;">
                     <div class="channel-title" style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: #71717a; margin-bottom: 12px;">📚 Kênh Học Tập Hoạt Động</div>
         `;
 
@@ -588,26 +588,25 @@ async function loadDiscordWidget() {
                                 </div>
                                 <span style="font-size: 0.8rem; color: #71717a;">${activeMembers.length} đang học</span>
                             </div>
-                            ${
-                              activeMembers.length > 0
-                                ? `
+                            ${activeMembers.length > 0
+              ? `
                                 <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-left: 16px;">
                                     ${activeMembers
-                                      .slice(0, 5)
-                                      .map(
-                                        (m) => `
+                .slice(0, 5)
+                .map(
+                  (m) => `
                                         <div style="display: flex; align-items: center; gap: 4px; background: #e4e4e7; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #18181b; border: 1px solid #d4d4d8;">
                                             <img src="${m.avatar_url}" style="width: 14px; height: 14px; border-radius: 50%;" />
                                             <span style="font-weight: 500;">${m.username}</span>
                                         </div>
                                     `
-                                      )
-                                      .join("")}
+                )
+                .join("")}
                                     ${activeMembers.length > 5 ? `<span style="font-size: 0.75rem; color: #71717a; align-self: center; font-weight: 600;">+${activeMembers.length - 5}</span>` : ""}
                                 </div>
                             `
-                                : ""
-                            }
+              : ""
+            }
                         </div>
                     `;
         }
@@ -617,6 +616,8 @@ async function loadDiscordWidget() {
     if (channelCount === 0) {
       html += `<div style="color: #71717a; font-size: 0.85rem; text-align: center; padding: 20px 0;">Hiện chưa có ai vào kênh thoại. Gia nhập ngay nhé!</div>`;
     }
+
+    html += `<div style="text-align: center; padding: 16px 0 4px 0; color: #71717a; font-size: 0.85rem; font-style: italic;">✨ Còn nhiều phòng khác đang đợi bạn khám phá!</div>`;
 
     const inviteLink =
       data.instant_invite || "https://discord.gg/betterme";

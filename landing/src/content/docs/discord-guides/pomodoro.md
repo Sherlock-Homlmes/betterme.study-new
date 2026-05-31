@@ -3,8 +3,6 @@ title: Pomodoro Timer
 description: Hướng dẫn sử dụng Pomodoro Timer trong phòng học
 ---
 
-## Pomodoro Timer
-
 Pomodoro là phương pháp quản lý thời gian hiệu quả, tích hợp sẵn trong phòng học BetterMe. Bot sẽ tự động đếm ngược và chuyển giữa các chu kỳ học - nghỉ.
 
 ### Chu kỳ Pomodoro
@@ -18,6 +16,12 @@ Ví dụ cài đặt mặc định:
 - Nghỉ ngắn: 5 phút
 - Nghỉ dài: 15 phút
 - Số section trước nghỉ dài: 4
+
+### Cách bắt đầu
+
+- Vào kênh thoại riêng ([cách tạo](/discord-guides/channel-structure/voice-channel))
+- Sử dụng lệnh */room_board*
+- Trên bảng điều khiển sẽ hiện ra button để bắt đầu pomodoro
 
 ### Cài đặt tùy chỉnh
 
@@ -43,8 +47,7 @@ Sử dụng bảng điều khiển phòng hoặc các nút:
 
 ### Tính năng nổi bật
 
-- **Countdown realtime**: Đếm ngược hiển thị trực tiếp trên tên phòng
-- **Âm thanh thông báo**: Phát soundboard khi chuyển section
+- **Đếm ngược thời gian thực**
+- **Âm thanh thông báo**: Phát âm thanh khi chuyển section
 - **Mute mic tự động**: Tự động mute tất cả user trong phòng khi đang học (có thể bật/tắt)
 - **Ghi nhận lịch sử**: Lưu lại lịch sử Pomodoro cho từng user tham gia
-- **Khôi phục khi restart**: Tự động resume các Pomodoro đang chạy khi bot restart

@@ -13,7 +13,7 @@ Ví dụ:
 * Tuyển sinh lớp 10
 * THPT Quốc gia
 
-* Lưu ý: các bộ đếm thời gian chỉ hiển thị khi bạn chọn vai trò (Role) tương ứng.
+**Lưu ý:** các bộ đếm thời gian chỉ hiển thị khi bạn chọn vai trò (Role) tương ứng.
 
 ---
 
@@ -21,21 +21,21 @@ Ví dụ:
 
 Đây là khu vực cung cấp các thông tin quan trọng liên quan đến cộng đồng BetterMe.
 
-#### [#quy-dinh-va-huong-dan](https://discord.com/channels/880360143768924210/880369537449619476)
+#### [📖quy-định-hướng-dẫn](https://discord.com/channels/880360143768924210/880369537449619476)
 
 Nội quy cộng đồng Discord và hướng dẫn sử dụng các tính năng trong server.
 
-#### #thong-bao
+#### [📢thông-báo](https://discord.com/channels/880360143768924210/885432470697308200)
 
 Cập nhật các thông tin mới nhất về server, sự kiện cộng đồng và các tính năng mới.
 
-#### #leaderboard
+#### [🏆leaderboard](https://discord.com/channels/880360143768924210/1347781344817578045)
 
 Bảng xếp hạng thời gian học tập của các thành viên theo tháng.
 
 Đây là nơi ghi nhận sự cố gắng và khuyến khích tinh thần học tập tích cực trong cộng đồng.
 
-#### #phan-hoi-de-xuat
+#### [📤phản-hồi-đề-xuất](https://discord.com/channels/880360143768924210/1024083239486377995)
 
 Kênh tiếp nhận:
 
@@ -50,15 +50,15 @@ Kênh tiếp nhận:
 
 Không gian giao lưu dành cho tất cả thành viên.
 
-#### #gioi-thieu-ban-than
+#### [#giới-thiệu-bản-thân](https://discord.com/channels/880360143768924210/894594032947310602)
 
 Nơi thành viên mới giới thiệu bản thân và làm quen với cộng đồng.
 
-#### #chat-chung
+#### [#chat-chung](https://discord.com/channels/880360143768924210/881075307795337226)
 
 Kênh trò chuyện tự do về học tập, cuộc sống và các chủ đề thường ngày.
 
-#### #english-chat
+#### [#english-chat](https://discord.com/channels/880360143768924210/880363081304252446)
 
 Không gian giao tiếp bằng tiếng Anh để luyện tập kỹ năng ngoại ngữ cùng các thành viên khác.
 
@@ -68,7 +68,7 @@ Không gian giao tiếp bằng tiếng Anh để luyện tập kỹ năng ngoạ
 
 Khu vực hỗ trợ học tập và chia sẻ kiến thức.
 
-#### #giup-do-hoc-tap
+#### [#giúp-đỡ-học-tập](https://discord.com/channels/880360143768924210/1024085192735998022)
 
 Đăng câu hỏi học tập để nhận sự hỗ trợ từ AI và các thành viên trong cộng đồng.
 
@@ -82,7 +82,7 @@ Bạn có thể hỏi về:
 * Lập trình
 * Và nhiều lĩnh vực khác
 
-#### #sach-app-tai-lieu
+#### [#sách-app-tài-liệu](https://discord.com/channels/880360143768924210/1081940602104598578)
 
 Tổng hợp các nguồn tài nguyên hữu ích như:
 
@@ -92,7 +92,7 @@ Tổng hợp các nguồn tài nguyên hữu ích như:
 * Khóa học miễn phí
 * Công cụ tăng năng suất
 
-#### #tim-ban-cung-hoc
+#### [#tìm-bạn-cùng-học](https://discord.com/channels/880360143768924210/1024085195466481694)
 
 Kết nối với những người có chung:
 
@@ -101,7 +101,7 @@ Kết nối với những người có chung:
 * Sở thích
 * Chuyên ngành
 
-giúp việc học tập trở nên hiệu quả và có động lực hơn.
+giúp bạn tìm được những người đồng chí, đồng đội giúp việc học tập trở nên hiệu quả và có động lực hơn.
 
 ---
 
@@ -163,12 +163,12 @@ Bên cạnh việc học tập, BetterMe cũng là nơi mọi người chia sẻ
 
 Các kênh trong khu vực này có thể bao gồm:
 
-* 📷 Chia sẻ hình ảnh
-* 🍜 Đồ ăn và nấu nướng
-* 💪 Gym và thể thao
-* 🎨 Nghệ thuật và sáng tạo
-* 🌿 Tâm sự cuộc sống
-* ✨ Những điều tích cực mỗi ngày
+* [🌿 Tâm sự cuộc sống](https://discord.com/channels/880360143768924210/902498448660656148)
+* [📷 Chia sẻ hình ảnh](https://discord.com/channels/880360143768924210/880374896876732426)
+* [🍜 Đồ ăn và nấu nướng](https://discord.com/channels/880360143768924210/923675568992579685)
+* [💪 Gym và thể thao](https://discord.com/channels/880360143768924210/1174376063468580985)
+* [🎨 Nghệ thuật và sáng tạo](https://discord.com/channels/880360143768924210/966255128258695168)
+* [✨ Những điều tích cực mỗi ngày](https://discord.com/channels/880360143768924210/1434600381240836106)
 
 Đôi khi chỉ là một bức ảnh đẹp, một bữa ăn ngon hay một niềm vui nhỏ cũng có thể giúp lan tỏa năng lượng tích cực đến cộng đồng.
 

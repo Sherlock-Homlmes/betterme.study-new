@@ -80,16 +80,19 @@
   left: 8%;
   animation: floatY 6s ease-in-out infinite;
 }
+
 .decor-2 {
   top: 25%;
   right: 12%;
   animation: floatY 8s ease-in-out infinite 1s;
 }
+
 .decor-3 {
   bottom: 20%;
   left: 15%;
   animation: floatY 7s ease-in-out infinite 2s;
 }
+
 .decor-4 {
   bottom: 35%;
   right: 8%;
@@ -97,10 +100,12 @@
 }
 
 @keyframes floatY {
+
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-15px) rotate(10deg);
   }
@@ -115,12 +120,14 @@
   border-top: 1px solid var(--accent-purple);
   border-bottom: 1px solid var(--accent-purple);
 }
+
 .marquee-inner {
   display: flex;
   gap: 0;
   white-space: nowrap;
   animation: marquee 25s linear infinite;
 }
+
 .marquee-item {
   display: inline-flex;
   align-items: center;
@@ -134,13 +141,16 @@
   opacity: 0.9;
   color: white;
 }
+
 .marquee-item span {
   color: var(--primary);
 }
+
 @keyframes marquee {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -151,26 +161,32 @@
   width: 100%;
   line-height: 0;
   z-index: 5;
+  border: none;
+  outline: none;
+  font-size: 0;
 }
+
 .divider svg {
   width: 100%;
   height: 60px;
   fill: #ffffff;
+  border: none;
+  outline: none;
+  display: block;
 }
+
 .divider-reversed {
   transform: rotate(180deg);
 }
+
 .divider-reversed svg {
-  fill: var(--bg-dark);
+  fill: #ffffff;
 }
 
 .about-section {
-  padding: 100px 0;
   background: #ffffff;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid var(--glass-border);
-  border-bottom: 1px solid var(--glass-border);
 }
 
 .about-grid {
@@ -200,9 +216,9 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
   background: var(--bg-dark);
-  padding: 16px;
+  padding: 16px 16px 0px 16px;
   border-radius: 12px;
   border: 1px solid var(--glass-border);
 }
@@ -228,6 +244,7 @@
   font-family: var(--font-body);
   color: #18181b !important;
 }
+
 .discord-mockup .discord-header {
   border-bottom: 1px solid #f4f4f5;
   padding-bottom: 12px;
@@ -236,14 +253,17 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .discord-mockup .discord-title {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .discord-mockup .discord-title strong {
   color: #18181b !important;
 }
+
 .discord-mockup .voice-channel {
   background: #faf9f6 !important;
   border: 1px solid #e4e4e7 !important;
@@ -251,18 +271,23 @@
   border-radius: 8px !important;
   margin-bottom: 8px !important;
 }
+
 .discord-mockup .voice-channel div {
   color: #18181b !important;
 }
+
 .discord-mockup .voice-channel span {
   color: #52525b !important;
 }
+
 .discord-mockup .voice-channel div span {
   color: #18181b !important;
 }
+
 .discord-mockup .voice-channel .pulse-dot {
   background-color: #10b981 !important;
 }
+
 .discord-badge {
   background: #e4e4e7;
   color: #3f3f46;
@@ -272,26 +297,30 @@
   border-radius: 4px;
   border: 1px solid #d4d4d8;
 }
+
 .discord-mockup .btn-purple {
   background: #18181b !important;
   color: #ffffff !important;
   border: 1px solid #18181b !important;
   box-shadow: none !important;
 }
+
 .discord-mockup .btn-purple:hover {
   background: #27272a !important;
 }
+
 .discord-mockup div[style*="color: #DCDDDE"] {
   color: #18181b !important;
   background: #e4e4e7 !important;
   border: 1px solid #d4d4d8 !important;
 }
+
 .discord-mockup span[style*="color: #72767D"] {
   color: #71717a !important;
 }
 
 .pomo-section {
-  padding: 100px 0;
+  padding: 30px 0;
   position: relative;
   overflow: hidden;
   background: var(--bg-dark);
@@ -312,7 +341,7 @@
 .pomo-iframe-wrapper {
   position: relative;
   width: 100%;
-  height: 650px;
+  height: 500px;
   padding: 0;
   overflow: hidden;
   border-radius: 20px;
@@ -339,6 +368,7 @@
   user-select: none;
   transform: scale(0.65);
 }
+
 .footer-pet-container:active {
   cursor: grabbing;
 }
@@ -379,6 +409,7 @@
   font-size: 0.9rem;
   transition: color 0.2s;
 }
+
 .footer-link:hover {
   color: var(--text-main);
 }
@@ -397,12 +428,18 @@
   .hero h1 {
     font-size: 2.8rem;
   }
+
   .about-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
   .stats-strip {
     gap: 20px;
     flex-wrap: wrap;
   }
+}
+
+.marquee-rotated {
+  transform: rotate(-4deg) scale(1.05);
 }

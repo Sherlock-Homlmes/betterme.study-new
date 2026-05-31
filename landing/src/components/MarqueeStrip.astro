@@ -1,7 +1,12 @@
 ---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
 ---
 
-<div class="marquee-strip">
+<div class:list={["marquee-strip", className]}>
   <div class="marquee-inner" id="marqueeInner">
     <div class="marquee-item">📚 Học Tập <span>•</span></div>
     <div class="marquee-item">🧠 Phát Triển Bản Thân <span>•</span></div>

@@ -23,6 +23,8 @@ import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter()
 
+const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true'
+
 // components
 const AppBar = defineAsyncComponent(() => import("@/components/appBar.vue"));
 const TutorialView = defineAsyncComponent(() => import("@/components/tutorial/_tutorialView.vue"));
@@ -193,8 +195,8 @@ section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
     )
     TimerControls(class="mb-8")
   TutorialView(v-if='!isOnboarded')
-  DesktopPIPMode(v-if='userSettings.visuals.show_pip_mode && isDesktop')
-  WebPIPMode(v-if='userSettings.visuals.show_pip_mode && isWeb')
+  DesktopPIPMode(v-if='userSettings.visuals.show_pip_mode && isDesktop && !isPreview')
+  WebPIPMode(v-if='userSettings.visuals.show_pip_mode && isWeb && !isPreview')
 </template>
 
 <style lang="scss" scoped>

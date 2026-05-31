@@ -14,7 +14,7 @@ Mọi khoản đóng góp, chi tiêu và số dư đều được cập nhật c
 
 ## Cam kết minh bạch
 
-Chúng tôi tin rằng một cộng đồng bền vững cần được xây dựng dựa trên sự tin tưởng.
+Bọn mình tin rằng một cộng đồng bền vững cần được xây dựng dựa trên sự tin tưởng.
 
 Vì vậy BetterMe cam kết:
 

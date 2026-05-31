@@ -3,8 +3,6 @@ title: An ninh & Kiểm duyệt
 description: Hệ thống kiểm duyệt từ nhạy cảm
 ---
 
-## An ninh & Kiểm duyệt
-
 BetterMe có hệ thống kiểm duyệt tin nhắn tự động để duy trì môi trường học tập lành mạnh. Hệ thống phát hiện tin nhắn chứa từ nhạy cảm với nhiều cấp độ kiểm tra.
 
 ### Hệ thống phạt
@@ -16,4 +14,4 @@ BetterMe có hệ thống kiểm duyệt tin nhắn tự động để duy trì 
 | Trên 12 lần | 🚫 Ban |
 
 - Vi phạm tự hết hạn sau **30 ngày**
-- User có thể báo cáo nếu bot cảnh báo sai
+- Người dùng có thể báo cáo nếu bot cảnh báo sai
