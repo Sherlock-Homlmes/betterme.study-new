@@ -3,17 +3,27 @@ title: Phòng học Voice Channel
 description: Hướng dẫn sử dụng hệ thống phòng học voice channel tự động
 ---
 
-## Phòng học Voice Channel
-
 BetterMe cung cấp hệ thống phòng học voice channel tự động. Bạn chỉ cần join vào kênh tạo phòng, bot sẽ tự động tạo một phòng riêng cho bạn.
+
+## Danh mục phòng
+
+1. **Phòng nhóm (SG-Small group):** Dành cho nhóm nhỏ học chung, giới hạn từ 3-15 người
+
+2. **Phòng đôi (CP-Couple):** Dành cho các cặp đôi muốn cùng học với nhau, giới hạn 2 người(không thay đổi)
+
+3. **Phòng đơn (SA-Study alone):** Dành cho các bạn muốn học 1 mình, giới hạn 1 người(không thay đổi)
+
+4. **Phòng tùy chỉnh (CR-Custom room):** Dành cho các bạn muốn học 1 mình, giới hạn 1 người(không thay đổi)
+
+5. **Phòng tâm sự:** Dành cho mục đích khác như chia sẻ cuộc sống, nói chuyện phiếm, tâm sự tuổi hồng...
+
+## Cách dùng
 
 ### Tạo phòng
 
 1. Vào kênh tạo phòng (thường có tên "Tạo phòng học" hoặc tương tự)
 2. Bot tự động tạo phòng riêng với số thứ tự
-3. Khi category đầy, bot sẽ tự tạo category mới
-
-Phòng sẽ bị xóa tự động khi trống (trừ phòng VIP/upgrade).
+3. Phòng sẽ bị xóa tự động khi trống
 
 ### Bảng điều khiển phòng (`/room_board`)
 
@@ -56,11 +66,11 @@ Gõ trực tiếp trong text channel:
 | `.status` | Xem trạng thái phòng |
 | `.reset` | Reset quyền phòng |
 
-### Nâng cấp phòng VIP (`/room_upgrade`)
+## Nâng cấp phòng VIP
 
-Phòng VIP (dành cho Leader/Manager):
+Khi room tồn tại đến một thời gian nhất định, Admin có thể cân nhắc đưa phòng trở thành phòng VIP
+Đặc quyền phòng VIP:
 - Không bị xóa tự động khi trống
 - Có role riêng cho phòng
+- Có role riêng cho chủ phòng
 - Quản lý thành viên riêng
-
-Dùng `/room_downgrade` để hạ cấp phòng VIP về mặc định.

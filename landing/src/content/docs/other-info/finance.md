@@ -40,7 +40,7 @@ Vì vậy BetterMe cam kết:
 
 **Ngân hàng:** Timo
 
-**Số tài khoản:** 00000000000
+**Số tài khoản:** TIMOA2VPZA1S6XM
 :::
 **QR chuyển khoản:**
 ![QR BetterMe](/qr-betterme.png)

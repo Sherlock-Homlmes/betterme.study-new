@@ -29,10 +29,15 @@ export default defineConfig({
           label: 'Discord học tập',
           items: [
             // TODO: chuyen sang sub directory
-            { label: 'Hệ thống kênh', link: '/discord-guides/channel-structure' },
-            { label: 'Phòng học Voice Channel', link: '/discord-guides/voice-channel' },
-            { label: 'Confession', link: '/discord-guides/confession' },
-            { label: 'Hữu duyên', link: '/discord-guides/destiny' },
+            {
+              label: 'Hệ thống kênh',
+              items: [
+                { label: 'Giới thiệu chung', link: '/discord-guides/channel-structure/intro' },
+                { label: 'Phòng học Voice Channel', link: '/discord-guides/channel-structure/voice-channel' },
+                { label: 'Confession', link: '/discord-guides/channel-structure/confession' },
+                { label: 'Hữu duyên', link: '/discord-guides/channel-structure/destiny' },
+              ],
+            },
             {
               label: 'Hệ thống bot',
               items: [
