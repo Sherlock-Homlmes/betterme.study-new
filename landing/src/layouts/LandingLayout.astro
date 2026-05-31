@@ -4,9 +4,17 @@ import Navbar from '../components/Navbar.astro';
 
 interface Props {
   title?: string;
+  description?: string;
+  canonicalURL?: string;
 }
 
-const { title = 'BetterMe — Better Everyday' } = Astro.props;
+const { 
+  title = 'Betterme-Cộng Đồng Học Tập Dành Cho Người Việt',
+  description = 'BetterMe — cộng đồng học tập phi lợi nhuận lớn nhất Việt Nam. 18500+ thành viên, phòng học 24/7, Pomodoro, AI bot, tìm study buddy. Tham gia ngay!',
+  canonicalURL = 'https://betterme.study/',
+} = Astro.props;
+
+const ogImage = 'https://betterme.study/og-image.png';
 ---
 
 <!doctype html>
@@ -15,6 +23,36 @@ const { title = 'BetterMe — Better Everyday' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="BetterMe" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "BetterMe Community",
+      "url": "https://betterme.study",
+      "description": "Cộng đồng học tập phát triển bản thân người Việt trên Discord.",
+      "foundingDate": "2021-08",
+      "numberOfMembers": { "@type": "QuantitativeValue", "value": 18500 },
+      "nonprofitStatus": "NonprofitType",
+      "sameAs": ["https://discord.gg/betterme"],
+      "areaServed": { "@type": "Country", "name": "Vietnam" },
+      "availableLanguage": "Vietnamese"
+    })} />
+
     <link rel="alternate" type="application/rss+xml" title="BetterMe" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

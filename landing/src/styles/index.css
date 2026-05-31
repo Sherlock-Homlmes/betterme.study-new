@@ -357,6 +357,35 @@
   background: transparent;
 }
 
+.pomo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.pomo-placeholder:hover {
+  color: var(--text-main);
+}
+
+.pomo-placeholder-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.pomo-placeholder-inner p {
+  font-family: var(--font-headings);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 .footer-pet-container {
   position: absolute;
   width: 192px;

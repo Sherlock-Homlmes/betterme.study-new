@@ -9,6 +9,7 @@ export default defineConfig({
     starlight({
       title: 'BetterMe',
       head: [
+        { tag: 'meta', attrs: { property: 'og:locale', content: 'vi_VN' } },
         { tag: 'link', attrs: { rel: 'alternate', type: 'application/rss+xml', title: 'BetterMe', href: '/rss.xml' } },
         { tag: 'link', attrs: { rel: 'sitemap', href: '/sitemap-index.xml' } },
       ],

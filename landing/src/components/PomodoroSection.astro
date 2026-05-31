@@ -11,9 +11,36 @@
     </div>
 
     <div class="glass-card pomo-iframe-wrapper reveal stagger-2">
+      <div id="pomo-placeholder" class="pomo-placeholder">
+        <div class="pomo-placeholder-inner">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p>Đang tải Pomodoro Timer...</p>
+        </div>
+      </div>
       <iframe
-        src="https://pomodoro.betterme.study/?preview=true"
-        title="BetterMe Pomodoro Clock"></iframe>
+        id="pomo-iframe"
+        data-src="https://pomodoro.betterme.study/?preview=true"
+        title="BetterMe Pomodoro Timer"
+        loading="lazy"
+        style="display:none;"
+      ></iframe>
     </div>
   </div>
 </section>
+
+<script>
+  const wrapper = document.querySelector('.pomo-iframe-wrapper');
+  const placeholder = document.getElementById('pomo-placeholder');
+  const iframe = document.getElementById('pomo-iframe');
+  if (wrapper && placeholder && iframe) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        iframe.src = iframe.dataset.src || '';
+        iframe.style.display = 'block';
+        iframe.addEventListener('load', () => { placeholder.style.display = 'none'; });
+        observer.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    observer.observe(wrapper);
+  }
+</script>
