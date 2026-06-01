@@ -99,16 +99,19 @@ class Posts(Document):
                             }
                         },
                     )
+                # TODO: fix this
+                elif pfield == "match_is_expired" and params.match_is_expired is not None:
+                    now = vn_now().date()
+                    if params.match_is_expired:
+                        find_queries["other_information.deadline"] = {"$lt": now.isoformat()}
+                    else:
+                        find_queries["other_information.deadline"] = {"$gte": now.isoformat()}
                 elif pfield.startswith("match_"):
                     match_values = getattr(params, pfield)
                     if match_values:
-                        # TODO: fix this
-                        # if len(values := match_values.split(",")) > 1:
                         find_queries[pfield.replace("match_", "")] = {
                             "$elemMatch": {"$in": match_values.split(",")}
                         }
-                        # else:
-                        #     agg_queries.append({pfield.replace("match_", ""): match_values})
         return find_queries, agg_queries
 
     ### Methods

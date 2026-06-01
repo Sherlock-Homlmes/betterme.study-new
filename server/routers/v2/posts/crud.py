@@ -1,5 +1,6 @@
 from typing import List, Optional
-from pydantic import model_validator
+import datetime
+from pydantic import model_validator, computed_field
 from beanie import PydanticObjectId
 from beanie.operators import ElemMatch
 from pydantic_core._pydantic_core import ValidationError
@@ -13,6 +14,7 @@ from utils.beanie_odm import (
     count_total,
     cursor_pipeline_rearrange,
 )
+from utils.time_modules import vn_now
 from .schemas import GetPostListResponse
 
 
@@ -23,7 +25,7 @@ class PostListProject(GetPostListResponse):
     class Settings:
         projection = get_projections_from_model(
             GetPostListResponse,
-            exclude_fields=["slug"],
+            exclude_fields=["slug", "is_expired"],
             map_fields={
                 "deadline": "other_information.deadline",
             },
@@ -34,6 +36,16 @@ class PostListProject(GetPostListResponse):
         if not len(values.slug) and values.title:
             values.slug = gen_slug(values.title)
         return values
+
+    @computed_field
+    @property
+    def is_expired(self) -> bool:
+        if self.deadline is None:
+            return False
+        deadline = self.deadline
+        if isinstance(deadline, str):
+            deadline = datetime.date.fromisoformat(deadline)
+        return vn_now().date() > deadline
 
 
 class PostCRUD(BaseCRUD[DBPost]):

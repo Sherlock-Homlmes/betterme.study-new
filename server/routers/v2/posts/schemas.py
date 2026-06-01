@@ -44,6 +44,7 @@ class BasePost(BaseModel):
 class GetPostListResponse(BasePost):
     id: IDStr
     deadline: Optional[str] = datetime.date
+    is_expired: bool = False
 
 
 class GetPostResponse(BasePost):
@@ -61,6 +62,7 @@ class GetPostResponse(BasePost):
 class GetPostListParams(Pagination):
     match_tags: Optional[str] = None
     match_search: Optional[str] = None
+    match_is_expired: Optional[bool] = None
 
 
 class GetPostParams(BaseModel):
