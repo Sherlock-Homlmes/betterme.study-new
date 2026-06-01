@@ -129,6 +129,8 @@
   display: flex;
   gap: 0;
   white-space: nowrap;
+  will-change: transform;
+  backface-visibility: hidden;
   animation: marquee 25s linear infinite;
 }
 
@@ -613,4 +615,8 @@
 
 .marquee-rotated-4-right {
   transform: rotate(4deg) scale(1.05);
+}
+
+.marquee-reverse .marquee-inner {
+  animation: marquee 25s linear infinite reverse;
 }
