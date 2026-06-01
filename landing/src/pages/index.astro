@@ -5,6 +5,7 @@ import MarqueeStrip from '../components/MarqueeStrip.astro';
 import WaveDivider from '../components/WaveDivider.astro';
 import AboutSection from '../components/AboutSection.astro';
 import PomodoroSection from '../components/PomodoroSection.astro';
+import NewsSection from '../components/NewsSection.astro';
 import FooterCTA from '../components/FooterCTA.astro';
 import '../styles/index.css';
 ---
@@ -12,10 +13,13 @@ import '../styles/index.css';
 <LandingLayout>
   <Hero />
   <MarqueeStrip />
-  <WaveDivider />
+  <WaveDivider/>
   <AboutSection />
-  <WaveDivider reversed />
-  <MarqueeStrip class="marquee-rotated" />
+  <WaveDivider reversedy />
+  <MarqueeStrip class="marquee-rotated-4-left" />
   <PomodoroSection />
+  <MarqueeStrip class="marquee-rotated-4-right" />
+  <WaveDivider reversedx reversedy />
+  <NewsSection />
   <FooterCTA />
 </LandingLayout>

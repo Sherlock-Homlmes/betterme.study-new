@@ -29,18 +29,11 @@
 </section>
 
 <script>
-  const wrapper = document.querySelector('.pomo-iframe-wrapper');
-  const placeholder = document.getElementById('pomo-placeholder');
-  const iframe = document.getElementById('pomo-iframe');
-  if (wrapper && placeholder && iframe) {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        iframe.src = iframe.dataset.src || '';
-        iframe.style.display = 'block';
-        iframe.addEventListener('load', () => { placeholder.style.display = 'none'; });
-        observer.disconnect();
-      }
-    }, { rootMargin: '200px' });
-    observer.observe(wrapper);
-  }
+  import { lazyLoadIframe } from '../scripts/lazyIframe';
+
+  lazyLoadIframe({
+    wrapperSelector: '.pomo-iframe-wrapper',
+    placeholderSelector: '#pomo-placeholder',
+    iframeSelector: '#pomo-iframe',
+  });
 </script>

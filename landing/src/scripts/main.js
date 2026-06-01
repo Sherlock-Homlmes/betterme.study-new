@@ -92,10 +92,12 @@ const statsObserver = new IntersectionObserver(
 
         if (numEl) {
           const target = parseInt(numEl.getAttribute("data-target"));
+          numEl.style.minWidth = numEl.offsetWidth + "px";
           animateCounter(numEl, target);
         }
 
         if (numStableEl) {
+          numStableEl.style.minWidth = numStableEl.offsetWidth + "px";
           animateStable(numStableEl);
         }
 
@@ -540,105 +542,6 @@ window.addEventListener("resize", () => {
   activeCompanions.forEach((pet) => pet.handleResize());
 });
 
-async function loadDiscordWidget() {
-  const container = document.getElementById("discord-widget-container");
-  const fallbackIframe = `
-          <div style="display: flex; justify-content: center; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(24, 24, 27, 0.05);">
-              <iframe src="https://discord.com/widget?id=880360143768924210&theme=light" width="100%" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-          </div>
-      `;
-
-  try {
-    const response = await fetch(
-      "https://discord.com/api/guilds/880360143768924210/widget.json"
-    );
-    if (!response.ok) throw new Error("API request failed");
-    const data = await response.json();
-
-    let html = `
-            <div class="discord-mockup">
-                <div class="discord-header">
-                    <div class="discord-title">
-                        <span class="pulse-dot"></span>
-                        <strong style="color: #18181b; font-size: 1.1rem;">${data.name}</strong>
-                        <span class="discord-badge" style="margin-left: 6px;">Discord's partner</span>
-                    </div>
-                    <span style="color: #10b981; font-weight: bold; font-size: 0.9rem;">${data.presence_count.toLocaleString()} Online</span>
-                </div>
-
-                <div class="voice-channels" style="max-height: 445px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;">
-                    <div class="channel-title" style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: #71717a; margin-bottom: 12px;">📚 Kênh Học Tập Hoạt Động</div>
-        `;
-
-    let channelCount = 0;
-    if (data.channels && data.channels.length > 0) {
-      data.channels.forEach((chan) => {
-        const activeMembers = data.members
-          ? data.members.filter((m) => m.channel_id === chan.id)
-          : [];
-
-        if (activeMembers.length > 0 || channelCount < 3) {
-          channelCount++;
-          html += `
-                        <div class="voice-channel">
-                            <div style="display: flex; justify-content: space-between; align-items: center; color: #18181b; font-size: 0.9rem; font-weight: 500;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="pulse-dot"></span>
-                                    <span style="font-weight: 600;">🔊 ${chan.name}</span>
-                                </div>
-                                <span style="font-size: 0.8rem; color: #71717a;">${activeMembers.length} đang học</span>
-                            </div>
-                            ${activeMembers.length > 0
-              ? `
-                                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-left: 16px;">
-                                    ${activeMembers
-                .slice(0, 5)
-                .map(
-                  (m) => `
-                                        <div style="display: flex; align-items: center; gap: 4px; background: #e4e4e7; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #18181b; border: 1px solid #d4d4d8;">
-                                            <img src="${m.avatar_url}" style="width: 14px; height: 14px; border-radius: 50%;" />
-                                            <span style="font-weight: 500;">${m.username}</span>
-                                        </div>
-                                    `
-                )
-                .join("")}
-                                    ${activeMembers.length > 5 ? `<span style="font-size: 0.75rem; color: #71717a; align-self: center; font-weight: 600;">+${activeMembers.length - 5}</span>` : ""}
-                                </div>
-                            `
-              : ""
-            }
-                        </div>
-                    `;
-        }
-      });
-    }
-
-    if (channelCount === 0) {
-      html += `<div style="color: #71717a; font-size: 0.85rem; text-align: center; padding: 20px 0;">Hiện chưa có ai vào kênh thoại. Gia nhập ngay nhé!</div>`;
-    }
-
-    html += `<div style="text-align: center; padding: 16px 0 4px 0; color: #71717a; font-size: 0.85rem; font-style: italic;">✨ Còn nhiều phòng khác đang đợi bạn khám phá!</div>`;
-
-    const inviteLink =
-      data.instant_invite || "https://discord.gg/betterme";
-    html += `
-                    </div>
-                    <a href="${inviteLink}" target="_blank" class="btn btn-purple interactive" style="width: 100%; justify-content: center;">
-                        Gia Nhập Server Ngay
-                    </a>
-                </div>
-            `;
-    container.innerHTML = html;
-  } catch (err) {
-    console.warn(
-      "API fetch thất bại, tự động chuyển đổi sang nhúng Iframe tiêu chuẩn:",
-      err
-    );
-    container.innerHTML = fallbackIframe;
-  }
-}
-
 window.addEventListener("load", () => {
   initPets();
-  loadDiscordWidget();
 });

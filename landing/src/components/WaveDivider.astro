@@ -1,12 +1,14 @@
 ---
 interface Props {
-  reversed?: boolean;
+  reversedy: boolean;
+  reversedx: boolean;
+  style?: string;
 }
 
-const { reversed = false } = Astro.props;
+const { reversedy = false, reversedx = false, style = "" } = Astro.props;
 ---
 
-<div class:list={["divider", { "divider-reversed": reversed }]}>
+<div class:list={["divider", { "divider-reversedx": reversedx, "divider-reversedy": reversedy }]} style={style}>
   <svg
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"

@@ -1,0 +1,82 @@
+---
+const tags = [
+  'Câu lạc bộ',
+  'Tình nguyện',
+  'Khóa học',
+  'Học bổng',
+  'Sự kiện-Cuộc thi',
+];
+---
+
+<section class="news-section" id="news">
+  <div class="container" style="position: relative;">
+    <div class="section-title reveal">
+      <h2>Tin tức — BetterMe News</h2>
+      <p style="color: var(--text-muted);">
+        Tổng hợp, chia sẻ các chương trình trao đổi, học bổng, CLB, cuộc thi, hoạt động tình nguyện và các cơ hội phát triển kỹ năng khác.
+      </p>
+    </div>
+
+    <div class="news-layout reveal stagger-2">
+      <div class="news-iframe-col glass-card news-iframe-wrapper">
+        <div id="news-placeholder" class="news-placeholder">
+          <div class="news-placeholder-inner">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+            <p>Đang tải BetterMe News...</p>
+          </div>
+        </div>
+        <iframe
+          id="news-iframe"
+          data-src="https://news.betterme.study"
+          title="BetterMe News"
+          loading="lazy"
+          style="display:none;"
+        ></iframe>
+      </div>
+
+      <div class="news-tags-col">
+        <h3 class="news-tags-title">Khám phá theo chủ đề</h3>
+        <div class="news-tags-list">
+          {tags.map((tag) => (
+            <button
+              class="news-tag-btn"
+              data-tag={tag}
+              data-base="https://news.betterme.study"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { lazyLoadIframe } from '../scripts/lazyIframe';
+
+  lazyLoadIframe({
+    wrapperSelector: '.news-iframe-wrapper',
+    placeholderSelector: '#news-placeholder',
+    iframeSelector: '#news-iframe',
+  });
+
+  const newsIframe = document.getElementById('news-iframe');
+  const tagButtons = document.querySelectorAll('.news-tag-btn');
+
+  tagButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag;
+      const base = btn.dataset.base;
+      if (newsIframe) {
+        newsIframe.src = `${base}/?match_tags=${encodeURIComponent(tag)}`;
+        newsIframe.style.display = 'block';
+      }
+      tagButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const placeholder = document.getElementById('news-placeholder');
+      if (placeholder) placeholder.style.display = 'none';
+    });
+  });
+</script>
