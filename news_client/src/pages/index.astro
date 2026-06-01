@@ -34,6 +34,8 @@ const currentPage = Astro.url.searchParams.get("page");
 if (!currentPage || !parseInt(currentPage))
 	Astro.url.searchParams.set("page", "1");
 Astro.url.searchParams.set("per_page", "23");
+if (!Astro.url.searchParams.has("match_is_expired"))
+	Astro.url.searchParams.set("match_is_expired", "false");
 const response = await fetch(`${fetchLink}/posts?` + Astro.url.searchParams);
 const postsData = ((await response.json()) as GetPostListResponse[]).map(
 	(postData) => {

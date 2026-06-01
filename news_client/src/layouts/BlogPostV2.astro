@@ -13,15 +13,6 @@ const createdAt = new Date(postData.created_at);
 const updatedAt = postData.updated_at ? new Date(postData.updated_at) : null;
 const articleDate = createdAt.toISOString();
 const currentDate = new Date();
-const isPostExpired = (deadline: string) => {
-	if (!deadline) return false;
-	const dateParts = deadline.split("/");
-	const expiredDate = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-	return expiredDate <= currentDate;
-};
-const shouldShowExpiredTag = isPostExpired(
-	postData.other_information?.deadline,
-);
 ---
 
 <BaseLayout
@@ -33,7 +24,7 @@ const shouldShowExpiredTag = isPostExpired(
 	articleDate={articleDate}
 	createdAt={createdAt}
 	updatedAt={updatedAt}
-	isPostExpired={shouldShowExpiredTag}
+	isExpired={postData.is_expired}
 >
 	<article class='min-w-full md:py-4 sm:max-w-none md:max-w-none'>
 		<header class='mb-3 flex flex-col justify-center items-center gap-6'>
@@ -76,7 +67,7 @@ const shouldShowExpiredTag = isPostExpired(
 				)
 			}
 			{
-				shouldShowExpiredTag && (
+				postData.is_expired && (
 					<Image
 						src='/expired-news-tag.png'
 						width={150}

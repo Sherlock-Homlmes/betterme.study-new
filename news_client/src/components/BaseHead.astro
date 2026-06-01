@@ -13,7 +13,7 @@ export interface Props {
 	articleDate?: string | undefined;
 	createdAt: string;
 	updatedAt: string | null;
-	isPostExpired?: boolean | null;
+	isExpired?: boolean | null;
 }
 
 const {
@@ -24,7 +24,7 @@ const {
 	keywords = [],
 	createdAt,
 	updatedAt,
-	isPostExpired = false
+	isExpired = false
 } = Astro.props;
 
 const ENVIRONMENT = import.meta.env.ENVIRONMENT;
@@ -149,7 +149,7 @@ if (schema)
 		</>
 	)
 }
-{isPostExpired && (
+{isExpired && (
 	<meta name="robots" content="noindex, follow" />
 )}
 <!-- Canonical URL -->

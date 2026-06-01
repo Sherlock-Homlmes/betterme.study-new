@@ -9,7 +9,7 @@ import _ from "lodash";
 import timerPresets from "@/assets/settings/timerPresets";
 import ChangeTracker from "@/utils/changeTracker";
 import {useErrorStore} from "./common";
-import {api, TokenManager} from "@/utils/betterFetch";
+import {api} from "@/utils/betterFetch";
 import { isEmpty } from "lodash";
 import { useDark } from '@vueuse/core';
 
@@ -96,17 +96,6 @@ export const useAuthStore = createGlobalState(() => {
 		if (!response?.ok) throw showError("Fail to update user setting");
 	};
 
-	const loginByDiscord = async (code: string) => {
-		const response = await fetch(`${API_URL}/auth/discord-oauth?code=${code}`);
-		const data = await response.json();
-		if (data?.token) {
-			// set auth using TokenManager
-			TokenManager.setToken(data.token);
-			// check if user is accessable or not
-			await getCurrentUser();
-		}
-	};
-
 	const getActiveSchedulePreset = computed(() => {
 		const index = Object.entries(timerPresets).findIndex(([_key, value]) => {
 			return (
@@ -184,7 +173,6 @@ export const useAuthStore = createGlobalState(() => {
 		// actions
 		getCurrentUser,
 		getCurrentUserSetting,
-		loginByDiscord,
 		applyPreset,
 	};
 });

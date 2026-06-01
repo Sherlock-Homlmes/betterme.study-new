@@ -39,6 +39,7 @@
 		const searchParams = {
 			per_page: 20,
 			match_search: searchContext,
+			match_is_expired: false,
 		}
 		if (selected && selected.id) searchParams.match_tags = selected.id
 

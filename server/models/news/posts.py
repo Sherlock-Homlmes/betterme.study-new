@@ -103,9 +103,13 @@ class Posts(Document):
                 elif pfield == "match_is_expired" and params.match_is_expired is not None:
                     now = vn_now().date()
                     if params.match_is_expired:
-                        find_queries["other_information.deadline"] = {"$lt": now.isoformat()}
+                        find_queries["other_information.deadline"] = {"$lt": now.isoformat(), "$ne": None}
                     else:
-                        find_queries["other_information.deadline"] = {"$gte": now.isoformat()}
+                        find_queries["$or"] = [
+                            {"other_information.deadline": {"$gte": now.isoformat()}},
+                            {"other_information.deadline": None},
+                            {"other_information": None},
+                        ]
                 elif pfield.startswith("match_"):
                     match_values = getattr(params, pfield)
                     if match_values:

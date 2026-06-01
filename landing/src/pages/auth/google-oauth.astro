@@ -1,0 +1,19 @@
+---
+const redirectUrl = import.meta.env.PUBLIC_POMODORO_URL || 'https://pomodoro.betterme.study';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logging in...</title>
+  </head>
+  <body>
+    <p id="status">Logging in...</p>
+    <script define:vars={{ redirectUrl }}>
+      document.getElementById('status').textContent = 'Google login is not yet supported. Redirecting...';
+      setTimeout(() => { window.location.href = redirectUrl; }, 2000);
+    </script>
+  </body>
+</html>

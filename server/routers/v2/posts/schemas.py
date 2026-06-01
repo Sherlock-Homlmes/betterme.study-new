@@ -3,12 +3,13 @@ import datetime
 from typing import List, Optional, Union
 
 # libraries
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, computed_field
 
 # local
 from base.custom.types import IDStr
 from base.custom.schemas import Pagination
 from utils.text_convertion import gen_slug
+from utils.time_modules import vn_now
 
 
 # TODO: remove duplicate code(using project beanie)
@@ -44,7 +45,13 @@ class BasePost(BaseModel):
 class GetPostListResponse(BasePost):
     id: IDStr
     deadline: Optional[str] = datetime.date
-    is_expired: bool = False
+
+    @computed_field
+    @property
+    def is_expired(self) -> Optional[bool]:
+        if self.deadline is None:
+            return False
+        return vn_now() > datetime.datetime.fromisoformat(self.deadline)
 
 
 class GetPostResponse(BasePost):

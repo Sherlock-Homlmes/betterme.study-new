@@ -10,6 +10,7 @@ export interface GetPostListParams {
 	per_page?: number;
 	match_tags?: string;
 	match_search?: string;
+	match_is_expired?: boolean;
 }
 export interface GetPostListResponse {
 	id: string;
@@ -23,6 +24,7 @@ export interface GetPostListResponse {
 	tags: string[];
 	keywords: string[];
 	view: number;
+	is_expired?: boolean;
 }
 export interface GetPostParams {
 	increase_view?: boolean;

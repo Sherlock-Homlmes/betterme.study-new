@@ -30,6 +30,9 @@ services:
       - nginx-net
     ports:
       - "3001:3000"
+    environment:
+      - PUBLIC_COOKIE_DOMAIN=.local.betterme.study
+      - PUBLIC_POMODORO_URL=http://pomodoro.local.betterme.study
     command: ["npm", "run", "dev"]
     # command: ["npm", "run", "preview", "--", '--host', "0.0.0.0", "--port", "3000"]
 
@@ -44,7 +47,7 @@ services:
       - VITE_PLATFORM=web
       - VITE_API_URL=http://localhost:8080/api
       - VITE_LIVEKIT_URL=ws://localhost:7880
-      - VITE_COOKIE_DOMAIN=localhost
+      - VITE_COOKIE_DOMAIN=.local.betterme.study
     networks:
       - nginx-net
     ports:
@@ -87,7 +90,6 @@ services:
       - .:/var/task
       - uv-cache:/root/.cache/uv
     working_dir: /var/task/server
-    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
     environment:
       - HOME=/tmp
       - ENV=DEV

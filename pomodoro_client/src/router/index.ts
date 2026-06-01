@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, createWebHashHistory, type RouteRecordRaw } from 'vue-router';
 import {runtimeConfig} from '@/config/runtimeConfig';
 import Index from '@/pages/index.vue';
-import DiscordOAuth from '@/pages/auth/discord-oauth.vue';
 import DesktopPIPView from '@/pages/DesktopPIPView.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -18,11 +17,6 @@ const routes: RouteRecordRaw[] = [
     path: '/vi',
     name: 'home-vi',
     component: Index,
-  },
-  {
-    path: '/auth/discord-oauth',
-    name: 'discord-oauth',
-    component: DiscordOAuth,
   },
   {
     path: '/:pathMatch(.*)*',
