@@ -31,11 +31,11 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			fetchLink: process.env.DEV
-				? "http://local.betterme.page/api"
-				: process.env.FETCH_LINK ?? "https://api.admin.news.betterme.page/api",
+				? "http://local.betterme.dev/api"
+				: process.env.FETCH_LINK ?? "https://api.admin.news.betterme.dev/api",
 			clientLink: process.env.DEV
-				? "http://news.local.betterme.page"
-				: "https://news.betterme.page",
+				? "http://news.local.betterme.dev"
+				: "https://news.betterme.dev",
 		},
 	},
 });

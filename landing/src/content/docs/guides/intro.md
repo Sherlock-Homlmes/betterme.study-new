@@ -43,6 +43,6 @@ Dù bạn đang là học sinh, sinh viên hay người đi làm, BetterMe luôn
 
 * 👉 **Discord**: https://discord.gg/betterme
 
-* 🌐 **Pomodoro**: https://pomodoro.betterme.page
+* 🌐 **Pomodoro**: https://pomodoro.betterme.dev
 
-* 📰 **BetterMe News**: https://news.betterme.page
+* 📰 **BetterMe News**: https://news.betterme.dev

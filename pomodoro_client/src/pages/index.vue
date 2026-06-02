@@ -120,7 +120,7 @@ const headData = computed(()=>{
     link: [
       {
         rel: 'canonical',
-        href: `https://pomodoro.betterme.page/${locale.value}`
+        href: `https://pomodoro.betterme.dev/${locale.value}`
       },
     ],
     script: [
@@ -131,7 +131,7 @@ const headData = computed(()=>{
           "@type": "SoftwareApplication",
           name: t('meta.title'),
           description: t('meta.description'),
-          url: `https://pomodoro.betterme.page/${locale.value}`,
+          url: `https://pomodoro.betterme.dev/${locale.value}`,
           applicationCategory: 'UtilitiesApplication',
           operatingSystem: 'Web Browser',
           inLanguage: locale.value

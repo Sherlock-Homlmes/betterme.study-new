@@ -60,7 +60,7 @@ def create_embed(
     if is_testing is False and post_id is not None:
         embed.add_field(
             name="Xem thêm",
-            value=f"https://news.betterme.page/posts/{gen_slug(data.title)}_{post_id}",
+            value=f"https://news.betterme.dev/posts/{gen_slug(data.title)}_{post_id}",
             inline=False,
         )
 

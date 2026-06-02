@@ -8,7 +8,7 @@ from routers.v2.posts.schemas import GetPostResponse
 
 pytest_plugins = ("pytest_asyncio",)
 
-BANNER_IMG = "https://s3.tebi.io/testfiles.news.betterme.page/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png"
+BANNER_IMG = "https://s3.tebi.io/testfiles.news.betterme.dev/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png"
 
 
 def _make_get_post_response(**overrides):

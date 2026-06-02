@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://news.betterme.page/sitemap.xml
+Sitemap: https://news.betterme.dev/sitemap.xml

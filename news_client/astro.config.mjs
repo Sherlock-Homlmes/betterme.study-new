@@ -12,7 +12,7 @@ import svelte from "@astrojs/svelte";
 export default defineConfig({
 	output: "server",
 	adapter: cloudflare(),
-	site: "https://news.betterme.page/",
+	site: "https://news.betterme.dev/",
 	// Write here your website url
 	markdown: {
 		drafts: true,

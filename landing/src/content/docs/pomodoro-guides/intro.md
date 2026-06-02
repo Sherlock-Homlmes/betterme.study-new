@@ -25,6 +25,6 @@ Mục tiêu của dự án không chỉ là đếm thời gian học tập mà c
 
 ## Bắt đầu
 
-[Truy cập](https://pomodoro.betterme.page)
+[Truy cập](https://pomodoro.betterme.dev)
 
 Sau đó chọn tính năng phù hợp với nhu cầu của bạn trong các tài liệu bên dưới.

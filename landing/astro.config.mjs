@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://betterme.page',
+  site: 'https://betterme.dev',
   integrations: [
     starlight({
       title: 'BetterMe',

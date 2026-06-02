@@ -27,7 +27,7 @@
 		"sidePanel"
 	],
 	"host_permissions": [
-		"*://*.betterme.page/*"
+		"*://*.betterme.dev/*"
 	],
 	"web_accessible_resources": [
 		{
@@ -41,7 +41,9 @@
 				"/icon_monochrome.png",
 				"/index.html"
 			],
-			"matches": ["<all_urls>"]
+			"matches": [
+				"<all_urls>"
+			]
 		}
 	],
 	"content_security_policy": {

@@ -191,7 +191,7 @@ class Posts(Document):
         #     facebook_post = post_to_fb(
         #         origin="Ivolunteer.vn",
         #         content="😍 " + current_data.title + "\n" + "😍 " + current_data.description + "\n",
-        #         comment=f"Xem thêm thông tin tại: https://news.betterme.page/posts/{gen_slug(post.title)}_{post.id}",
+        #         comment=f"Xem thêm thông tin tại: https://news.betterme.dev/posts/{gen_slug(post.title)}_{post.id}",
         #         hashtags=current_data.keywords,
         #         image_name=f"scrap/data/media/{current_data.banner}",
         #     )

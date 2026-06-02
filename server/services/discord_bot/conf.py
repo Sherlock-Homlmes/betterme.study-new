@@ -24,7 +24,7 @@ class Bot(commands.Bot):
 
         #         channel = await server_info.guild.fetch_channel(1081937675151482945 if is_dev_env else 891909866355048548)
         #         message = await channel.send("""
-        # **Reaction để nhận thông tin mới nhất về các tin tức của news.betterme.page**
+        # **Reaction để nhận thông tin mới nhất về các tin tức của news.betterme.dev**
         # 💛: CLB-Tình nguyện
         # 💚: Khóa học-Kĩ năng
         # 💙: Học bổng

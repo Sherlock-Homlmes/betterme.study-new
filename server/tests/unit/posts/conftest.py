@@ -11,7 +11,7 @@ async def create_post_data(clean_db):
 
     admin_user = Users(
         _id=PydanticObjectId("65d767d163bc47aa66a84ef8"),
-        email="atang@news.betterme.page",
+        email="atang@news.betterme.dev",
         discord_id="123456",
         name="Atang",
         avatar="https://pic.com",
@@ -35,7 +35,7 @@ async def create_post_data(clean_db):
                 "Tình nguyện",
             ],
             other_information=other_info,
-            banner_img="https://s3.tebi.io/testfiles.news.betterme.page/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png",
+            banner_img="https://s3.tebi.io/testfiles.news.betterme.dev/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png",
             content="Some title",
             author="Ivolunteer.vn",
             keywords=[
@@ -43,7 +43,7 @@ async def create_post_data(clean_db):
                 "keyword 2",
                 "keyword 3",
             ],
-            og_img="https://s3.tebi.io/testfiles.news.betterme.page/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png",
+            og_img="https://s3.tebi.io/testfiles.news.betterme.dev/6e590aaf_Ban-sao-cua-Kich-thuoc-800x500px_Anh-Dai-Dien-Bai-Dang-Website-iVolunteer-40.png",
         )
     ]
 

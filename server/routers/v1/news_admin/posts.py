@@ -73,7 +73,7 @@ async def new_post(
         other_information=other_info,
         banner_img=banner_img,
         content=payload.content,
-        author="news.betterme.page",
+        author="news.betterme.dev",
         # SEO
         keywords=payload.keywords,
         og_img=banner_img,

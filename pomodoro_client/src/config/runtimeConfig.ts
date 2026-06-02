@@ -14,11 +14,11 @@ export interface RuntimeConfig {
 
 export const runtimeConfig: RuntimeConfig = {
 	public: {
-		API_URL: import.meta.env.VITE_API_URL || 'https://api.betterme.page/api',
+		API_URL: import.meta.env.VITE_API_URL || 'https://api.betterme.dev/api',
 		PLATFORM: (import.meta.env.VITE_PLATFORM as 'web' | 'desktop' | 'extension' | 'mobile') || 'web',
-		URL: import.meta.env.VITE_URL || 'https://betterme.page',
+		URL: import.meta.env.VITE_URL || 'https://betterme.dev',
 		PACKAGE_VERSION: import.meta.env.VITE_PACKAGE_VERSION || '0.2.0',
-		LIVEKIT_URL: import.meta.env.VITE_LIVEKIT_URL || 'wss://livekit.betterme.page',
-		COOKIE_DOMAIN: import.meta.env.VITE_COOKIE_DOMAIN || '.betterme.page',
+		LIVEKIT_URL: import.meta.env.VITE_LIVEKIT_URL || 'wss://livekit.betterme.dev',
+		COOKIE_DOMAIN: import.meta.env.VITE_COOKIE_DOMAIN || '.betterme.dev',
 	},
 };
