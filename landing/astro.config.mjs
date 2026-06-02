@@ -62,6 +62,10 @@ export default defineConfig({
         },
       ],
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) =>
+        !page.includes('/auth/discord-oauth/') &&
+        !page.includes('/auth/google-oauth/'),
+    }),
   ],
 });
