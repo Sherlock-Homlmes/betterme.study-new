@@ -2,7 +2,7 @@
 import SettingsPanel from '@/components/panelSettings/index.vue'
 import AIChatPanel from '@/components/panelAIChat/index.vue'
 import TaskPanel from '@/components/panelTask/index.vue'
-import PomodoroRoomPanel from '@/components/panelPomodoroRooms/index.vue'
+// import PomodoroRoomPanel from '@/components/panelPomodoroRooms/index.vue'
 import { useOpenPanels } from '@/stores/openpanels'
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from '@/stores/settings'
@@ -21,7 +21,7 @@ div(class="relative w-screen h-screen")
     TaskPanel(v-if="openPanels.todo" class="fixed bottom-0 z-10 w-full md:max-w-lg transition-all rounded-t-xl md:right-4 md:pb-8" :editing="[0].includes(timerState)" @hide="openPanels.todo = false")
   //- transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
     AIChatPanel(v-if="openPanels.ai" class="right-0")
-  transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
+  //- transition(enter-from-class="translate-x-32 opacity-0" enter-active-class="transition duration-300 ease-out" leave-to-class="scale-95 opacity-0" leave-active-class="transition ease-in")
     PomodoroRoomPanel(v-show="openPanels.pomodoroRoom" class="right-0")
   slot
 </template>
