@@ -203,7 +203,8 @@ div(class="flex flex-col items-center justify-center w-screen min-h-screen p-6 t
 
 <style lang="scss" scoped>
 .showerror-transition-enter-active {
-  @apply transition-all duration-700;
+  transition-property: all;
+  transition-duration: 700ms;
 }
 
 .showerror-transition-enter {

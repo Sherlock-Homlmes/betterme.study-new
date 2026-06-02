@@ -78,44 +78,4 @@ div(class="flex flex-row items-center gap-2")
   span(class="min-w-[2ch] text-center" :class="props.valueClass" v-text="`${props.prefix}${state.value}${props.postfix}`")
 </template>
 
-<style lang="scss" scoped>
-@import "@/assets/css/tailwind.css";
 
-@mixin range-track {
-  @apply h-1 min-w-0 rounded-full bg-primary/20 dark:bg-primary-dark/20 active:bg-primary/40 dark:active:bg-primary-dark/40;
-}
-
-@mixin range-thumb {
-  @apply rounded-full border-none bg-primary dark:bg-primary-dark scale-90 transition-all duration-300 active:scale-125 appearance-none size-4 -mt-1.5;
-
-  &:focus {
-    @apply ring ring-primary dark:ring-primary-dark;
-  }
-}
-
-:deep(.input-number-range) {
-  &::-moz-range-thumb {
-    @include range-thumb;
-  }
-
-  &::-moz-range-track {
-    @include range-track;
-  }
-
-  &::-ms-thumb {
-    @include range-thumb;
-  }
-
-  &::ms-track {
-    @include range-track;
-  }
-
-  &::-webkit-slider-thumb {
-    @include range-thumb;
-  }
-
-  &::-webkit-slider-runnable-track {
-    @include range-track;
-  }
-}
-</style>

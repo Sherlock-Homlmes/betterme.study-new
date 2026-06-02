@@ -1,5 +1,3 @@
-@reference tailwindcss;
-
 .transition-slidein-enter-active,
 .transition-slidein-leave-active {
   transform: translateZ(0); /* transform-gpu */

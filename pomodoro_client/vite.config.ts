@@ -10,9 +10,15 @@ const allowedHosts = null;
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
+  css: {
+    transformer: 'lightningcss',
+  },
+  build: {
+    cssMinify: 'lightningcss',
+  },
   plugins: [
-    vue(),
     tailwindcss(),
+    vue(),
     VueI18nPlugin({
       include: './src/i18n/**',
     }),
