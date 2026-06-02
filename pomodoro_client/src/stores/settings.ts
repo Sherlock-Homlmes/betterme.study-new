@@ -184,9 +184,15 @@ export const useSettings = defineStore("settings", {
 
 		getActiveSchedulePreset: (state) => {
 			const index = Object.entries(timerPresets).findIndex(([_key, value]) => {
+				const statePreset = {
+					pomodoro_study_time: state.schedule.lengths.work / 1000,
+					pomodoro_rest_time: state.schedule.lengths.shortpause / 1000,
+					pomodoro_long_rest_time: state.schedule.lengths.longpause / 1000,
+					long_rest_time_interval: state.schedule.longPauseInterval,
+				};
 				return (
-					JSON.stringify(value.lengths) ===
-					JSON.stringify(state.schedule.lengths)
+					JSON.stringify(value) ===
+					JSON.stringify(statePreset)
 				);
 			});
 
@@ -255,7 +261,12 @@ export const useSettings = defineStore("settings", {
 			};
 
 			if (validate(id)) {
-				this.schedule.lengths = Object.assign({}, timerPresets[id].lengths);
+				const preset = timerPresets[id];
+				this.schedule.lengths = {
+					work: preset.pomodoro_study_time * 1000,
+					shortpause: preset.pomodoro_rest_time * 1000,
+					longpause: preset.pomodoro_long_rest_time * 1000,
+				};
 			}
 		},
 

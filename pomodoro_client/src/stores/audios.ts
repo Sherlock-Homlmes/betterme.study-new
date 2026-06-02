@@ -1,7 +1,6 @@
-import { computed, ref, watch } from "vue";
+import { ref } from "vue";
 import { runtimeConfig } from "@/config/runtimeConfig";
 import {
-	StorageSerializers,
 	createGlobalState,
 	useStorage,
 } from "@vueuse/core";

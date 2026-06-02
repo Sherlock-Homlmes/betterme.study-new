@@ -161,7 +161,7 @@ export function useWeb() {
 		) {
 			return;
 		}
-		const notificationActions: NotificationAction[] = [];
+		const notificationActions: { action: string; title: string }[] = [];
 		if (nextState === "work") {
 			notificationActions.push({
 				action: "ready",
@@ -170,12 +170,12 @@ export function useWeb() {
 		}
 
 		try {
-			new Notification(i18n.t("notification." + nextState + ".title"), {
-				// eslint-disable-line no-new
+			const options: NotificationOptions = {
 				tag: "FocusTide-SectionNotify",
 				body: i18n.t("notification." + nextState + ".body"),
-				actions: notificationActions,
-			});
+			};
+			(options as any).actions = notificationActions;
+			new Notification(i18n.t("notification." + nextState + ".title"), options);
 		} catch (err) {
 			console.warn(err);
 		}

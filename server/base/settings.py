@@ -70,7 +70,7 @@ is_prod_env = settings.ENV == ENVEnum.PROD.value
 
 # base setting
 app = FastAPI(
-    title="Betterme.study API",
+    title="Betterme.page API",
     # version="1.0.0",
     openapi_url="/openapi.json",
     docs_url="/api/docs",

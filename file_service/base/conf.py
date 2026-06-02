@@ -56,7 +56,7 @@ is_prod_env = settings.ENV == ENVEnum.PROD.value
 
 # base setting
 app = FastAPI(
-    title="Betterme.study file service API",
+    title="Betterme.page file service API",
     openapi_url="/openapi.json",
     docs_url="/api/docs",
     redoc_url=None,

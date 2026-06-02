@@ -41,7 +41,7 @@ div.flex.flex-col.items-center.gap-2.py-6
         )
           BrandDiscordIcon
           span(v-text="$t('loginBy.discord')")
-      a(href="https://news.betterme.study" target="_blank" rel="noopener noreferrer")
+      a(href="https://news.betterme.page" target="_blank" rel="noopener noreferrer")
         Button(
           :importance="ButtonImportance.Filled"
           dark

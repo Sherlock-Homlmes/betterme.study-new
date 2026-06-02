@@ -598,7 +598,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     chatMessages, newMessage, messagesContainer, showChat,
     showEmojiPicker, showGifPicker, showReactionPicker,
     fileInputRef, uploadingFile, flyingReactions, commonReactions, commonGifs,
-    currentRoom, unreadMessageCount, totalParticipants,
+    currentRoom, unreadMessageCount, totalParticipants, lastReadMessageIndex,
     joinRoom, leaveRoom: cleanup, toggleMicrophone, toggleCamera,
     toggleSpeaker, enableCameraAndMicrophone, toggleScreenShare,
     getAvailableDevices, switchDevice, sendTextMessage, sendFile,

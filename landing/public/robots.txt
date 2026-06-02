@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /_astro/
 
-Sitemap: https://betterme.study/sitemap-index.xml
+Sitemap: https://betterme.page/sitemap-index.xml

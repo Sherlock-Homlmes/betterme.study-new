@@ -3,7 +3,7 @@ import { runtimeConfig } from "@/config/runtimeConfig";
 import { createGlobalState } from "@vueuse/core";
 import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
-import { useSettings, Section, ColorMethod } from "./settings";
+import { useSettings, Section, ColorMethod, type Settings } from "./settings";
 import { useErrorStore } from "./common";
 
 export enum ETimerState {
@@ -54,7 +54,7 @@ export const usePomodoroStore = createGlobalState(() => {
 	const timerString = ref("");
 	const items = ref(createScheduleSeries(10));
 	const timerState = ref(TimerState.STOPPED);
-	const scheduleItemTypeTimeLengthMap = {
+	const scheduleItemTypeTimeLengthMap: Record<string, keyof typeof userSettings.value.pomodoro_settings> = {
 		work: "pomodoro_study_time",
 		shortpause: "pomodoro_rest_time",
 		longpause: "pomodoro_long_rest_time",
@@ -210,7 +210,7 @@ export const usePomodoroStore = createGlobalState(() => {
 	};
 
 	/** Allows locking information on a schedule item (so the getter will not override it) */
-	const lockInfo = ({ index = 0, length = undefined, type = undefined }) => {
+	const lockInfo = ({ index = 0, length, type }: { index?: number; length?: number; type?: Section }) => {
 		if (index <= items.value.length) {
 			items.value[index].length = length;
 			items.value[index].type = type;

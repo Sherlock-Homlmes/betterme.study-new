@@ -7,7 +7,7 @@ import { useEvents, EventType } from "@/stores/events";
 interface TickState {
 	lastUpdate: number;
 	nextTickDelta: number;
-	timerHandle: number | null;
+	timerHandle: ReturnType<typeof setTimeout> | null;
 }
 
 export function useTicker() {
@@ -101,7 +101,7 @@ export function useTicker() {
 
 	/** Clears the tick handle and stops ticking */
 	const clearTickHandle = () => {
-		clearTimeout(state.timerHandle as number);
+		clearTimeout(state.timerHandle!);
 		state.timerHandle = null;
 	};
 

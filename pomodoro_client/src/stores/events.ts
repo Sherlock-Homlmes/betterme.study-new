@@ -1,4 +1,4 @@
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { createGlobalState } from "@vueuse/core";
 
 export const useEvents = createGlobalState(() => {
@@ -45,7 +45,7 @@ export class Event {
 
 	constructor(
 		eventType = EventType.OTHER,
-		{ data = undefined, timestamp = new Date() },
+		{ data, timestamp = new Date() }: { data?: unknown; timestamp?: Date },
 	) {
 		this._timestamp = timestamp;
 		this._event = eventType;

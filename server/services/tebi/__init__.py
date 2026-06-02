@@ -39,7 +39,7 @@ def upload_image(image_name: str):
     return (
         f"https://s3.tebi.io/{settings.AWS_BUCKET}/{object_id}"
         if is_dev_env
-        else f"https://files.news.betterme.study/{object_id}"
+        else f"https://files.news.betterme.page/{object_id}"
     )
 
 

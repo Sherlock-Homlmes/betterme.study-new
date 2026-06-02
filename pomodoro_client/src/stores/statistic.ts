@@ -380,5 +380,8 @@ export const useStatistics = () => {
     formattedData,
     getFormattedData,
     fetchStatistics,
+    groupDataByPeriod,
+    fillMissingDates,
+    calculateSummaryFromData,
   };
 };

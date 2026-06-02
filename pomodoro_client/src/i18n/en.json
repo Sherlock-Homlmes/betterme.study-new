@@ -304,7 +304,6 @@
 				"_title": "Reset settings",
 				"_description": "All settings will be reset after the app is reloaded"
 			},
-
 			"account": {
 				"heading": "Info",
 				"inputs": {
@@ -458,7 +457,7 @@
 		"onboarding": {
 			"pages": {
 				"0": {
-					"title": "Welcome to Betterme.study!",
+					"title": "Welcome to Betterme.page!",
 					"onboarding_invite": "Let's set you up for the first time. You can change everything in the settings menu later.",
 					"heading": "Choose your language"
 				},

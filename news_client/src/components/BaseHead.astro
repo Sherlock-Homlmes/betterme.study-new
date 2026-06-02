@@ -52,17 +52,17 @@ let schemaElement = null;
 let schema = null;
 const organization = {
   "@type": "Organization",
-  "@id": "https://news.betterme.study/#organization",
+  "@id": "https://news.betterme.page/#organization",
   name: "BetterMe",
-  url: "https://news.betterme.study",
+  url: "https://news.betterme.page",
   logo: {
     "@type": "ImageObject",
-    url: "https://news.betterme.study/favicon-180x180.png",
+    url: "https://news.betterme.page/favicon-180x180.png",
   },
   description: description,
-  email: "contact@news.betterme.study",
+  email: "contact@news.betterme.page",
   sameAs: [
-    "https://betterme.study",
+    "https://betterme.page",
     "https://www.facebook.com/profile.php?id=61561787097897",
   ],
   address: {
@@ -75,7 +75,7 @@ const organization = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    email: "contact@news.betterme.study",
+    email: "contact@news.betterme.page",
     contactType: "customer support",
   },
 };
@@ -97,7 +97,7 @@ if (pathName.startsWith("/posts/")) {
     publisher: organization,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://news.betterme.study${pathName}`,
+      "@id": `https://news.betterme.page${pathName}`,
     },
   };
 } else {
@@ -107,19 +107,19 @@ if (pathName.startsWith("/posts/")) {
       organization,
       {
         "@type": "WebSite",
-        "@id": "https://news.betterme.study/#website",
-        url: "https://news.betterme.study",
+        "@id": "https://news.betterme.page/#website",
+        url: "https://news.betterme.page",
         name: "BetterMe News",
         description: description,
         publisher: {
-          "@id": "https://news.betterme.study/#organization",
+          "@id": "https://news.betterme.page/#organization",
         },
         potentialAction: {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
             urlTemplate:
-              "https://news.betterme.study/?search={search_term_string}",
+              "https://news.betterme.page/?search={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },

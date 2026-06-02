@@ -9,7 +9,8 @@
     "build:extension": "VITE_PLATFORM=desktop vite build",
     "build:tauri": "tauri build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
