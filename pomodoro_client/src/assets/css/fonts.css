@@ -3,5 +3,5 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url('./fonts/Lexend/Lexend-VariableFont_wght.woff2') format('woff2');
+  src: url('/fonts/Lexend-VariableFont_wght.woff2') format('woff2');
 }
