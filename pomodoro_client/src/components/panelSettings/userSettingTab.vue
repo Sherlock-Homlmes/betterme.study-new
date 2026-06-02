@@ -5,10 +5,10 @@ import { runtimeConfig } from "@/config/runtimeConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-vue-next";
+import { LoaderIcon } from "vue-tabler-icons";
 import LoginTab from "@/components/common/loginTab.vue";
 import { api, TokenManager } from "@/utils/betterFetch";
-import _ from "lodash";
+import pick from "lodash/pick";
 
 const { isAuth, userInfo, getCurrentUser } = useAuthStore();
 const API_URL = runtimeConfig.public.API_URL;
@@ -16,7 +16,7 @@ const loading = ref(false);
 const updateAbleUserInfo = ["avatar_url", "custom_name"];
 const updateUserInfo = async () => {
 	loading.value = true;
-	const payload = _.pick(userInfo.value, updateAbleUserInfo);
+	const payload = pick(userInfo.value, updateAbleUserInfo);
 	try {
 		const response = await api.patch(`${API_URL}/users/self/info`, payload);
 		if (!response?.ok) throw new Error(`Fail to update user information`);
@@ -78,7 +78,7 @@ div.flex.flex-col.h-full
 					size="default"
 					class="w-fit shadow-md hover:shadow-lg transition-all duration-200"
 				)
-					Loader2(v-if="loading" class="mr-2 h-4 w-4 animate-spin")
+					LoaderIcon(v-if="loading" class="mr-2 h-4 w-4 animate-spin")
 					span(v-if="!loading") {{ $t('settings.values.account.buttons.save') }}
 					span(v-else) Saving...
 </template>

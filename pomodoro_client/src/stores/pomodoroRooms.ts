@@ -494,11 +494,11 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   const toggleSpeaker = () => {
     isSpeakerEnabled.value = !isSpeakerEnabled.value;
 
-    remoteVideoRefs.value.forEach((videoElement) => {
+    for (const videoElement of remoteVideoRefs.value.values()) {
       if (videoElement) {
         videoElement.muted = !isSpeakerEnabled.value;
       }
-    });
+    }
   };
 
   // Enable both camera and microphone at once
@@ -680,17 +680,17 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     localParticipant.value = null;
     participants.value = [];
 
-    remoteVideoRefs.value.forEach((element) => {
+    for (const element of remoteVideoRefs.value.values()) {
       element.remove();
-    });
+    }
     remoteVideoRefs.value.clear();
 
-    participantsToClean.forEach((participant) => {
+    for (const participant of participantsToClean) {
       const container = document.getElementById(`remote-${participant.identity}`);
       if (container) {
         container.innerHTML = '';
       }
-    });
+    }
   };
 
   // Helper function to get participant avatar from metadata

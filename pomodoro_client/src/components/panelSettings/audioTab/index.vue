@@ -47,7 +47,7 @@ onMounted(async () => {
 
   // Resume ambient sounds that were playing or auto-play if enabled
   if (ambientSoundsRef.value?.soundPlayers) {
-    ambientSoundsRef.value.soundPlayers.forEach((soundPlayer) => {
+    for (const soundPlayer of ambientSoundsRef.value.soundPlayers) {
       // Play if volume is > 0 OR if auto-play is enabled
       const shouldPlay = soundPlayer.volume.value !== 0;
 
@@ -68,7 +68,7 @@ onMounted(async () => {
           { immediate: true }
         );
       }
-    });
+    }
   }
 });
 </script>

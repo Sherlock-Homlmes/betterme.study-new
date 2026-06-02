@@ -2,7 +2,7 @@
 import type { CalendarNextProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
 import { reactiveOmit } from "@vueuse/core";
-import { ChevronRight } from "lucide-vue-next";
+import { ChevronRightIcon } from "vue-tabler-icons";
 import { CalendarNext, useForwardProps } from "reka-ui";
 import { cn } from "@/utils/index.ts";
 import { buttonVariants } from "@/components/ui/button";
@@ -26,7 +26,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
   >
     <slot>
-      <ChevronRight class="h-4 w-4" />
+      <ChevronRightIcon class="h-4 w-4" />
     </slot>
   </CalendarNext>
 </template>

@@ -8,7 +8,7 @@ import {
 import { useAuthStore } from "./auth";
 import {useErrorStore} from "./common";
 import { api } from "@/utils/betterFetch";
-import _ from "lodash";
+
 
 export const useLocalAudioDBStore = createGlobalState(() => {
 	const blobUrl = ref<string>(""); // Ref to hold the Blob URL for useSound

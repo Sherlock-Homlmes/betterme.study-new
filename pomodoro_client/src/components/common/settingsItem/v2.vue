@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from "vue";
-import {get, set} from 'lodash'
+import get from 'lodash/get'
+import set from 'lodash/set'
 import { useSettings } from "@/stores/settings";
 import OptionGroup from "@/components/base/optionGroup.vue";
 import { Control } from "./type";

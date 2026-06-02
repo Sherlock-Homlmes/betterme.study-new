@@ -6,7 +6,7 @@ import type { Grid } from "reka-ui/date";
 import type { Ref } from "vue";
 import { CalendarDate, isEqualMonth } from "@internationalized/date";
 
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "vue-tabler-icons";
 import { RangeCalendarRoot, useDateFormatter } from "reka-ui";
 import { createMonth, toDate } from "reka-ui/date";
 import { ref, watch } from "vue";
@@ -123,7 +123,7 @@ watch(() => props.modelValue, (newValue) => {
           )
         "
       >
-        <Calendar class="mr-2 h-4 w-4" />
+        <CalendarIcon class="mr-2 h-4 w-4" />
         <template v-if="value.start">
           <template v-if="value.end">
             {{
@@ -174,7 +174,7 @@ watch(() => props.modelValue, (newValue) => {
                 "
                 @click="updateMonth('first', -1)"
               >
-                <ChevronLeft class="h-4 w-4" />
+                <ChevronLeftIcon class="h-4 w-4" />
               </button>
               <div :class="cn('text-sm font-medium')">
                 {{
@@ -192,7 +192,7 @@ watch(() => props.modelValue, (newValue) => {
                 "
                 @click="updateMonth('first', 1)"
               >
-                <ChevronRight class="h-4 w-4" />
+                <ChevronRightIcon class="h-4 w-4" />
               </button>
             </div>
             <RangeCalendarGrid>
@@ -240,7 +240,7 @@ watch(() => props.modelValue, (newValue) => {
                 "
                 @click="updateMonth('second', -1)"
               >
-                <ChevronLeft class="h-4 w-4" />
+                <ChevronLeftIcon class="h-4 w-4" />
               </button>
               <div :class="cn('text-sm font-medium')">
                 {{
@@ -259,7 +259,7 @@ watch(() => props.modelValue, (newValue) => {
                 "
                 @click="updateMonth('second', 1)"
               >
-                <ChevronRight class="h-4 w-4" />
+                <ChevronRightIcon class="h-4 w-4" />
               </button>
             </div>
             <RangeCalendarGrid>

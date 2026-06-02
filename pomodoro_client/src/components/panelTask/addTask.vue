@@ -5,7 +5,7 @@ import { type Ref } from "vue";
 import { ButtonImportance } from "../base/types/button";
 import Button from "@/components/base/uiButton.vue";
 import { useTaskStore } from "@/stores/tasks";
-import {cloneDeep} from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 const addtaskInput: Ref<HTMLElement | null> = ref(null);
 const { postTask } = useTaskStore();

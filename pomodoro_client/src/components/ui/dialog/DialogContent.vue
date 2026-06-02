@@ -2,7 +2,7 @@
 import type { DialogContentEmits, DialogContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
-import { X } from "lucide-vue-next"
+import { XIcon } from "vue-tabler-icons"
 import {
   DialogClose,
   DialogContent,
@@ -38,7 +38,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
       <DialogClose
         class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
       >
-        <X class="w-4 h-4" />
+        <XIcon class="w-4 h-4" />
         <span class="sr-only">Close</span>
       </DialogClose>
     </DialogContent>

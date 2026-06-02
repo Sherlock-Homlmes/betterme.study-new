@@ -24,24 +24,22 @@ watch(
 				return;
 			}
 
-			[primary.value as HTMLElement, secondary.value as HTMLElement].forEach(
-				(row) => {
-					while (row.hasChildNodes()) {
-						if (row.firstChild) {
-							row.removeChild(row.firstChild);
-						}
+			for (const row of [primary.value as HTMLElement, secondary.value as HTMLElement]) {
+				while (row.hasChildNodes()) {
+					if (row.firstChild) {
+						row.removeChild(row.firstChild);
 					}
-				},
-			);
+				}
+			}
 
 			// Add nodes back in
-			newValue.forEach((node: HTMLElement) => {
+			for (const node of newValue) {
 				if (["recommended", "primary"].includes(node.dataset.row || "")) {
 					(primary.value as HTMLElement).appendChild(node);
 				} else if (node.dataset.row === "secondary") {
 					(secondary.value as HTMLElement).appendChild(node);
 				}
-			});
+			}
 		} catch (e) {
 			// console.error(e)
 		}
@@ -52,11 +50,9 @@ onMounted(() => {
 	// collect all nodes with a `data-row` attribute
 	state.items = [];
 	if (items != null) {
-		(items.value as HTMLElement)
-			.querySelectorAll("[data-row]")
-			.forEach((node) => {
-				state.items.push(node as HTMLElement);
-			});
+		for (const node of (items.value as HTMLElement).querySelectorAll("[data-row]")) {
+			state.items.push(node as HTMLElement);
+		}
 	}
 
 	// sort items: recommended > primary > secondary

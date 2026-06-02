@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/utils/index'
-import { Loader2 } from 'lucide-vue-next'
+import { LoaderIcon } from 'vue-tabler-icons'
 
 interface LoadingProps {
   class?: string
@@ -24,7 +24,7 @@ const sizeClasses = {
 
 <template>
   <div :class="cn('flex items-center justify-center gap-2', props.class)">
-    <Loader2 :class="cn('animate-spin', sizeClasses[props.size])" />
+    <LoaderIcon :class="cn('animate-spin', sizeClasses[props.size])" />
     <span v-if="props.showText" class="text-sm text-muted-foreground">
       {{ props.text }}
     </span>

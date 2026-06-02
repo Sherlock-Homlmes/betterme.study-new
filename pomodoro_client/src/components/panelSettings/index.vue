@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {reactive} from "vue";
-
+import { reactive, defineAsyncComponent } from "vue";
 import {
 	SettingsIcon,
 	AdjustmentsIcon as TabIconGeneral,
@@ -10,22 +9,20 @@ import {
 	UserIcon as TabIconAccount,
 	ChartBarIcon as TabIconStatistic,
 } from "vue-tabler-icons";
-
 import Panel from "@/components/panel.vue";
-
 import TabHeader from "@/components/common/panel/tabHeader.vue";
 import CoreSettingTab from "./coreSettingTab/index.vue";
-import ClockSettingTab from "./clockTab.vue";
 import AudioSettingTab from "./audioTab/index.vue";
-import AboutTab from "./aboutTab.vue";
-import UserSettingTab from "./userSettingTab.vue";
-import StatisticTab from "./statisticTab.vue";
+
+const ClockSettingTab = defineAsyncComponent(() => import('./clockTab.vue'))
+const AboutTab = defineAsyncComponent(() => import('./aboutTab.vue'))
+const UserSettingTab = defineAsyncComponent(() => import('./userSettingTab.vue'))
+const StatisticTab = defineAsyncComponent(() => import('./statisticTab.vue'))
 
 const state = reactive({
 	activeTab: 1,
 	resetConfirm: false,
 });
-
 </script>
 
 <template lang="pug">
@@ -42,7 +39,6 @@ Panel(:panel-name="'settings'")
         UserSettingTab(v-if="state.activeTab === 5")
         div(v-if="state.activeTab === 6" class="grid grid-cols-1 gap-2 py-3 px-4")
           AboutTab
-
       div.flex.flex-row.flex-none.h-20.p-4
         TabHeader(:active="state.activeTab === 1" :text="$t('settings.tabs.main')" @click="state.activeTab = 1")
           template(#icon)

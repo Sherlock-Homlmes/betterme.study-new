@@ -1,6 +1,6 @@
 import { runtimeConfig } from "@/config/runtimeConfig";
 import { createGlobalState, useLocalStorage } from "@vueuse/core";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
 import { useErrorStore } from "./common";

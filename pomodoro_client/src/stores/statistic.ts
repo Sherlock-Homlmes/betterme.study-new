@@ -161,10 +161,9 @@ export const useStatistics = () => {
     const hasMultipleYears = startDate.getFullYear() !== endDate.getFullYear();
 
     // Create a map of existing data by date
-    const dataMap = new Map<string, StatisticData>();
-    data.forEach(item => {
-      dataMap.set(item.date, item);
-    });
+    const dataMap = new Map<string, StatisticData>(
+      data.map(item => [item.date, item])
+    );
 
     // Fill in all dates in the range
     const currentDate = new Date(startDate);

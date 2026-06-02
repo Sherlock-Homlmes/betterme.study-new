@@ -5,12 +5,12 @@ import {
 	createGlobalState,
 	useStorage,
 } from "@vueuse/core";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import isEmpty from "lodash/isEmpty";
 import timerPresets from "@/assets/settings/timerPresets";
 import ChangeTracker from "@/utils/changeTracker";
 import {useErrorStore} from "./common";
 import {api} from "@/utils/betterFetch";
-import { isEmpty } from "lodash";
 import { useDark } from '@vueuse/core';
 
 const changeTracker = new ChangeTracker();
@@ -51,7 +51,7 @@ export const useAuthStore = createGlobalState(() => {
 	const userInfo = ref();
 	const userSettings = useStorage(
 		"userSettings",
-		_.cloneDeep(defaultSettings),
+		cloneDeep(defaultSettings),
 		undefined,
 		{ serializer: StorageSerializers.object },
 	);

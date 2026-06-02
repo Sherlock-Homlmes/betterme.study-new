@@ -2,7 +2,7 @@
 import Button from "@/components/base/uiButton.vue";
 import { ButtonImportance } from "@/components/base/types/button";
 
-import {cloneDeep} from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 import { useAuthStore, defaultSettings } from "@/stores/auth";
 
