@@ -452,57 +452,107 @@ class FloatingPet {
   }
 }
 
+function initMobileCinder() {
+  const el = document.querySelector(".cinder-mobile-sprite");
+  if (!el) return;
+
+  let currentAnim = "";
+  let currentFrame = 0;
+  let interval = null;
+
+  function setAnimation(animName) {
+    if (currentAnim === animName) return;
+    currentAnim = animName;
+    currentFrame = 0;
+    clearInterval(interval);
+    const cfg = cinderAnims[animName];
+
+    const update = () => {
+      const posX = -(currentFrame * 192);
+      const posY = -(cfg.row * 208);
+      el.style.backgroundPosition = `${posX}px ${posY}px`;
+      currentFrame++;
+      if (currentFrame >= cfg.frames) {
+        if (cfg.next) {
+          setAnimation(cfg.next);
+        } else {
+          currentFrame = 0;
+        }
+      }
+    };
+    update();
+    interval = setInterval(update, cfg.speed);
+  }
+
+  setAnimation("idle");
+
+  el.addEventListener("click", () => {
+    setAnimation("wave");
+  });
+
+  el.addEventListener("dblclick", (e) => {
+    e.stopPropagation();
+    setAnimation("jump");
+  });
+}
+
 function initPets() {
-  const cinderPet = new BoundedPet(
-    "cinder",
-    "/cinder.webp",
-    0.6,
-    ".hero",
-    (parent, container) => {
-      const heading = parent.querySelector("h1");
-      const rect = heading.getBoundingClientRect();
-      const parentRect = parent.getBoundingClientRect();
-      return {
-        x: rect.left - parentRect.left - 150,
-        y: rect.top - parentRect.top - 30,
-      };
-    }
-  );
-  activeCompanions.push(cinderPet);
+  if (window.innerWidth <= 968) {
+    initMobileCinder();
+  } else {
+    const cinderPet = new BoundedPet(
+      "cinder",
+      "/cinder.webp",
+      0.6,
+      ".hero",
+      (parent, container) => {
+        const heading = parent.querySelector("h1");
+        const rect = heading.getBoundingClientRect();
+        const parentRect = parent.getBoundingClientRect();
+        return {
+          x: rect.left - parentRect.left - 150,
+          y: rect.top - parentRect.top - 30,
+        };
+      }
+    );
+    activeCompanions.push(cinderPet);
+  }
 
-  const bunnyPet = new BoundedPet(
-    "bunny",
-    "/bunny.webp",
-    0.6,
-    ".about-section",
-    (parent, container) => {
-      const heading = parent.querySelector("h2");
-      const rect = heading.getBoundingClientRect();
-      const parentRect = parent.getBoundingClientRect();
-      return {
-        x: rect.left - parentRect.left - 170,
-        y: rect.top - parentRect.top - 60,
-      };
-    }
-  );
-  activeCompanions.push(bunnyPet);
+  if (window.innerWidth > 968) {
+    const bunnyPet = new BoundedPet(
+      "bunny",
+      "/bunny.webp",
+      0.6,
+      ".about-section",
+      (parent, container) => {
+        const heading = parent.querySelector("h2");
+        const rect = heading.getBoundingClientRect();
+        const parentRect = parent.getBoundingClientRect();
+        return {
+          x: rect.left - parentRect.left - 170,
+          y: rect.top - parentRect.top - 60,
+        };
+      }
+    );
+    activeCompanions.push(bunnyPet);
 
-  const capyPet = new BoundedPet(
-    "capybara",
-    "/capybara.png",
-    0.6,
-    ".pomo-section",
-    (parent, container) => {
-      const heading = parent.querySelector("h2");
-      const rect = heading.getBoundingClientRect();
-      const parentRect = parent.getBoundingClientRect();
-      return {
-        x: rect.right - parentRect.left - 30,
-        y: rect.top - parentRect.top - 50,
-      };
-    }
-  );
-  activeCompanions.push(capyPet);
+    const capyPet = new BoundedPet(
+      "capybara",
+      "/capybara.png",
+      0.6,
+      ".pomo-section",
+      (parent, container) => {
+        const heading = parent.querySelector("h2");
+        const rect = heading.getBoundingClientRect();
+        const parentRect = parent.getBoundingClientRect();
+        return {
+          x: rect.right - parentRect.left - 30,
+          y: rect.top - parentRect.top - 50,
+        };
+      }
+    );
+    activeCompanions.push(capyPet);
+  }
 
   const pigPet = new BoundedPet(
     "freddy",
@@ -517,9 +567,6 @@ function initPets() {
     }
   );
   activeCompanions.push(pigPet);
-
-  const hajimiPet = new FloatingPet("hajimi", "/hajimi.webp", 0.6);
-  activeCompanions.push(hajimiPet);
 }
 
 let lastScrollTop = window.scrollY;
@@ -544,4 +591,8 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("load", () => {
   initPets();
+  if (window.innerWidth > 968) {
+    const hajimiPet = new FloatingPet("hajimi", "/hajimi.webp", 0.6);
+    activeCompanions.push(hajimiPet);
+  }
 });

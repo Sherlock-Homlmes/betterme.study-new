@@ -107,7 +107,7 @@ const inviteLink = discordData?.instant_invite || "https://discord.gg/betterme";
                       <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-left: 16px;">
                         {activeMembers.slice(0, 5).map((m) => (
                           <div style="display: flex; align-items: center; gap: 4px; background: #e4e4e7; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #18181b; border: 1px solid #d4d4d8;">
-                            <img src={m.avatar_url} alt={`${m.username} avatar`} style="width: 14px; height: 14px; border-radius: 50%;" />
+                            <img src={m.avatar_url} alt={`${m.username} avatar`} style="width: 14px; height: 14px; border-radius: 50%;" loading="lazy"/>
                             <span style="font-weight: 500;">{m.username}</span>
                           </div>
                         ))}

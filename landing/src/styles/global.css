@@ -37,13 +37,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #faf9f6;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #d4d4d8;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-purple);
 }
@@ -64,9 +67,9 @@ body {
     background-color 0.2s ease;
 }
 
-a:hover ~ #custom-cursor,
-button:hover ~ #custom-cursor,
-.interactive:hover ~ #custom-cursor {
+a:hover~#custom-cursor,
+button:hover~#custom-cursor,
+.interactive:hover~#custom-cursor {
   transform: translate(-50%, -50%) scale(1.6);
   background: transparent;
   border: 1px solid var(--accent-purple);
@@ -102,6 +105,7 @@ button:hover ~ #custom-cursor,
   border-bottom: 1px solid var(--glass-border);
   padding: 16px 0;
 }
+
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -110,6 +114,7 @@ button:hover ~ #custom-cursor,
   justify-content: space-between;
   align-items: center;
 }
+
 .nav-logo {
   font-family: var(--font-headings);
   font-size: 1.5rem;
@@ -117,13 +122,16 @@ button:hover ~ #custom-cursor,
   color: var(--text-main);
   text-decoration: none;
 }
+
 .nav-logo span {
   color: var(--primary);
 }
+
 .nav-links {
   display: flex;
   gap: 32px;
 }
+
 .nav-link {
   font-family: var(--font-body);
   font-size: 0.95rem;
@@ -132,9 +140,11 @@ button:hover ~ #custom-cursor,
   font-weight: 500;
   transition: color 0.2s;
 }
+
 .nav-link:hover {
   color: var(--text-main);
 }
+
 .btn-nav {
   padding: 8px 18px;
   border-radius: 6px;
@@ -153,9 +163,11 @@ button:hover ~ #custom-cursor,
   filter: drop-shadow(0 4px 12px rgba(24, 24, 27, 0.15));
   user-select: none;
 }
+
 .desktop-pet-container:active {
   cursor: grabbing;
 }
+
 .desktop-pet-sprite {
   width: 192px;
   height: 208px;
@@ -177,6 +189,7 @@ button:hover ~ #custom-cursor,
     box-shadow 0.3s ease,
     border-color 0.3s ease;
 }
+
 .glass-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(24, 24, 27, 0.08);
@@ -224,6 +237,7 @@ button:hover ~ #custom-cursor,
   color: white;
   box-shadow: none;
 }
+
 .btn-purple:hover {
   background: #27272a;
   transform: translateY(-2px);
@@ -235,6 +249,7 @@ button:hover ~ #custom-cursor,
   color: var(--text-main);
   border: 1px solid var(--glass-border);
 }
+
 .btn-outline-green:hover {
   background: #faf9f6;
   border-color: var(--accent-purple);
@@ -258,6 +273,7 @@ button:hover ~ #custom-cursor,
     opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
@@ -266,9 +282,11 @@ button:hover ~ #custom-cursor,
 .stagger-1 {
   transition-delay: 0.08s;
 }
+
 .stagger-2 {
   transition-delay: 0.15s;
 }
+
 .stagger-3 {
   transition-delay: 0.22s;
 }
@@ -276,5 +294,68 @@ button:hover ~ #custom-cursor,
 @media (max-width: 968px) {
   .nav-links {
     display: none;
+  }
+
+  body {
+    cursor: auto;
+    padding-top: 70px;
+  }
+
+  #custom-cursor {
+    display: none;
+  }
+
+  #canvas-particles {
+    display: none;
+  }
+
+  .navbar {
+    padding: 12px 0;
+  }
+
+  .nav-container {
+    padding: 0 16px;
+  }
+
+  .btn-nav {
+    padding: 6px 12px;
+    font-size: 1.1rem;
+  }
+
+  .nav-logo {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  #footer-pig-container {
+    display: none;
+  }
+}
+
+@media (min-width: 969px) {
+  .desktop-pet-container[style*="position: fixed"] {
+    display: block !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 64px;
+  }
+
+  .navbar {
+    padding: 10px 0;
+  }
+
+  .nav-logo {
+    font-size: 1.8rem;
+  }
+
+  .btn-nav {
+    padding: 5px 10px;
+    font-size: 1.1rem;
   }
 }
