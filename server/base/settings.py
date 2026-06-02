@@ -81,7 +81,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:1420",
     ],
-    allow_origin_regex=r"https?://(.*\.)?betterme\.study",
+    allow_origin_regex=r"https?://(.*\.)?betterme\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
