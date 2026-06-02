@@ -53,8 +53,8 @@ services:
     ports:
       - "1420:1420"
       - "4173:4173"
-    command: ["bun", "run", "dev", "--", "--host", "0.0.0.0"]
-    # command: ["bun", "run", "preview"]
+    # command: ["bun", "run", "dev", "--", "--host", "0.0.0.0"]
+    command: ["bun", "run", "preview", "--", "--host", "0.0.0.0"]
 
   news-client:
     build:
