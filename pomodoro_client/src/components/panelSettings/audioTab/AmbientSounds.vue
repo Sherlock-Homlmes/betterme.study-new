@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { watch } from "vue";
 import { useSound } from "@vueuse/sound";
-import { useStorage, useRefHistory } from "@vueuse/core";
+import { useRefHistory } from "@vueuse/core";
 import { ButtonImportance } from "@/components/base/types/button";
 import {
 	VolumeIcon,
 	VolumeOffIcon,
 } from "vue-tabler-icons";
 import ControlButton from "@/components/base/uiButton.vue";
+import { useAudioStore } from "@/stores/audios";
 
-// ===== AMBIENT SOUNDS =====
+const { ambientSoundVolumes } = useAudioStore();
+
 const AMBIENT_SOUNDS = [
 	{ name: "Rain", path: "/audio/musical/Rain.mp3" },
 	{ name: "Fireplace", path: "/audio/musical/Fireplace.mp3" },
@@ -17,7 +19,7 @@ const AMBIENT_SOUNDS = [
 ];
 
 const createSoundPlayer = (soundInfo: { name: string; path: string }) => {
-	const volume = useStorage(`sound-volume-${soundInfo.name}`, 0);
+	const volume = ambientSoundVolumes[soundInfo.name as keyof typeof ambientSoundVolumes];
 	const { history } = useRefHistory(volume, { capacity: 10 });
 	const { play, stop, isPlaying, sound } = useSound(soundInfo.path, {
 		volume: volume.value,

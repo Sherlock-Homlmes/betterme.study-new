@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch, nextTick } from "vue";
 import { watchOnce, useIntersectionObserver, useWindowFocus, until } from "@vueuse/core";
 import SettingsItem from "@/components/common/settingsItem/v1.vue";
 import SettingsItemV2 from "@/components/common/settingsItem/v2.vue";
@@ -9,6 +9,7 @@ import {Control} from "@/components/common/settingsItem/type";
 import { usePlatformStore } from "@/stores/platforms";
 import { useOpenPanels } from "@/stores/openpanels";
 import { useAuthStore } from "@/stores/auth";
+import { useAudioStore } from "@/stores/audios";
 
 import YouTubePlayer from "./YouTubePlayer.vue";
 import AmbientSounds from "./AmbientSounds.vue";
@@ -21,9 +22,11 @@ const windowFocus = useWindowFocus()
 
 const openPanels = useOpenPanels();
 const { userSettings } = useAuthStore();
+const { hasAnyVolume, audioTabActive } = useAudioStore();
+
 const shouldPlayMusic = ref(false);
 const shouldLoadMusic = computed(() =>
-  userSettings.value.visuals.enable_music_when_visit_site && firstTimeWindowFocus.value
+  userSettings.value.visuals.enable_music_when_visit_site && firstTimeWindowFocus.value && (hasAnyVolume.value || audioTabActive.value)
 );
 const youtubePlayerRef = ref<InstanceType<typeof YouTubePlayer> | null>(null);
 const ambientSoundsRef = ref<InstanceType<typeof AmbientSounds> | null>(null);
@@ -44,8 +47,8 @@ onMounted(async () => {
   await until(windowFocus).toBe(true)
   firstTimeWindowFocus.value = true
   await until(shouldLoadMusic).toBe(true)
+  await nextTick()
 
-  // Resume ambient sounds that were playing or auto-play if enabled
   if (ambientSoundsRef.value?.soundPlayers) {
     for (const soundPlayer of ambientSoundsRef.value.soundPlayers) {
       // Play if volume is > 0 OR if auto-play is enabled

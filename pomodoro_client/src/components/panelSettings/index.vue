@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, defineAsyncComponent } from "vue";
+import { reactive, defineAsyncComponent, watch } from "vue";
 import {
 	SettingsIcon,
 	AdjustmentsIcon as TabIconGeneral,
@@ -13,15 +13,24 @@ import Panel from "@/components/panel.vue";
 import TabHeader from "@/components/common/panel/tabHeader.vue";
 import CoreSettingTab from "./coreSettingTab/index.vue";
 import AudioSettingTab from "./audioTab/index.vue";
+import { useAudioStore } from "@/stores/audios";
 
 const ClockSettingTab = defineAsyncComponent(() => import('./clockTab.vue'))
 const AboutTab = defineAsyncComponent(() => import('./aboutTab.vue'))
 const UserSettingTab = defineAsyncComponent(() => import('./userSettingTab.vue'))
 const StatisticTab = defineAsyncComponent(() => import('./statisticTab.vue'))
 
+const { audioTabActive } = useAudioStore();
+
 const state = reactive({
 	activeTab: 1,
 	resetConfirm: false,
+});
+
+watch(() => state.activeTab, (newTab) => {
+	if (newTab === 3) {
+		audioTabActive.value = true;
+	}
 });
 </script>
 

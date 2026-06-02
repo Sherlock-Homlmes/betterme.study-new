@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { useStorage, useRefHistory } from "@vueuse/core";
+import { useRefHistory } from "@vueuse/core";
 import { ButtonImportance } from "@/components/base/types/button";
 import {
 	VolumeIcon,
@@ -8,11 +8,11 @@ import {
 } from "vue-tabler-icons";
 import ControlButton from "@/components/base/uiButton.vue";
 import YouTube from "vue3-youtube";
+import { useAudioStore } from "@/stores/audios";
 
-// ===== YOUTUBE PLAYER =====
+const { youtubeVolume, youtubeLink } = useAudioStore();
+
 const youtubePlayerRef = ref(null);
-const youtubeLink = useStorage("youtube-link", "https://youtu.be/JCKBaJDRMw4");
-const youtubeVolume = useStorage("youtube-volume", 0);
 const { history: youtubeVolumeHistory } = useRefHistory(youtubeVolume, { capacity: 10 });
 
 // Extract YouTube video ID from URL

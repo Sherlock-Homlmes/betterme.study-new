@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { runtimeConfig } from "@/config/runtimeConfig";
 import {
 	createGlobalState,
@@ -187,10 +187,22 @@ export const useAudioStore = createGlobalState(() => {
 	const getNextTrack = () => {};
 	const getPreviousTrack = () => {};
 
+	const ambientSoundVolumes = {
+		Rain: useStorage("sound-volume-Rain", 0),
+		Fireplace: useStorage("sound-volume-Fireplace", 0),
+		Cafe: useStorage("sound-volume-Cafe", 0),
+	};
+
+	const youtubeVolume = useStorage("youtube-volume", 0);
+	const youtubeLink = useStorage("youtube-link", "https://youtu.be/JCKBaJDRMw4");
+
+	const hasAnyVolume = computed(() => {
+		return Object.values(ambientSoundVolumes).some((v) => v.value > 0) || youtubeVolume.value > 0;
+	});
+
+	const audioTabActive = ref(false);
+
 	return {
-		// state
-		// getters
-		// actions
 		getAudioTracksInfo,
 		downloadAudioTracks,
 		createAudioTrack,
@@ -198,5 +210,10 @@ export const useAudioStore = createGlobalState(() => {
 		getCurrentTrack,
 		getNextTrack,
 		getPreviousTrack,
+		ambientSoundVolumes,
+		youtubeVolume,
+		youtubeLink,
+		hasAnyVolume,
+		audioTabActive,
 	};
 });
