@@ -1,10 +1,49 @@
-// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://betterme.dev',
+  compressHTML: true,
+  build: {
+    inlineStylesheets: 'auto',
+  },
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+    },
+  },
+  vite: {
+    css: {
+      transformer: 'lightningcss',
+    },
+    build: {
+      cssMinify: 'lightningcss',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: false,
+          passes: 2,
+        },
+        mangle: true,
+        format: {
+          comments: false,
+        },
+      },
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('astro') || id.includes('starlight')) {
+                return 'vendor-astro';
+              }
+              return 'vendor';
+            }
+          },
+        },
+      },
+    },
+  },
   integrations: [
     starlight({
       title: 'BetterMe',
@@ -12,6 +51,9 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:locale', content: 'vi_VN' } },
         { tag: 'link', attrs: { rel: 'alternate', type: 'application/rss+xml', title: 'BetterMe', href: '/rss.xml' } },
         { tag: 'link', attrs: { rel: 'sitemap', href: '/sitemap-index.xml' } },
+        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' } },
+        { tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap' } },
       ],
       customCss: ['./src/styles/docs.css'],
       components: {
