@@ -32,6 +32,7 @@ export default defineConfig(async () => ({
   },
   build: {
     cssMinify: 'lightningcss',
+    target: 'es2022',
   },
   plugins: [
     tailwindcss(),
@@ -68,6 +69,7 @@ export default defineConfig(async () => ({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '~~': fileURLToPath(new URL('./', import.meta.url)),
+      'vue': 'vue/dist/vue.runtime.esm-bundler.js',
     }
   }
 }));
