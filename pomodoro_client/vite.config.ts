@@ -33,6 +33,13 @@ export default defineConfig(async () => ({
   build: {
     cssMinify: 'lightningcss',
     target: 'es2022',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      }
+    }
   },
   plugins: [
     tailwindcss(),
