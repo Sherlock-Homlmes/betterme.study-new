@@ -2,15 +2,14 @@
 ResizablePanelGroup(
   direction="horizontal"
   class="fixed z-40 right-0 h-full md:p-4 pointer-events-none"
-  :style="{ width: panelWidth }"
 )
   ResizablePanel
     //- TODO: add huong dan -))
   ResizableHandle(class="opacity-0")
   ResizablePanel(
     class="pointer-events-auto"
-    :default-size="45"
-    :min-size="39"
+    :default-size="isMobile ? 100 : 45"
+    :min-size="isMobile ? 100 : 39"
     :max-size="100"
   )
     section(class="w-full h-full")
@@ -58,6 +57,7 @@ ResizablePanelGroup(
 </style>
 
 <script setup lang="ts">
+import { computed } from "vue"
 import { useMobileSettings } from "@/stores/platforms/mobileSettings"; // Changed to relative path
 import { useAuthStore } from "@/stores/auth"; // Changed to relative path
 import { useOpenPanels } from "@/stores/openpanels"; // Changed to relative path
@@ -74,6 +74,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import { useWindowSize } from "@vueuse/core"
 
 const props = defineProps({
 	panelName: {
@@ -93,4 +94,7 @@ const { isAuth } = useAuthStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
 const closePanel = () => openPanels.value[props.panelName] = false
+
+const { width: windowWidth } = useWindowSize()
+const isMobile = computed(() => windowWidth.value < 768)
 </script>
