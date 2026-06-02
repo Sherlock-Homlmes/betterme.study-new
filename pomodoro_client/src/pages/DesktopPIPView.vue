@@ -69,10 +69,9 @@ watch([timerString, currentScheduleColour], ([newTimer, newColour]) => {
 }, { deep: true });
 </script>
 
-<template>
-	<div class="pip-container" :style="containerStyle" data-tauri-drag-region>
-		<div class="timer-display">{{ localTimerString }}</div>
-	</div>
+<template lang="pug">
+div.pip-container(:style="containerStyle" data-tauri-drag-region)
+	div.timer-display {{ localTimerString }}
 </template>
 
 <style scoped>

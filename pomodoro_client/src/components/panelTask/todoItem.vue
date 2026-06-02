@@ -113,57 +113,48 @@ watch(
 );
 </script>
 
-<template>
-  <div
-    class="relative flex flex-row items-center px-2 py-3 transition-all duration-200 border-l-8 rounded-md hover:shadow-sm border-themed group md:py-2"
-    :class="[{ 'opacity-50 line-through italic': props.item.status === TaskStatus.DONE, 'cursor-move': showReorder, 'ring ring-themed': state.dragged || props.droptarget, 'bg-themed !text-white': props.manage && state.editing }, props.manage && state.editing ? 'bg-themed' : 'bg-surface-light dark:bg-surface-dark hover:shadow-md hover:ring-1 hover:ring-themed']"
-    :style="{ '--theme': settingsStore.getColor(props.item.section, ColorMethod.modern) }"
-    draggable="true"
-    @mouseenter="state.hovering = true"
-    @mouseleave="state.hovering = false"
-    @dragstart="(event) => { startDrag(event, item), emit('dropstart', props.item) }"
-    @dragover.prevent
-    @dragend="(event) => { state.dragged = false, emit('dropfinish', props.item) }"
-    @dragenter="emit('droptarget', props.item)"
-  >
-    <div :class="['absolute left-0 top-0 h-full self-stretch bg-themed transition-all duration-75 text-white flex flex-row items-center flex-shrink-0 cursor-move', showReorder ? 'w-6' : 'w-0']">
-      <span v-show="showReorder">
-        <PencilIcon v-if="props.manage && state.editing" size="16" />
-        <MenuIcon v-else size="16" />
-      </span>
-    </div>
-    <div class="flex flex-col flex-grow w-full min-w-0 py-2 -my-2 transition-all duration-75 select-none mr-7" :class="[showReorder ? 'translate-x-6' : 'translate-x-0']" @click="state.editing = true">
-      <input
-        v-if="props.manage && state.editing"
-        ref="editbox"
-        v-model="displayedTitle"
-        class="py-2 pl-1 -my-2 -ml-1 text-white bg-transparent outline-none"
-        @blur="state.editing = false, handleEdit(displayedTitle)"
-        @keyup.enter.exact="state.editing = false, handleEdit(displayedTitle)"
-      >
-      <span v-else class="break-words">{{ props.item.title }}</span>
-      <!-- <span class="text-sm">Description</span> -->
-    </div>
-
-    <span class="flex-grow" />
-
-    <div class="flex flex-row items-center flex-shrink-0 gap-4 md:gap-3">
-      <transition name="slidein">
-        <Button
-          v-show="manage"
-          circle
-          :importance="ButtonImportance.Text"
-          class="-m-3 md:-m-2"
-          inner-class="p-3 md:p-2"
-          bg-class="ring-themed group-hover:bg-themed"
-          @click="deleteTask(props.item.id)"
-        >
-          <TrashIcon size="18" />
-        </Button>
-      </transition>
-      <input v-model="checked" type="checkbox" class="w-6 h-6 mr-1 rounded accent-themed text-themed dark:text-themed md:w-5 md:h-5">
-    </div>
-  </div>
+<template lang="pug">
+div(
+  class="relative flex flex-row items-center px-2 py-3 transition-all duration-200 border-l-8 rounded-md hover:shadow-sm border-themed group md:py-2"
+  :class="[{ 'opacity-50 line-through italic': props.item.status === TaskStatus.DONE, 'cursor-move': showReorder, 'ring ring-themed': state.dragged || props.droptarget, 'bg-themed !text-white': props.manage && state.editing }, props.manage && state.editing ? 'bg-themed' : 'bg-surface-light dark:bg-surface-dark hover:shadow-md hover:ring-1 hover:ring-themed']"
+  :style="{ '--theme': settingsStore.getColor(props.item.section, ColorMethod.modern) }"
+  draggable="true"
+  @mouseenter="state.hovering = true"
+  @mouseleave="state.hovering = false"
+  @dragstart="(event) => { startDrag(event, item), emit('dropstart', props.item) }"
+  @dragover.prevent
+  @dragend="(event) => { state.dragged = false, emit('dropfinish', props.item) }"
+  @dragenter="emit('droptarget', props.item)"
+)
+  div(:class="['absolute left-0 top-0 h-full self-stretch bg-themed transition-all duration-75 text-white flex flex-row items-center flex-shrink-0 cursor-move', showReorder ? 'w-6' : 'w-0']")
+    span(v-show="showReorder")
+      PencilIcon(v-if="props.manage && state.editing" size="16")
+      MenuIcon(v-else size="16")
+  div(class="flex flex-col flex-grow w-full min-w-0 py-2 -my-2 transition-all duration-75 select-none mr-7" :class="[showReorder ? 'translate-x-6' : 'translate-x-0']" @click="state.editing = true")
+    input(
+      v-if="props.manage && state.editing"
+      ref="editbox"
+      v-model="displayedTitle"
+      class="py-2 pl-1 -my-2 -ml-1 text-white bg-transparent outline-none"
+      @blur="state.editing = false, handleEdit(displayedTitle)"
+      @keyup.enter.exact="state.editing = false, handleEdit(displayedTitle)"
+    )
+    span(v-else class="break-words") {{ props.item.title }}
+    //- span(class="text-sm") Description
+  span(class="flex-grow")
+  div(class="flex flex-row items-center flex-shrink-0 gap-4 md:gap-3")
+    transition(name="slidein")
+      Button(
+        v-show="manage"
+        circle
+        :importance="ButtonImportance.Text"
+        class="-m-3 md:-m-2"
+        inner-class="p-3 md:p-2"
+        bg-class="ring-themed group-hover:bg-themed"
+        @click="deleteTask(props.item.id)"
+      )
+        TrashIcon(size="18")
+    input(v-model="checked" type="checkbox" class="w-6 h-6 mr-1 rounded accent-themed text-themed dark:text-themed md:w-5 md:h-5")
 </template>
 
 <style lang="scss">

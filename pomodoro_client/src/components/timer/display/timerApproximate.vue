@@ -42,26 +42,18 @@ const time = computed(
 );
 </script>
 
-<template>
-  <div :class="['timer-display select-none flex flex-col md:flex-row gap-2 items-center leading-none text-9xl xl:text-[12rem]', { 'active': running }]">
-    <div class="flex flex-row">
-      <transition name="transition-approximate-up">
-        <div v-show="time.value < 0" class="-mr-2 font-bold">
-          +
-        </div>
-      </transition>
-      <transition name="transition-approximate-up" mode="out-in">
-        <div :key="time.value" :style="{ '--ch': Math.max(1, Math.ceil(Math.log10(Math.abs(time.value) + 1))) }" class="font-bold text-center md:text-right time-value">
-          {{ Math.abs(time.value) }}
-        </div>
-      </transition>
-    </div>
-    <transition name="transition-approximate-up" mode="out-in">
-      <div :key="time.string" class="text-[.5em]">
-        {{ time.string }}
-      </div>
-    </transition>
-  </div>
+<template lang="pug">
+div(:class="['timer-display select-none flex flex-col md:flex-row gap-2 items-center leading-none text-9xl xl:text-[12rem]', { 'active': running }]")
+  div(class="flex flex-row")
+    transition(name="transition-approximate-up")
+      div(v-show="time.value < 0" class="-mr-2 font-bold")
+        | +
+    transition(name="transition-approximate-up" mode="out-in")
+      div(:key="time.value" :style="{ '--ch': Math.max(1, Math.ceil(Math.log10(Math.abs(time.value) + 1))) }" class="font-bold text-center md:text-right time-value")
+        | {{ Math.abs(time.value) }}
+  transition(name="transition-approximate-up" mode="out-in")
+    div(:key="time.string" class="text-[.5em]")
+      | {{ time.string }}
 </template>
 
 <style lang="scss" scoped>

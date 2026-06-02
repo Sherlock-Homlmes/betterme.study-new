@@ -88,40 +88,34 @@ const isSideControls = computed(
 );
 </script>
 
-<template>
-  <div class="flex flex-col justify-start gap-2" :class="{'pointer-events-none opacity-60': props.disabled }" :tabindex="disabled ? -1 : 0">
-    <div class="flex flex-row items-center gap-4">
-      <!-- Settings item title and description -->
-      <div class="flex-grow select-none">
-        <div v-text="$t(translationKey + '._title')" />
-        <div class="text-sm opacity-80" v-text="$t(translationKey + '._description')" />
-      </div>
-      <!-- Settings item control (right side) -->
-      <div v-if="isSideControls" class="flex-shrink-0 w-36">
-        <Component
-           :is="controls[props.type]"
-           :disabled="props.disabled"
-           :min="props.min"
-           :max="props.max"
-           :choices="props.choices"
-           class="ml-auto"
-           :value="value"
-           @input="(newValue: any) => value = newValue"
-         />
-      </div>
-    </div>
-
-    <!-- Settings item control (below) -->
-    <div v-if="!isSideControls">
-      <OptionGroup
-        v-if="props.type === Control.Option"
-         :choices="props.choices"
-         :disabled="props.disabled"
-         :value="value ?? ''"
-         :translation-key="translationKey"
-         @input="(newValue: any) => value = newValue"
-       />
-      <slot />
-    </div>
-  </div>
+<template lang="pug">
+div(class="flex flex-col justify-start gap-2" :class="{'pointer-events-none opacity-60': props.disabled }" :tabindex="disabled ? -1 : 0")
+  div(class="flex flex-row items-center gap-4")
+    //- Settings item title and description
+    div(class="flex-grow select-none")
+      div(v-text="$t(translationKey + '._title')")
+      div(class="text-sm opacity-80" v-text="$t(translationKey + '._description')")
+    //- Settings item control (right side)
+    div(v-if="isSideControls" class="flex-shrink-0 w-36")
+      Component(
+        :is="controls[props.type]"
+        :disabled="props.disabled"
+        :min="props.min"
+        :max="props.max"
+        :choices="props.choices"
+        class="ml-auto"
+        :value="value"
+        @input="(newValue: any) => value = newValue"
+      )
+  //- Settings item control (below)
+  div(v-if="!isSideControls")
+    OptionGroup(
+      v-if="props.type === Control.Option"
+      :choices="props.choices"
+      :disabled="props.disabled"
+      :value="value ?? ''"
+      :translation-key="translationKey"
+      @input="(newValue: any) => value = newValue"
+    )
+    slot
 </template>

@@ -1,5 +1,4 @@
-<template>
-  <div>
-    <slot />
-  </div>
+<template lang="pug">
+div
+  slot
 </template>

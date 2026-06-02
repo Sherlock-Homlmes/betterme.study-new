@@ -30,37 +30,24 @@ const activeThemeKey = computed(() => {
 const isUsingCustomTheme = ref(activeThemeKey === undefined);
 </script>
 
-<template>
-  <div class="flex flex-col gap-2">
-    <div class="grid grid-flow-row grid-cols-3 gap-2 mb-2">
-      <UiOption
-        v-for="(theme, index) in prebuiltThemes"
-        :key="`theme-${index}`"
-        :title="''"
-        class="text-center"
-        :active="!isUsingCustomTheme && activeThemeKey === index"
-        @click="$newTheme => {
-          settingsStore.visuals.theme.work = theme.work
-          settingsStore.visuals.theme.shortpause = theme.shortpause
-          settingsStore.visuals.theme.longpause = theme.longpause
-          isUsingCustomTheme = false
-        }"
-      >
-        <template #pre>
-          <ThemePreview class="mx-auto" :theme="theme" />
-        </template>
-      </UiOption>
-      <UiOption key="custom" :title="$t('settings.values.visuals.theme.custom')" class="text-center" :active="isUsingCustomTheme" @click="isUsingCustomTheme = true">
-        <!-- <template #pre>
-          <ThemePreview class="mx-auto mb-2" :theme="customTheme" />
-        </template> -->
-      </UiOption>
-    </div>
-
-    <template v-if="isUsingCustomTheme">
-      <ColorChanger :input-theme="customTheme.work" @input="$newColor => customTheme.work = $newColor" />
-      <ColorChanger :input-theme="customTheme.shortpause" @input="$newColor => customTheme.shortpause = $newColor" />
-      <ColorChanger :input-theme="customTheme.longpause" @input="$newColor => customTheme.longpause = $newColor" />
-    </template>
-  </div>
+<template lang="pug">
+div(class="flex flex-col gap-2")
+  div(class="grid grid-flow-row grid-cols-3 gap-2 mb-2")
+    UiOption(
+      v-for="(theme, index) in prebuiltThemes"
+      :key="`theme-${index}`"
+      :title="''"
+      class="text-center"
+      :active="!isUsingCustomTheme && activeThemeKey === index"
+      @click="$newTheme => { settingsStore.visuals.theme.work = theme.work; settingsStore.visuals.theme.shortpause = theme.shortpause; settingsStore.visuals.theme.longpause = theme.longpause; isUsingCustomTheme = false }"
+    )
+      template(#pre)
+        ThemePreview(class="mx-auto" :theme="theme")
+    UiOption(key="custom" :title="$t('settings.values.visuals.theme.custom')" class="text-center" :active="isUsingCustomTheme" @click="isUsingCustomTheme = true")
+      //- template(#pre)
+      //-   ThemePreview(class="mx-auto mb-2" :theme="customTheme")
+  template(v-if="isUsingCustomTheme")
+    ColorChanger(:input-theme="customTheme.work" @input="$newColor => customTheme.work = $newColor")
+    ColorChanger(:input-theme="customTheme.shortpause" @input="$newColor => customTheme.shortpause = $newColor")
+    ColorChanger(:input-theme="customTheme.longpause" @input="$newColor => customTheme.longpause = $newColor")
 </template>

@@ -34,35 +34,29 @@ const paddingStyle = computed(() => {
 });
 </script>
 
-<template>
-	<section
-		v-if="show"
-		class="fixed z-40 w-full h-full p-0 md:p-4"
-		:class="maxWidth"
-	>
-		<div
-			class="flex flex-col h-full overflow-hidden rounded-none shadow-lg bg-surface-light text-surface-onlight md:rounded-xl md:dark:ring-1 dark:ring-surface-ondark dark:ring-opacity-20 ring-inset dark:bg-surface-dark dark:text-surface-ondark"
-			:class="panelClass"
-			:style="{ ...paddingStyle, ...panelStyle }"
-		>
-			<!-- Header slot -->
-			<slot name="header">
-				<!-- Default header if no slot provided -->
-			</slot>
+<template lang="pug">
+section(
+  v-if="show"
+  class="fixed z-40 w-full h-full p-0 md:p-4"
+  :class="maxWidth"
+)
+  div(
+    class="flex flex-col h-full overflow-hidden rounded-none shadow-lg bg-surface-light text-surface-onlight md:rounded-xl md:dark:ring-1 dark:ring-surface-ondark dark:ring-opacity-20 ring-inset dark:bg-surface-dark dark:text-surface-ondark"
+    :class="panelClass"
+    :style="{ ...paddingStyle, ...panelStyle }"
+  )
+    //- Header slot
+    slot(name="header")
+      //- Default header if no slot provided
 
-			<!-- Content slot -->
-			<div class="flex-grow overflow-y-auto">
-				<slot name="content">
-					<!-- Default content if no slot provided -->
-				</slot>
-			</div>
+    //- Content slot
+    div(class="flex-grow overflow-y-auto")
+      slot(name="content")
+        //- Default content if no slot provided
 
-			<!-- Footer slot -->
-			<slot name="footer">
-				<!-- Default footer if no slot provided -->
-			</slot>
-		</div>
-	</section>
+    //- Footer slot
+    slot(name="footer")
+      //- Default footer if no slot provided
 </template>
 
 <style lang="scss" scoped>

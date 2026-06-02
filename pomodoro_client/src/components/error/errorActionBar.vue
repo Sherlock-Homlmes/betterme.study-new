@@ -69,19 +69,15 @@ onMounted(() => {
 });
 </script>
 
-<template>
-  <div class="flex flex-col items-center space-y-4">
-    <div v-text="$t('errorpage.suggestions.primary')" />
-    <div ref="primary" class="flex flex-col space-y-4 lg:flex-row md:space-y-0 md:space-x-2">
-      <!-- Recommended row  -->
-    </div>
-    <div v-text="$t('errorpage.suggestions.secondary')" />
-    <div ref="secondary" class="flex flex-col mt-4 space-y-4 lg:flex-row md:space-x-2 md:space-y-0">
-      <!-- Secondary row -->
-    </div>
-    <div ref="items" class="hidden">
-      <!-- Hide items by default -->
-      <slot />
-    </div>
-  </div>
+<template lang="pug">
+div(class="flex flex-col items-center space-y-4")
+  div(v-text="$t('errorpage.suggestions.primary')")
+  div(ref="primary" class="flex flex-col space-y-4 lg:flex-row md:space-y-0 md:space-x-2")
+    //- Recommended row
+  div(v-text="$t('errorpage.suggestions.secondary')")
+  div(ref="secondary" class="flex flex-col mt-4 space-y-4 lg:flex-row md:space-x-2 md:space-y-0")
+    //- Secondary row
+  div(ref="items" class="hidden")
+    //- Hide items by default
+    slot
 </template>

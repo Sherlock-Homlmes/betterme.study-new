@@ -26,18 +26,16 @@ const timerValue = computed(
 );
 </script>
 
-<template>
-  <div class="flex flex-row items-center gap-4 select-none timer-percentage timer-display" :class="[{ 'active': running }]">
-    <transition name="transition-percentage" tag="span" mode="out-in">
-      <span
-        :key="timerValue"
-        :style="{ 'width': `${Math.max(1, Math.ceil(Math.log10(timerValue + 1)))}ch` }"
-        class="relative inline-block text-9xl md:text-[14rem] font-bold"
-        v-text="timerValue"
-      />
-    </transition>
-    <span class="text-4xl md:text-8xl">%</span>
-  </div>
+<template lang="pug">
+div(class="flex flex-row items-center gap-4 select-none timer-percentage timer-display" :class="[{ 'active': running }]")
+  transition(name="transition-percentage" tag="span" mode="out-in")
+    span(
+      :key="timerValue"
+      :style="{ 'width': `${Math.max(1, Math.ceil(Math.log10(timerValue + 1)))}ch` }"
+      class="relative inline-block text-9xl md:text-[14rem] font-bold"
+      v-text="timerValue"
+    )
+  span(class="text-4xl md:text-8xl") %
 </template>
 
 <style lang="scss" scoped>

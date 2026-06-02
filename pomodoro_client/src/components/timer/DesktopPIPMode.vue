@@ -30,7 +30,7 @@ onMounted(async () => {
 });
 </script>
 
-<template>
-    <!-- No video element needed for Tauri desktop PIP mode -->
-    <div style="display: none;"></div>
+<template lang="pug">
+//- No video element needed for Tauri desktop PIP mode
+div(style="display: none")
 </template>

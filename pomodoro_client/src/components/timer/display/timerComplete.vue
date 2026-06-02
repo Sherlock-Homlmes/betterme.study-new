@@ -2,10 +2,9 @@
 import { CheckIcon as CompleteIcon } from "vue-tabler-icons";
 </script>
 
-<template>
-  <div class="timer-complete-icon">
-    <CompleteIcon />
-  </div>
+<template lang="pug">
+div.timer-complete-icon
+  CompleteIcon
 </template>
 
 <style lang="scss" scoped>

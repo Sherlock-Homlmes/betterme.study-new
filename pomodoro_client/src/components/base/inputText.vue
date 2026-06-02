@@ -19,10 +19,10 @@ const innerValue = computed({
 const emit = defineEmits<{ (event: "input", value: string): void }>();
 </script>
 
-<template>
-  <input
-    v-model="innerValue"
-    class="w-full min-w-0"
-    type="text"
-  >
+<template lang="pug">
+input(
+  v-model="innerValue"
+  class="w-full min-w-0"
+  type="text"
+)
 </template>

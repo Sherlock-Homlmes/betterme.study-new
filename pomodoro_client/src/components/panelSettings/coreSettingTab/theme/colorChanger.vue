@@ -38,34 +38,33 @@ watch(
 );
 </script>
 
-<template>
-  <div class="flex flex-row gap-4">
-    <div class="w-6 h-6 rounded-full flex-shrink-0" :style="{ backgroundColor: `rgb(${previewColorRGB[0]} ${previewColorRGB[1]} ${previewColorRGB[2]})` }" />
-    <InputNumber
-      class="flex-grow"
-      value-class="w-[4ch]"
-      postfix="°"
-      :value="inputHue"
-      :min="0"
-      :max="360"
-      @input="$value => inputHue = $value"
-    />
-    <InputNumber
-      class="flex-grow"
-      value-class="w-[4ch]"
-      :value="inputSat"
-      postfix="%"
-      :min="10"
-      :max="100"
-      @input="$value => inputSat = $value"
-    />
-    <!-- <InputNumber
-      class="flex-grow"
-      value-class="w-[4ch]"
-      :value="inputLit"
-      :min="50"
-      :max="80"
-      @input="$value => inputLit = $value"
-    /> -->
-  </div>
+<template lang="pug">
+div(class="flex flex-row gap-4")
+  div(class="w-6 h-6 rounded-full flex-shrink-0" :style="{ backgroundColor: `rgb(${previewColorRGB[0]} ${previewColorRGB[1]} ${previewColorRGB[2]})` }")
+  InputNumber(
+    class="flex-grow"
+    value-class="w-[4ch]"
+    postfix="°"
+    :value="inputHue"
+    :min="0"
+    :max="360"
+    @input="$value => inputHue = $value"
+  )
+  InputNumber(
+    class="flex-grow"
+    value-class="w-[4ch]"
+    :value="inputSat"
+    postfix="%"
+    :min="10"
+    :max="100"
+    @input="$value => inputSat = $value"
+  )
+  //- InputNumber(
+    class="flex-grow"
+    value-class="w-[4ch]"
+    :value="inputLit"
+    :min="50"
+    :max="80"
+    @input="$value => inputLit = $value"
+  )
 </template>

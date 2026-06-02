@@ -46,36 +46,31 @@ const handleDrop = () => {
 };
 </script>
 
-<template>
-  <div class="px-4 py-4 shadow-lg bg-surface-variant text-surface-onvariant dark:bg-surface-darkvariant dark:text-surface-ondarkvariant border-opacity-20 dark:border-opacity-20 md:border md:py-3" @keyup.stop="">
-    <div class="relative flex flex-row items-center justify-center h-10">
-      <p class="text-xl font-bold tracking-tighter text-gray-800 uppercase dark:text-gray-100" v-text="$t('tasks.title')" />
-      <div class="absolute right-0 float-right -mr-2">
-        <ControlButton circle default-style :theme="ButtonTheme.Primary" :importance="ButtonImportance.Text" @click="openPanels.todo = false">
-          <XIcon />
-        </ControlButton>
-      </div>
-    </div>
-    <div v-show="tasks.length < 1" key="notask" class="mt-3 italic text-black dark:text-gray-200 text-opacity-70" v-text="$t('tasks.empty')" />
-    <transition-group
-      tag="div"
-      name="transition-item"
-      class="flex flex-col px-2 py-1 mt-2 -mx-2 space-y-2 overflow-x-hidden overflow-y-auto max-h-64"
-    >
-      <TaskItem
-        v-for="task in tasks"
-        :key="task.id"
-        :manage="state.manageMode"
-        :item="task"
-        :droptarget="task === state.dropTarget"
-        moveable
-        @dropstart="state.draggedItem = task, state.dragging = true"
-        @dropfinish="handleDrop"
-        @droptarget="updateDropTarget"
-      />
-    </transition-group>
-    <TaskAdd class="mt-3" />
-  </div>
+<template lang="pug">
+div(class="px-4 py-4 shadow-lg bg-surface-variant text-surface-onvariant dark:bg-surface-darkvariant dark:text-surface-ondarkvariant border-opacity-20 dark:border-opacity-20 md:border md:py-3" @keyup.stop="")
+  div(class="relative flex flex-row items-center justify-center h-10")
+    p(class="text-xl font-bold tracking-tighter text-gray-800 uppercase dark:text-gray-100" v-text="$t('tasks.title')")
+    div(class="absolute right-0 float-right -mr-2")
+      ControlButton(circle default-style :theme="ButtonTheme.Primary" :importance="ButtonImportance.Text" @click="openPanels.todo = false")
+        XIcon
+  div(v-show="tasks.length < 1" key="notask" class="mt-3 italic text-black dark:text-gray-200 text-opacity-70" v-text="$t('tasks.empty')")
+  transition-group(
+    tag="div"
+    name="transition-item"
+    class="flex flex-col px-2 py-1 mt-2 -mx-2 space-y-2 overflow-x-hidden overflow-y-auto max-h-64"
+  )
+    TaskItem(
+      v-for="task in tasks"
+      :key="task.id"
+      :manage="state.manageMode"
+      :item="task"
+      :droptarget="task === state.dropTarget"
+      moveable
+      @dropstart="state.draggedItem = task, state.dragging = true"
+      @dropfinish="handleDrop"
+      @droptarget="updateDropTarget"
+    )
+  TaskAdd(class="mt-3")
 </template>
 
 <style lang="scss">

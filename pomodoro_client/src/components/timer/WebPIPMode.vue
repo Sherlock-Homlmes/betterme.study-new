@@ -47,9 +47,8 @@ onMounted(async () => {
 });
 </script>
 
-<template>
-    <video id="videoPlayer" width="1920" height="1080" style="display: none" autoplay>
-      <source src="" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+<template lang="pug">
+video#videoPlayer(width="1920" height="1080" style="display: none" autoplay)
+  source(src="" type="video/mp4")
+  | Your browser does not support the video tag.
 </template>

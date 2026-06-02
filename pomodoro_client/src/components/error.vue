@@ -164,57 +164,41 @@ const actionTypeToButtonStyle = (action: ActionType): ButtonStyleMapping => {
 };
 </script>
 
-<template>
-  <div class="flex flex-col items-center justify-center w-screen min-h-screen p-6 text-surface-ondark bg-surface-dark dark">
-    <div>
-      <component :is="Icons[currentErrorType]" size="128" stroke-width="1.25" />
-    </div>
-    <h1 class="mt-2 text-5xl font-bold tracking-tighter text-center uppercase" v-text="errorHeading" />
-
-    <!-- Error description -->
-    <div class="max-w-screen-lg mt-8 border-2 border-gray-300 rounded-lg">
-      <transition name="showerror-transition" mode="out-in">
-        <div v-if="!state.showError" class="flex flex-row items-center p-4 space-x-4 text-surface-ondark transition bg-surface-darkvariant cursor-pointer" role="button" @click="state.showError = true">
-          <IconShowError size="42" />
-          <div>
-            <div class="font-bold" v-text="$t('errorpage.showError.main')" />
-            <div v-text="$t('errorpage.showError.sub')" />
-          </div>
-        </div>
-        <div v-else-if="state.showError" class="p-4 overflow-y-scroll max-h-56 max-w-full break-before-all">
-          <pre v-text="fullError" />
-        </div>
-      </transition>
-    </div>
-
-    <!-- Recommended actions -->
-    <ActionBar class="mt-8">
-      <UiButton :data-row="recommendedActions.reset" v-bind="actionTypeToButtonStyle(recommendedActions.reset)" @click="actionReset">
-        <IconReset class="mr-1" />
-        <div v-text="$t('errorpage.action.reset')" />
-      </UiButton>
-      <UiButton :data-row="recommendedActions.reload" v-bind="actionTypeToButtonStyle(recommendedActions.reload)" @click="actionReload">
-        <IconReload class="mr-1" />
-        <div v-text="$t('errorpage.action.reload')" />
-      </UiButton>
-      <UiButton link :data-row="recommendedActions.home" v-bind="actionTypeToButtonStyle(recommendedActions.home)" href="/">
-        <IconHome class="mr-1" />
-        <div v-text="$t('errorpage.action.home')" />
-      </UiButton>
-      <!-- <UiButton link :data-row="recommendedActions.githubIssue" v-bind="actionTypeToButtonStyle(recommendedActions.githubIssue)" href="https://github.com/Hanziness/FocusTide/issues?utm_source=AnotherPomodor&utm_medium=web&utm_content=error">
-        <IconGithub class="mr-1" />
-        <div v-text="$t('errorpage.action.githubIssue')" />
-      </UiButton>
-      <UiButton link :data-row="recommendedActions.githubDiscussion" v-bind="actionTypeToButtonStyle(recommendedActions.githubDiscussion)" href="https://github.com/Hanziness/FocusTide/discussions?utm_source=AnotherPomodor&utm_medium=web&utm_content=error">
-        <IconDiscussion class="mr-1" />
-        <div v-text="$t('errorpage.action.githubDiscussion')" />
-      </UiButton>
-      <UiButton link :data-row="recommendedActions.twitter" v-bind="actionTypeToButtonStyle(recommendedActions.home)" href="https://twitter.com/FocusTide?utm_source=AnotherPomodor&utm_medium=web&utm_content=error">
-        <IconTwitter class="mr-1" />
-        <div v-text="$t('errorpage.action.twitter')" />
-      </UiButton> -->
-    </ActionBar>
-  </div>
+<template lang="pug">
+div(class="flex flex-col items-center justify-center w-screen min-h-screen p-6 text-surface-ondark bg-surface-dark dark")
+  div
+    component(:is="Icons[currentErrorType]" size="128" stroke-width="1.25")
+  h1(class="mt-2 text-5xl font-bold tracking-tighter text-center uppercase" v-text="errorHeading")
+  //- Error description
+  div(class="max-w-screen-lg mt-8 border-2 border-gray-300 rounded-lg")
+    transition(name="showerror-transition" mode="out-in")
+      div(v-if="!state.showError" class="flex flex-row items-center p-4 space-x-4 text-surface-ondark transition bg-surface-darkvariant cursor-pointer" role="button" @click="state.showError = true")
+        IconShowError(size="42")
+        div
+          div(class="font-bold" v-text="$t('errorpage.showError.main')")
+          div(v-text="$t('errorpage.showError.sub')")
+      div(v-else-if="state.showError" class="p-4 overflow-y-scroll max-h-56 max-w-full break-before-all")
+        pre(v-text="fullError")
+  //- Recommended actions
+  ActionBar(class="mt-8")
+    UiButton(:data-row="recommendedActions.reset" v-bind="actionTypeToButtonStyle(recommendedActions.reset)" @click="actionReset")
+      IconReset(class="mr-1")
+      div(v-text="$t('errorpage.action.reset')")
+    UiButton(:data-row="recommendedActions.reload" v-bind="actionTypeToButtonStyle(recommendedActions.reload)" @click="actionReload")
+      IconReload(class="mr-1")
+      div(v-text="$t('errorpage.action.reload')")
+    UiButton(link :data-row="recommendedActions.home" v-bind="actionTypeToButtonStyle(recommendedActions.home)" href="/")
+      IconHome(class="mr-1")
+      div(v-text="$t('errorpage.action.home')")
+    //- UiButton(link :data-row="recommendedActions.githubIssue" v-bind="actionTypeToButtonStyle(recommendedActions.githubIssue)" href="https://github.com/Hanziness/FocusTide/issues?utm_source=AnotherPomodor&utm_medium=web&utm_content=error")
+    //-   IconGithub(class="mr-1")
+    //-   div(v-text="$t('errorpage.action.githubIssue')")
+    //- UiButton(link :data-row="recommendedActions.githubDiscussion" v-bind="actionTypeToButtonStyle(recommendedActions.githubDiscussion)" href="https://github.com/Hanziness/FocusTide/discussions?utm_source=AnotherPomodor&utm_medium=web&utm_content=error")
+    //-   IconDiscussion(class="mr-1")
+    //-   div(v-text="$t('errorpage.action.githubDiscussion')")
+    //- UiButton(link :data-row="recommendedActions.twitter" v-bind="actionTypeToButtonStyle(recommendedActions.home)" href="https://twitter.com/FocusTide?utm_source=AnotherPomodor&utm_medium=web&utm_content=error")
+    //-   IconTwitter(class="mr-1")
+    //-   div(v-text="$t('errorpage.action.twitter')")
 </template>
 
 <style lang="scss" scoped>

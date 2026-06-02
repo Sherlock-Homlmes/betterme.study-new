@@ -65,18 +65,17 @@ const updateInput = (newValue: string) => {
 };
 </script>
 
-<template>
-  <div class="flex flex-row items-center gap-2">
-    <input
-      class="input-number-range relative h-3 min-w-0 bg-transparent appearance-none group isolate w-full"
-      :value="state.value"
-      :min="props.min"
-      :max="props.max"
-      type="range"
-      @input="(e) => updateInput((e.target as HTMLInputElement).value)"
-    >
-    <span class="min-w-[2ch] text-center" :class="props.valueClass" v-text="`${props.prefix}${state.value}${props.postfix}`" />
-  </div>
+<template lang="pug">
+div(class="flex flex-row items-center gap-2")
+  input(
+    class="input-number-range relative h-3 min-w-0 bg-transparent appearance-none group isolate w-full"
+    :value="state.value"
+    :min="props.min"
+    :max="props.max"
+    type="range"
+    @input="(e) => updateInput((e.target as HTMLInputElement).value)"
+  )
+  span(class="min-w-[2ch] text-center" :class="props.valueClass" v-text="`${props.prefix}${state.value}${props.postfix}`")
 </template>
 
 <style lang="scss" scoped>

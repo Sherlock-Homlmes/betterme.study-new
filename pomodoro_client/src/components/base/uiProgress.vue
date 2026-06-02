@@ -8,8 +8,7 @@ const props = defineProps({
 });
 </script>
 
-<template>
-  <div class="rounded-full h-2 bg-surface-variant dark:bg-surface-darkvariant overflow-hidden ring-1 ring-inset ring-surface-onlight ring-opacity-10 dark:ring-surface-ondark dark:ring-opacity-25">
-    <div class="rounded-full bg-primary dark:bg-primary-dark w-full h-full transition-all" :style="{ 'translate': `-${100 - 100 * props.progress}% 0` }" />
-  </div>
+<template lang="pug">
+div(class="rounded-full h-2 bg-surface-variant dark:bg-surface-darkvariant overflow-hidden ring-1 ring-inset ring-surface-onlight ring-opacity-10 dark:ring-surface-ondark dark:ring-opacity-25")
+  div(class="rounded-full bg-primary dark:bg-primary-dark w-full h-full transition-all" :style="{ 'translate': `-${100 - 100 * props.progress}% 0` }")
 </template>

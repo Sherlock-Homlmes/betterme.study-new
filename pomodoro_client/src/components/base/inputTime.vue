@@ -76,29 +76,27 @@ const updateSec = (newValue: string) => {
 };
 </script>
 
-<template>
-<!-- TODO: fix bg-error value -->
-  <div class="flex flex-row items-center gap-2 relative rounded-lg overflow-hidden outline outline-1 outline-surface-outline dark:outline-surface-darkoutline focus-within:ring focus-within:ring-primary dark:focus-within:ring-primary-dark transition"
-      :class="{ 'bg-error-dark dark:bg-error-light outline outline-1 ring ring-primary': !valid, 'bg-transparent': valid }"
-  >
-    <input
-      :value="innerValue.min"
-      type="text"
-      pattern="[0-9]*"
-      inputmode="numeric"
-      class="w-full py-2 pl-2 focus:ring-0 focus:bg-primary-container focus:text-primary-oncontainer dark:focus:bg-primary-darkcontainer dark:focus:text-primary-darkoncontainer focus:outline-none"
-      :class="{ 'bg-error-dark dark:bg-error-light': !valid, 'bg-transparent': valid }"
-      @input="(e) => updateMin((e.target as HTMLInputElement).value)"
-    >
-    <span>:</span>
-    <input
-      :value="innerValue.sec"
-      type="text"
-      pattern="[0-9]*"
-      inputmode="numeric"
-      class="w-full py-2 pl-2 focus:ring-0 focus:bg-primary-container focus:text-primary-oncontainer dark:focus:bg-primary-darkcontainer dark:focus:text-primary-darkoncontainer focus:outline-none"
-      :class="{ 'bg-error-dark dark:bg-error-light': !valid, 'bg-transparent': valid }"
-      @input="(e) => updateSec((e.target as HTMLInputElement).value)"
-    >
-  </div>
+<template lang="pug">
+//- TODO: fix bg-error value
+div(class="flex flex-row items-center gap-2 relative rounded-lg overflow-hidden outline outline-1 outline-surface-outline dark:outline-surface-darkoutline focus-within:ring focus-within:ring-primary dark:focus-within:ring-primary-dark transition"
+    :class="{ 'bg-error-dark dark:bg-error-light outline outline-1 ring ring-primary': !valid, 'bg-transparent': valid }")
+  input(
+    :value="innerValue.min"
+    type="text"
+    pattern="[0-9]*"
+    inputmode="numeric"
+    class="w-full py-2 pl-2 focus:ring-0 focus:bg-primary-container focus:text-primary-oncontainer dark:focus:bg-primary-darkcontainer dark:focus:text-primary-darkoncontainer focus:outline-none"
+    :class="{ 'bg-error-dark dark:bg-error-light': !valid, 'bg-transparent': valid }"
+    @input="(e) => updateMin((e.target as HTMLInputElement).value)"
+  )
+  span :
+  input(
+    :value="innerValue.sec"
+    type="text"
+    pattern="[0-9]*"
+    inputmode="numeric"
+    class="w-full py-2 pl-2 focus:ring-0 focus:bg-primary-container focus:text-primary-oncontainer dark:focus:bg-primary-darkcontainer dark:focus:text-primary-darkoncontainer focus:outline-none"
+    :class="{ 'bg-error-dark dark:bg-error-light': !valid, 'bg-transparent': valid }"
+    @input="(e) => updateSec((e.target as HTMLInputElement).value)"
+  )
 </template>

@@ -2,8 +2,7 @@
 import OptionGroup from "@/components/base/optionGroup.vue";
 </script>
 
-<template>
-  <div class="h-96 flex flex-col">
-    <OptionGroup :choices="{'pomodoro': 'Pomodoro', 'short': 'Short times'}" :value="'short'" />
-  </div>
+<template lang="pug">
+div(class="h-96 flex flex-col")
+  OptionGroup(:choices="{'pomodoro': 'Pomodoro', 'short': 'Short times'}" :value="'short'")
 </template>
