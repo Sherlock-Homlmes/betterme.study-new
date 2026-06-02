@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watch } from 'vue';
-import { RemoteParticipant, Track } from 'livekit-client';
 import {
   VideoIcon,
   MicrophoneIcon,
@@ -50,7 +49,7 @@ const handleLeaveRoom = () => {
 // Watch for local video ref changes
 watch(localVideoRef, (newRef) => {
   if (newRef && localParticipant.value && isCameraEnabled.value) {
-    const videoTrackPublication = localParticipant.value.getTrackPublication(Track.Source.Camera);
+    const videoTrackPublication = localParticipant.value.getTrackPublication('camera');
     if (videoTrackPublication?.videoTrack) {
       videoTrackPublication.videoTrack.attach(newRef);
     }

@@ -1,10 +1,17 @@
 import { ref, computed, markRaw, nextTick, watch } from 'vue';
 import { createGlobalState } from '@vueuse/core';
-import { Room, RoomEvent, Track, LocalParticipant, RemoteParticipant, Participant, MediaDeviceFailure } from 'livekit-client';
+import type { Room, RemoteParticipant, LocalParticipant, Participant, Track as TrackType } from 'livekit-client';
 import { runtimeConfig } from '@/config/runtimeConfig';
 import { api } from '@/utils/betterFetch';
 import { useAuthStore } from './auth';
-import {useErrorStore} from "./common";
+import { useErrorStore } from "./common";
+
+// Lazy load livekit
+let _livekit: typeof import('livekit-client') | null = null;
+const getLivekit = async () => {
+  if (!_livekit) _livekit = await import('livekit-client');
+  return _livekit;
+};
 
 // Chat message types
 export type MessageType = 'text' | 'file' | 'gif' | 'reaction';
@@ -31,8 +38,9 @@ export interface RoomInfo {
 }
 
 export const usePomodoroRoomsStore = createGlobalState(() => {
-	const { showError } = useErrorStore();
-  const {userSettings} = useAuthStore();
+  const { showError } = useErrorStore();
+  const { userSettings } = useAuthStore();
+
   // State
   const livekitRoom = ref<Room | null>(null);
   const isConnected = ref(false);
@@ -70,10 +78,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   // Reaction state
   const flyingReactions = ref<Array<{ id: string; emoji: string; x: number; y: number }>>([]);
 
-  // Common reactions
   const commonReactions = ['👍', '❤️', '😂', '😮', '😢', '🎉', '🔥', '👏'];
-
-  // Common GIFs
   const commonGifs = [
     'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
     'https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif',
@@ -83,167 +88,22 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
   ];
 
-  // Current room info
   const currentRoom = ref<RoomInfo | null>(null);
 
-  // Build API URL
-  const buildApiUrl = (path: string) => {
-    return `${runtimeConfig.public.API_URL}/v2/pomodoro-rooms${path}`;
-  };
-
-  // Setup room event listeners
-  const setupRoomListeners = (room: Room) => {
-    // Data received - handle chat messages and reactions
-    room.on(RoomEvent.DataReceived, (payload, participant) => {
-      handleDataReceived(payload, participant);
-    });
-
-    // Track subscribed - when a remote participant's track is available
-    room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
-      if (track.kind === Track.Kind.Video || track.kind === Track.Kind.Audio) {
-        if (publication.source === Track.Source.ScreenShare) {
-          attachScreenShareTrack(track, participant.identity);
-        } else {
-          attachTrack(track, participant.identity);
-        }
-      }
-      updateParticipantsList();
-    });
-
-    // Track unsubscribed
-    room.on(RoomEvent.TrackUnsubscribed, (track, publication, participant) => {
-      if (publication.source === Track.Source.ScreenShare) {
-        detachScreenShareTrack(track, participant.identity);
-      } else {
-        detachTrack(track, participant.identity);
-      }
-      updateParticipantsList();
-    });
-
-    // Participant track unmuted
-    room.on(RoomEvent.TrackUnmuted, () => {
-      updateParticipantsList();
-    });
-
-    // Participant track muted
-    room.on(RoomEvent.TrackMuted, () => {
-      updateParticipantsList();
-    });
-
-    // Participant connected
-    room.on(RoomEvent.ParticipantConnected, () => {
-      updateParticipantsList();
-    });
-
-    // Participant disconnected
-    room.on(RoomEvent.ParticipantDisconnected, (participant) => {
-      const videoElement = remoteVideoRefs.value.get(participant.identity);
-      if (videoElement) {
-        videoElement.remove();
-        remoteVideoRefs.value.delete(participant.identity);
-      }
-
-      const screenShareId = `screen-share-${participant.identity}`;
-      const screenShareElement = remoteVideoRefs.value.get(screenShareId);
-      if (screenShareElement) {
-        screenShareElement.remove();
-        remoteVideoRefs.value.delete(screenShareId);
-      }
-
-      const container = document.getElementById(`remote-${participant.identity}`);
-      if (container) {
-        container.innerHTML = '';
-      }
-
-      updateParticipantsList();
-    });
-
-    // Active speakers changed
-    room.on(RoomEvent.ActiveSpeakersChanged, (speakers) => {
-      updateActiveSpeakers(speakers);
-    });
-
-    // Disconnected
-    room.on(RoomEvent.Disconnected, () => {
-      isConnected.value = false;
-      cleanup();
-    });
-
-    // Local track published
-    room.on(RoomEvent.LocalTrackPublished, (publication) => {
-      if (publication.source === Track.Source.Camera) {
-        isCameraEnabled.value = true;
-        if (localVideoRef.value && publication.videoTrack) {
-          publication.videoTrack.attach(localVideoRef.value);
-        }
-      } else if (publication.source === Track.Source.Microphone) {
-        isMicEnabled.value = true;
-      } else if (publication.source === Track.Source.ScreenShare) {
-        isScreenShareEnabled.value = true;
-      }
-    });
-
-    // Local track unpublished
-    room.on(RoomEvent.LocalTrackUnpublished, (publication) => {
-      if (publication.source === Track.Source.Camera) {
-        isCameraEnabled.value = false;
-        if (publication.videoTrack) {
-          publication.videoTrack.detach();
-        }
-      } else if (publication.source === Track.Source.Microphone) {
-        isMicEnabled.value = false;
-      } else if (publication.source === Track.Source.ScreenShare) {
-        isScreenShareEnabled.value = false;
-      }
-    });
-
-    // Media devices error
-    room.on(RoomEvent.MediaDevicesError, (err) => {
-      console.error('Media devices error:', err);
-
-      const failure = MediaDeviceFailure.getFailure(err);
-      console.error('Media device failure type:', failure);
-
-      if (err) {
-        if (err.message && err.message.includes('camera')) {
-          isCameraEnabled.value = false;
-        } else if (err.message && err.message.includes('microphone')) {
-          isMicEnabled.value = false;
-        }
-
-        switch (failure) {
-          case MediaDeviceFailure.PermissionDenied:
-            showError('Permission denied for media device')
-            break;
-          case MediaDeviceFailure.NotFound:
-            showError('Media device not found')
-            break
-          case MediaDeviceFailure.DeviceInUse:
-            showError('Media device is already in use')
-            break;
-          default:
-            showError('Unknown media device error')
-        }
-      }
-    });
-  };
+  const buildApiUrl = (path: string) => `${runtimeConfig.public.API_URL}/v2/pomodoro-rooms${path}`;
 
   // Attach track to video element
-  const attachTrack = (track: Track, participantIdentity: string) => {
+  const attachTrack = (track: TrackType, participantIdentity: string) => {
     let videoElement = remoteVideoRefs.value.get(participantIdentity);
-
     if (!videoElement) {
       videoElement = document.createElement('video');
       videoElement.autoplay = true;
       videoElement.playsInline = true;
       videoElement.className = 'w-full h-full object-cover rounded-lg';
       videoElement.id = `remote-video-${participantIdentity}`;
-
       remoteVideoRefs.value.set(participantIdentity, videoElement);
     }
-
     track.attach(videoElement);
-
     const container = document.getElementById(`remote-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
       container.innerHTML = '';
@@ -251,37 +111,28 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Detach track from video element
-  const detachTrack = (track: Track, participantIdentity: string) => {
+  const detachTrack = (track: TrackType, participantIdentity: string) => {
     const videoElement = remoteVideoRefs.value.get(participantIdentity);
     if (videoElement) {
       track.detach(videoElement);
       videoElement.remove();
       const container = document.getElementById(`remote-${participantIdentity}`);
-      if (container) {
-        container.innerHTML = '';
-      }
+      if (container) container.innerHTML = '';
     }
   };
 
-  // Attach screen share track to video element
-  const attachScreenShareTrack = (track: Track, participantIdentity: string) => {
+  const attachScreenShareTrack = (track: TrackType, participantIdentity: string) => {
     const screenShareId = `screen-share-${participantIdentity}`;
-
     let videoElement = remoteVideoRefs.value.get(screenShareId);
-
     if (!videoElement) {
       videoElement = document.createElement('video');
       videoElement.autoplay = true;
       videoElement.playsInline = true;
       videoElement.className = 'w-full h-full object-cover rounded-lg';
       videoElement.id = `remote-video-${screenShareId}`;
-
       remoteVideoRefs.value.set(screenShareId, videoElement);
     }
-
     track.attach(videoElement);
-
     const container = document.getElementById(`remote-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
       container.innerHTML = '';
@@ -289,39 +140,52 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Detach screen share track from video element
-  const detachScreenShareTrack = (track: Track, participantIdentity: string) => {
+  const detachScreenShareTrack = (track: TrackType, participantIdentity: string) => {
     const screenShareId = `screen-share-${participantIdentity}`;
     const videoElement = remoteVideoRefs.value.get(screenShareId);
-
     if (videoElement) {
       track.detach(videoElement);
       videoElement.remove();
       const container = document.getElementById(`remote-${participantIdentity}`);
-      if (container) {
-        container.innerHTML = '';
-      }
+      if (container) container.innerHTML = '';
       remoteVideoRefs.value.delete(screenShareId);
     }
   };
 
-  // Update participants list
   const updateParticipantsList = () => {
     if (!livekitRoom.value) return;
-
     participants.value = Array.from(livekitRoom.value.remoteParticipants.values());
   };
 
-  // Update active speakers
-  const updateActiveSpeakers = (speakers: Participant[]) => {
-    // The UI will automatically update due to reactive properties
+  const updateActiveSpeakers = (_speakers: Participant[]) => { };
+
+  const scrollToBottom = () => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    }
   };
 
-  // Handle incoming data from LiveKit
+  const addChatMessage = (message: ChatMessage) => {
+    chatMessages.value.push(message);
+    if (!showChat.value && message.sender !== localParticipant.value?.identity) {
+      unreadMessageCount.value++;
+    }
+    nextTick(() => scrollToBottom());
+  };
+
+  const showFlyingReaction = (emoji: string) => {
+    const id = Date.now().toString() + Math.random();
+    const x = Math.random() * 80 + 10;
+    flyingReactions.value.push({ id, emoji, x, y: 100 });
+    setTimeout(() => {
+      const index = flyingReactions.value.findIndex(r => r.id === id);
+      if (index !== -1) flyingReactions.value.splice(index, 1);
+    }, 3000);
+  };
+
   const handleDataReceived = (payload: Uint8Array, participant?: RemoteParticipant | LocalParticipant) => {
     try {
       const data = JSON.parse(new TextDecoder().decode(payload));
-
       if (data.type === 'chat' && participant) {
         addChatMessage({
           id: Date.now().toString() + Math.random(),
@@ -343,31 +207,107 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Add chat message to the list
-  const addChatMessage = (message: ChatMessage) => {
-    chatMessages.value.push(message);
+  const setupRoomListeners = async (room: Room) => {
+    const { RoomEvent, Track, MediaDeviceFailure } = await getLivekit();
 
-    // Increment unread count if chat is not visible or message is not from local user
-    if (!showChat.value && message.sender !== localParticipant.value?.identity) {
-      unreadMessageCount.value++;
-    }
+    room.on(RoomEvent.DataReceived, (payload, participant) => {
+      handleDataReceived(payload, participant);
+    });
 
-    nextTick(() => {
-      scrollToBottom();
+    room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
+      if (track.kind === Track.Kind.Video || track.kind === Track.Kind.Audio) {
+        if (publication.source === Track.Source.ScreenShare) {
+          attachScreenShareTrack(track, participant.identity);
+        } else {
+          attachTrack(track, participant.identity);
+        }
+      }
+      updateParticipantsList();
+    });
+
+    room.on(RoomEvent.TrackUnsubscribed, (track, publication, participant) => {
+      if (publication.source === Track.Source.ScreenShare) {
+        detachScreenShareTrack(track, participant.identity);
+      } else {
+        detachTrack(track, participant.identity);
+      }
+      updateParticipantsList();
+    });
+
+    room.on(RoomEvent.TrackUnmuted, () => updateParticipantsList());
+    room.on(RoomEvent.TrackMuted, () => updateParticipantsList());
+    room.on(RoomEvent.ParticipantConnected, () => updateParticipantsList());
+
+    room.on(RoomEvent.ParticipantDisconnected, (participant) => {
+      const videoElement = remoteVideoRefs.value.get(participant.identity);
+      if (videoElement) {
+        videoElement.remove();
+        remoteVideoRefs.value.delete(participant.identity);
+      }
+      const screenShareId = `screen-share-${participant.identity}`;
+      const screenShareElement = remoteVideoRefs.value.get(screenShareId);
+      if (screenShareElement) {
+        screenShareElement.remove();
+        remoteVideoRefs.value.delete(screenShareId);
+      }
+      const container = document.getElementById(`remote-${participant.identity}`);
+      if (container) container.innerHTML = '';
+      updateParticipantsList();
+    });
+
+    room.on(RoomEvent.ActiveSpeakersChanged, (speakers) => updateActiveSpeakers(speakers));
+
+    room.on(RoomEvent.Disconnected, () => {
+      isConnected.value = false;
+      cleanup();
+    });
+
+    room.on(RoomEvent.LocalTrackPublished, (publication) => {
+      if (publication.source === Track.Source.Camera) {
+        isCameraEnabled.value = true;
+        if (localVideoRef.value && publication.videoTrack) {
+          publication.videoTrack.attach(localVideoRef.value);
+        }
+      } else if (publication.source === Track.Source.Microphone) {
+        isMicEnabled.value = true;
+      } else if (publication.source === Track.Source.ScreenShare) {
+        isScreenShareEnabled.value = true;
+      }
+    });
+
+    room.on(RoomEvent.LocalTrackUnpublished, (publication) => {
+      if (publication.source === Track.Source.Camera) {
+        isCameraEnabled.value = false;
+        if (publication.videoTrack) publication.videoTrack.detach();
+      } else if (publication.source === Track.Source.Microphone) {
+        isMicEnabled.value = false;
+      } else if (publication.source === Track.Source.ScreenShare) {
+        isScreenShareEnabled.value = false;
+      }
+    });
+
+    room.on(RoomEvent.MediaDevicesError, (err) => {
+      console.error('Media devices error:', err);
+      const failure = MediaDeviceFailure.getFailure(err);
+      if (err) {
+        if (err.message?.includes('camera')) isCameraEnabled.value = false;
+        else if (err.message?.includes('microphone')) isMicEnabled.value = false;
+        switch (failure) {
+          case MediaDeviceFailure.PermissionDenied:
+            showError('Permission denied for media device'); break;
+          case MediaDeviceFailure.NotFound:
+            showError('Media device not found'); break;
+          case MediaDeviceFailure.DeviceInUse:
+            showError('Media device is already in use'); break;
+          default:
+            showError('Unknown media device error');
+        }
+      }
     });
   };
 
-  // Scroll chat to bottom
-  const scrollToBottom = () => {
-    if (messagesContainer.value) {
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-    }
-  };
-
-  // Publish data via LiveKit
   const publishData = async (data: any) => {
     if (!livekitRoom.value) return;
-
     const message = JSON.stringify(data);
     await livekitRoom.value.localParticipant.publishData(
       new TextEncoder().encode(message),
@@ -375,23 +315,6 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     );
   };
 
-  // Show flying reaction animation
-  const showFlyingReaction = (emoji: string) => {
-    const id = Date.now().toString() + Math.random();
-    const x = Math.random() * 80 + 10;
-    const y = 100;
-
-    flyingReactions.value.push({ id, emoji, x, y });
-
-    setTimeout(() => {
-      const index = flyingReactions.value.findIndex(r => r.id === id);
-      if (index !== -1) {
-        flyingReactions.value.splice(index, 1);
-      }
-    }, 3000);
-  };
-
-  // Generate token and join room
   const joinRoom = async (room: RoomInfo) => {
     try {
       isConnecting.value = true;
@@ -409,6 +332,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       const data = await response.json();
       token.value = data.token;
 
+      const { Room } = await getLivekit();
+
       const newRoom = new Room({
         adaptiveStream: true,
         dynacast: true,
@@ -419,20 +344,16 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       });
 
       livekitRoom.value = newRoom;
-      setupRoomListeners(newRoom);
+      await setupRoomListeners(newRoom);
 
-      if (!token.value) {
-        throw new Error('Token is required to connect to room');
-      }
+      if (!token.value) throw new Error('Token is required to connect to room');
 
       await newRoom.connect(runtimeConfig.public.LIVEKIT_URL, token.value);
 
       isConnected.value = true;
       localParticipant.value = markRaw(newRoom.localParticipant);
-
       updateParticipantsList();
 
-      // Sync pomodoro_settings from room metadata to auth store
       const roomMetadata = getRoomMetadata();
       if (roomMetadata?.pomodoro_settings) {
         userSettings.value.pomodoro_settings = {
@@ -440,7 +361,6 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
           ...roomMetadata.pomodoro_settings,
         };
       }
-
     } catch (err: any) {
       error.value = err.message || 'Failed to join room';
       console.error('Error joining room:', err);
@@ -449,104 +369,79 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Toggle microphone
   const toggleMicrophone = async () => {
     if (!livekitRoom.value || !localParticipant.value) return;
-
     try {
       const newState = !isMicEnabled.value;
       await localParticipant.value.setMicrophoneEnabled(newState);
       isMicEnabled.value = newState;
     } catch (err: any) {
       console.error('Error toggling microphone:', err);
-      if (err && err.name === 'MediaDeviceError') {
-        console.error('Microphone device error:', err);
-      }
     }
   };
 
-  // Toggle camera
   const toggleCamera = async () => {
     if (!livekitRoom.value || !localParticipant.value) return;
-
     try {
       const newState = !isCameraEnabled.value;
       await localParticipant.value.setCameraEnabled(newState);
       isCameraEnabled.value = newState;
-
       if (newState && localVideoRef.value) {
-        setTimeout(() => {
-          const videoTrackPublication = localParticipant.value?.getTrackPublication(Track.Source.Camera);
-          if (videoTrackPublication?.videoTrack && localVideoRef.value) {
-            videoTrackPublication.videoTrack.attach(localVideoRef.value);
+        setTimeout(async () => {
+          const { Track } = await getLivekit();
+          const pub = localParticipant.value?.getTrackPublication(Track.Source.Camera);
+          if (pub?.videoTrack && localVideoRef.value) {
+            pub.videoTrack.attach(localVideoRef.value);
           }
         }, 100);
       }
     } catch (err: any) {
       console.error('Error toggling camera:', err);
-      if (err && err.name === 'MediaDeviceError') {
-        console.error('Camera device error:', err);
-      }
     }
   };
 
-  // Toggle speaker
   const toggleSpeaker = () => {
     isSpeakerEnabled.value = !isSpeakerEnabled.value;
-
     for (const videoElement of remoteVideoRefs.value.values()) {
-      if (videoElement) {
-        videoElement.muted = !isSpeakerEnabled.value;
-      }
+      if (videoElement) videoElement.muted = !isSpeakerEnabled.value;
     }
   };
 
-  // Enable both camera and microphone at once
   const enableCameraAndMicrophone = async () => {
     if (!livekitRoom.value || !localParticipant.value) return;
-
     try {
       await localParticipant.value.setCameraEnabled(true);
       await localParticipant.value.setMicrophoneEnabled(true);
-
       isCameraEnabled.value = true;
       isMicEnabled.value = true;
-
       if (localVideoRef.value) {
-        setTimeout(() => {
-          const videoTrackPublication = localParticipant.value?.getTrackPublication(Track.Source.Camera);
-          if (videoTrackPublication?.videoTrack && localVideoRef.value) {
-            videoTrackPublication.videoTrack.attach(localVideoRef.value);
+        setTimeout(async () => {
+          const { Track } = await getLivekit();
+          const pub = localParticipant.value?.getTrackPublication(Track.Source.Camera);
+          if (pub?.videoTrack && localVideoRef.value) {
+            pub.videoTrack.attach(localVideoRef.value);
           }
         }, 100);
       }
     } catch (err: any) {
       console.error('Error enabling camera and microphone:', err);
-      if (err && err.name === 'MediaDeviceError') {
-        console.error('Media device error:', err);
-      }
     }
   };
 
-  // Toggle screen sharing
   const toggleScreenShare = async () => {
     if (!livekitRoom.value || !localParticipant.value) return;
-
     try {
       const newState = !isScreenShareEnabled.value;
       await localParticipant.value.setScreenShareEnabled(newState);
       isScreenShareEnabled.value = newState;
     } catch (err: any) {
       console.error('Error toggling screen share:', err);
-      if (err && err.name === 'MediaDeviceError') {
-        console.error('Screen share device error:', err);
-      }
     }
   };
 
-  // Get available devices
   const getAvailableDevices = async (kind: 'audioinput' | 'audiooutput' | 'videoinput') => {
     try {
+      const { Room } = await getLivekit();
       return await Room.getLocalDevices(kind);
     } catch (err) {
       console.error(`Error getting ${kind} devices:`, err);
@@ -554,10 +449,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Switch to a specific device
   const switchDevice = async (kind: 'audioinput' | 'audiooutput' | 'videoinput', deviceId: string) => {
     if (!livekitRoom.value) return;
-
     try {
       await livekitRoom.value.switchActiveDevice(kind, deviceId);
     } catch (err) {
@@ -565,16 +458,9 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Send text message
   const sendTextMessage = async () => {
     if (!newMessage.value.trim() || !livekitRoom.value) return;
-
-    await publishData({
-      type: 'chat',
-      messageType: 'text',
-      content: newMessage.value,
-    });
-
+    await publishData({ type: 'chat', messageType: 'text', content: newMessage.value });
     addChatMessage({
       id: Date.now().toString() + Math.random(),
       type: 'text',
@@ -583,30 +469,21 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       content: newMessage.value,
       timestamp: Date.now(),
     });
-
     newMessage.value = '';
   };
 
-  // Send file
   const sendFile = async (file: File) => {
     if (!livekitRoom.value) return;
-
     uploadingFile.value = true;
-
     try {
       const reader = new FileReader();
       reader.onload = async (e) => {
         const base64 = e.target?.result as string;
-
         await publishData({
-          type: 'chat',
-          messageType: 'file',
+          type: 'chat', messageType: 'file',
           content: `Shared a file: ${file.name}`,
-          fileUrl: base64,
-          fileName: file.name,
-          fileSize: file.size,
+          fileUrl: base64, fileName: file.name, fileSize: file.size,
         });
-
         addChatMessage({
           id: Date.now().toString() + Math.random(),
           type: 'file',
@@ -614,11 +491,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
           senderName: 'You',
           content: `Shared a file: ${file.name}`,
           timestamp: Date.now(),
-          fileUrl: base64,
-          fileName: file.name,
-          fileSize: file.size,
+          fileUrl: base64, fileName: file.name, fileSize: file.size,
         });
-
         uploadingFile.value = false;
       };
       reader.readAsDataURL(file);
@@ -628,17 +502,9 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  // Send GIF
   const sendGif = async (gifUrl: string) => {
     if (!livekitRoom.value) return;
-
-    await publishData({
-      type: 'chat',
-      messageType: 'gif',
-      content: 'Shared a GIF',
-      gifUrl: gifUrl,
-    });
-
+    await publishData({ type: 'chat', messageType: 'gif', content: 'Shared a GIF', gifUrl });
     addChatMessage({
       id: Date.now().toString() + Math.random(),
       type: 'gif',
@@ -646,54 +512,37 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       senderName: 'You',
       content: 'Shared a GIF',
       timestamp: Date.now(),
-      gifUrl: gifUrl,
+      gifUrl,
     });
-
     showGifPicker.value = false;
   };
 
-  // Send reaction
   const sendReaction = async (emoji: string) => {
     if (!livekitRoom.value) return;
-
-    await publishData({
-      type: 'reaction',
-      emoji: emoji,
-    });
-
+    await publishData({ type: 'reaction', emoji });
     showFlyingReaction(emoji);
   };
 
-  // Cleanup
   const cleanup = () => {
     if (livekitRoom.value) {
       livekitRoom.value.disconnect();
       livekitRoom.value = null;
     }
-
     const participantsToClean = [...participants.value];
-
     isConnected.value = false;
     isMicEnabled.value = false;
     isCameraEnabled.value = false;
     isScreenShareEnabled.value = false;
     localParticipant.value = null;
     participants.value = [];
-
-    for (const element of remoteVideoRefs.value.values()) {
-      element.remove();
-    }
+    for (const element of remoteVideoRefs.value.values()) element.remove();
     remoteVideoRefs.value.clear();
-
     for (const participant of participantsToClean) {
       const container = document.getElementById(`remote-${participant.identity}`);
-      if (container) {
-        container.innerHTML = '';
-      }
+      if (container) container.innerHTML = '';
     }
   };
 
-  // Helper function to get participant avatar from metadata
   const getParticipantAvatar = (participant: RemoteParticipant) => {
     try {
       if (participant.metadata) {
@@ -706,111 +555,54 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     return null;
   };
 
-  // Helper function to get room metadata
   const getRoomMetadata = () => {
     try {
-      if (livekitRoom.value?.metadata) {
-        return JSON.parse(livekitRoom.value.metadata);
-      }
+      if (livekitRoom.value?.metadata) return JSON.parse(livekitRoom.value.metadata);
     } catch (err) {
       console.error('Error parsing room metadata:', err);
     }
     return null;
   };
 
-  // Helper function to get participant metadata
   const getParticipantMetadata = (participant: RemoteParticipant | LocalParticipant) => {
     try {
-      if (participant.metadata) {
-        return JSON.parse(participant.metadata);
-      }
+      if (participant.metadata) return JSON.parse(participant.metadata);
     } catch (err) {
       console.error('Error parsing participant metadata:', err);
     }
     return null;
   };
 
-  // Helper function to get local participant avatar
   const getLocalParticipantAvatar = () => {
     const { userInfo } = useAuthStore();
-    if (userInfo.value) {
-      return userInfo.value.avatar_url || userInfo.value.custom_avatar_url;
-    }
+    if (userInfo.value) return userInfo.value.avatar_url || userInfo.value.custom_avatar_url;
     return null;
   };
 
-  // Format file size
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
-  // Computed properties
-  const totalParticipants = computed(() => {
-    return participants.value.length + (localParticipant.value ? 1 : 0);
-  });
+  const totalParticipants = computed(() => participants.value.length + (localParticipant.value ? 1 : 0));
 
-  // Watch for chat visibility changes to reset unread count
   watch(showChat, (newValue) => {
-    if (newValue) {
-      unreadMessageCount.value = 0;
-    }
+    if (newValue) unreadMessageCount.value = 0;
   });
 
   return {
-    // State
-    livekitRoom,
-    isConnected,
-    isConnecting,
-    error,
-    token,
-    isMicEnabled,
-    isCameraEnabled,
-    isSpeakerEnabled,
-    isScreenShareEnabled,
-    participants,
-    localParticipant,
-    localVideoRef,
-    remoteVideoRefs,
-    chatMessages,
-    newMessage,
-    messagesContainer,
-    showChat,
-    showEmojiPicker,
-    showGifPicker,
-    showReactionPicker,
-    fileInputRef,
-    uploadingFile,
-    flyingReactions,
-    commonReactions,
-    commonGifs,
-    currentRoom,
-    unreadMessageCount,
-
-    // Computed
-    totalParticipants,
-
-    // Methods
-    joinRoom,
-    leaveRoom: cleanup,
-    toggleMicrophone,
-    toggleCamera,
-    toggleSpeaker,
-    enableCameraAndMicrophone,
-    toggleScreenShare,
-    getAvailableDevices,
-    switchDevice,
-    sendTextMessage,
-    sendFile,
-    sendGif,
-    sendReaction,
-    getParticipantAvatar,
-    getLocalParticipantAvatar,
-    formatFileSize,
-    cleanup,
-    buildApiUrl,
-    getRoomMetadata,
-    getParticipantMetadata,
+    livekitRoom, isConnected, isConnecting, error, token,
+    isMicEnabled, isCameraEnabled, isSpeakerEnabled, isScreenShareEnabled,
+    participants, localParticipant, localVideoRef, remoteVideoRefs,
+    chatMessages, newMessage, messagesContainer, showChat,
+    showEmojiPicker, showGifPicker, showReactionPicker,
+    fileInputRef, uploadingFile, flyingReactions, commonReactions, commonGifs,
+    currentRoom, unreadMessageCount, totalParticipants,
+    joinRoom, leaveRoom: cleanup, toggleMicrophone, toggleCamera,
+    toggleSpeaker, enableCameraAndMicrophone, toggleScreenShare,
+    getAvailableDevices, switchDevice, sendTextMessage, sendFile,
+    sendGif, sendReaction, getParticipantAvatar, getLocalParticipantAvatar,
+    formatFileSize, cleanup, buildApiUrl, getRoomMetadata, getParticipantMetadata,
   };
 });
