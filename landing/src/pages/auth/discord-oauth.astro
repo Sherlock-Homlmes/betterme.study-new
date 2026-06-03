@@ -1,6 +1,6 @@
 ---
-const cookieDomain = import.meta.env.PUBLIC_COOKIE_DOMAIN || '.betterme.dev';
-const redirectUrl = import.meta.env.PUBLIC_POMODORO_URL || 'https://pomodoro.betterme.dev';
+const cookieDomain = import.meta.env.PUBLIC_COOKIE_DOMAIN || ".betterme.dev";
+const apiUrl = import.meta.env.PUBLIC_API_URL || "";
 ---
 
 <!doctype html>
@@ -12,39 +12,48 @@ const redirectUrl = import.meta.env.PUBLIC_POMODORO_URL || 'https://pomodoro.bet
   </head>
   <body>
     <p id="status">Logging in...</p>
-    <script define:vars={{ cookieDomain, redirectUrl }}>
+    <script define:vars={{ cookieDomain, apiUrl }}>
       (async () => {
-        const statusEl = document.getElementById('status');
+        const statusEl = document.getElementById("status");
         const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
+        const code = params.get("code");
+        const redirect = params.get("redirect");
+
+        const redirectMap = {
+          pomodoro: "https://pomodoro.betterme.dev",
+          news: "https://news.betterme.dev",
+        };
+        const redirectUrl = redirectMap[redirect] || "https://betterme.dev";
+
+        const failUrl = `/auth/login-fail?redirect=${encodeURIComponent(redirect || "")}`;
 
         if (!code) {
-          statusEl.textContent = 'Login failed: missing authorization code.';
+          window.location.href = failUrl;
           return;
         }
 
-        try {
-          const response = await fetch(`/api/auth/discord-oauth?code=${encodeURIComponent(code)}`);
-          if (!response.ok) {
-            statusEl.textContent = 'Login failed. Redirecting...';
-            setTimeout(() => { window.location.href = redirectUrl + '/error'; }, 1500);
-            return;
-          }
-
-          const data = await response.json();
-          if (data?.token) {
-            const expires = new Date();
-            expires.setDate(expires.getDate() + 30);
-            document.cookie = `Authorization=${data.token}; expires=${expires.toUTCString()}; path=/; domain=${cookieDomain}; SameSite=Lax`;
-            window.location.href = redirectUrl;
-          } else {
-            statusEl.textContent = 'Login failed: no token received.';
-            setTimeout(() => { window.location.href = redirectUrl + '/error'; }, 1500);
-          }
-        } catch (err) {
-          statusEl.textContent = 'Login failed: network error.';
-          setTimeout(() => { window.location.href = redirectUrl + '/error'; }, 1500);
-        }
+        fetch(
+          `${apiUrl}/api/auth/discord-oauth?code=${encodeURIComponent(code)}`,
+        )
+          .then(async (res) => {
+            if (!res.ok) {
+              window.location.href = failUrl;
+              return;
+            }
+            const data = await res.json();
+            if (data?.token) {
+              const expires = new Date();
+              expires.setDate(expires.getDate() + 30);
+              document.cookie = `Authorization=${data.token}; expires=${expires.toUTCString()}; path=/; domain=${cookieDomain}; SameSite=Lax`;
+              window.location.href = redirectUrl;
+            } else {
+              window.location.href = failUrl;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            // window.location.href = failUrl;
+          });
       })();
     </script>
   </body>

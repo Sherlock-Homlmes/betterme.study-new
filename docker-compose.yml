@@ -32,7 +32,7 @@ services:
       - "3001:3000"
     environment:
       - PUBLIC_COOKIE_DOMAIN=.local.betterme.study
-      - PUBLIC_POMODORO_URL=http://pomodoro.local.betterme.study
+      - PUBLIC_API_URL=http://103.161.171.189:8080
     command: ["npm", "run", "dev"]
     # command: ["npm", "run", "preview", "--", '--host', "0.0.0.0", "--port", "3000"]
 
@@ -45,7 +45,7 @@ services:
     working_dir: /var/task/pomodoro_client
     environment:
       - VITE_PLATFORM=web
-      - VITE_API_URL=http://localhost:8080/api
+      - VITE_API_URL=http://103.161.171.189:8080/api
       - VITE_LIVEKIT_URL=ws://localhost:7880
       - VITE_COOKIE_DOMAIN=.local.betterme.study
     networks:

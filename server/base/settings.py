@@ -76,11 +76,10 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url=None,
 )
+origins = [] if is_prod_env else ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:1420",
-    ],
+    allow_origins=origins,
     allow_origin_regex=r"https?://(.*\.)?betterme\.dev",
     allow_credentials=True,
     allow_methods=["*"],
