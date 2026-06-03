@@ -105,9 +105,7 @@ export default defineConfig({
       ],
     }),
     sitemap({
-      filter: (page) =>
-        !page.includes('/auth/discord-oauth/') &&
-        !page.includes('/auth/google-oauth/'),
+      filter: (page) => !page.includes('/auth/'),
     }),
   ],
 });
