@@ -1,0 +1,22 @@
+---
+const params = Astro.url.searchParams;
+const redirect = params.get('redirect');
+
+const redirectMap = {
+  pomodoro: 'https://pomodoro.betterme.dev',
+  news: 'https://news.betterme.dev',
+};
+const redirectUrl = redirectMap[redirect] || 'https://betterme.dev';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Failed</title>
+  </head>
+  <body>
+    <p id="status">Login failed. Please retry...</p>
+  </body>
+</html>
