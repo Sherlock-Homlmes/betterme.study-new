@@ -10,8 +10,14 @@ BetterMe có hệ thống kiểm duyệt tin nhắn tự động để duy trì 
 | Số lần vi phạm | Hình phạt |
 |-----------------|-----------|
 | 1 - 6 lần | ⚠️ Cảnh báo |
-| 7 - 12 lần | 🔇 Timeout (tăng dần từ 0.5h đến 360h) |
-| Trên 12 lần | 🚫 Ban |
+| 7 lần | 🔇 Timeout 0.5h |
+| 8 lần | 🔇 Timeout 2h |
+| 9 lần | 🔇 Timeout 4h |
+| 10 lần | 🔇 Timeout 24h |
+| 11 lần | 🔇 Timeout 72h |
+| 12 lần | 🔇 Timeout 180h |
+| 13 lần | 🔇 Timeout 360h |
+| Trên 13 lần | 🚫 Ban |
 
 - Vi phạm tự hết hạn sau **30 ngày**
 - Người dùng có thể báo cáo nếu bot cảnh báo sai
