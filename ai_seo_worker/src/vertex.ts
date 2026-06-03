@@ -3,7 +3,7 @@ import type { Env } from './types'
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 // Update to gemini-3.5-flash-001 or gemini-3.5-pro when Vertex GA
-const GEMINI_MODEL = 'gemini-3.5-flash'
+const GEMINI_MODEL = 'gemini-2.5-flash'
 const DEFAULT_REGION = 'us-central1'
 
 // ─── JWT / OAuth ─────────────────────────────────────────────────────────────
@@ -35,6 +35,7 @@ async function buildJWT(serviceAccount: string, privateKeyPem: string): Promise<
 
     const pem = privateKeyPem
         .replace(/-----[^-]+-----/g, '')
+        .replace(/\\n/g, '')
         .replace(/\s/g, '')
 
     const der = Uint8Array.from(atob(pem), (c) => c.charCodeAt(0))
