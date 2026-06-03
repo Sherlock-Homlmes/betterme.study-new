@@ -106,6 +106,7 @@ export default defineConfig({
     }),
     sitemap({
       filter: (page) => !page.includes('/auth/'),
+      filter: (page) => !page.includes('/blog'),
     }),
   ],
 });

@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<nav class="blog-breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Trang chủ</a>
+  <span class="bc-sep">/</span>
+  <a href="/blog">Blog</a>
+  <span class="bc-sep">/</span>
+  <span>{title}</span>
+</nav>

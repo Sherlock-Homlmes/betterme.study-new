@@ -1,0 +1,32 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+  <aside class="blog-toc">
+    <h4 class="blog-toc-title">Mục lục</h4>
+    <ul>
+      {tocHeadings.map(heading => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class={heading.depth === 3 ? 'toc-h3' : ''}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}

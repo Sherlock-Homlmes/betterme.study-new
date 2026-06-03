@@ -1,0 +1,76 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  slug: string;
+}
+
+const { title, slug } = Astro.props;
+const encodedUrl = encodeURIComponent(`https://betterme.dev/blog/${slug}`);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div class="blog-post-footer">
+  <div class="blog-share">
+    <span class="blog-share-label">Chia sẻ:</span>
+    <a
+      href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="blog-share-btn interactive"
+      aria-label="Chia sẻ Facebook"
+    >
+      f
+    </a>
+    <a
+      href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="blog-share-btn interactive"
+      aria-label="Chia sẻ Twitter"
+    >
+      X
+    </a>
+    <a
+      href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="blog-share-btn interactive"
+      aria-label="Chia sẻ Telegram"
+    >
+      T
+    </a>
+    <button
+      class="blog-share-btn interactive"
+      id="copy-link-btn"
+      type="button"
+      aria-label="Sao chép liên kết"
+    >
+      &#x1F517;
+    </button>
+  </div>
+
+  <div class="blog-cta-box">
+    <h3>Tham gia cộng đồng BetterMe</h3>
+    <p>Học tập cùng 18,500+ thành viên, phòng học 24/7, Pomodoro timer, AI bot và nhiều hơn nữa.</p>
+    <a
+      href="https://discord.gg/betterme"
+      target="_blank"
+      class="btn btn-purple interactive"
+    >
+      Tham gia Discord ngay
+    </a>
+  </div>
+</div>
+
+<script>
+  const copyBtn = document.getElementById('copy-link-btn');
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      const original = copyBtn.innerHTML;
+      copyBtn.innerHTML = '&#10003;';
+      setTimeout(() => { copyBtn.innerHTML = original; }, 2000);
+    } catch { /* noop */ }
+  });
+</script>

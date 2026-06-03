@@ -1,0 +1,462 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import BlogCard from "../../components/blog/BlogCard.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const POSTS_PER_PAGE = 10;
+const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+const allTags = [
+  ...new Set(
+    sortedPosts.flatMap((p) => p.data.tags.map((t) => t.toLowerCase())),
+  ),
+];
+
+const searchData = sortedPosts.map((post) => ({
+  slug: post.id,
+  title: post.data.title.toLowerCase(),
+  description: post.data.description.toLowerCase(),
+  tags: post.data.tags.map((t) => t.toLowerCase()),
+}));
+---
+
+<BlogLayout
+  title="Blog — BetterMe"
+  description="Blog chia sẻ kiến thức học tập, mẹo hiệu quả, kỹ năng phát triển bản thân từ cộng đồng BetterMe."
+>
+  <section class="blog-listing-hero">
+    <div class="container">
+      <h1 class="gradient-text">Blog</h1>
+      <p>
+        Chia sẻ kiến thức, mẹo học tập và phát triển bản thân từ cộng đồng
+        BetterMe.
+      </p>
+      <div class="blog-search-wrap" id="blog-search-wrap">
+        <span class="blog-search-icon">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="11" cy="11" r="8"></circle><line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"></line></svg
+          >
+        </span>
+        <input
+          type="text"
+          class="blog-search-input"
+          id="blog-search"
+          placeholder="Tìm kiếm bài viết..."
+          autocomplete="off"
+        />
+        <button
+          class="blog-search-clear interactive"
+          id="blog-search-clear"
+          type="button">&times;</button
+        >
+        <div class="blog-tag-dropdown" id="blog-tag-dropdown"></div>
+      </div>
+      <p class="blog-search-hint" id="blog-search-hint">
+        Gõ "@" để search theo tag
+      </p>
+      <div class="blog-tag-chips" id="blog-tag-chips"></div>
+    </div>
+  </section>
+
+  <section class="container">
+    {
+      sortedPosts.length > 0 ? (
+        <>
+          <div class="blog-grid" id="blog-grid">
+            {sortedPosts.map((post, i) => (
+              <div
+                class="blog-card-wrap"
+                data-page={Math.floor(i / POSTS_PER_PAGE) + 1}
+                data-slug={post.id}
+              >
+                <BlogCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate}
+                  tags={post.data.tags}
+                  slug={post.id}
+                  heroImage={post.data.heroImage}
+                  readingTime={Math.max(
+                    1,
+                    Math.ceil((post.body || "").split(/\s+/).length / 250),
+                  )}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div class="blog-no-results" id="blog-no-results">
+            <h3>Không tìm thấy bài viết</h3>
+            <p>Thử tìm kiếm với từ khóa khác nhé.</p>
+          </div>
+
+          {totalPages > 1 && (
+            <nav class="blog-pagination" id="blog-pagination">
+              <button
+                class="blog-page-btn interactive"
+                id="btn-prev"
+                type="button"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Trang trước
+              </button>
+              <div class="blog-page-numbers" id="page-numbers">
+                {pageNumbers.map((n) => (
+                  <button
+                    class={`blog-page-num interactive${n === 1 ? " active" : ""}`}
+                    data-pn={n}
+                    type="button"
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              <button
+                class="blog-page-btn interactive"
+                id="btn-next"
+                type="button"
+              >
+                Trang sau
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </nav>
+          )}
+        </>
+      ) : (
+        <div class="blog-empty">
+          <h2>Chưa có bài viết</h2>
+          <p>Các bài viết mới sẽ sớm được đăng tải.</p>
+        </div>
+      )
+    }
+  </section>
+
+  <div class="blog-footer-bar">
+    <div class="container">
+      <div class="blog-footer-inner">
+        <a href="/" class="interactive">Trang chủ</a>
+        <a href="https://discord.gg/betterme" class="interactive"
+          >Discord Community</a
+        >
+        <a href="https://pomodoro.betterme.dev" class="interactive"
+          >Pomodoro Timer</a
+        >
+        <a href="https://news.betterme.dev" class="interactive"
+          >Tin tức & Học bổng</a
+        >
+      </div>
+      <p class="copyright">&copy; 2026 BetterMe Community. Phi lợi nhuận.</p>
+    </div>
+  </div>
+</BlogLayout>
+
+<script define:vars={{ totalPages, searchData, allTags }}>
+  const cards = document.querySelectorAll(".blog-card-wrap");
+  const prevBtn = document.getElementById("btn-prev");
+  const nextBtn = document.getElementById("btn-next");
+  const numBtns = document.querySelectorAll(".blog-page-num");
+  const searchInput = document.getElementById("blog-search");
+  const searchClear = document.getElementById("blog-search-clear");
+  const noResults = document.getElementById("blog-no-results");
+  const pagination = document.getElementById("blog-pagination");
+  const hint = document.getElementById("blog-search-hint");
+  const chipsContainer = document.getElementById("blog-tag-chips");
+  const dropdown = document.getElementById("blog-tag-dropdown");
+
+  const slugToData = {};
+  searchData.forEach((d) => {
+    slugToData[d.slug] = d;
+  });
+
+  let selectedTags = [];
+  let highlightIdx = -1;
+
+  function getParams() {
+    const url = new URL(window.location.href);
+    const tagStr = (url.searchParams.get("tag") || "").toLowerCase();
+    return {
+      page: parseInt(url.searchParams.get("page"), 10) || 1,
+      tags: tagStr ? tagStr.split(",").filter(Boolean) : [],
+      query: (url.searchParams.get("q") || "").toLowerCase(),
+    };
+  }
+
+  function setParams(params) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("page");
+    url.searchParams.delete("tag");
+    url.searchParams.delete("q");
+    if (params.page > 1) url.searchParams.set("page", params.page);
+    if (params.tags && params.tags.length > 0)
+      url.searchParams.set("tag", params.tags.join(","));
+    if (params.query) url.searchParams.set("q", params.query);
+    history.replaceState(null, "", url);
+  }
+
+  function filterCards(tags, query) {
+    let visibleCount = 0;
+    cards.forEach((c) => {
+      const slug = c.dataset.slug;
+      const d = slugToData[slug];
+      if (!d) return;
+      const matchTag =
+        tags.length === 0 || tags.every((t) => d.tags.includes(t));
+      const matchQuery =
+        !query ||
+        d.title.includes(query) ||
+        d.description.includes(query) ||
+        d.tags.some((t) => t.includes(query));
+      const show = matchTag && matchQuery;
+      c.dataset.visible = show ? "1" : "0";
+      if (show) visibleCount++;
+    });
+    noResults.classList.toggle("visible", visibleCount === 0);
+    if (pagination) pagination.style.display = visibleCount === 0 ? "none" : "";
+    return visibleCount;
+  }
+
+  function applyView(page) {
+    let idx = 0;
+    cards.forEach((c) => {
+      if (c.dataset.visible !== "1") {
+        c.style.display = "none";
+        return;
+      }
+      idx++;
+      c.dataset.page = Math.floor((idx - 1) / 9) + 1;
+      c.style.display = parseInt(c.dataset.page) === page ? "" : "none";
+    });
+
+    const filteredPages = Math.ceil(idx / 9) || 1;
+
+    prevBtn.disabled = page === 1;
+    nextBtn.disabled = page >= filteredPages;
+    prevBtn.style.opacity = page === 1 ? "0.4" : "1";
+    nextBtn.style.opacity = page >= filteredPages ? "0.4" : "1";
+
+    numBtns.forEach((b) => {
+      const pn = parseInt(b.dataset.pn);
+      b.style.display = pn <= filteredPages ? "" : "none";
+      b.classList.toggle("active", pn === page);
+    });
+  }
+
+  function renderChips() {
+    chipsContainer.innerHTML = "";
+    selectedTags.forEach((tag) => {
+      const chip = document.createElement("span");
+      chip.className = "blog-tag-chip";
+      chip.innerHTML =
+        tag +
+        '<button class="blog-tag-chip-x" data-tag="' +
+        tag +
+        '" type="button">&times;</button>';
+      chipsContainer.appendChild(chip);
+    });
+    chipsContainer.querySelectorAll(".blog-tag-chip-x").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const t = btn.dataset.tag;
+        selectedTags = selectedTags.filter((x) => x !== t);
+        applyFilter();
+      });
+    });
+    hint.classList.toggle("hidden", selectedTags.length > 0);
+  }
+
+  function applyFilter() {
+    const query = searchInput.value.trim().toLowerCase();
+    setParams({ page: 1, tags: selectedTags, query });
+    renderChips();
+    searchClear.classList.toggle(
+      "visible",
+      !!searchInput.value || selectedTags.length > 0,
+    );
+    filterCards(selectedTags, query);
+    applyView(1);
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove("open");
+    dropdown.innerHTML = "";
+    highlightIdx = -1;
+  }
+
+  function showDropdown(filter) {
+    const available = allTags.filter(
+      (t) => !selectedTags.includes(t) && t.includes(filter),
+    );
+    if (available.length === 0) {
+      closeDropdown();
+      return;
+    }
+
+    dropdown.innerHTML = "";
+    highlightIdx = -1;
+    available.slice(0, 8).forEach((tag) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "blog-tag-dropdown-item";
+      btn.textContent = tag;
+      btn.addEventListener("click", () => {
+        selectedTags.push(tag);
+        const raw = searchInput.value;
+        searchInput.value = raw.replace(/@\S*\s?$/, "").trim();
+        closeDropdown();
+        applyFilter();
+        searchInput.focus();
+      });
+      dropdown.appendChild(btn);
+    });
+    dropdown.classList.add("open");
+  }
+
+  function highlightDropdownItem() {
+    const items = dropdown.querySelectorAll(".blog-tag-dropdown-item");
+    items.forEach((it, i) =>
+      it.classList.toggle("highlighted", i === highlightIdx),
+    );
+    if (items[highlightIdx])
+      items[highlightIdx].scrollIntoView({ block: "nearest" });
+  }
+
+  searchInput.addEventListener("input", () => {
+    const val = searchInput.value;
+    const atIdx = val.lastIndexOf("@");
+    if (atIdx !== -1) {
+      const afterAt = val
+        .slice(atIdx + 1)
+        .split(/\s/)[0]
+        .toLowerCase();
+      showDropdown(afterAt);
+    } else {
+      closeDropdown();
+    }
+
+    clearTimeout(searchInput._debounce);
+    searchInput._debounce = setTimeout(() => {
+      const query = searchInput.value.replace(/@\S*/g, "").trim().toLowerCase();
+      setParams({ page: 1, tags: selectedTags, query });
+      searchClear.classList.toggle(
+        "visible",
+        !!searchInput.value || selectedTags.length > 0,
+      );
+      renderChips();
+      filterCards(selectedTags, query);
+      applyView(1);
+    }, 200);
+  });
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (!dropdown.classList.contains("open")) return;
+    const items = dropdown.querySelectorAll(".blog-tag-dropdown-item");
+    if (items.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      highlightIdx = (highlightIdx + 1) % items.length;
+      highlightDropdownItem();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      highlightIdx = (highlightIdx - 1 + items.length) % items.length;
+      highlightDropdownItem();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightIdx >= 0 && items[highlightIdx]) {
+        items[highlightIdx].click();
+      } else if (items.length > 0) {
+        items[0].click();
+      }
+    } else if (e.key === "Escape") {
+      closeDropdown();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("blog-search-wrap").contains(e.target))
+      closeDropdown();
+  });
+
+  searchClear.addEventListener("click", () => {
+    searchInput.value = "";
+    selectedTags = [];
+    closeDropdown();
+    applyFilter();
+    searchInput.focus();
+  });
+
+  prevBtn.addEventListener("click", () => {
+    const { page, tags, query } = getParams();
+    if (page > 1) {
+      setParams({ page: page - 1, tags, query });
+      applyView(page - 1);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const { page, tags, query } = getParams();
+    setParams({ page: page + 1, tags, query });
+    applyView(page + 1);
+  });
+
+  numBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      const { tags, query } = getParams();
+      const pn = parseInt(b.dataset.pn);
+      setParams({ page: pn, tags, query });
+      applyView(pn);
+    });
+  });
+
+  // init from URL
+  const initParams = getParams();
+  selectedTags = initParams.tags;
+  const initQuery = initParams.query;
+  searchInput.value = initQuery;
+  searchClear.classList.toggle(
+    "visible",
+    !!initQuery || selectedTags.length > 0,
+  );
+  renderChips();
+  filterCards(selectedTags, initQuery);
+  applyView(initParams.page);
+</script>

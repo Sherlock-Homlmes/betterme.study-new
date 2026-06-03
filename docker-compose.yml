@@ -126,7 +126,6 @@ services:
     volumes:
       - ./others/data/mongodb:/data/db
 
-    # TODO: add local mongo
     # TODO: add local local s3
 
 
@@ -149,9 +148,20 @@ services:
       - redis
     command: ["--config", "/etc/livekit.yaml"]
 
+  ai-seo-worker:
+    build:
+      context: ./ai_seo_worker
+      dockerfile: ../others/docker/wrangler/Dockerfile
+    volumes:
+      - ./ai_seo_worker:/app
+      - ai-seo-worker-node-modules:/app/node_modules
+    working_dir: /app
+    profiles: ["tools"]
+
 volumes:
   uv-cache:
   landing-node-modules:
+  ai-seo-worker-node-modules:
 
 #Docker Networks
 networks:

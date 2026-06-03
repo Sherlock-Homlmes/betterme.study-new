@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import Breadcrumb from '../../components/blog/Breadcrumb.astro';
+import BlogHero from '../../components/blog/BlogHero.astro';
+import TableOfContents from '../../components/blog/TableOfContents.astro';
+import BlogFooter from '../../components/blog/BlogFooter.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const wordCount = post.body ? post.body.split(/\s+/).length : 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 250));
+---
+
+<BlogLayout
+  title={`${post.data.title} — BetterMe Blog`}
+  description={post.data.description}
+  ogImage={post.data.heroImage || undefined}
+  article={true}
+  pubDate={post.data.pubDate}
+  author={post.data.author}
+  tags={post.data.tags}
+>
+  <article class="blog-post-page">
+    <div class="container">
+      <Breadcrumb title={post.data.title} />
+    </div>
+
+    <BlogHero
+      title={post.data.title}
+      description={post.data.description}
+      pubDate={post.data.pubDate}
+      updatedDate={post.data.updatedDate}
+      author={post.data.author}
+      tags={post.data.tags}
+      readingTime={readingTime}
+    />
+
+    <div class="blog-post-body">
+      <div class="blog-post-content">
+        <Content />
+        <BlogFooter
+          title={post.data.title}
+          description={post.data.description}
+          slug={post.id}
+        />
+      </div>
+      <TableOfContents headings={headings} />
+    </div>
+  </article>
+</BlogLayout>
+
+<script>
+  const tocLinks = document.querySelectorAll('.blog-toc a');
+  const sections = Array.from(tocLinks).map(link => {
+    const id = link.getAttribute('href')?.slice(1);
+    return document.getElementById(id || '');
+  }).filter(Boolean);
+
+  function setActiveToc() {
+    let current = '';
+    for (const section of sections) {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 120) {
+        current = section.id;
+      }
+    }
+    tocLinks.forEach(link => {
+      const href = link.getAttribute('href')?.slice(1);
+      link.classList.toggle('toc-active', href === current);
+    });
+  }
+
+  window.addEventListener('scroll', setActiveToc, { passive: true });
+  setActiveToc();
+</script>

@@ -1,0 +1,48 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags: string[];
+  slug: string;
+  heroImage?: string;
+  readingTime: number;
+}
+
+const { title, description, pubDate, tags, slug, heroImage, readingTime } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('vi-VN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<a href={`/blog/${slug}`} class="blog-card interactive">
+  {heroImage ? (
+    <div class="blog-card-image-wrap">
+      <img src={heroImage} alt={title} loading="lazy" />
+    </div>
+  ) : (
+    <div class="blog-card-image-wrap" />
+  )}
+  <div class="blog-card-body">
+    <div class="blog-card-tags">
+      {tags.slice(0, 3).map(tag => (
+        <span class="blog-tag">{tag}</span>
+      ))}
+    </div>
+    <h3 class="blog-card-title">{title}</h3>
+    <p class="blog-card-desc">{description}</p>
+    <div class="blog-card-meta">
+      <span class="blog-card-date">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        {formattedDate}
+      </span>
+      <span class="blog-card-reading-time">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        {readingTime} phút đọc
+      </span>
+    </div>
+  </div>
+</a>
