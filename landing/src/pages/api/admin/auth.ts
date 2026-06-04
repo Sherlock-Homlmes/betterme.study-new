@@ -12,7 +12,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
     try {
-        const res = await fetch(`${apiUrl}/api/auth/me`, {
+        const res = await fetch(`${apiUrl}/api/auth/self`, {
             headers: { Authorization: `Bearer ${token}` },
         })
         const data = await res.json()
