@@ -136,7 +136,7 @@ export async function processArticle(
         savedImages.hero = heroPath
         console.log(`[SEO] Hero image saved: ${heroPath}`)
 
-        // Section images (up to 3)
+        // Section images (one per outline section)
         for (const section of imagePayload.sections) {
             const sectionBytes = await generateImage(env, section.prompt)
             const sectionPath = await saveImage(
@@ -149,12 +149,12 @@ export async function processArticle(
             console.log(`[SEO] Section image saved: ${sectionPath}`)
         }
 
-        // Write article
+        // Write article — pass exact image paths so writer only references existing images
         console.log(`[SEO] Writing: ${plan.title}`)
         const pubDate = new Date().toISOString().split('T')[0]
         const content = await callGemini(
             env,
-            buildWriterPrompt(plan, research, pubDate, savedImages.hero),
+            buildWriterPrompt(plan, research, pubDate, savedImages.hero, savedImages.sections),
             {
                 systemPrompt: WRITER_SYSTEM_PROMPT,
                 useSearch: false,

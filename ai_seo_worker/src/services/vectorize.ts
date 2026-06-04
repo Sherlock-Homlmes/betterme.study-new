@@ -8,7 +8,7 @@ const SIMILARITY_THRESHOLD = 0.92
 // ─── Embedding ────────────────────────────────────────────────────────────────
 
 export async function embedText(env: Env, text: string): Promise<number[]> {
-    const result = (await env.AI.run('@cf/qwen/qwen3-embedding-0.6b', {
+    const result = (await env.AI.run('@cf/google/embeddinggemma-300m', {
         text: [text],
     })) as { data: number[][] }
 

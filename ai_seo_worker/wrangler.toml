@@ -11,15 +11,16 @@ binding = "SEO_WORKFLOW"
 name = "ai-seo-workflow"
 class_name = "SEOContentWorkflow"
 
+# npx wrangler r2 bucket create betterme-content
 [[r2_buckets]]
 binding = "CONTENT_BUCKET"
 bucket_name = "betterme-content"
 
-# npx wrangler vectorize create betterme-articles --dimensions=768 --metric=cosine
+# npx wrangler vectorize create betterme-articles --dimensions=1024 --metric=cosine
 [[vectorize]]
 binding = "VECTORIZE"
 index_name = "betterme-articles"
-dimensions = 768
+dimensions = 1024
 metric = "cosine"
 
 [ai]

@@ -55,7 +55,7 @@ export default {
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
-async function triggerWorkflow(env: Env, targetCount = 5): Promise<string> {
+async function triggerWorkflow(env: Env, targetCount = 10): Promise<string> {
     const params: WorkflowParams = {
         triggeredAt: new Date().toISOString(),
         targetCount,

@@ -3,7 +3,7 @@ title: "10 Mẹo Học Tập Hiệu Quả Giúp Tối Ưu Hóa Thời Gian Học
 description: "Khám phá 10 mẹo học tập hiệu quả đã được khoa học chứng minh, giúp bạn ghi nhớ tốt hơn, tập trung lâu hơn và đạt kết quả học tập vượt trội."
 pubDate: 2026-06-01
 updatedDate: 2026-06-03
-heroImage: "/blog/img/meo-hoc-tap-hieu-qua-banner.webp"
+heroImage: "https://files.betterme.dev/blog/image/meo-hoc-tap-hieu-qua/banner.webp"
 author: "BetterMe"
 tags: ["học tập", "kỹ năng học", "pomodoro", "ghi nhớ", "tập trung"]
 draft: false

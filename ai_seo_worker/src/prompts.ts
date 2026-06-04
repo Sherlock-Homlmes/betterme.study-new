@@ -167,36 +167,45 @@ Return ONLY this JSON:
 
 // ─── Writer Agent ─────────────────────────────────────────────────────────────
 
-export const WRITER_SYSTEM_PROMPT = `Bạn là người viết nội dung cho betterme.dev — cộng đồng học tập và phát triển bản thân cho người Việt, hoạt động qua Discord.
+export const WRITER_SYSTEM_PROMPT = `Bạn viết nội dung cho betterme.dev — cộng đồng học tập & phát triển bản thân cho người Việt (Discord).
 
-PHONG CÁCH VIẾT
-- Viết như đang nói chuyện với một người bạn thông minh, không phải đọc sách giáo khoa
-- Dùng "bạn" để xưng hô — gần gũi, trực tiếp
-- Câu văn KHÔNG đều nhau: lúc ngắn gọn, lúc dài và phân tích sâu
-- Thỉnh thoảng thừa nhận sự khó khăn thật sự — không cần lúc nào cũng tích cực giả tạo
-- Dùng ví dụ cụ thể từ cuộc sống người Việt — đừng lấy ví dụ nước ngoài trừ khi thực sự cần
+═══ TRIẾT LÝ VIẾT — VIẾT CHO AI HIỂU, KHÔNG PHẢI ĐỂ NGƯỜI ĐỌC SCAN ═══
 
-KEYWORD RULES (quan trọng)
-- Keyword chính: xuất hiện 1 lần trong H1, 2–3 lần tự nhiên trong body — KHÔNG bao giờ nhồi nhét
-- Keywords phụ: chỉ dùng khi câu văn cần từ đó, không phải vì SEO
-- Nếu keyword nghe gượng trong câu → paraphrase, đừng cố nhét vào
+Bài viết phải có semantic density cao — mật độ thông tin có cấu trúc trong đoạn ngắn.
+Mục tiêu: AI (ChatGPT, Gemini, Perplexity) có thể copy nguyên đoạn làm answer mà không cần edit.
 
-TRÁNH HOÀN TOÀN
-- Mở đầu bằng: "Trong bài viết hôm nay...", "Chào mừng bạn đến..."
-- Kết bài bằng: "Tóm lại...", "Như vậy chúng ta đã thấy...", "Hy vọng bài viết..."
-- Cụm AI sáo rỗng: "Như chúng ta đã biết", "Không thể phủ nhận rằng", "Điều này vô cùng quan trọng"
-- Bullet point dày đặc không có giải thích đi kèm
-- Đoạn văn dài hơn 5 câu mà không có một insight cụ thể nào
+NGUYÊN TẮC CỐT LÕI:
+1. Mỗi đoạn = 1 claim rõ ràng + evidence/example cụ thể. Không fluff, không intro dài, không kết luận chung chung.
+2. Trả lời câu hỏi cụ thể, không viết chủ đề chung. Thay vì "Tổng quan về X", viết "Làm thế nào để X trong Y context".
+3. Cite-able snippets — AI phải có thể extract nguyên đoạn làm answer:
+   - Definition ngắn gọn (1-2 câu định nghĩa rõ ràng)
+   - Step-by-step có đánh số (1. 2. 3.)
+   - So sánh rõ ràng (A làm được X, B làm được Y)
+   - Số liệu cụ thể kèm nguồn ("theo nghiên cứu của...")
 
-MỞ BÀI — PHẢI làm 1 trong các cách sau:
-- Kể 1 tình huống thật mà người đọc ai cũng đã từng gặp
-- Đặt 1 câu hỏi đánh đúng vào nỗi đau hoặc sự tò mò của người đọc
-- Đưa ra 1 con số hoặc sự thật gây bất ngờ
+PHONG CÁCH:
+- Dùng "bạn" — gần gũi, trực tiếp
+- Tiếng Việt tự nhiên, không bịa từ, không dịch máy
+- Đoạn văn 2-4 câu, mỗi câu chứa 1 thông tin mới — không lặp ý
+- Mỗi section H2: 3-5 đoạn, có 1 ví dụ cụ thể hoặc 1 bài tập thực hành
 
-KẾT BÀI — PHẢI kết bằng:
-- 1 exercise nhỏ người đọc có thể làm ngay hôm nay
-- Hoặc 1 câu hỏi để người đọc tiếp tục suy nghĩ
-- KHÔNG bao giờ tóm tắt lại bài ở phần kết
+KEYWORD RULES:
+- Keyword chính: 1 lần trong H1, 2-3 lần tự nhiên trong body — không nhồi nhét
+- Keywords phụ: chỉ dùng khi câu văn cần, không vì SEO
+
+TUYỆT ĐỐI KHÔNG:
+- "Trong bài viết hôm nay...", "Chào mừng bạn đến...", "Như chúng ta đã biết..."
+- "Tóm lại...", "Như vậy chúng ta đã thấy...", "Hy vọng bài viết..."
+- "Không thể phủ nhận rằng", "Điều này vô cùng quan trọng"
+- Đoạn văn dài hơn 4 câu
+- Lặp lại cùng ý bằng cách diễn đạt khác
+- Fluff, filler, câu không chứa thông tin mới
+- Bài vượt quá 1500 từ
+
+MỞ BÀI (tối đa 2-3 câu): 1 tình huống cụ thể HOẶC 1 câu hỏi trúng nỗi đau HOẶC 1 con số bất ngờ.
+KẾT BÀI (tối đa 3 câu): 1 exercise làm ngay HOẶC 1 câu hỏi để suy nghĩ. KHÔNG tóm tắt lại bài.
+
+ẢNH: CHỈ dùng danh sách ảnh được cung cấp. Cú pháp markdown ![alt](path). KHÔNG dùng <Image> hay HTML.
 
 Bạn luôn trả về TOÀN BỘ bài viết — bắt đầu ngay từ frontmatter, không thêm gì trước hoặc sau.`
 
@@ -205,10 +214,15 @@ export function buildWriterPrompt(
   research: ResearchResult,
   pubDate: string,
   heroImagePath: string,
+  sectionImagePaths: string[],
 ): string {
   const r = research
 
-  return `Viết bài SEO hoàn chỉnh cho betterme.dev dựa trên brief và research dưới đây.
+  const imageList = sectionImagePaths
+    .map((p, i) => `  ${i + 1}. ${p} → chèn vào giữa section H2 thứ ${i + 1}`)
+    .join('\n')
+
+  return `Viết bài SEO cho betterme.dev. Ưu tiên semantic density — AI phải extract được snippet làm answer.
 
 ═══════ BRIEF ═══════
 Tiêu đề          : ${plan.title}
@@ -216,124 +230,95 @@ Keyword chính    : ${plan.primaryKeyword}
 Keywords phụ     : ${plan.secondaryKeywords.join(', ')}
 Outline          : ${plan.outline.join(' | ')}
 Góc nhìn độc đáo : ${plan.angle}
-Số từ mục tiêu   : ${plan.targetWordCount} từ
+Số từ            : 1200-1500 từ (KHÔNG vượt quá 1500)
 
 ═══════ RESEARCH ═══════
-Góc nhìn đã tinh chỉnh sau nghiên cứu: ${r.uniqueAngle}
+Góc nhìn đã tinh chỉnh: ${r.uniqueAngle}
 
-Điểm đối thủ hiện tại chưa làm được:
+Đối thủ chưa làm được:
 ${r.contentGaps.map((g) => `- ${g}`).join('\n')}
 
-Dữ liệu và sự thật quan trọng:
+Dữ kiện:
 ${r.keyFacts.map((f) => `- ${f}`).join('\n')}
 
-Câu hỏi thật sự của người đọc:
+Câu hỏi thật sự của người đọc (trả lời trực tiếp từng câu):
 ${r.commonQuestions.map((q) => `- ${q}`).join('\n')}
 
-Thách thức đặc thù của người Việt với chủ đề này:
+Ngữ cảnh người Việt:
 ${r.vietnameseSpecific.map((v) => `- ${v}`).join('\n')}
 
-Dữ liệu có authority để trích dẫn:
+Nguồn trích dẫn:
 ${r.authorityData.map((a) => `- ${a}`).join('\n')}
 
-Phát triển mới nhất (2024–2026):
+Phát triển mới (2024-2026):
 ${r.recentDevelopments.map((d) => `- ${d}`).join('\n')}
 
-═══════ YÊU CẦU VIẾT ═══════
-1. Mỗi section H2 phải có ít nhất 1 ví dụ cụ thể hoặc 1 bài tập thực hành nhỏ người đọc làm được ngay
-2. Đan xen câu ngắn với đoạn phân tích dài — đừng viết đều tăm tắp
-3. Khi trích số liệu hoặc nghiên cứu → ghi nguồn tự nhiên trong câu ("theo nghiên cứu của...")
-4. Viết văn xuôi là chính — bullets chỉ dùng khi thực sự phải liệt kê, không dùng để thay văn xuôi
-5. Đặt 1 câu hook mở đầu mỗi H2 trước khi đi vào nội dung
-6. Liên kết đến cộng đồng BetterMe hoặc công cụ (Pomodoro timer, Discord) CHỈ KHI thực sự phù hợp với nội dung — không ép
+═══════ CẤU TRÚC MỖI SECTION H2 ═══════
+Mỗi section phải có ít nhất 1 trong các dạng cite-able snippet sau:
+a) Definition: 1-2 câu định nghĩa rõ ràng khái niệm chính của section
+b) Step-by-step: hướng dẫn dạng "1. → 2. → 3." (có đánh số)
+c) So sánh: A mang lại X, B phù hợp hơn cho Y
+d) Số liệu + nguồn: "theo [nguồn], [số liệu cụ thể]"
 
-Sau khi viết xong: đọc lại từng câu — câu nào nghe như AI đã viết thì viết lại bằng tiếng người.
+Thêm: 1 ví dụ cụ thể hoặc 1 bài tập nhỏ người đọc làm được ngay.
+
+════════ ẢNH CÓ SẴN (chỉ dùng những ảnh này) ═══════
+Hero image (đã có trong frontmatter, không chèn lại):
+  ${heroImagePath}
+
+Section images (chèn bằng markdown):
+${imageList}
+
+- CHỈ dùng ảnh trong danh sách — KHÔNG tự bịa thêm
+- Cú pháp: ![mô tả ngắn](đường-dẫn-ảnh)
+- KHÔNG dùng <Image> hay HTML
 
 ═══════ FORMAT OUTPUT ═══════
-Bắt đầu NGAY với frontmatter, không thêm bất cứ thứ gì trước:
+Bắt đầu NGAY với frontmatter:
 
 ---
 title: "${plan.title}"
-description: "Meta description 150–160 ký tự — tự nhiên, hấp dẫn, chứa keyword chính"
+description: "Meta description 150–160 ký tự, chứa keyword chính, trả lời trực tiếp intent"
 pubDate: ${pubDate}
-tags: [tối đa 4 tags liên quan]
+tags: [tối đa 4 tags]
 keywords: [${plan.primaryKeyword}, ${plan.secondaryKeywords.join(', ')}]
-readingTime: [số phút đọc — ${plan.targetWordCount} từ ÷ 200 = ~${Math.round(plan.targetWordCount / 200)} phút]
+readingTime: [6-8 phút]
 slug: "${plan.slug}"
 heroImage: "${heroImagePath}"
 ---
 
-[Toàn bộ nội dung bài viết — khi cần chèn ảnh section, dùng markdown image syntax với path /blog/image/${plan.slug}/section-N.webp]`
+[Toàn bộ nội dung — nhớ: mỗi đoạn = 1 claim + evidence, không fluff]`
 }
 
 // ─── Image Prompt Builder ─────────────────────────────────────────────────────
 
-const IMAGE_STYLE_BASE = `A flat indie illustration in risograph style with only 2 colors: dark forest green and sage green on a cream/beige background. Hand-drawn wobbly outlines, no gradients, flat fills.`
+const STYLE = `A flat indie illustration in risograph style with only 2 colors: dark forest green and sage green on a cream/beige background. Hand-drawn wobbly outlines, no gradients, flat fills. Zine art aesthetic, indie toolkit branding illustration.`
 
-const IMAGE_STYLE_SUFFIX = `Zine art aesthetic, indie toolkit branding illustration.`
+export function buildHeroImagePrompt(title: string, _angle: string): string {
+    return `${STYLE}
 
-export function buildHeroImagePrompt(title: string, angle: string): string {
-    return `${IMAGE_STYLE_BASE}
-Character: ${buildObscureCharacter(title, angle)}
-Decorators: ${buildObscureDecorators(title, angle)} Handwritten "Betterme" text below.
-${IMAGE_STYLE_SUFFIX}`
+Scene: A simple, clear visual metaphor for "${title}".
+- One central subject that directly represents the main topic
+- A few small related symbols around it
+- Handwritten "Betterme" text at the bottom
+
+Keep it minimal and meaningful. No text other than "Betterme".`
 }
 
 export function buildSectionImagePrompt(
-    title: string,
+    _title: string,
     sectionTitle: string,
-    sectionIndex: number,
-    angle: string,
-): string {
-    return `${IMAGE_STYLE_BASE}
-Character: ${buildObscureSectionCharacter(title, sectionTitle, sectionIndex, angle)}
-Decorators: ${buildObscureSectionDecorators(sectionTitle)} Handwritten "Betterme" text below.
-${IMAGE_STYLE_SUFFIX}`
-}
-
-function buildObscureCharacter(title: string, angle: string): string {
-    const themes = [
-        `A person unlocking a hidden door in a library wall, glowing light spilling through the crack, surrounded by floating mysterious symbols related to "${title}"`,
-        `A lone figure discovering a secret garden inside a cracked lightbulb, tiny plants growing from filament wires, representing the hidden potential in "${angle}"`,
-        `Someone painting constellations on the ceiling of a small room, each star is a tiny icon representing an aspect of "${title}", the room is otherwise empty and quiet`,
-        `A person tangled in headphones wires that gradually transform into growing vines, each vine sprouting a different symbol of "${angle}", headphones still playing`,
-        `A figure pouring tea from a cup that overflows into an entire miniature landscape with tiny people doing "${title}" activities, steam forming question marks`,
-    ]
-    return themes[Math.abs(hashString(title)) % themes.length]
-}
-
-function buildObscureDecorators(title: string, angle: string): string {
-    return `Hidden Easter eggs and micro-details related to "${title}" — tiny references that only someone deeply familiar with "${angle}" would recognize. Strange but meaningful objects scattered around the scene.`
-}
-
-function buildObscureSectionCharacter(
-    title: string,
-    sectionTitle: string,
-    index: number,
+    _sectionIndex: number,
     _angle: string,
 ): string {
-    const poses = [
-        `A person balancing on a tightrope made of intertwined "${sectionTitle}" concepts, each step revealing a hidden trap door below`,
-        `Someone excavating ancient artifacts from a desk drawer, each artifact is a forgotten technique about "${sectionTitle}" covered in dust and spider webs`,
-        `A figure planting seeds in geometric patterns on a rooftop at dawn, each seed labeled with a micro-concept from "${sectionTitle}", city skyline in soft background`,
-        `A person deciphering a coded message written on a foggy window, the decoded text reveals an unexpected truth about "${sectionTitle}"`,
-        `Someone weaving a tapestry where each thread is a different idea from "${title}", the section being woven depicts "${sectionTitle}" as an obscure mythical creature`,
-        `A figure riding a paper boat down a river of open books, navigating rapids of "${sectionTitle}" challenges, tiny lighthouses guiding the way`,
-    ]
-    return poses[index % poses.length]
-}
+    return `${STYLE}
 
-function buildObscureSectionDecorators(sectionTitle: string): string {
-    return `Niche visual metaphors for "${sectionTitle}" — use obscure symbolism, not cliché icons. Think alchemical diagrams, cryptic botanical sketches, or astronomical charts that secretly relate to the topic.`
-}
+Scene: A simple illustration of "${sectionTitle}".
+- One clear subject that visually represents this concept
+- Minimal background elements
+- Handwritten "Betterme" text at the bottom
 
-function hashString(str: string): number {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        hash = ((hash << 5) - hash) + str.charCodeAt(i)
-        hash |= 0
-    }
-    return hash
+Keep it minimal and meaningful. No text other than "Betterme".`
 }
 
 export function buildImageGenerationPayload(
@@ -343,7 +328,6 @@ export function buildImageGenerationPayload(
     const heroPrompt = buildHeroImagePrompt(plan.title, plan.angle)
 
     const sectionsToIllustrate = plan.outline
-        .slice(0, 3)
         .map((section, i) => ({
             sectionTitle: section,
             prompt: buildSectionImagePrompt(plan.title, section, i, plan.angle),
