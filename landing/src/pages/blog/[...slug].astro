@@ -21,12 +21,14 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 ---
 
 <BlogLayout
-  title={`${post.data.title} — BetterMe Blog`}
+  title={`${post.data.title} | BetterMe`}
   description={post.data.description}
   ogImage={post.data.heroImage || undefined}
   article={true}
   pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
   author={post.data.author}
+  authorUrl={post.data.authorUrl}
   tags={post.data.tags}
 >
   <article class="blog-post-page">
@@ -40,9 +42,11 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
       pubDate={post.data.pubDate}
       updatedDate={post.data.updatedDate}
       author={post.data.author}
+      authorUrl={post.data.authorUrl}
       tags={post.data.tags}
       readingTime={readingTime}
       bannerImage={post.data.heroImage || undefined}
+      bannerAlt={post.data.bannerAlt || undefined}
     />
 
     <div class="blog-post-body">

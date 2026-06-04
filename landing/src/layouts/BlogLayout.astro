@@ -10,7 +10,9 @@ interface Props {
   ogImage?: string;
   article?: boolean;
   pubDate?: Date;
+  updatedDate?: Date;
   author?: string;
+  authorUrl?: string;
   tags?: string[];
 }
 
@@ -21,7 +23,9 @@ const {
   ogImage = "https://betterme.dev/og-image.webp",
   article = false,
   pubDate,
+  updatedDate,
   author = "BetterMe",
+  authorUrl,
   tags = [],
 } = Astro.props;
 ---
@@ -72,9 +76,11 @@ const {
             description: description,
             image: ogImage,
             datePublished: pubDate.toISOString(),
+            ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
             author: {
-              "@type": "Organization",
+              "@type": "Person",
               name: author,
+              ...(authorUrl ? { url: authorUrl } : {}),
             },
             publisher: {
               "@type": "Organization",

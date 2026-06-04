@@ -13,6 +13,7 @@ export interface ArticlePlan {
     outline: string[]
     targetWordCount: number
     angle: string
+    citationTargets?: string[]
 }
 
 export interface StrategyResult {
@@ -33,6 +34,12 @@ export interface ResearchResult {
     uniqueAngle: string
     authorityData: string[]
     recentDevelopments: string[]
+    sectionSources?: SectionSource[]
+}
+
+export interface SectionSource {
+    section: string
+    sources: string[]
 }
 
 export interface ArticleIndex {

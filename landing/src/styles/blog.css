@@ -603,6 +603,27 @@ a.blog-tag-link:hover {
   margin: 40px 0;
 }
 
+.blog-post-content .blog-reference,
+.blog-post-content .blog-reference p {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.blog-reference strong {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.blog-reference a {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--primary);
+}
+
+.blog-reference a:hover {
+  border-bottom-style: solid;
+}
+
 .blog-toc {
   position: sticky;
   top: 100px;
