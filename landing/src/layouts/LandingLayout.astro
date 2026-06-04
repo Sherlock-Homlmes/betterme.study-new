@@ -1,4 +1,5 @@
 ---
+import "../styles/fonts.css";
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 
@@ -111,12 +112,9 @@ const ogImage = "https://betterme.dev/og-image.webp";
       href="/rss.xml"
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/fonts/BeVietnamPro-400-vi.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/BeVietnamPro-700-vi.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/SpaceGrotesk-vi.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <div id="custom-cursor"></div>

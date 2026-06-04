@@ -3,7 +3,7 @@ import type { Env } from './types'
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 // Update to gemini-3.5-flash-001 or gemini-3.5-pro when Vertex GA
-const GEMINI_MODEL = 'gemini-flash-latest'
+const GEMINI_MODEL = 'gemini-3-flash-preview'
 const GEMINI_IMAGE_MODEL = 'gemini-3-pro-image'
 const DEFAULT_REGION = 'us-central1'
 
