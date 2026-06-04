@@ -421,6 +421,19 @@ a.blog-tag-link:hover {
   flex-wrap: wrap;
 }
 
+.blog-post-banner {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.blog-post-banner img {
+  max-height: 400px;
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
 .blog-post-meta-item {
   display: flex;
   align-items: center;

@@ -111,17 +111,16 @@ const formattedUpdated = updatedDate?.toLocaleDateString("vi-VN", {
           </span>
         )
       }
-      {
-        bannerImage && (
-          <br/>
+    </div>
+    {
+      bannerImage && (
+        <div class="blog-post-banner">
           <img
-            class="blog-post-meta-item"
-            style="max-height: 400px; max-width: 100%"
             src={bannerImage}
             alt={bannerImage.split("/").at(-1).split(".")[0]}
           />
-        )
-      }
-    </div>
+        </div>
+      )
+    }
   </div>
 </header>
