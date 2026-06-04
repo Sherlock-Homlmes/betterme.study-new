@@ -30,6 +30,53 @@ const searchData = sortedPosts.map((post) => ({
   title="Blog — BetterMe"
   description="Blog chia sẻ kiến thức học tập, mẹo hiệu quả, kỹ năng phát triển bản thân từ cộng đồng BetterMe."
 >
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "Blog — BetterMe",
+        description:
+          "Blog chia sẻ kiến thức học tập, mẹo hiệu quả, kỹ năng phát triển bản thân từ cộng đồng BetterMe.",
+        url: "https://betterme.dev/blog",
+        isPartOf: {
+          "@type": "WebSite",
+          name: "BetterMe Community",
+          url: "https://betterme.dev",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "BetterMe",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://betterme.dev/favicon.svg",
+          },
+        },
+      })}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Trang chủ",
+            item: "https://betterme.dev",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: "https://betterme.dev/blog",
+          },
+        ],
+      })}
+    />
+  </Fragment>
   <section class="blog-listing-hero">
     <div class="container">
       <h1 class="gradient-text">Blog</h1>

@@ -71,7 +71,7 @@ const {
           type="application/ld+json"
           set:html={JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "BlogPosting",
             headline: title,
             description: description,
             image: ogImage,
@@ -106,6 +106,7 @@ const {
       href="/rss.xml"
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <slot name="head" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

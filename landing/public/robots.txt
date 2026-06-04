@@ -41,4 +41,16 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /auth/
 
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+
 Sitemap: https://betterme.dev/sitemap-index.xml

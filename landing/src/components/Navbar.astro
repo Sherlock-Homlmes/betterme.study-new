@@ -9,11 +9,68 @@
     </a>
     <nav class="nav-links">
       <a href="/blog" class="nav-link interactive">Blog</a>
-      <a href="news.betterme.dev" class="nav-link interactive">Tin tức</a>
-      <a href="pomodoro.betterme.dev" class="nav-link interactive">Pomodoro</a>
+      <a href="https://news.betterme.dev" class="nav-link interactive"
+        >Tin tức</a
+      >
+      <a href="https://pomodoro.betterme.dev" class="nav-link interactive"
+        >Pomodoro</a
+      >
     </nav>
     <a href="/guides/intro" class="btn-nav btn-purple interactive">
       Hướng dẫn sử dụng
     </a>
+    <button
+      class="nav-hamburger interactive"
+      id="nav-hamburger"
+      type="button"
+      aria-label="Mở menu"
+      aria-expanded="false"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
   </div>
+  <nav class="nav-mobile" id="nav-mobile" aria-hidden="true">
+    <a href="/blog" class="nav-mobile-link interactive">Blog</a>
+    <a href="https://news.betterme.dev" class="nav-mobile-link interactive"
+      >Tin tức</a
+    >
+    <a
+      href="https://pomodoro.betterme.dev"
+      class="nav-mobile-link interactive"
+      >Pomodoro</a
+    >
+    <a href="/guides/intro" class="nav-mobile-link nav-mobile-cta interactive"
+      >Hướng dẫn sử dụng</a
+    >
+  </nav>
 </header>
+
+<script>
+  const hamburger = document.getElementById("nav-hamburger");
+  const mobileNav = document.getElementById("nav-mobile");
+
+  function closeMobileNav() {
+    hamburger?.classList.remove("open");
+    mobileNav?.classList.remove("open");
+    hamburger?.setAttribute("aria-expanded", "false");
+    mobileNav?.setAttribute("aria-hidden", "true");
+  }
+
+  hamburger?.addEventListener("click", () => {
+    const isOpen = mobileNav?.classList.contains("open");
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      hamburger.classList.add("open");
+      mobileNav?.classList.add("open");
+      hamburger.setAttribute("aria-expanded", "true");
+      mobileNav?.setAttribute("aria-hidden", "false");
+    }
+  });
+
+  mobileNav?.querySelectorAll(".nav-mobile-link").forEach((link) => {
+    link.addEventListener("click", closeMobileNav);
+  });
+</script>
