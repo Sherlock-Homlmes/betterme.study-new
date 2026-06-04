@@ -3,7 +3,7 @@ import { siteConfig } from "@/site-config";
 import { fetchLink } from "src/utils/config";
 import type { GetPostListResponse } from "@/types/responses";
 
-export async function get() {
+export async function GET() {
 	const response = await fetch(`${fetchLink}/posts?per_page=1000000`);
 	const posts = (await response.json()) as GetPostListResponse[];
 	return rss({

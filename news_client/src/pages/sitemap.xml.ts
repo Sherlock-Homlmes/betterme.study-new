@@ -39,6 +39,7 @@ export async function GET() {
 
 	const result = `
         <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <sitemap><loc>${siteUrl}sitemap-static.xml</loc></sitemap>
         ${contentTypesSitemapData
 					.map((data) => {
 						return `<sitemap><loc>${siteUrl}sitemap-${data.contentType}.xml</loc><lastmod>${data.lastModified}+07:00</lastmod></sitemap>`;

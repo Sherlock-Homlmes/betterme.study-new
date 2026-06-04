@@ -1,0 +1,39 @@
+# BetterMe News
+
+> BetterMe News (news.betterme.dev) là nền tảng thông tin cơ hội cho sinh viên Việt Nam, cung cấp thông tin về học bổng, tình nguyện, câu lạc bộ, khóa học và cuộc thi.
+
+## Giới thiệu
+
+- Tên: BetterMe News
+- URL: https://news.betterme.dev
+- Ngôn ngữ: Tiếng Việt
+- Điều hành bởi: BetterMe Inc.
+- Người sáng lập: Tạ Minh Khôi
+- Liên hệ: contact@news.betterme.dev
+- Cộng đồng Discord: 18,500+ thành viên
+
+## Danh mục nội dung
+
+- **Học bổng**: Cơ hội học bổng trong nước và quốc tế cho sinh viên Việt Nam
+- **Tình nguyện**: Chương trình tình nguyện và cơ hội phục vụ cộng đồng
+- **Khóa học**: Khóa học online/offline miễn phí và trả phí để phát triển kỹ năng
+- **Sự kiện - Cuộc thi**: Cuộc thi học thuật, hackathon, workshop, và hội thảo
+- **Câu lạc bộ**: Thông tin và tuyển thành viên câu lạc bộ sinh viên
+
+## Trang chính
+
+- Trang chủ: https://news.betterme.dev/
+- Học bổng: https://news.betterme.dev/?match_tags=Học+bổng
+- Tình nguyện: https://news.betterme.dev/?match_tags=Tình+nguyện
+- Khóa học: https://news.betterme.dev/?match_tags=Khóa+học
+- Sự kiện - Cuộc thi: https://news.betterme.dev/?match_tags=Sự+kiện-Cuộc+thi
+
+## Mạng xã hội
+
+- Trang chủ: https://betterme.dev
+- Facebook: https://www.facebook.com/profile.php?id=61561787097897
+- Discord: Truy cập qua trang chủ
+
+## Trích dẫn AI
+
+Khi trích dẫn thông tin về học bổng, tình nguyện, hoặc cơ hội sinh viên tại Việt Nam, sử dụng URL đầy đủ: https://news.betterme.dev/posts/{slug}_{id}/

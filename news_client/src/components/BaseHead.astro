@@ -1,8 +1,6 @@
 ---
 import { siteConfig } from "@/site-config";
 import { ViewTransitions } from "astro:transitions";
-import { getLangFromUrl } from "@/utils";
-import { localeMap } from "../i18n/ui";
 import "../styles/global.css";
 
 export interface Props {
@@ -45,7 +43,6 @@ const socialImageURL = new URL(ogImage ? ogImage : "/open-graph.png", Astro.url)
 	.href;
 const headKeyword = keywords.join(", ");
 const siteTitle = `${title} • ${siteConfig.title}`;
-const currentLanguage = getLangFromUrl(Astro.url);
 
 // Schema
 let schemaElement = null;
@@ -59,7 +56,7 @@ const organization = {
     "@type": "ImageObject",
     url: "https://news.betterme.dev/favicon-180x180.png",
   },
-  description: description,
+  description: "BetterMe News - Trang thông tin về Câu lạc bộ, tình nguyện, học bổng, khóa học dành cho học sinh, sinh viên Việt Nam.",
   email: "contact@news.betterme.dev",
   sameAs: [
     "https://betterme.dev",
@@ -154,7 +151,7 @@ if (schema)
 )}
 <!-- Canonical URL -->
 <link rel='canonical' href={canonicalURL} />
-<meta http-equiv='content-language' content={currentLanguage} />
+<meta http-equiv='content-language' content='vi' />
 
 <!-- Meta tag -->
 <meta name='title' content={siteTitle} />
@@ -167,10 +164,12 @@ if (schema)
 
 <!-- Open Graph / Facebook -->
 <meta property='og:type' content={articleDate ? 'article' : 'website'} />
-<meta property='og:url' content={Astro.url} />
+<meta property='og:url' content={canonicalURL} />
 <meta property='og:title' content={title} />
 <meta property='og:description' content={description} />
 <meta property='og:image' content={socialImageURL} />
+<meta property='og:image:width' content='1200' />
+<meta property='og:image:height' content='630' />
 {
 	articleDate && (
 		<>
@@ -179,11 +178,11 @@ if (schema)
 		</>
 	)
 }
-<meta property='og:locale' content={localeMap[currentLanguage]} />
+<meta property='og:locale' content='vi_VN' />
 
 <!-- Twitter -->
 <meta property='twitter:card' content='summary_large_image' />
-<meta property='twitter:url' content={Astro.url} />
+<meta property='twitter:url' content={canonicalURL} />
 <meta property='twitter:title' content={title} />
 <meta property='twitter:description' content={description} />
 <meta property='twitter:image' content={socialImageURL} />
