@@ -1,14 +1,14 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import Breadcrumb from '../../components/blog/Breadcrumb.astro';
-import BlogHero from '../../components/blog/BlogHero.astro';
-import TableOfContents from '../../components/blog/TableOfContents.astro';
-import BlogFooter from '../../components/blog/BlogFooter.astro';
+import { getCollection, render } from "astro:content";
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import Breadcrumb from "../../components/blog/Breadcrumb.astro";
+import BlogHero from "../../components/blog/BlogHero.astro";
+import TableOfContents from "../../components/blog/TableOfContents.astro";
+import BlogFooter from "../../components/blog/BlogFooter.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
   }));
@@ -42,6 +42,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
       author={post.data.author}
       tags={post.data.tags}
       readingTime={readingTime}
+      bannerImage={post.data.heroImage || undefined}
     />
 
     <div class="blog-post-body">
@@ -59,26 +60,28 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 </BlogLayout>
 
 <script>
-  const tocLinks = document.querySelectorAll('.blog-toc a');
-  const sections = Array.from(tocLinks).map(link => {
-    const id = link.getAttribute('href')?.slice(1);
-    return document.getElementById(id || '');
-  }).filter(Boolean);
+  const tocLinks = document.querySelectorAll(".blog-toc a");
+  const sections = Array.from(tocLinks)
+    .map((link) => {
+      const id = link.getAttribute("href")?.slice(1);
+      return document.getElementById(id || "");
+    })
+    .filter(Boolean);
 
   function setActiveToc() {
-    let current = '';
+    let current = "";
     for (const section of sections) {
       const rect = section.getBoundingClientRect();
       if (rect.top <= 120) {
         current = section.id;
       }
     }
-    tocLinks.forEach(link => {
-      const href = link.getAttribute('href')?.slice(1);
-      link.classList.toggle('toc-active', href === current);
+    tocLinks.forEach((link) => {
+      const href = link.getAttribute("href")?.slice(1);
+      link.classList.toggle("toc-active", href === current);
     });
   }
 
-  window.addEventListener('scroll', setActiveToc, { passive: true });
+  window.addEventListener("scroll", setActiveToc, { passive: true });
   setActiveToc();
 </script>
