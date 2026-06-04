@@ -1,0 +1,179 @@
+---
+import '../../styles/global.css'
+import '../../styles/blog.css'
+---
+
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            cursor: auto;
+            padding-top: 0;
+        }
+        a, button, .interactive {
+            cursor: pointer;
+        }
+        #custom-cursor, #canvas-particles {
+            display: none !important;
+        }
+        .preview-notice {
+            background: var(--accent-green);
+            color: #fff;
+            text-align: center;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        #preview-content {
+            min-height: calc(100vh - 40px);
+        }
+        .no-data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-notice">PREVIEW MODE — Bài viết chưa được publish</div>
+    <div id="preview-content" class="blog-post-page">
+        <div class="no-data" id="no-data">Không có dữ liệu preview</div>
+    </div>
+
+    <script>
+        import { marked } from 'marked'
+
+        function parseFrontmatter(raw: string) {
+            const match = raw.match(/^---\n([\s\S]*?)\n---/)
+            if (!match) return { frontmatter: {}, body: raw }
+
+            const fm: Record<string, any> = {}
+            for (const line of match[1].split('\n')) {
+                const m = line.match(/^(\w[\w]*):\s*(.*)$/)
+                if (!m) continue
+                const [, key, val] = m
+                try {
+                    fm[key] = JSON.parse(val)
+                } catch {
+                    fm[key] = val
+                }
+            }
+            return { frontmatter: fm, body: raw.slice(match[0].length).trim() }
+        }
+
+        function extractHeadings(html: string): { depth: number; slug: string; text: string }[] {
+            const headings: { depth: number; slug: string; text: string }[] = []
+            const regex = /<h([2-3])\s+id="([^"]*)"[^>]*>(.*?)<\/h\1>/g
+            let m
+            while ((m = regex.exec(html)) !== null) {
+                const text = m[3].replace(/<[^>]*>/g, '')
+                headings.push({ depth: parseInt(m[1]), slug: m[2], text })
+            }
+            return headings
+        }
+
+        function renderTOC(headings: { depth: number; slug: string; text: string }[]): string {
+            if (!headings.length) return ''
+            return `<aside class="blog-toc">
+                <h4 class="blog-toc-title">Mục lục</h4>
+                <ul>${headings.map(h =>
+                    `<li><a href="#${h.slug}" class="${h.depth === 3 ? 'toc-h3' : ''}">${h.text}</a></li>`
+                ).join('')}</ul>
+            </aside>`
+        }
+
+        function formatDate(dateStr: string): string {
+            try {
+                return new Date(dateStr).toLocaleDateString('vi-VN', {
+                    year: 'numeric', month: 'long', day: 'numeric',
+                })
+            } catch {
+                return dateStr
+            }
+        }
+
+        ;(function init() {
+            const raw = sessionStorage.getItem('seo_preview')
+            if (!raw) return
+
+            let data: any
+            try { data = JSON.parse(raw) } catch { return }
+
+            const content = data.content || ''
+            if (!content) return
+
+            const { frontmatter: fm, body } = parseFrontmatter(content)
+
+            const wordCount = body.split(/\s+/).length
+            const readingTime = Math.max(1, Math.ceil(wordCount / 250))
+
+            marked.use({
+                gfm: true,
+                breaks: false,
+            })
+
+            const htmlBody = marked.parse(body) as string
+            const headings = extractHeadings(htmlBody)
+            const tocHtml = renderTOC(headings)
+
+            const tags = Array.isArray(fm.tags) ? fm.tags : []
+
+            const container = document.getElementById('preview-content')!
+            container.innerHTML = `
+                <div class="container">
+                    <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                        <a href="/blog">Blog</a>
+                        <span class="bc-sep">/</span>
+                        <span>${fm.title || 'Preview'}</span>
+                    </nav>
+                </div>
+
+                <header class="blog-post-header">
+                    <div class="container">
+                        ${tags.length ? `<div class="blog-post-tags">${tags.map((t: string) =>
+                            `<span class="blog-tag">${t}</span>`
+                        ).join('')}</div>` : ''}
+                        <h1 class="blog-post-title">${fm.title || 'Untitled'}</h1>
+                        <div class="blog-post-meta">
+                            <span class="blog-post-meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                ${fm.author || 'BetterMe'}
+                            </span>
+                            <span class="blog-post-meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                ${fm.pubDate ? formatDate(fm.pubDate) : ''}
+                            </span>
+                            <span class="blog-post-meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                ${readingTime} phút đọc
+                            </span>
+                        </div>
+                        ${fm.heroImage ? `<div class="blog-post-banner"><img src="${fm.heroImage}" alt="${fm.title || ''}" /></div>` : ''}
+                    </div>
+                </header>
+
+                <div class="blog-post-body">
+                    <div class="blog-post-content">${htmlBody}</div>
+                    ${tocHtml}
+                </div>
+            `
+
+            document.title = `${fm.title || 'Preview'} — BetterMe Blog`
+        })()
+    </script>
+</body>
+</html>
