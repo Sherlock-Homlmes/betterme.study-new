@@ -1,12 +1,14 @@
 import type { Env } from '../types'
 
-// Articles with cosine similarity above this are considered duplicates
-const SIMILARITY_THRESHOLD = 0.82
+// Only skip when truly the same topic — not just loosely related
+// 0.92 = near-identical topic (same keyword, same angle)
+// Lower values catch related-but-different topics which should still be allowed
+const SIMILARITY_THRESHOLD = 0.92
 
 // ─── Embedding ────────────────────────────────────────────────────────────────
 
 export async function embedText(env: Env, text: string): Promise<number[]> {
-    const result = (await env.AI.run('@cf/baai/bge-base-en-v1.5', {
+    const result = (await env.AI.run('@cf/qwen/qwen3-embedding-0.6b', {
         text: [text],
     })) as { data: number[][] }
 

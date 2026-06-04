@@ -49,6 +49,21 @@ export interface ArticleResult {
     skipped: boolean
     error?: string
     skipReason?: string
+    images?: {
+        hero?: string
+        sections: string[]
+    }
+}
+
+export interface ImageSection {
+    sectionTitle: string
+    prompt: string
+    index: number
+}
+
+export interface ImageGeneration {
+    hero: string
+    sections: ImageSection[]
 }
 
 // ─── Workflow ─────────────────────────────────────────────────────────────────

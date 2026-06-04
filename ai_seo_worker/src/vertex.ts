@@ -4,6 +4,7 @@ import type { Env } from './types'
 
 // Update to gemini-3.5-flash-001 or gemini-3.5-pro when Vertex GA
 const GEMINI_MODEL = 'gemini-2.5-flash'
+const GEMINI_IMAGE_MODEL = 'gemini-3-pro-image'
 const DEFAULT_REGION = 'us-central1'
 
 // ─── JWT / OAuth ─────────────────────────────────────────────────────────────
@@ -166,4 +167,73 @@ export function parseJSON<T>(raw: string): T {
         .replace(/```\s*$/m, '')
         .trim()
     return JSON.parse(clean) as T
+}
+
+// ─── Gemini Image Generation ─────────────────────────────────────────────────
+
+export async function generateImage(
+    env: Env,
+    prompt: string,
+): Promise<Uint8Array> {
+    const token = await getAccessToken(env)
+    const region = env.GCP_REGION || DEFAULT_REGION
+    const project = env.GCP_PROJECT_ID
+
+    const url =
+        `https://${region}-aiplatform.googleapis.com/v1/projects/${project}` +
+        `/locations/${region}/publishers/google/models/${GEMINI_IMAGE_MODEL}:generateContent`
+
+    const body = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+            responseModalities: ['TEXT', 'IMAGE'],
+        },
+    }
+
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    })
+
+    if (!res.ok) {
+        const err = await res.text()
+        throw new Error(`Vertex AI Image ${res.status}: ${err}`)
+    }
+
+    const data = await res.json() as {
+        candidates?: {
+            content?: {
+                parts?: Array<{
+                    text?: string
+                    inlineData?: { mimeType?: string; data?: string }
+                }>
+            }
+        }[]
+        promptFeedback?: { blockReason?: string }
+    }
+
+    if (data.promptFeedback?.blockReason) {
+        throw new Error(`Image prompt blocked: ${data.promptFeedback.blockReason}`)
+    }
+
+    const parts = data.candidates?.[0]?.content?.parts
+    if (!parts) throw new Error('No parts in image generation response')
+
+    const imagePart = parts.find((p) => p.inlineData?.data)
+    if (!imagePart?.inlineData?.data) {
+        const textPart = parts.find((p) => p.text)
+        throw new Error(`No image in response. Text: ${textPart?.text ?? 'none'}`)
+    }
+
+    const binary = atob(imagePart.inlineData.data)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i)
+    }
+
+    return bytes
 }
