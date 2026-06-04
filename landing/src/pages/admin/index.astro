@@ -32,53 +32,24 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
             --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: var(--font-b);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
+        body { font-family: var(--font-b); background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        /* ─── Navbar ─── */
         .admin-nav {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
         }
-        .admin-nav h1 {
-            font-family: var(--font-h);
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
+        .admin-nav h1 { font-family: var(--font-h); font-size: 1.25rem; font-weight: 700; }
         .admin-nav h1 a { color: var(--text); text-decoration: none; }
         .admin-nav h1 span { color: var(--primary); }
         .nav-actions { display: flex; gap: 8px; align-items: center; }
-        .nav-actions .user-info {
-            font-size: .85rem;
-            color: var(--text-muted);
-        }
+        .nav-actions .user-info { font-size: .85rem; color: var(--text-muted); }
 
-        /* ─── Buttons ─── */
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-            color: var(--text);
-            font-family: var(--font-b);
-            font-size: .875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all .15s;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+            background: var(--surface); color: var(--text); font-family: var(--font-b);
+            font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .15s;
         }
         .btn:hover { border-color: var(--text-muted); }
         .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -88,192 +59,113 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         .btn-sm { padding: 4px 10px; font-size: .8rem; }
         .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-        /* ─── Login ─── */
         .login-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             min-height: calc(100vh - 56px);
         }
         .login-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 48px 40px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            max-width: 400px;
-            width: 100%;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 48px 40px; text-align: center;
+            box-shadow: var(--shadow); max-width: 440px; width: 100%;
         }
         .login-card h2 { font-family: var(--font-h); font-size: 1.5rem; margin-bottom: 8px; }
         .login-card p { color: var(--text-muted); font-size: .9rem; margin-bottom: 24px; }
+        .login-card .field { text-align: left; margin-bottom: 16px; }
+        .login-card label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 4px; }
+        .login-card input {
+            width: 100%; padding: 8px 12px; border: 1px solid var(--border);
+            border-radius: var(--radius); font-family: var(--font-b); font-size: .9rem; outline: none;
+        }
+        .login-card input:focus { border-color: var(--primary); }
+        .login-card .hint { font-size: .75rem; color: var(--text-muted); margin-top: 4px; }
 
-        /* ─── Main layout ─── */
         .admin-container { max-width: 1100px; margin: 0 auto; padding: 24px; }
 
-        /* ─── Stats bar ─── */
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px; margin-bottom: 24px;
         }
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-        }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
         .stat-card .label { font-size: .8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
         .stat-card .value { font-family: var(--font-h); font-size: 1.5rem; font-weight: 700; margin-top: 4px; }
 
-        /* ─── Actions bar ─── */
-        .actions-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
+        .actions-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
         .actions-bar .spacer { flex: 1; }
         .actions-bar .search {
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-family: var(--font-b);
-            font-size: .875rem;
-            width: 240px;
-            outline: none;
+            padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+            font-family: var(--font-b); font-size: .875rem; width: 240px; outline: none;
         }
         .actions-bar .search:focus { border-color: var(--primary); }
 
-        /* ─── Article table ─── */
-        .articles-table {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
+        .articles-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
         .article-row {
-            display: grid;
-            grid-template-columns: 1fr 200px 140px 120px;
-            align-items: center;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            transition: background .1s;
+            display: grid; grid-template-columns: 1fr 200px 140px 120px;
+            align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); transition: background .1s;
         }
         .article-row:last-child { border-bottom: none; }
         .article-row:hover { background: #fafaf9; }
         .article-row.header {
-            background: #f4f4f5;
-            font-size: .75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: .5px;
-            color: var(--text-muted);
+            background: #f4f4f5; font-size: .75rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted);
         }
         .article-row.header:hover { background: #f4f4f5; }
         .article-title { font-weight: 500; font-size: .9rem; }
         .article-slug { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
         .article-keyword {
-            font-size: .8rem;
-            color: var(--primary);
-            background: rgba(63,98,18,.06);
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-block;
+            font-size: .8rem; color: var(--primary); background: rgba(63,98,18,.06);
+            padding: 2px 8px; border-radius: 4px; display: inline-block;
         }
         .article-date { font-size: .8rem; color: var(--text-muted); }
         .article-actions { display: flex; gap: 4px; justify-content: flex-end; }
 
-        /* ─── Modal ─── */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.4);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+            z-index: 200; align-items: center; justify-content: center;
         }
         .modal-overlay.active { display: flex; }
         .modal {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 480px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,.15);
+            background: var(--surface); border-radius: 12px; padding: 24px;
+            max-width: 480px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,.15);
         }
         .modal h3 { font-family: var(--font-h); font-size: 1.15rem; margin-bottom: 16px; }
         .modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-        /* ─── Toast ─── */
-        .toast-container {
-            position: fixed;
-            top: 72px;
-            right: 24px;
-            z-index: 300;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .toast-container { position: fixed; top: 72px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
         .toast {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            box-shadow: var(--shadow);
-            font-size: .875rem;
-            animation: slideIn .2s ease;
-            max-width: 360px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 12px 16px; box-shadow: var(--shadow); font-size: .875rem;
+            animation: slideIn .2s ease; max-width: 360px;
         }
         .toast.success { border-left: 3px solid var(--primary); }
         .toast.error { border-left: 3px solid var(--danger); }
         .toast.info { border-left: 3px solid var(--warning); }
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* ─── Empty state ─── */
-        .empty-state {
-            text-align: center;
-            padding: 64px 24px;
-            color: var(--text-muted);
-        }
+        .empty-state { text-align: center; padding: 64px 24px; color: var(--text-muted); }
         .empty-state p { margin-bottom: 16px; }
 
-        /* ─── Loading ─── */
         .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin .6s linear infinite;
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid var(--border); border-top-color: var(--primary);
+            border-radius: 50%; animation: spin .6s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .hidden { display: none !important; }
 
-        /* ─── Preview ─── */
         .preview-container {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px;
-            max-height: 70vh;
-            overflow-y: auto;
-            line-height: 1.7;
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 32px; max-height: 70vh; overflow-y: auto; line-height: 1.7;
         }
         .preview-container h1 { font-family: var(--font-h); font-size: 1.75rem; margin-bottom: 16px; }
         .preview-container h2 { font-family: var(--font-h); font-size: 1.25rem; margin: 24px 0 12px; color: var(--primary); }
         .preview-container p { margin-bottom: 12px; }
         .preview-container img { max-width: 100%; border-radius: var(--radius); margin: 16px 0; }
         .preview-container code { background: #f4f4f5; padding: 2px 6px; border-radius: 3px; font-size: .9em; }
+        .preview-container hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
     </style>
 </head>
 <body>
-    <!-- ─── Navbar ─── -->
     <nav class="admin-nav">
         <h1><a href="/admin"><span>Better</span>Me Admin</a></h1>
         <div class="nav-actions" id="nav-actions"></div>
@@ -284,17 +176,26 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         <div class="login-card">
             <h2>SEO Blog Admin</h2>
             <p>Đăng nhập bằng tài khoản BetterMe Discord</p>
-            <a id="discord-login-btn" class="btn btn-primary" href="#">
+            <a id="discord-login-btn" class="btn btn-primary" href="#" style="margin-bottom:20px;display:inline-flex">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-                Đăng nhập bằng Discord
+                Đăng nhập Discord
             </a>
+            <div class="field">
+                <label>SEO Worker URL</label>
+                <input type="text" id="input-worker-url" placeholder="https://ai-seo-worker.betterme.dev" />
+                <div class="hint">URL của ai-seo-worker (Cloudflare)</div>
+            </div>
+            <div class="field">
+                <label>Worker Secret</label>
+                <input type="password" id="input-worker-secret" placeholder="x-internal-secret value" />
+                <div class="hint">Giá trị của INTERNAL_SECRET trong worker</div>
+            </div>
         </div>
     </div>
 
     <!-- ─── Dashboard ─── -->
     <div id="dashboard-view" class="admin-container hidden">
         <div class="stats-bar" id="stats-bar"></div>
-
         <div class="actions-bar">
             <button class="btn btn-primary" id="btn-generate" onclick="handleGenerate()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -305,9 +206,8 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
                 Refresh
             </button>
             <div class="spacer"></div>
-            <input type="text" class="search" placeholder="Tìm bài theo title, slug, keyword..." id="search-input" oninput="filterArticles()" />
+            <input type="text" class="search" placeholder="Tìm bài..." id="search-input" oninput="filterArticles()" />
         </div>
-
         <div class="articles-table" id="articles-table">
             <div class="article-row header">
                 <div>Bài viết</div>
@@ -322,12 +222,12 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         </div>
     </div>
 
-    <!-- ─── Delete confirm modal ─── -->
+    <!-- ─── Delete modal ─── -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal">
             <h3>Xóa bài viết?</h3>
             <p id="delete-modal-text" style="color:var(--text-muted);font-size:.9rem"></p>
-            <p style="color:var(--danger);font-size:.85rem;margin-top:8px">Sẽ xóa bài viết, tất cả ảnh, và vector index. Không thể hoàn tác.</p>
+            <p style="color:var(--danger);font-size:.85rem;margin-top:8px">Xóa bài, ảnh, vector index. Không hoàn tác.</p>
             <div class="actions">
                 <button class="btn" onclick="closeModal('delete-modal')">Hủy</button>
                 <button class="btn btn-danger" id="btn-confirm-delete">Xóa bài</button>
@@ -340,9 +240,9 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         <div class="modal">
             <h3>Generate bài viết mới</h3>
             <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px">
-                Workflow sẽ research keyword, viết bài, generate ảnh, lưu vào R2. Quá trình mất 10-15 phút.
+                Workflow: research → viết → generate ảnh → lưu R2. ~10-15 phút/bài.
             </p>
-            <label style="font-size:.85rem;font-weight:500;display:block;margin-bottom:6px">Số bài muốn generate</label>
+            <label style="font-size:.85rem;font-weight:500;display:block;margin-bottom:6px">Số bài</label>
             <input type="number" id="generate-count" value="1" min="1" max="10"
                 style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:.9rem;width:100px;font-family:var(--font-b)" />
             <div class="actions">
@@ -363,19 +263,21 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         </div>
     </div>
 
-    <!-- ─── Toast container ─── -->
     <div class="toast-container" id="toast-container"></div>
 
     <script define:vars={{ apiUrl }}>
-        // ─── State ───
         let token = ''
         let user = null
         let articles = []
         let deleteTarget = null
+        let workerUrl = localStorage.getItem('admin_worker_url') || ''
+        let workerSecret = localStorage.getItem('admin_worker_secret') || ''
 
-        // ─── Init ───
         ;(function init() {
             token = getCookie('Authorization')
+            document.getElementById('input-worker-url').value = workerUrl
+            document.getElementById('input-worker-secret').value = workerSecret
+
             if (token) {
                 checkAuth()
             } else {
@@ -388,17 +290,12 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
             return match ? match[2] : ''
         }
 
-        // ─── Auth ───
         async function checkAuth() {
             try {
-                const res = await fetch('/api/admin/auth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token.startsWith('Bearer ') ? token : `Bearer ${token}` }),
-                })
+                const t = token.startsWith('Bearer ') ? token : `Bearer ${token}`
+                const res = await fetch(`${apiUrl}/api/auth/me`, { headers: { Authorization: t } })
                 if (!res.ok) { showLogin(); return }
-                const data = await res.json()
-                user = data
+                user = await res.json()
                 showDashboard()
             } catch {
                 showLogin()
@@ -413,6 +310,18 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
         }
 
         function showDashboard() {
+            workerUrl = document.getElementById('input-worker-url').value.trim()
+            workerSecret = document.getElementById('input-worker-secret').value.trim()
+
+            if (!workerUrl || !workerSecret) {
+                toast('Vui lòng nhập Worker URL và Secret', 'error')
+                showLogin()
+                return
+            }
+
+            localStorage.setItem('admin_worker_url', workerUrl)
+            localStorage.setItem('admin_worker_secret', workerSecret)
+
             document.getElementById('login-view').classList.add('hidden')
             document.getElementById('dashboard-view').classList.remove('hidden')
             document.getElementById('nav-actions').innerHTML = `
@@ -424,80 +333,53 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
 
         function logout() {
             document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-            token = ''
-            user = null
-            showLogin()
+            token = ''; user = null; showLogin()
         }
 
-        // ─── API helpers ───
-        function authHeaders() {
-            const t = token.startsWith('Bearer ') ? token : `Bearer ${token}`
-            return { 'Authorization': t, 'Content-Type': 'application/json' }
+        function wHeaders() {
+            return { 'Content-Type': 'application/json', 'x-internal-secret': workerSecret }
         }
 
-        // ─── Articles ───
         async function refreshArticles() {
-            const table = document.getElementById('articles-table')
-            const empty = document.getElementById('empty-state')
-            const stats = document.getElementById('stats-bar')
-
-            // Show loading
-            const rows = table.querySelectorAll('.article-row:not(.header)')
-            rows.forEach(r => r.remove())
-
-            try {
-                const res = await fetch('/api/admin/articles', { headers: authHeaders() })
-                if (!res.ok) throw new Error('Failed to fetch')
-                const data = await res.json()
-                articles = data.articles || []
-
-                if (articles.length === 0) {
-                    empty.classList.remove('hidden')
-                    stats.innerHTML = renderStats(0)
-                    return
-                }
-
-                empty.classList.add('hidden')
-                stats.innerHTML = renderStats(articles.length)
-                renderArticleRows(articles)
-            } catch (e) {
-                toast('Lỗi tải danh sách bài: ' + e.message, 'error')
-            }
-        }
-
-        function renderStats(count) {
-            return `
-                <div class="stat-card">
-                    <div class="label">Tổng bài viết</div>
-                    <div class="value">${count}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Trạng thái</div>
-                    <div class="value" style="font-size:1rem;color:var(--primary)">Hoạt động</div>
-                </div>
-            `
-        }
-
-        function renderArticleRows(list) {
             const table = document.getElementById('articles-table')
             table.querySelectorAll('.article-row:not(.header)').forEach(r => r.remove())
 
+            try {
+                const res = await fetch(`${workerUrl}/articles`, { headers: wHeaders() })
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                const data = await res.json()
+                articles = data.articles || []
+
+                const empty = document.getElementById('empty-state')
+                const stats = document.getElementById('stats-bar')
+                stats.innerHTML = `
+                    <div class="stat-card"><div class="label">Tổng bài</div><div class="value">${articles.length}</div></div>
+                    <div class="stat-card"><div class="label">Trạng thái</div><div class="value" style="font-size:1rem;color:var(--primary)">OK</div></div>
+                `
+                if (articles.length === 0) { empty.classList.remove('hidden'); return }
+                empty.classList.add('hidden')
+                renderRows(articles)
+            } catch (e) {
+                toast('Lỗi tải: ' + e.message, 'error')
+            }
+        }
+
+        function renderRows(list) {
+            const table = document.getElementById('articles-table')
+            table.querySelectorAll('.article-row:not(.header)').forEach(r => r.remove())
             list.forEach(a => {
                 const date = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('vi-VN') : '—'
                 const row = document.createElement('div')
                 row.className = 'article-row'
                 row.dataset.search = `${a.title} ${a.slug} ${a.primaryKeyword}`.toLowerCase()
                 row.innerHTML = `
-                    <div>
-                        <div class="article-title">${esc(a.title)}</div>
-                        <div class="article-slug">${esc(a.slug)}</div>
-                    </div>
+                    <div><div class="article-title">${esc(a.title)}</div><div class="article-slug">${esc(a.slug)}</div></div>
                     <div><span class="article-keyword">${esc(a.primaryKeyword)}</span></div>
                     <div class="article-date">${date}</div>
                     <div class="article-actions">
-                        <button class="btn btn-sm" onclick="previewArticle('${esc(a.slug)}')" title="Preview">👁</button>
-                        <button class="btn btn-sm" onclick="rewriteArticle('${esc(a.slug)}')" title="Viết lại">↻ Rewrite</button>
-                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${esc(a.slug)}', '${esc(a.title)}')" title="Xóa">✕</button>
+                        <button class="btn btn-sm" onclick="previewArticle('${esc(a.slug)}')">👁</button>
+                        <button class="btn btn-sm" onclick="rewriteArticle('${esc(a.slug)}')">↻ Rewrite</button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${esc(a.slug)}','${esc(a.title)}')">✕</button>
                     </div>
                 `
                 table.appendChild(row)
@@ -506,125 +388,75 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
 
         function filterArticles() {
             const q = document.getElementById('search-input').value.toLowerCase()
-            document.querySelectorAll('.article-row:not(.header)').forEach(row => {
-                row.style.display = row.dataset.search.includes(q) ? '' : 'none'
+            document.querySelectorAll('.article-row:not(.header)').forEach(r => {
+                r.style.display = r.dataset.search.includes(q) ? '' : 'none'
             })
         }
 
-        // ─── Generate ───
-        function handleGenerate() {
-            document.getElementById('generate-modal').classList.add('active')
-        }
+        function handleGenerate() { document.getElementById('generate-modal').classList.add('active') }
 
         async function confirmGenerate() {
             const count = parseInt(document.getElementById('generate-count').value) || 1
             const btn = document.getElementById('btn-confirm-generate')
-            btn.disabled = true
-            btn.innerHTML = '<span class="spinner"></span> Đang tạo...'
-
+            btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Đang tạo...'
             try {
-                const res = await fetch('/api/admin/trigger', {
-                    method: 'POST',
-                    headers: authHeaders(),
-                    body: JSON.stringify({ targetCount: count }),
-                })
+                const res = await fetch(`${workerUrl}/trigger`, { method: 'POST', headers: wHeaders(), body: JSON.stringify({ targetCount: count }) })
                 const data = await res.json()
-                if (res.ok) {
-                    toast(`Workflow đã tạo: ${data.workflowId}. Bài sẽ được viết trong 10-15 phút.`, 'success')
-                    closeModal('generate-modal')
-                } else {
-                    toast('Lỗi: ' + (data.error || 'Unknown'), 'error')
-                }
-            } catch (e) {
-                toast('Lỗi: ' + e.message, 'error')
-            } finally {
-                btn.disabled = false
-                btn.textContent = 'Tạo workflow'
-            }
+                if (res.ok) { toast(`Workflow: ${data.workflowId}`, 'success'); closeModal('generate-modal') }
+                else toast('Lỗi: ' + (data.error || '?'), 'error')
+            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
+            finally { btn.disabled = false; btn.textContent = 'Tạo workflow' }
         }
 
-        // ─── Rewrite ───
         async function rewriteArticle(slug) {
-            if (!confirm(`Viết lại bài "${slug}"? Bài cũ và ảnh cũ sẽ bị xóa, bài mới sẽ được generate.`)) return
+            if (!confirm(`Rewrite "${slug}"? Bài & ảnh cũ sẽ bị xóa.`)) return
             toast(`Đang rewrite "${slug}"...`, 'info')
-
             try {
-                const res = await fetch('/api/admin/rewrite', {
-                    method: 'POST',
-                    headers: authHeaders(),
-                    body: JSON.stringify({ slug }),
-                })
+                const res = await fetch(`${workerUrl}/rewrite`, { method: 'POST', headers: wHeaders(), body: JSON.stringify({ slug }) })
                 const data = await res.json()
-                if (data.ok) {
-                    toast(`Đã rewrite "${slug}" thành công!`, 'success')
-                    refreshArticles()
-                } else {
-                    toast(`Rewrite thất bại: ${data.error || 'Unknown error'}`, 'error')
-                }
-            } catch (e) {
-                toast('Lỗi: ' + e.message, 'error')
-            }
+                if (data.ok) { toast(`Rewrite "${slug}" OK!`, 'success'); refreshArticles() }
+                else toast(`Fail: ${data.error}`, 'error')
+            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
         }
 
-        // ─── Delete ───
         function confirmDelete(slug, title) {
             deleteTarget = slug
             document.getElementById('delete-modal-text').textContent = `"${title}" (${slug})`
             document.getElementById('delete-modal').classList.add('active')
-            document.getElementById('btn-confirm-delete').onclick = () => doDelete()
+            document.getElementById('btn-confirm-delete').onclick = doDelete
         }
 
         async function doDelete() {
             if (!deleteTarget) return
             const btn = document.getElementById('btn-confirm-delete')
-            btn.disabled = true
-            btn.textContent = 'Đang xóa...'
-
+            btn.disabled = true; btn.textContent = 'Đang xóa...'
             try {
-                const res = await fetch(`/api/admin/articles/${deleteTarget}`, {
-                    method: 'DELETE',
-                    headers: authHeaders(),
-                })
+                const res = await fetch(`${workerUrl}/articles/${deleteTarget}`, { method: 'DELETE', headers: wHeaders() })
                 const data = await res.json()
-                if (data.ok) {
-                    toast(`Đã xóa "${deleteTarget}"`, 'success')
-                    closeModal('delete-modal')
-                    refreshArticles()
-                } else {
-                    toast('Xóa thất bại: ' + (data.error || 'Unknown'), 'error')
-                }
-            } catch (e) {
-                toast('Lỗi: ' + e.message, 'error')
-            } finally {
-                btn.disabled = false
-                btn.textContent = 'Xóa bài'
-            }
+                if (data.ok) { toast(`Đã xóa "${deleteTarget}"`, 'success'); closeModal('delete-modal'); refreshArticles() }
+                else toast('Fail: ' + (data.error || '?'), 'error')
+            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
+            finally { btn.disabled = false; btn.textContent = 'Xóa bài' }
         }
 
-        // ─── Preview ───
         async function previewArticle(slug) {
             document.getElementById('preview-title').textContent = slug
-            document.getElementById('preview-content').innerHTML = '<p style="color:var(--text-muted)"><span class="spinner"></span> Đang tải preview...</p>'
+            document.getElementById('preview-content').innerHTML = '<p style="color:var(--text-muted)"><span class="spinner"></span> Đang tải...</p>'
             document.getElementById('preview-modal').classList.add('active')
-
             try {
-                const res = await fetch(`/api/admin/articles/preview/${slug}`, {
-                    headers: authHeaders(),
-                })
-                if (!res.ok) throw new Error('Failed to fetch')
+                const res = await fetch(`${workerUrl}/articles/${slug}/content`, { headers: wHeaders() })
+                if (!res.ok) throw new Error('HTTP ' + res.status)
                 const data = await res.json()
-                const content = data.content || 'Không có nội dung'
-
-                // Render markdown to HTML (basic)
-                const html = markdownToHtml(content)
-                document.getElementById('preview-content').innerHTML = html
-                document.getElementById('preview-title').textContent = data.title || slug
+                const content = data.content || ''
+                const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m)
+                document.getElementById('preview-title').textContent = titleMatch ? titleMatch[1] : slug
+                document.getElementById('preview-content').innerHTML = mdToHtml(content)
             } catch (e) {
-                document.getElementById('preview-content').innerHTML = `<p style="color:var(--danger)">Lỗi tải preview: ${e.message}</p>`
+                document.getElementById('preview-content').innerHTML = `<p style="color:var(--danger)">Lỗi: ${e.message}</p>`
             }
         }
 
-        function markdownToHtml(md) {
+        function mdToHtml(md) {
             return md
                 .replace(/^### (.+)$/gm, '<h3>$1</h3>')
                 .replace(/^## (.+)$/gm, '<h2>$1</h2>')
@@ -637,40 +469,20 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
                 .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\n\n/g, '</p><p>')
-                .replace(/^(?!<[hbiuo]|<hr|<img|<block)(.+)$/gm, '<p>$1</p>')
         }
 
-        // ─── Modal helpers ───
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active')
-            deleteTarget = null
-        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); deleteTarget = null }
+        document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active') }))
 
-        // close modals on overlay click
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', e => {
-                if (e.target === overlay) overlay.classList.remove('active')
-            })
-        })
-
-        // ─── Toast ───
         function toast(msg, type = 'info') {
-            const container = document.getElementById('toast-container')
+            const c = document.getElementById('toast-container')
             const el = document.createElement('div')
-            el.className = `toast ${type}`
-            el.textContent = msg
-            container.appendChild(el)
+            el.className = `toast ${type}`; el.textContent = msg; c.appendChild(el)
             setTimeout(() => el.remove(), 5000)
         }
 
-        // ─── Util ───
-        function esc(s) {
-            const d = document.createElement('div')
-            d.textContent = s || ''
-            return d.innerHTML
-        }
+        function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML }
 
-        // expose to onclick handlers
         window.handleGenerate = handleGenerate
         window.confirmGenerate = confirmGenerate
         window.refreshArticles = refreshArticles
