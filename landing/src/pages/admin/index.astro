@@ -1,7 +1,5 @@
 ---
 import '../../styles/global.css'
-
-const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
 ---
 
 <!doctype html>
@@ -16,482 +14,359 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.betterme.dev'
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --bg: #faf9f6;
-            --surface: #ffffff;
-            --border: #e4e4e7;
-            --text: #18181b;
-            --text-muted: #71717a;
-            --primary: #3f6212;
-            --primary-light: #4d7c0f;
-            --danger: #dc2626;
-            --danger-light: #fef2f2;
-            --warning: #d97706;
-            --font-h: "Space Grotesk", sans-serif;
-            --font-b: "Be Vietnam Pro", sans-serif;
-            --radius: 8px;
-            --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+            --bg:#faf9f6;--surface:#fff;--border:#e4e4e7;--text:#18181b;--muted:#71717a;
+            --primary:#3f6212;--primary-lt:#4d7c0f;--danger:#dc2626;--danger-bg:#fef2f2;
+            --warn:#d97706;--fh:"Space Grotesk",sans-serif;--fb:"Be Vietnam Pro",sans-serif;
+            --r:8px;--sh:0 1px 3px rgba(0,0,0,.08);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-b); background: var(--bg); color: var(--text); min-height: 100vh; }
+        *{box-sizing:border-box;margin:0;padding:0;cursor:auto}
+        body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;cursor:auto}
+        a,button,.btn,input,[onclick]{cursor:pointer}
+        #custom-cursor,#canvas-particles{display:none!important}
 
-        .admin-nav {
-            background: var(--surface); border-bottom: 1px solid var(--border);
-            padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; z-index: 100;
-        }
-        .admin-nav h1 { font-family: var(--font-h); font-size: 1.25rem; font-weight: 700; }
-        .admin-nav h1 a { color: var(--text); text-decoration: none; }
-        .admin-nav h1 span { color: var(--primary); }
-        .nav-actions { display: flex; gap: 8px; align-items: center; }
-        .nav-actions .user-info { font-size: .85rem; color: var(--text-muted); }
+        .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+        .nav h1{font-family:var(--fh);font-size:1.25rem;font-weight:700}
+        .nav h1 a{color:var(--text);text-decoration:none}
+        .nav h1 span{color:var(--primary)}
+        .nav-right{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}
 
-        .btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius);
-            background: var(--surface); color: var(--text); font-family: var(--font-b);
-            font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .15s;
-        }
-        .btn:hover { border-color: var(--text-muted); }
-        .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .btn-primary:hover { background: var(--primary-light); }
-        .btn-danger { color: var(--danger); border-color: var(--danger); }
-        .btn-danger:hover { background: var(--danger-light); }
-        .btn-sm { padding: 4px 10px; font-size: .8rem; }
-        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-family:var(--fb);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .15s}
+        .btn:hover{border-color:var(--muted)}
+        .btn-p{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .btn-p:hover{background:var(--primary-lt)}
+        .btn-d{color:var(--danger);border-color:var(--danger)}
+        .btn-d:hover{background:var(--danger-bg)}
+        .btn-sm{padding:4px 10px;font-size:.8rem}
+        .btn:disabled{opacity:.5;cursor:not-allowed}
 
-        .login-container {
-            display: flex; align-items: center; justify-content: center;
-            min-height: calc(100vh - 56px);
-        }
-        .login-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; padding: 48px 40px; text-align: center;
-            box-shadow: var(--shadow); max-width: 440px; width: 100%;
-        }
-        .login-card h2 { font-family: var(--font-h); font-size: 1.5rem; margin-bottom: 8px; }
-        .login-card p { color: var(--text-muted); font-size: .9rem; margin-bottom: 24px; }
-        .login-card .field { text-align: left; margin-bottom: 16px; }
-        .login-card label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 4px; }
-        .login-card input {
-            width: 100%; padding: 8px 12px; border: 1px solid var(--border);
-            border-radius: var(--radius); font-family: var(--font-b); font-size: .9rem; outline: none;
-        }
-        .login-card input:focus { border-color: var(--primary); }
-        .login-card .hint { font-size: .75rem; color: var(--text-muted); margin-top: 4px; }
+        .center{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 56px)}
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:48px 40px;text-align:center;box-shadow:var(--sh);max-width:420px;width:100%}
+        .card h2{font-family:var(--fh);font-size:1.5rem;margin-bottom:8px}
+        .card p{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+        .card .f{text-align:left;margin-bottom:16px}
+        .card label{display:block;font-size:.85rem;font-weight:500;margin-bottom:4px}
+        .card input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--fb);font-size:.9rem;outline:none}
+        .card input:focus{border-color:var(--primary)}
+        .card .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
 
-        .admin-container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .wrap{max-width:1100px;margin:0 auto;padding:24px}
+        .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+        .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+        .stat .l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+        .stat .v{font-family:var(--fh);font-size:1.4rem;font-weight:700;margin-top:4px}
 
-        .stats-bar {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px; margin-bottom: 24px;
-        }
-        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-        .stat-card .label { font-size: .8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
-        .stat-card .value { font-family: var(--font-h); font-size: 1.5rem; font-weight: 700; margin-top: 4px; }
+        .bar{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+        .bar .sp{flex:1}
+        .bar input[type=text]{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--fb);font-size:.875rem;width:220px;outline:none}
+        .bar input:focus{border-color:var(--primary)}
 
-        .actions-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
-        .actions-bar .spacer { flex: 1; }
-        .actions-bar .search {
-            padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius);
-            font-family: var(--font-b); font-size: .875rem; width: 240px; outline: none;
-        }
-        .actions-bar .search:focus { border-color: var(--primary); }
+        .tbl{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+        .row{display:grid;grid-template-columns:1fr 180px 100px 80px 100px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .1s}
+        .row:last-child{border-bottom:none}
+        .row:hover{background:#fafaf9}
+        .row.hd{background:#f4f4f5;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+        .row.hd:hover{background:#f4f4f5}
+        .row .t{font-weight:500;font-size:.9rem}
+        .row .s{font-size:.8rem;color:var(--muted);margin-top:2px}
+        .row .kw{font-size:.8rem;color:var(--primary);background:rgba(63,98,18,.06);padding:2px 8px;border-radius:4px;display:inline-block}
+        .row .d{font-size:.8rem;color:var(--muted)}
+        .row .cost{font-size:.8rem;color:var(--warn)}
+        .row .act{display:flex;gap:4px;justify-content:flex-end}
 
-        .articles-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-        .article-row {
-            display: grid; grid-template-columns: 1fr 200px 140px 120px;
-            align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); transition: background .1s;
-        }
-        .article-row:last-child { border-bottom: none; }
-        .article-row:hover { background: #fafaf9; }
-        .article-row.header {
-            background: #f4f4f5; font-size: .75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted);
-        }
-        .article-row.header:hover { background: #f4f4f5; }
-        .article-title { font-weight: 500; font-size: .9rem; }
-        .article-slug { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
-        .article-keyword {
-            font-size: .8rem; color: var(--primary); background: rgba(63,98,18,.06);
-            padding: 2px 8px; border-radius: 4px; display: inline-block;
-        }
-        .article-date { font-size: .8rem; color: var(--text-muted); }
-        .article-actions { display: flex; gap: 4px; justify-content: flex-end; }
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content: center}
+        .overlay.on{display:flex}
+        .modal{background:var(--surface);border-radius:12px;padding:24px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+        .modal.wide{max-width:720px}
+        .modal h3{font-family:var(--fh);font-size:1.15rem;margin-bottom:16px}
+        .modal .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
 
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
-            z-index: 200; align-items: center; justify-content: center;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--surface); border-radius: 12px; padding: 24px;
-            max-width: 480px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,.15);
-        }
-        .modal h3 { font-family: var(--font-h); font-size: 1.15rem; margin-bottom: 16px; }
-        .modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+        .toasts{position:fixed;top:72px;right:24px;z-index:300;display:flex;flex-direction:column;gap:8px}
+        .toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;box-shadow:var(--sh);font-size:.875rem;animation:si .2s ease;max-width:360px}
+        .toast.ok{border-left:3px solid var(--primary)}
+        .toast.err{border-left:3px solid var(--danger)}
+        .toast.info{border-left:3px solid var(--warn)}
+        @keyframes si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
-        .toast-container { position: fixed; top: 72px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
-        .toast {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 12px 16px; box-shadow: var(--shadow); font-size: .875rem;
-            animation: slideIn .2s ease; max-width: 360px;
-        }
-        .toast.success { border-left: 3px solid var(--primary); }
-        .toast.error { border-left: 3px solid var(--danger); }
-        .toast.info { border-left: 3px solid var(--warning); }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .empty{text-align:center;padding:64px 24px;color:var(--muted)}
+        .spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:sp .6s linear infinite}
+        @keyframes sp{to{transform:rotate(360deg)}}
+        .hidden{display:none!important}
 
-        .empty-state { text-align: center; padding: 64px 24px; color: var(--text-muted); }
-        .empty-state p { margin-bottom: 16px; }
-
-        .spinner {
-            display: inline-block; width: 16px; height: 16px;
-            border: 2px solid var(--border); border-top-color: var(--primary);
-            border-radius: 50%; animation: spin .6s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .hidden { display: none !important; }
-
-        .preview-container {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 32px; max-height: 70vh; overflow-y: auto; line-height: 1.7;
-        }
-        .preview-container h1 { font-family: var(--font-h); font-size: 1.75rem; margin-bottom: 16px; }
-        .preview-container h2 { font-family: var(--font-h); font-size: 1.25rem; margin: 24px 0 12px; color: var(--primary); }
-        .preview-container p { margin-bottom: 12px; }
-        .preview-container img { max-width: 100%; border-radius: var(--radius); margin: 16px 0; }
-        .preview-container code { background: #f4f4f5; padding: 2px 6px; border-radius: 3px; font-size: .9em; }
-        .preview-container hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+        .wf-list{max-height:300px;overflow-y:auto}
+        .wf-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+        .wf-item:last-child{border-bottom:none}
+        .wf-badge{padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:600}
+        .wf-badge.running{background:#dbeafe;color:#1d4ed8}
+        .wf-badge.complete{background:#dcfce7;color:#166534}
+        .wf-badge.failed{background:var(--danger-bg);color:var(--danger)}
     </style>
 </head>
 <body>
-    <nav class="admin-nav">
-        <h1><a href="/admin"><span>Better</span>Me Admin</a></h1>
-        <div class="nav-actions" id="nav-actions"></div>
+    <nav class="nav">
+        <h1><a href="/admin"><span>Better</span>Me SEO</a></h1>
+        <div class="nav-right" id="nav-right"></div>
     </nav>
 
     <!-- ─── Login ─── -->
-    <div id="login-view" class="login-container">
-        <div class="login-card">
-            <h2>SEO Blog Admin</h2>
-            <p>Đăng nhập bằng tài khoản BetterMe Discord</p>
-            <a id="discord-login-btn" class="btn btn-primary" href="#" style="margin-bottom:20px;display:inline-flex">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-                Đăng nhập Discord
-            </a>
-            <div class="field">
-                <label>SEO Worker URL</label>
-                <input type="text" id="input-worker-url" placeholder="https://ai-seo-worker.betterme.dev" />
-                <div class="hint">URL của ai-seo-worker (Cloudflare)</div>
-            </div>
-            <div class="field">
-                <label>Worker Secret</label>
-                <input type="password" id="input-worker-secret" placeholder="x-internal-secret value" />
-                <div class="hint">Giá trị của INTERNAL_SECRET trong worker</div>
-            </div>
+    <div id="view-login" class="center">
+        <div class="card">
+            <h2>SEO Admin</h2>
+            <p>Nhập URL và Secret để kết nối worker</p>
+            <div class="f"><label>Worker URL</label><input id="in-url" placeholder="https://ai-seo-worker.betterme.dev" /><div class="hint">Cloudflare worker URL</div></div>
+            <div class="f"><label>Secret Key</label><input type="password" id="in-key" placeholder="x-internal-secret" /><div class="hint">INTERNAL_SECRET</div></div>
+            <button class="btn btn-p" style="margin-top:8px" onclick="doLogin()">Kết nối</button>
         </div>
     </div>
 
     <!-- ─── Dashboard ─── -->
-    <div id="dashboard-view" class="admin-container hidden">
-        <div class="stats-bar" id="stats-bar"></div>
-        <div class="actions-bar">
-            <button class="btn btn-primary" id="btn-generate" onclick="handleGenerate()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                Generate bài mới
-            </button>
-            <button class="btn" onclick="refreshArticles()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
-                Refresh
-            </button>
-            <div class="spacer"></div>
-            <input type="text" class="search" placeholder="Tìm bài..." id="search-input" oninput="filterArticles()" />
+    <div id="view-dash" class="wrap hidden">
+        <div class="grid2" id="stats"></div>
+        <div class="bar">
+            <button class="btn btn-p" onclick="openGen()">+ Generate</button>
+            <button class="btn" onclick="loadArticles()">↻ Refresh</button>
+            <button class="btn" onclick="openWorkflows()">Workflows</button>
+            <div class="sp"></div>
+            <input type="text" placeholder="Tìm bài..." id="q" oninput="filter()" />
         </div>
-        <div class="articles-table" id="articles-table">
-            <div class="article-row header">
-                <div>Bài viết</div>
-                <div>Keyword</div>
-                <div>Ngày đăng</div>
-                <div style="text-align:right">Thao tác</div>
-            </div>
+        <div class="tbl" id="tbl">
+            <div class="row hd"><div>Bài viết</div><div>Keyword</div><div>Ảnh</div><div>Chi phí</div><div style="text-align:right">Thao tác</div></div>
         </div>
-        <div id="empty-state" class="empty-state hidden">
-            <p>Chưa có bài viết nào</p>
-            <button class="btn btn-primary" onclick="handleGenerate()">Generate bài đầu tiên</button>
+        <div id="empty" class="empty hidden"><p>Chưa có bài nào</p><button class="btn btn-p" onclick="openGen()">Generate bài đầu</button></div>
+    </div>
+
+    <!-- ─── Generate modal ─── -->
+    <div class="overlay" id="m-gen">
+        <div class="modal">
+            <h3>Generate bài mới</h3>
+            <p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">Workflow: research → viết → ảnh → R2. ~10-15 phút/bài.</p>
+            <label style="font-size:.85rem;font-weight:500;display:block;margin-bottom:6px">Số bài</label>
+            <input type="number" id="gen-n" value="1" min="1" max="10" style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:.9rem;width:100px;font-family:var(--fb)" />
+            <div class="foot"><button class="btn" onclick="closeM('m-gen')">Hủy</button><button class="btn btn-p" id="btn-gen" onclick="doGen()">Tạo</button></div>
         </div>
     </div>
 
     <!-- ─── Delete modal ─── -->
-    <div class="modal-overlay" id="delete-modal">
+    <div class="overlay" id="m-del">
         <div class="modal">
             <h3>Xóa bài viết?</h3>
-            <p id="delete-modal-text" style="color:var(--text-muted);font-size:.9rem"></p>
-            <p style="color:var(--danger);font-size:.85rem;margin-top:8px">Xóa bài, ảnh, vector index. Không hoàn tác.</p>
-            <div class="actions">
-                <button class="btn" onclick="closeModal('delete-modal')">Hủy</button>
-                <button class="btn btn-danger" id="btn-confirm-delete">Xóa bài</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ─── Generate modal ─── -->
-    <div class="modal-overlay" id="generate-modal">
-        <div class="modal">
-            <h3>Generate bài viết mới</h3>
-            <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px">
-                Workflow: research → viết → generate ảnh → lưu R2. ~10-15 phút/bài.
-            </p>
-            <label style="font-size:.85rem;font-weight:500;display:block;margin-bottom:6px">Số bài</label>
-            <input type="number" id="generate-count" value="1" min="1" max="10"
-                style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:.9rem;width:100px;font-family:var(--font-b)" />
-            <div class="actions">
-                <button class="btn" onclick="closeModal('generate-modal')">Hủy</button>
-                <button class="btn btn-primary" id="btn-confirm-generate" onclick="confirmGenerate()">Tạo workflow</button>
-            </div>
+            <p id="del-text" style="color:var(--muted);font-size:.9rem"></p>
+            <p style="color:var(--danger);font-size:.85rem;margin-top:8px">Xóa bài + ảnh + vector. Không hoàn tác.</p>
+            <div class="foot"><button class="btn" onclick="closeM('m-del')">Hủy</button><button class="btn btn-d" id="btn-del">Xóa</button></div>
         </div>
     </div>
 
     <!-- ─── Preview modal ─── -->
-    <div class="modal-overlay" id="preview-modal">
-        <div class="modal" style="max-width:720px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-                <h3 id="preview-title">Preview</h3>
-                <button class="btn btn-sm" onclick="closeModal('preview-modal')">Đóng</button>
-            </div>
-            <div class="preview-container" id="preview-content"></div>
+    <div class="overlay" id="m-prev" style="background:#fff">
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);z-index:10"><h3 id="prev-t">Preview</h3><button class="btn btn-sm" onclick="closeM('m-prev')">Đóng</button></div>
+        <iframe id="prev-iframe" src="/admin/preview" style="width:100%;height:100%;border:none;margin-top:48px"></iframe>
+    </div>
+
+    <!-- ─── Workflows modal ─── -->
+    <div class="overlay" id="m-wf">
+        <div class="modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3>Workflows</h3><button class="btn btn-sm" onclick="closeM('m-wf')">Đóng</button></div>
+            <div class="wf-list" id="wf-list"><p style="color:var(--muted)"><span class="spin"></span> Đang tải...</p></div>
         </div>
     </div>
 
-    <div class="toast-container" id="toast-container"></div>
+    <div class="toasts" id="toasts"></div>
 
-    <script define:vars={{ apiUrl }}>
-        let token = ''
-        let user = null
+    <script>
         let articles = []
-        let deleteTarget = null
-        let workerUrl = localStorage.getItem('admin_worker_url') || ''
-        let workerSecret = localStorage.getItem('admin_worker_secret') || ''
+        let delSlug = null
+        let wUrl = ''
+        let wKey = ''
 
-        ;(function init() {
-            token = getCookie('Authorization')
-            document.getElementById('input-worker-url').value = workerUrl
-            document.getElementById('input-worker-secret').value = workerSecret
+        const COOKIE = 'seo_admin'
 
-            if (token) {
-                checkAuth()
-            } else {
-                showLogin()
-            }
+        ;(function() {
+            const c = getCookie(COOKIE)
+            if (c) { try { const d = JSON.parse(c); wUrl = d.u || ''; wKey = d.k || '' } catch {} }
+            document.getElementById('in-url').value = wUrl
+            document.getElementById('in-key').value = wKey
+            if (wUrl && wKey) ping()
         })()
 
-        function getCookie(name) {
-            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
-            return match ? match[2] : ''
-        }
+        function getCookie(n) { const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : '' }
+        function setCookie(n, v, days = 365) { const d = new Date(); d.setDate(d.getDate() + days); document.cookie = `${n}=${encodeURIComponent(v)}; expires=${d.toUTCString()}; path=/` }
+        function rmCookie(n) { document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/` }
 
-        async function checkAuth() {
+        function H() { return { 'Content-Type': 'application/json', 'x-internal-secret': wKey } }
+
+        async function ping() {
             try {
-                const t = token.startsWith('Bearer ') ? token : `Bearer ${token}`
-                const res = await fetch(`${apiUrl}/api/auth/me`, { headers: { Authorization: t } })
-                if (!res.ok) { showLogin(); return }
-                user = await res.json()
-                showDashboard()
-            } catch {
-                showLogin()
-            }
+                const r = await fetch(`${wUrl}/ping`)
+                if (!r.ok) throw 0
+                const d = await r.json()
+                if (d.ok) { setCookie(COOKIE, JSON.stringify({ u: wUrl, k: wKey })); showDash(); return }
+            } catch {}
+            toast('Kết nối thất bại', 'err')
         }
 
-        function showLogin() {
-            document.getElementById('login-view').classList.remove('hidden')
-            document.getElementById('dashboard-view').classList.add('hidden')
-            document.getElementById('discord-login-btn').href =
-                `${apiUrl}/api/auth/discord?redirect=${encodeURIComponent('admin')}`
+        async function doLogin() {
+            wUrl = document.getElementById('in-url').value.trim()
+            wKey = document.getElementById('in-key').value.trim()
+            if (!wUrl || !wKey) { toast('Nhập đủ URL và Key', 'err'); return }
+            await ping()
         }
 
-        function showDashboard() {
-            workerUrl = document.getElementById('input-worker-url').value.trim()
-            workerSecret = document.getElementById('input-worker-secret').value.trim()
-
-            if (!workerUrl || !workerSecret) {
-                toast('Vui lòng nhập Worker URL và Secret', 'error')
-                showLogin()
-                return
-            }
-
-            localStorage.setItem('admin_worker_url', workerUrl)
-            localStorage.setItem('admin_worker_secret', workerSecret)
-
-            document.getElementById('login-view').classList.add('hidden')
-            document.getElementById('dashboard-view').classList.remove('hidden')
-            document.getElementById('nav-actions').innerHTML = `
-                <span class="user-info">${user?.username || 'Admin'}</span>
-                <button class="btn btn-sm" onclick="logout()">Đăng xuất</button>
-            `
-            refreshArticles()
+        function showDash() {
+            document.getElementById('view-login').classList.add('hidden')
+            document.getElementById('view-dash').classList.remove('hidden')
+            document.getElementById('nav-right').innerHTML = `<span>${esc(wUrl.replace(/https?:\/\//, ''))}</span><button class="btn btn-sm" onclick="logout()">Logout</button>`
+            loadArticles()
         }
 
         function logout() {
-            document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-            token = ''; user = null; showLogin()
+            rmCookie(COOKIE); wUrl = ''; wKey = ''
+            document.getElementById('view-login').classList.remove('hidden')
+            document.getElementById('view-dash').classList.add('hidden')
+            document.getElementById('nav-right').innerHTML = ''
         }
 
-        function wHeaders() {
-            return { 'Content-Type': 'application/json', 'x-internal-secret': workerSecret }
-        }
-
-        async function refreshArticles() {
-            const table = document.getElementById('articles-table')
-            table.querySelectorAll('.article-row:not(.header)').forEach(r => r.remove())
-
+        // ─── Articles ───
+        async function loadArticles() {
+            const tbl = document.getElementById('tbl')
+            tbl.querySelectorAll('.row:not(.hd)').forEach(r => r.remove())
             try {
-                const res = await fetch(`${workerUrl}/articles`, { headers: wHeaders() })
-                if (!res.ok) throw new Error(`HTTP ${res.status}`)
-                const data = await res.json()
-                articles = data.articles || []
-
-                const empty = document.getElementById('empty-state')
-                const stats = document.getElementById('stats-bar')
-                stats.innerHTML = `
-                    <div class="stat-card"><div class="label">Tổng bài</div><div class="value">${articles.length}</div></div>
-                    <div class="stat-card"><div class="label">Trạng thái</div><div class="value" style="font-size:1rem;color:var(--primary)">OK</div></div>
+                const r = await fetch(`${wUrl}/articles`, { headers: H() })
+                if (!r.ok) throw new Error(`HTTP ${r.status}`)
+                const d = await r.json()
+                articles = d.articles || []
+                const totalCost = articles.reduce((s, a) => s + (a.cost?.estimatedUsd || 0), 0)
+                const totalImg = articles.reduce((s, a) => s + (a.imageCount || 0), 0)
+                document.getElementById('stats').innerHTML = `
+                    <div class="stat"><div class="l">Tổng bài</div><div class="v">${articles.length}</div></div>
+                    <div class="stat"><div class="l">Tổng ảnh</div><div class="v">${totalImg}</div></div>
+                    <div class="stat"><div class="l">Tổng chi phí</div><div class="v">$${totalCost.toFixed(2)}</div></div>
                 `
-                if (articles.length === 0) { empty.classList.remove('hidden'); return }
+                const empty = document.getElementById('empty')
+                if (!articles.length) { empty.classList.remove('hidden'); return }
                 empty.classList.add('hidden')
                 renderRows(articles)
-            } catch (e) {
-                toast('Lỗi tải: ' + e.message, 'error')
-            }
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
         }
 
         function renderRows(list) {
-            const table = document.getElementById('articles-table')
-            table.querySelectorAll('.article-row:not(.header)').forEach(r => r.remove())
+            const tbl = document.getElementById('tbl')
+            tbl.querySelectorAll('.row:not(.hd)').forEach(r => r.remove())
             list.forEach(a => {
                 const date = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('vi-VN') : '—'
+                const cost = a.cost?.estimatedUsd ? `$${a.cost.estimatedUsd}` : '—'
                 const row = document.createElement('div')
-                row.className = 'article-row'
-                row.dataset.search = `${a.title} ${a.slug} ${a.primaryKeyword}`.toLowerCase()
+                row.className = 'row'
+                row.dataset.q = `${a.title} ${a.slug} ${a.primaryKeyword}`.toLowerCase()
                 row.innerHTML = `
-                    <div><div class="article-title">${esc(a.title)}</div><div class="article-slug">${esc(a.slug)}</div></div>
-                    <div><span class="article-keyword">${esc(a.primaryKeyword)}</span></div>
-                    <div class="article-date">${date}</div>
-                    <div class="article-actions">
-                        <button class="btn btn-sm" onclick="previewArticle('${esc(a.slug)}')">👁</button>
-                        <button class="btn btn-sm" onclick="rewriteArticle('${esc(a.slug)}')">↻ Rewrite</button>
-                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${esc(a.slug)}','${esc(a.title)}')">✕</button>
+                    <div><div class="t">${esc(a.title)}</div><div class="s">${esc(a.slug)}</div></div>
+                    <div><span class="kw">${esc(a.primaryKeyword)}</span></div>
+                    <div class="d">${a.imageCount || 0} ảnh</div>
+                    <div class="cost">${cost}</div>
+                    <div class="act">
+                        <button class="btn btn-sm" onclick="preview('${esc(a.slug)}')">👁</button>
+                        <button class="btn btn-sm" onclick="regen('${esc(a.slug)}')">↻</button>
+                        <button class="btn btn-sm btn-d" onclick="openDel('${esc(a.slug)}','${esc(a.title)}')">✕</button>
                     </div>
                 `
-                table.appendChild(row)
+                tbl.appendChild(row)
             })
         }
 
-        function filterArticles() {
-            const q = document.getElementById('search-input').value.toLowerCase()
-            document.querySelectorAll('.article-row:not(.header)').forEach(r => {
-                r.style.display = r.dataset.search.includes(q) ? '' : 'none'
-            })
+        function filter() {
+            const q = document.getElementById('q').value.toLowerCase()
+            document.querySelectorAll('.row:not(.hd)').forEach(r => { r.style.display = r.dataset.q.includes(q) ? '' : 'none' })
         }
 
-        function handleGenerate() { document.getElementById('generate-modal').classList.add('active') }
+        // ─── Generate ───
+        function openGen() { document.getElementById('m-gen').classList.add('on') }
 
-        async function confirmGenerate() {
-            const count = parseInt(document.getElementById('generate-count').value) || 1
-            const btn = document.getElementById('btn-confirm-generate')
-            btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Đang tạo...'
+        async function doGen() {
+            const n = parseInt(document.getElementById('gen-n').value) || 1
+            const btn = document.getElementById('btn-gen')
+            btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Đang tạo...'
             try {
-                const res = await fetch(`${workerUrl}/trigger`, { method: 'POST', headers: wHeaders(), body: JSON.stringify({ targetCount: count }) })
-                const data = await res.json()
-                if (res.ok) { toast(`Workflow: ${data.workflowId}`, 'success'); closeModal('generate-modal') }
-                else toast('Lỗi: ' + (data.error || '?'), 'error')
-            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
-            finally { btn.disabled = false; btn.textContent = 'Tạo workflow' }
+                const r = await fetch(`${wUrl}/articles`, { method: 'POST', headers: H(), body: JSON.stringify({ targetCount: n }) })
+                const d = await r.json()
+                if (r.ok) { toast(`Workflow: ${d.workflowId}`, 'ok'); closeM('m-gen') }
+                else toast('Lỗi: ' + (d.error || '?'), 'err')
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
+            finally { btn.disabled = false; btn.textContent = 'Tạo' }
         }
 
-        async function rewriteArticle(slug) {
-            if (!confirm(`Rewrite "${slug}"? Bài & ảnh cũ sẽ bị xóa.`)) return
-            toast(`Đang rewrite "${slug}"...`, 'info')
+        // ─── Regenerate ───
+        async function regen(slug) {
+            if (!confirm(`Regenerate "${slug}"?`)) return
+            toast(`Đang regenerate "${slug}"...`, 'info')
             try {
-                const res = await fetch(`${workerUrl}/rewrite`, { method: 'POST', headers: wHeaders(), body: JSON.stringify({ slug }) })
-                const data = await res.json()
-                if (data.ok) { toast(`Rewrite "${slug}" OK!`, 'success'); refreshArticles() }
-                else toast(`Fail: ${data.error}`, 'error')
-            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
+                const r = await fetch(`${wUrl}/articles/${slug}/_regenerate`, { method: 'POST', headers: H(), body: JSON.stringify({}) })
+                const d = await r.json()
+                if (d.ok) { toast(`OK!`, 'ok'); loadArticles() }
+                else toast('Fail: ' + (d.error || '?'), 'err')
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
         }
 
-        function confirmDelete(slug, title) {
-            deleteTarget = slug
-            document.getElementById('delete-modal-text').textContent = `"${title}" (${slug})`
-            document.getElementById('delete-modal').classList.add('active')
-            document.getElementById('btn-confirm-delete').onclick = doDelete
+        // ─── Delete ───
+        function openDel(slug, title) {
+            delSlug = slug
+            document.getElementById('del-text').textContent = `"${title}" (${slug})`
+            document.getElementById('m-del').classList.add('on')
+            document.getElementById('btn-del').onclick = doDel
         }
 
-        async function doDelete() {
-            if (!deleteTarget) return
-            const btn = document.getElementById('btn-confirm-delete')
+        async function doDel() {
+            if (!delSlug) return
+            const btn = document.getElementById('btn-del')
             btn.disabled = true; btn.textContent = 'Đang xóa...'
             try {
-                const res = await fetch(`${workerUrl}/articles/${deleteTarget}`, { method: 'DELETE', headers: wHeaders() })
-                const data = await res.json()
-                if (data.ok) { toast(`Đã xóa "${deleteTarget}"`, 'success'); closeModal('delete-modal'); refreshArticles() }
-                else toast('Fail: ' + (data.error || '?'), 'error')
-            } catch (e) { toast('Lỗi: ' + e.message, 'error') }
-            finally { btn.disabled = false; btn.textContent = 'Xóa bài' }
+                const r = await fetch(`${wUrl}/articles/${delSlug}`, { method: 'DELETE', headers: H() })
+                const d = await r.json()
+                if (d.ok) { toast('Đã xóa', 'ok'); closeM('m-del'); loadArticles() }
+                else toast('Fail: ' + (d.error || '?'), 'err')
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
+            finally { btn.disabled = false; btn.textContent = 'Xóa' }
         }
 
-        async function previewArticle(slug) {
-            document.getElementById('preview-title').textContent = slug
-            document.getElementById('preview-content').innerHTML = '<p style="color:var(--text-muted)"><span class="spinner"></span> Đang tải...</p>'
-            document.getElementById('preview-modal').classList.add('active')
+        // ─── Preview ───
+        async function preview(slug) {
+            document.getElementById('prev-t').textContent = slug
+            document.getElementById('m-prev').classList.add('on')
+            const iframe = document.getElementById('prev-iframe')
             try {
-                const res = await fetch(`${workerUrl}/articles/${slug}/content`, { headers: wHeaders() })
-                if (!res.ok) throw new Error('HTTP ' + res.status)
-                const data = await res.json()
-                const content = data.content || ''
-                const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m)
-                document.getElementById('preview-title').textContent = titleMatch ? titleMatch[1] : slug
-                document.getElementById('preview-content').innerHTML = mdToHtml(content)
-            } catch (e) {
-                document.getElementById('preview-content').innerHTML = `<p style="color:var(--danger)">Lỗi: ${e.message}</p>`
-            }
+                const r = await fetch(`${wUrl}/articles/${slug}`, { headers: H() })
+                if (!r.ok) throw new Error('HTTP ' + r.status)
+                const d = await r.json()
+                document.getElementById('prev-t').textContent = d.title || slug
+                sessionStorage.setItem('seo_preview', JSON.stringify({ content: d.content || '' }))
+                iframe.src = '/admin/preview'
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
         }
 
-        function mdToHtml(md) {
-            return md
-                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-                .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.+?)\*/g, '<em>$1</em>')
-                .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-                .replace(/^---$/gm, '<hr />')
-                .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/\n\n/g, '</p><p>')
+        // ─── Workflows ───
+        async function openWorkflows() {
+            document.getElementById('wf-list').innerHTML = '<p style="color:var(--muted)"><span class="spin"></span> Đang tải...</p>'
+            document.getElementById('m-wf').classList.add('on')
+            try {
+                const r = await fetch(`${wUrl}/article-workflows`, { headers: H() })
+                const d = await r.json()
+                const wfs = d.workflows || []
+                if (!wfs.length) { document.getElementById('wf-list').innerHTML = '<p style="color:var(--muted)">Không có workflow nào gần đây</p>'; return }
+                document.getElementById('wf-list').innerHTML = wfs.map(w => `
+                    <div class="wf-item">
+                        <div><strong>${esc(w.id)}</strong><br><span style="font-size:.75rem;color:var(--muted)">${w.triggerDate} · ${w.targetCount} bài</span></div>
+                        <span class="wf-badge ${w.status === 'complete' ? 'complete' : w.status === 'failed' ? 'failed' : 'running'}">${w.status}</span>
+                    </div>
+                `).join('')
+            } catch (e) { document.getElementById('wf-list').innerHTML = `<p style="color:var(--danger)">${e.message}</p>` }
         }
 
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); deleteTarget = null }
-        document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active') }))
+        function closeM(id) { document.getElementById(id).classList.remove('on'); delSlug = null }
+        document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on') }))
 
-        function toast(msg, type = 'info') {
-            const c = document.getElementById('toast-container')
-            const el = document.createElement('div')
-            el.className = `toast ${type}`; el.textContent = msg; c.appendChild(el)
-            setTimeout(() => el.remove(), 5000)
-        }
-
+        function toast(msg, type = 'info') { const c = document.getElementById('toasts'); const el = document.createElement('div'); el.className = `toast ${type}`; el.textContent = msg; c.appendChild(el); setTimeout(() => el.remove(), 5000) }
         function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML }
 
-        window.handleGenerate = handleGenerate
-        window.confirmGenerate = confirmGenerate
-        window.refreshArticles = refreshArticles
-        window.filterArticles = filterArticles
-        window.rewriteArticle = rewriteArticle
-        window.confirmDelete = confirmDelete
-        window.previewArticle = previewArticle
-        window.closeModal = closeModal
-        window.logout = logout
+        window.doLogin = doLogin; window.logout = logout; window.loadArticles = loadArticles; window.filter = filter
+        window.openGen = openGen; window.doGen = doGen; window.regen = regen; window.openDel = openDel
+        window.preview = preview; window.openWorkflows = openWorkflows; window.closeM = closeM
     </script>
 </body>
 </html>

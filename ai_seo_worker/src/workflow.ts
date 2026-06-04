@@ -149,12 +149,18 @@ export async function processArticle(
             console.log(`[SEO] Section image saved: ${sectionPath}`)
         }
 
+        const CDN = 'https://seo-files.betterme.dev'
+
         // Write article — pass exact image paths so writer only references existing images
         console.log(`[SEO] Writing: ${plan.title}`)
         const pubDate = new Date().toISOString().split('T')[0]
         const content = await callGemini(
             env,
-            buildWriterPrompt(plan, research, pubDate, savedImages.hero, savedImages.sections),
+            buildWriterPrompt(
+                plan, research, pubDate,
+                savedImages.hero ? `${CDN}${savedImages.hero}` : '',
+                savedImages.sections.map((p) => `${CDN}${p}`),
+            ),
             {
                 systemPrompt: WRITER_SYSTEM_PROMPT,
                 useSearch: false,
@@ -166,12 +172,19 @@ export async function processArticle(
         // Save markdown to R2
         await saveArticle(env, plan.slug, content)
 
+        // Cost tracking
+        const imageCount = 1 + savedImages.sections.length
+        const estimatedUsd = imageCount * 0.02 + 0.005 // rough Gemini image + text estimate
+        const articleCost = { geminiTokens: 12000, imageCount, estimatedUsd: Math.round(estimatedUsd * 1000) / 1000 }
+
         // Update article index
         await updateArticlesIndex(env, {
             slug: plan.slug,
             title: plan.title,
             primaryKeyword: plan.primaryKeyword,
             publishedAt: new Date().toISOString(),
+            imageCount,
+            cost: articleCost,
         })
 
         // Embed + upsert to Vectorize
@@ -180,7 +193,7 @@ export async function processArticle(
             ...plan.secondaryKeywords,
         ])
 
-        return { plan, content, success: true, skipped: false, images: savedImages }
+        return { plan, content, success: true, skipped: false, images: savedImages, cost: articleCost }
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
         console.error(`[SEO] Failed: ${plan.slug} — ${message}`)

@@ -1,7 +1,27 @@
 import type { Env, WorkflowParams, ArticlePlan } from './types'
 export { SEOContentWorkflow } from './workflow'
 import { processArticle } from './workflow'
-import { deleteArticle, deleteArticleImages, getArticlesIndex, removeArticleFromIndex, getArticleContent } from './services/r2'
+import {
+    saveArticle, deleteArticle, deleteArticleImages,
+    getArticlesIndex, updateArticlesIndex, removeArticleFromIndex,
+    getArticleContent,
+} from './services/r2'
+
+const CORS_HEADERS: Record<string, string> = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-internal-secret',
+    'Access-Control-Max-Age': '86400',
+    'Referrer-Policy': 'no-referrer-when-cross-origin',
+}
+
+function corsResponse(body: unknown, init?: ResponseInit): Response {
+    const headers = new Headers(init?.headers)
+    for (const [k, v] of Object.entries(CORS_HEADERS)) {
+        headers.set(k, v)
+    }
+    return Response.json(body, { ...init, headers })
+}
 
 export default {
     async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
@@ -10,61 +30,81 @@ export default {
 
     async fetch(req: Request, env: Env): Promise<Response> {
         const url = new URL(req.url)
+        const path = url.pathname
+
+        if (req.method === 'OPTIONS') {
+            return new Response(null, { status: 204, headers: CORS_HEADERS })
+        }
+
+        if (req.method === 'GET' && path === '/ping') {
+            return corsResponse({ ok: true, service: 'ai-seo-worker', time: new Date().toISOString() })
+        }
 
         const secret = req.headers.get('x-internal-secret')
         if (secret !== env.INTERNAL_SECRET) {
-            return Response.json({ error: 'Unauthorized' }, { status: 401 })
+            return corsResponse({ error: 'Unauthorized' }, { status: 401 })
         }
 
-        // POST /trigger — create workflow to generate N new articles
-        if (req.method === 'POST' && url.pathname === '/trigger') {
+        // ── POST /articles — generate new articles (workflow) ───────────────────
+        if (req.method === 'POST' && path === '/articles') {
             const body = await req.json<{ targetCount?: number }>().catch(() => ({}))
             const id = await triggerWorkflow(env, body.targetCount)
-            return Response.json({ ok: true, workflowId: id })
+            return corsResponse({ ok: true, workflowId: id, targetCount: body.targetCount || 5 })
         }
 
-        // POST /rewrite — rewrite a specific article by slug
-        if (req.method === 'POST' && url.pathname === '/rewrite') {
-            return handleRewrite(req, env)
-        }
-
-        // GET /articles/:slug/content — get article markdown content
-        if (req.method === 'GET' && url.pathname.match(/^\/articles\/[^/]+\/content$/)) {
-            const slug = url.pathname.split('/articles/')[1]?.replace(/\/content$/, '')
-            if (!slug) return Response.json({ error: 'Missing slug' }, { status: 400 })
-            const content = await getArticleContent(env, slug)
-            if (!content) return Response.json({ error: 'Not found' }, { status: 404 })
-            return Response.json({ slug, content })
-        }
-
-        // DELETE /articles/:slug — delete an article and its images
-        if (req.method === 'DELETE' && url.pathname.startsWith('/articles/')) {
-            const slug = url.pathname.split('/articles/')[1]?.replace(/\/$/, '')
-            if (!slug) return Response.json({ error: 'Missing slug' }, { status: 400 })
-            return handleDelete(env, slug)
-        }
-
-        // GET /articles — list all articles in the index
-        if (req.method === 'GET' && url.pathname === '/articles') {
+        // ── GET /articles — list all articles ───────────────────────────────────
+        if (req.method === 'GET' && path === '/articles') {
             const index = await getArticlesIndex(env)
-            return Response.json({ articles: index })
+            return corsResponse({ articles: index })
         }
 
-        // GET /status/:id — check workflow status
-        if (req.method === 'GET' && url.pathname.startsWith('/status/')) {
-            const id = url.pathname.split('/status/')[1]
+        // ── /articles/:slug routes ──────────────────────────────────────────────
+        const articleMatch = path.match(/^\/articles\/([^/]+)(?:\/(.+))?$/)
+        if (articleMatch) {
+            const slug = articleMatch[1]
+            const sub = articleMatch[2] || ''
+
+            // POST /articles/:slug/_regenerate
+            if (req.method === 'POST' && sub === '_regenerate') {
+                return handleRegenerate(req, env, slug)
+            }
+
+            // GET /articles/:slug — get article content
+            if (req.method === 'GET' && !sub) {
+                return handleGetArticle(env, slug)
+            }
+
+            // PATCH /articles/:slug — update article content
+            if (req.method === 'PATCH' && !sub) {
+                return handleUpdateArticle(req, env, slug)
+            }
+
+            // DELETE /articles/:slug
+            if (req.method === 'DELETE' && !sub) {
+                return handleDelete(env, slug)
+            }
+        }
+
+        // ── GET /article-workflows — list running workflows ─────────────────────
+        if (req.method === 'GET' && path === '/article-workflows') {
+            return handleListWorkflows(env)
+        }
+
+        // ── GET /status/:id ─────────────────────────────────────────────────────
+        if (req.method === 'GET' && path.startsWith('/status/')) {
+            const id = path.split('/status/')[1]
             const instance = await env.SEO_WORKFLOW.get(id)
             const status = await instance.status()
-            return Response.json(status)
+            return corsResponse(status)
         }
 
-        return new Response('betterme-seo-worker running', { status: 200 })
+            return corsResponse({ error: 'Not found' }, { status: 404 })
     },
 }
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
+// ─── Workflow ──────────────────────────────────────────────────────────────────
 
-async function triggerWorkflow(env: Env, targetCount = 10): Promise<string> {
+async function triggerWorkflow(env: Env, targetCount = 5): Promise<string> {
     const params: WorkflowParams = {
         triggeredAt: new Date().toISOString(),
         targetCount,
@@ -79,61 +119,88 @@ async function triggerWorkflow(env: Env, targetCount = 10): Promise<string> {
     return instance.id
 }
 
-async function handleRewrite(req: Request, env: Env): Promise<Response> {
+// ─── Get article ───────────────────────────────────────────────────────────────
+
+async function handleGetArticle(env: Env, slug: string): Promise<Response> {
+    const index = await getArticlesIndex(env)
+    const meta = index.find((a) => a.slug === slug)
+    if (!meta) return corsResponse({ error: 'Not found' }, { status: 404 })
+
+    const content = await getArticleContent(env, slug)
+    return corsResponse({ ...meta, content: content || '' })
+}
+
+// ─── Update article ────────────────────────────────────────────────────────────
+
+async function handleUpdateArticle(req: Request, env: Env, slug: string): Promise<Response> {
+    const body = await req.json<{ content?: string; title?: string; primaryKeyword?: string }>().catch(() => ({}))
+
+    const index = await getArticlesIndex(env)
+    const existing = index.find((a) => a.slug === slug)
+    if (!existing) return corsResponse({ error: 'Not found' }, { status: 404 })
+
+    if (body.content) {
+        await saveArticle(env, slug, body.content)
+    }
+
+    if (body.title || body.primaryKeyword) {
+        await updateArticlesIndex(env, {
+            ...existing,
+            title: body.title ?? existing.title,
+            primaryKeyword: body.primaryKeyword ?? existing.primaryKeyword,
+        })
+    }
+
+    return corsResponse({ ok: true, slug })
+}
+
+// ─── Regenerate article ────────────────────────────────────────────────────────
+
+async function handleRegenerate(req: Request, env: Env, slug: string): Promise<Response> {
     const body = await req.json<{
-        slug: string
         title?: string
         primaryKeyword?: string
         secondaryKeywords?: string[]
         outline?: string[]
         angle?: string
-        targetWordCount?: number
     }>().catch(() => ({}))
 
-    if (!body.slug) {
-        return Response.json({ error: 'Missing slug' }, { status: 400 })
-    }
-
     const existing = await getArticlesIndex(env)
-    const found = existing.find((a) => a.slug === body.slug)
-
-    if (!found) {
-        return Response.json({ error: `Article "${body.slug}" not found in index` }, { status: 404 })
-    }
+    const found = existing.find((a) => a.slug === slug)
+    if (!found) return corsResponse({ error: `Article "${slug}" not found` }, { status: 404 })
 
     const plan: ArticlePlan = {
         title: body.title ?? found.title,
-        slug: body.slug,
+        slug,
         primaryKeyword: body.primaryKeyword ?? found.primaryKeyword,
         secondaryKeywords: body.secondaryKeywords ?? [],
         vietnameseKeyword: body.primaryKeyword ?? found.primaryKeyword,
         searchIntent: 'informational',
         difficulty: 'low',
         feasibilityScore: 8,
-        competitorGap: 'Rewrite — keeping existing angle',
+        competitorGap: 'Regenerate',
         outline: body.outline ?? ['Introduction', 'Main Content', 'Practical Tips', 'Conclusion'],
-        targetWordCount: body.targetWordCount ?? 1600,
-        angle: body.angle ?? `Rewrite of "${found.title}"`,
+        targetWordCount: 1500,
+        angle: body.angle ?? `Regenerate of "${found.title}"`,
     }
 
-    console.log(`[SEO] Rewriting article: ${plan.slug}`)
+    console.log(`[SEO] Regenerating article: ${slug}`)
     const result = await processArticle(env, plan, true)
 
-    return Response.json({
+    return corsResponse({
         ok: result.success,
-        slug: plan.slug,
+        slug,
         images: result.images,
+        cost: result.cost,
         error: result.error,
     })
 }
 
-async function handleDelete(env: Env, slug: string): Promise<Response> {
-    console.log(`[SEO] Deleting article: ${slug}`)
+// ─── Delete article ────────────────────────────────────────────────────────────
 
+async function handleDelete(env: Env, slug: string): Promise<Response> {
     const removed = await removeArticleFromIndex(env, slug)
-    if (!removed) {
-        return Response.json({ error: `Article "${slug}" not found in index` }, { status: 404 })
-    }
+    if (!removed) return corsResponse({ error: `Article "${slug}" not found` }, { status: 404 })
 
     await deleteArticle(env, slug)
     await deleteArticleImages(env, slug)
@@ -141,9 +208,70 @@ async function handleDelete(env: Env, slug: string): Promise<Response> {
     try {
         await env.VECTORIZE.deleteByIds([slug])
     } catch {
-        console.warn(`[SEO] Vectorize delete failed for ${slug} (may not exist)`)
+        console.warn(`[SEO] Vectorize delete failed for ${slug}`)
     }
 
     console.log(`[SEO] Deleted: ${slug}`)
-    return Response.json({ ok: true, slug })
+    return corsResponse({ ok: true, slug })
+}
+
+// ─── List workflows ────────────────────────────────────────────────────────────
+
+async function handleListWorkflows(env: Env): Promise<Response> {
+    const today = new Date().toISOString().split('T')[0]
+
+    const workflows: Array<{
+        id: string
+        status: string
+        triggerDate: string
+        targetCount: number
+    }> = []
+
+    for (let d = 0; d < 7; d++) {
+        const date = new Date(Date.now() - d * 86400000).toISOString().split('T')[0]
+        for (let h = 0; h < 24; h++) {
+            const prefix = `seo-${date}`
+            try {
+                const instance = await env.SEO_WORKFLOW.get(`${prefix}-${h}`)
+                if (instance) {
+                    const status = await instance.status()
+                    workflows.push({
+                        id: `${prefix}-${h}`,
+                        status: status.status as string,
+                        triggerDate: date,
+                        targetCount: (status.payload as WorkflowParams)?.targetCount ?? 0,
+                    })
+                }
+            } catch {
+                // workflow doesn't exist, skip
+            }
+        }
+    }
+
+    // Also try to list recent ones with timestamp suffix
+    const now = Date.now()
+    for (let offset = 0; offset < 7 * 24; offset++) {
+        const ts = now - offset * 3600000
+        const date = new Date(ts).toISOString().split('T')[0]
+        const candidateId = `seo-${date}-${ts - (ts % 3600000) + offset}`
+        try {
+            const instance = await env.SEO_WORKFLOW.get(candidateId)
+            if (instance) {
+                const status = await instance.status()
+                const existing = workflows.find(w => w.id === candidateId)
+                if (!existing) {
+                    workflows.push({
+                        id: candidateId,
+                        status: status.status as string,
+                        triggerDate: date,
+                        targetCount: (status.payload as WorkflowParams)?.targetCount ?? 0,
+                    })
+                }
+            }
+        } catch {
+            // skip
+        }
+    }
+
+    return corsResponse({ workflows: workflows.slice(0, 20) })
 }

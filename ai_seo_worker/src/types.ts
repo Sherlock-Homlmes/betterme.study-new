@@ -8,11 +8,11 @@ export interface ArticlePlan {
     vietnameseKeyword: string
     searchIntent: 'informational' | 'navigational' | 'commercial'
     difficulty: 'low' | 'medium' | 'high'
-    feasibilityScore: number // 1–10, higher = more achievable for betterme.dev
-    competitorGap: string   // what competitors miss
-    outline: string[]       // H2 sections
+    feasibilityScore: number
+    competitorGap: string
+    outline: string[]
     targetWordCount: number
-    angle: string           // unique content angle
+    angle: string
 }
 
 export interface StrategyResult {
@@ -29,7 +29,7 @@ export interface ResearchResult {
     contentGaps: string[]
     keyFacts: string[]
     commonQuestions: string[]
-    vietnameseSpecific: string[]   // challenges specific to Vietnamese learners
+    vietnameseSpecific: string[]
     uniqueAngle: string
     authorityData: string[]
     recentDevelopments: string[]
@@ -40,6 +40,12 @@ export interface ArticleIndex {
     title: string
     primaryKeyword: string
     publishedAt: string
+    imageCount: number
+    cost: {
+        geminiTokens: number
+        imageCount: number
+        estimatedUsd: number
+    }
 }
 
 export interface ArticleResult {
@@ -52,6 +58,11 @@ export interface ArticleResult {
     images?: {
         hero?: string
         sections: string[]
+    }
+    cost?: {
+        geminiTokens: number
+        imageCount: number
+        estimatedUsd: number
     }
 }
 
@@ -76,23 +87,14 @@ export interface WorkflowParams {
 // ─── Cloudflare Env ──────────────────────────────────────────────────────────
 
 export interface Env {
-    // Workflow binding
     SEO_WORKFLOW: Workflow
-
-    // Storage
     CONTENT_BUCKET: R2Bucket
     VECTORIZE: VectorizeIndex
     AI: Ai
-
-    // Vertex AI / GCP secrets
-    GCP_PRIVATE_KEY: string       // RSA private key PEM (service account)
-    GCP_SERVICE_ACCOUNT: string   // service account email
+    GCP_PRIVATE_KEY: string
+    GCP_SERVICE_ACCOUNT: string
     GCP_PROJECT_ID: string
-    GCP_REGION: string            // e.g. us-central1
-
-    // Notifications
+    GCP_REGION: string
     DISCORD_WEBHOOK_URL: string
-
-    // HTTP manual trigger auth
     INTERNAL_SECRET: string
 }
