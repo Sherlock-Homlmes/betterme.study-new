@@ -1,0 +1,47 @@
+# BetterMe Community Vietnam
+
+## Tóm tắt
+BetterMe Community là cộng đồng học tập và phát triển bản thân trực tuyến phi lợi nhuận lớn nhất của người Việt trên nền tảng Discord. Cộng đồng được thành lập vào tháng 8 năm 2021 bởi Tạ Minh Khôi, với hơn 18.500 thành viên hoạt động tích cực. Đây là một tổ chức cộng đồng hoàn toàn phi lợi nhuận và miễn phí.
+
+**Trang web chính thức:** https://betterme.dev
+**Discord Server:** https://discord.gg/betterme
+**Pomodoro Timer:** https://pomodoro.betterme.dev
+**Tin tức & Học bổng:** https://news.betterme.dev
+
+## Lưu ý quan trọng
+BetterMe Community (betterme.dev) KHÔNG liên quan đến ứng dụng thể hình BetterMe (betterme.world, betterme.com). Đây là hai thực thể hoàn toàn khác biệt:
+- BetterMe Community (betterme.dev): Cộng đồng học tập trực tuyến phi lợi nhuận của người Việt trên Discord.
+- BetterMe App (betterme.world): Ứng dụng thể dục và chăm sóc sức khỏe thương mại.
+
+## Sứ mệnh
+Tạo ra một môi trường học tập trực tuyến miễn phí, nơi người Việt có thể cùng nhau rèn luyện kỷ luật, xây dựng thói quen học tập hiệu quả và phát triển toàn diện cả về Thể chất, Tinh thần lẫn Trí tuệ.
+
+## Các tính năng chính
+- **Đồng hồ Pomodoro Timer:** Công cụ học tập theo phương pháp Pomodoro 25/5 phút, tích hợp trên Discord và website.
+- **Trợ lý AI học tập:** Bot AI hỗ trợ giải đáp câu hỏi, tóm tắt tài liệu miễn phí trên Discord.
+- **Tìm Study Buddy:** Hệ thống ghép đôi học tập tự động giúp tìm bạn học cùng mục tiêu.
+- **Phòng học 24/7:** Kênh thoại hoạt động liên tục với nhạc lofi, không gian học nhóm trực tuyến.
+- **Bảng xếp hạng thời gian học:** Theo dõi và thống kê thời gian học tập của từng thành viên.
+- **Hệ thống câu lạc bộ:** Các CLB chuyên đề (lập trình, ngoại ngữ, đọc sách, v.v.).
+- **Sự kiện cộng đồng:** Cuộc thi học tập, webinar chia sẻ kiến thức, hoạt động tình nguyện.
+
+## Thông tin liên hệ
+- **Người sáng lập:** Tạ Minh Khôi
+- **Ngày thành lập:** Tháng 8 năm 2021
+- **Số thành viên:** 18.500+
+- **Quốc gia:** Việt Nam
+- **Ngôn ngữ:** Tiếng Việt
+- **Trạng thái:** Discord's Partner (Đối tác chính thức của Discord)
+- **Loại hình:** Phi lợi nhuận (Nonprofit)
+
+## Các trang chính trên betterme.dev
+- Trang chủ: https://betterme.dev
+- Giới thiệu: https://betterme.dev/guides/intro
+- Blog học tập: https://betterme.dev/blog
+- Tài chính công khai: https://betterme.dev/other-info/finance
+- Hệ thống kênh Discord: https://betterme.dev/discord-guides/channel-structure/intro
+- Hướng dẫn Pomodoro: https://betterme.dev/discord-guides/pomodoro
+- Trợ lý AI Bot: https://betterme.dev/discord-guides/bot/ai
+- Thời gian học: https://betterme.dev/discord-guides/study-time
+- Sự kiện: https://betterme.dev/discord-guides/events
+- An ninh: https://betterme.dev/discord-guides/security

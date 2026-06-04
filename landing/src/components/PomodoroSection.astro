@@ -1,19 +1,29 @@
 ---
+
 ---
 
 <section class="pomo-section" id="pomodoro-room">
   <div class="container" style="position: relative;">
     <div class="section-title reveal">
       <h2>Học cùng nhau — Phòng Pomodoro</h2>
-      <p style="color: var(--text-muted);">
-        Pomodoro độc quyền từ Betterme
-      </p>
+      <p style="color: var(--text-muted);">Pomodoro độc quyền từ BetterMe</p>
     </div>
 
     <div class="glass-card pomo-iframe-wrapper reveal stagger-2">
       <div id="pomo-placeholder" class="pomo-placeholder">
         <div class="pomo-placeholder-inner">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="12" cy="12" r="10"></circle><polyline
+              points="12 6 12 12 16 14"></polyline></svg
+          >
           <p>Đang tải Pomodoro Timer...</p>
         </div>
       </div>
@@ -22,18 +32,17 @@
         data-src="https://pomodoro.betterme.dev/?preview=true"
         title="BetterMe Pomodoro Timer"
         loading="lazy"
-        style="display:none;"
-      ></iframe>
+        style="display:none;"></iframe>
     </div>
   </div>
 </section>
 
 <script>
-  import { lazyLoadIframe } from '../scripts/lazyIframe';
+  import { lazyLoadIframe } from "../scripts/lazyIframe";
 
   lazyLoadIframe({
-    wrapperSelector: '.pomo-iframe-wrapper',
-    placeholderSelector: '#pomo-placeholder',
-    iframeSelector: '#pomo-iframe',
+    wrapperSelector: ".pomo-iframe-wrapper",
+    placeholderSelector: "#pomo-placeholder",
+    iframeSelector: "#pomo-iframe",
   });
 </script>

@@ -1,6 +1,6 @@
 ---
-import '../styles/global.css';
-import Navbar from '../components/Navbar.astro';
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
 
 interface Props {
   title?: string;
@@ -8,13 +8,13 @@ interface Props {
   canonicalURL?: string;
 }
 
-const { 
-  title = 'Betterme-Cộng Đồng Học Tập Dành Cho Người Việt',
-  description = 'BetterMe — cộng đồng học tập phi lợi nhuận lớn nhất Việt Nam. 18500+ thành viên, phòng học 24/7, Pomodoro, AI bot, tìm study buddy. Tham gia ngay!',
-  canonicalURL = 'https://betterme.dev/',
+const {
+  title = "BetterMe Community | Cộng Đồng Học Tập Việt Nam — 18.500+ Thành Viên",
+  description = "BetterMe Community — cộng đồng học tập và phát triển bản thân phi lợi nhuận lớn nhất Việt Nam trên Discord. 18.500+ thành viên, phòng học 24/7, Pomodoro Timer, Trợ lý AI, tìm Study Buddy. Tham gia miễn phí ngay!",
+  canonicalURL = "https://betterme.dev/",
 } = Astro.props;
 
-const ogImage = 'https://betterme.dev/og-image.png';
+const ogImage = "https://betterme.dev/og-image.webp";
 ---
 
 <!doctype html>
@@ -25,8 +25,8 @@ const ogImage = 'https://betterme.dev/og-image.png';
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" href="/favicon.svg">
-    
+    <link rel="icon" href="/favicon.svg" />
+
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
@@ -40,21 +40,76 @@ const ogImage = 'https://betterme.dev/og-image.png';
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
-      "name": "BetterMe Community",
-      "url": "https://betterme.dev",
-      "description": "Cộng đồng học tập phát triển bản thân người Việt trên Discord.",
-      "foundingDate": "2021-08",
-      "numberOfMembers": { "@type": "QuantitativeValue", "value": 18500 },
-      "nonprofitStatus": "NonprofitType",
-      "sameAs": ["https://discord.gg/betterme"],
-      "areaServed": { "@type": "Country", "name": "Vietnam" },
-      "availableLanguage": "Vietnamese"
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        name: "BetterMe Community",
+        alternateName: [
+          "BetterMe Community",
+          "BetterMe Việt Nam",
+          "Cộng Đồng BetterMe",
+          "BetterMe",
+        ],
+        url: "https://betterme.dev",
+        logo: "https://betterme.dev/favicon.svg",
+        description:
+          "Cộng đồng học tập và phát triển bản thân trực tuyến lớn nhất của người Việt trên nền tảng Discord.",
+        foundingDate: "2021-08",
+        founder: {
+          "@type": "Person",
+          name: "Tạ Minh Khôi",
+        },
+        numberOfMembers: {
+          "@type": "QuantitativeValue",
+          value: 18500,
+        },
+        nonprofitStatus: "https://schema.org/NonprofitType",
+        sameAs: ["https://discord.gg/betterme"],
+        areaServed: {
+          "@type": "Country",
+          name: "Vietnam",
+        },
+        availableLanguage: "Vietnamese",
+      })}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "BetterMe Community",
+        url: "https://betterme.dev",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://betterme.dev/blog/?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+      })}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Trang chủ",
+            item: "https://betterme.dev",
+          },
+        ],
+      })}
+    />
 
-    <link rel="alternate" type="application/rss+xml" title="BetterMe" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="BetterMe"
+      href="/rss.xml"
+    />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,7 +126,7 @@ const ogImage = 'https://betterme.dev/og-image.png';
       <slot />
     </main>
     <script>
-      import '../scripts/main.js';
+      import "../scripts/main.js";
     </script>
   </body>
 </html>

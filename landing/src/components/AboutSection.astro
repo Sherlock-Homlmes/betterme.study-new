@@ -25,37 +25,45 @@ const inviteLink = discordData?.instant_invite || "https://discord.gg/betterme";
     <div class="about-content reveal" style="position: relative;">
       <h2 class="reveal">BetterMe là gì?</h2>
       <p>
-        BetterMe là một ngôi nhà học tập và phát triển bản thân dành cho người Việt, nơi mọi người có thể cùng nhau học tập, rèn luyện kỷ luật và xây dựng những thói quen tích cực mỗi ngày.
-        <br>
-        Bọn mình tin rằng việc phát triển bản thân sẽ trở nên dễ dàng và bền vững hơn khi có người đồng hành.
+        BetterMe là cộng đồng học tập và phát triển bản thân trực tuyến phi lợi
+        nhuận. Từ một nhóm nhỏ những người yêu học tập, cộng đồng đã phát triển
+        thành hệ sinh thái với hơn 18.500 thành viên hoạt động tích cực, trở
+        thành đối tác chính thức của Discord và tổ chức nhiều sự kiện, cuộc thi
+        cùng các chương trình chia sẻ kiến thức cho người Việt trên toàn thế
+        giới.
       </p>
 
       <ul class="feature-list">
-        <li class="feature-item">
-          <span class="feature-icon">✨</span>
-          <div>
-            <strong>Phát triển diện rộng</strong>
-            <p style="font-size: 0.9rem; margin-top: 4px;">
-              Tập trung bồi dưỡng Thể chất — Tinh thần — Trí tuệ cho người Việt.
-            </p>
-          </div>
-        </li>
         <li class="feature-item">
           <span class="feature-icon">🎵</span>
           <div>
             <strong>Phòng học 24/7</strong>
             <p style="font-size: 0.9rem; margin-top: 4px;">
-              Kênh thoại hoạt động 24/7 tích hợp bot phát nhạc chất lượng cao hoàn
-              toàn miễn phí.
+              Các kênh thoại hoạt động 24/7 tích hợp bot phát nhạc chất lượng
+              cao, tạo không gian học tập nhóm trực tuyến miễn phí bất cứ lúc
+              nào.
             </p>
           </div>
         </li>
         <li class="feature-item">
-          <span class="feature-icon">✨</span>
+          <span class="feature-icon">🍅</span>
           <div>
-            <strong>Trợ lý AI</strong>
+            <strong>Đồng hồ Pomodoro Timer</strong>
             <p style="font-size: 0.9rem; margin-top: 4px;">
-              Tích hợp bot AI hỗ trợ học tập miễn phí
+              Công cụ Pomodoro được tích hợp trực tiếp trên Discord và website,
+              giúp bạn áp dụng phương pháp học tập khoa học để tối ưu hiệu suất
+              tập trung mỗi ngày.
+            </p>
+          </div>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">🤖</span>
+          <div>
+            <strong>Trợ lý AI học tập</strong>
+            <p style="font-size: 0.9rem; margin-top: 4px;">
+              Bot AI được tích hợp sẵn trong máy chủ Discord hỗ trợ giải đáp câu
+              hỏi, tóm tắt tài liệu và gợi ý phương pháp học tập hiệu quả hoàn
+              toàn miễn phí cho mọi thành viên.
             </p>
           </div>
         </li>
@@ -64,7 +72,19 @@ const inviteLink = discordData?.instant_invite || "https://discord.gg/betterme";
           <div>
             <strong>Tìm "Study Buddy" tức thì</strong>
             <p style="font-size: 0.9rem; margin-top: 4px;">
-              Học cặp đôi cùng bạn bè, giám sát chéo giúp giữ vững kỷ luật.
+              Hệ thống ghép đôi học tập giúp bạn tìm được bạn học cùng mục tiêu,
+              giám sát chéo và giữ vững kỷ luật học tập mỗi ngày.
+            </p>
+          </div>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">✨</span>
+          <div>
+            <strong>Phát triển toàn diện</strong>
+            <p style="font-size: 0.9rem; margin-top: 4px;">
+              Không chỉ học tập, cộng đồng còn tập trung bồi dưỡng Thể chất,
+              Tinh thần và Trí tuệ cho người Việt thông qua các câu lạc bộ, sự
+              kiện và hoạt động tình nguyện.
             </p>
           </div>
         </li>
@@ -74,71 +94,114 @@ const inviteLink = discordData?.instant_invite || "https://discord.gg/betterme";
     <div
       id="discord-widget-container"
       class="reveal stagger-2"
+      style="min-height: 525px;"
     >
-      {discordData ? (
-        <div class="discord-mockup">
-          <div class="discord-header">
-            <div class="discord-title">
-              <span class="pulse-dot"></span>
-              <strong style="color: #18181b; font-size: 1.1rem;">{discordData.name}</strong>
-              <span class="discord-badge" style="margin-left: 6px;">Discord's partner</span>
+      {
+        discordData ? (
+          <div class="discord-mockup">
+            <div class="discord-header">
+              <div class="discord-title">
+                <span class="pulse-dot" />
+                <strong style="color: #18181b; font-size: 1.1rem;">
+                  {discordData.name}
+                </strong>
+                <span class="discord-badge" style="margin-left: 6px;">
+                  Discord's partner
+                </span>
+              </div>
+              <span style="color: #10b981; font-weight: bold; font-size: 0.9rem;">
+                {discordData.presence_count.toLocaleString()} Online
+              </span>
             </div>
-            <span style="color: #10b981; font-weight: bold; font-size: 0.9rem;">{discordData.presence_count.toLocaleString()} Online</span>
-          </div>
 
-          <div class="voice-channels" style="max-height: 525px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;">
-            <div class="channel-title" style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: #71717a; margin-bottom: 12px;">📚 Kênh Học Tập Hoạt Động</div>
-            {(() => {
-              let channelCount = 0;
-              return (discordData!.channels || []).map((chan) => {
-                const activeMembers = (discordData!.members || []).filter((m) => m.channel_id === chan.id);
-                if (activeMembers.length === 0 && channelCount >= 3) return null;
-                channelCount++;
-                return (
-                  <div class="voice-channel">
-                    <div style="display: flex; justify-content: space-between; align-items: center; color: #18181b; font-size: 0.9rem; font-weight: 500;">
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="pulse-dot"></span>
-                        <span style="font-weight: 600;">🔊 {chan.name}</span>
+            <div
+              class="voice-channels"
+              style="max-height: 825px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;"
+            >
+              <div
+                class="channel-title"
+                style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: #71717a; margin-bottom: 12px;"
+              >
+                {" "}
+                Kênh Học Tập Hoạt Động
+              </div>
+              {(() => {
+                let channelCount = 0;
+                return (discordData!.channels || []).map((chan) => {
+                  const activeMembers = (discordData!.members || []).filter(
+                    (m) => m.channel_id === chan.id,
+                  );
+                  if (activeMembers.length === 0 && channelCount >= 3)
+                    return null;
+                  channelCount++;
+                  return (
+                    <div class="voice-channel">
+                      <div style="display: flex; justify-content: space-between; align-items: center; color: #18181b; font-size: 0.9rem; font-weight: 500;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span class="pulse-dot" />
+                          <span style="font-weight: 600;">🔊 {chan.name}</span>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #71717a;">
+                          {activeMembers.length} đang học
+                        </span>
                       </div>
-                      <span style="font-size: 0.8rem; color: #71717a;">{activeMembers.length} đang học</span>
+                      {activeMembers.length > 0 && (
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-left: 16px;">
+                          {activeMembers.slice(0, 5).map((m) => (
+                            <div style="display: flex; align-items: center; gap: 4px; background: #e4e4e7; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #18181b; border: 1px solid #d4d4d8;">
+                              <img
+                                src={m.avatar_url}
+                                alt=""
+                                width="14"
+                                height="14"
+                                style="border-radius: 50%;"
+                                loading="lazy"
+                              />
+                              <span style="font-weight: 500;">
+                                {m.username}
+                              </span>
+                            </div>
+                          ))}
+                          {activeMembers.length > 5 && (
+                            <span style="font-size: 0.75rem; color: #71717a; align-self: center; font-weight: 600;">
+                              +{activeMembers.length - 5}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    {activeMembers.length > 0 && (
-                      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-left: 16px;">
-                        {activeMembers.slice(0, 5).map((m) => (
-                          <div style="display: flex; align-items: center; gap: 4px; background: #e4e4e7; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #18181b; border: 1px solid #d4d4d8;">
-                            <img src={m.avatar_url} alt={`${m.username} avatar`} style="width: 14px; height: 14px; border-radius: 50%;" loading="lazy"/>
-                            <span style="font-weight: 500;">{m.username}</span>
-                          </div>
-                        ))}
-                        {activeMembers.length > 5 && (
-                          <span style="font-size: 0.75rem; color: #71717a; align-self: center; font-weight: 600;">+{activeMembers.length - 5}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              });
-            })()}
-            <div style="text-align: center; padding: 16px 0 4px 0; color: #71717a; font-size: 0.85rem; font-style: italic;">✨ Còn nhiều phòng khác đang đợi bạn khám phá!</div>
-          </div>
+                  );
+                });
+              })()}
+              <div style="text-align: center; padding: 16px 0 4px 0; color: #71717a; font-size: 0.85rem; font-style: italic;">
+                ✨ Còn nhiều phòng khác đang đợi bạn khám phá!
+              </div>
+            </div>
 
-          <a href={inviteLink} target="_blank" class="btn btn-purple interactive" style="width: 100%; justify-content: center;">
-            Gia Nhập Server Ngay
-          </a>
-        </div>
-      ) : (
-        <div style="display: flex; justify-content: center; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(24, 24, 27, 0.05);">
-          <iframe
-            src={`https://discord.com/widget?id=${DISCORD_GUILD_ID}&theme=light`}
-            width="100%"
-            height="500"
-            allowtransparency="true"
-            frameborder="0"
-            sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-          ></iframe>
-        </div>
-      )}
+            <a
+              href={inviteLink}
+              target="_blank"
+              class="btn btn-purple interactive"
+              style="width: 100%; justify-content: center;"
+            >
+              Gia Nhập Server Ngay
+            </a>
+          </div>
+        ) : (
+          <div style="display: flex; justify-content: center; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(24, 24, 27, 0.05);">
+            <iframe
+              src={`https://discord.com/widget?id=${DISCORD_GUILD_ID}&theme=light`}
+              width="100%"
+              height="500"
+              allowtransparency="true"
+              frameborder="0"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+              loading="lazy"
+              title="BetterMe Community Discord Server"
+            />
+          </div>
+        )
+      }
     </div>
   </div>
 </section>
