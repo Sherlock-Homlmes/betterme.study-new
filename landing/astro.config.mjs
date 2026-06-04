@@ -6,7 +6,7 @@ export default defineConfig({
   site: 'https://betterme.dev',
   compressHTML: true,
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   image: {
     service: {
