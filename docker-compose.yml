@@ -33,6 +33,8 @@ services:
     environment:
       - PUBLIC_COOKIE_DOMAIN=.local.betterme.study
       - PUBLIC_API_URL=http://103.161.171.189:8080
+      - SEO_WORKER_URL=http://ai-seo-worker:8787
+      - SEO_WORKER_SECRET=dev-secret
     command: ["npm", "run", "dev"]
     # command: ["npm", "run", "preview", "--", '--host', "0.0.0.0", "--port", "3000"]
 

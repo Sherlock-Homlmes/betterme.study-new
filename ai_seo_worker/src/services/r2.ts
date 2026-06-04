@@ -15,6 +15,12 @@ export async function deleteArticle(env: Env, slug: string): Promise<void> {
     await env.CONTENT_BUCKET.delete(`${ARTICLES_PREFIX}${slug}.md`)
 }
 
+export async function getArticleContent(env: Env, slug: string): Promise<string | null> {
+    const obj = await env.CONTENT_BUCKET.get(`${ARTICLES_PREFIX}${slug}.md`)
+    if (!obj) return null
+    return await obj.text()
+}
+
 // ─── Images ───────────────────────────────────────────────────────────────────
 // Stored at: blog/image/[slug]/[filename]  e.g. blog/image/meo-hoc-tap/banner.webp
 

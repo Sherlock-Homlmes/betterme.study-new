@@ -1,7 +1,7 @@
 import type { Env, WorkflowParams, ArticlePlan } from './types'
 export { SEOContentWorkflow } from './workflow'
 import { processArticle } from './workflow'
-import { deleteArticle, deleteArticleImages, getArticlesIndex, removeArticleFromIndex } from './services/r2'
+import { deleteArticle, deleteArticleImages, getArticlesIndex, removeArticleFromIndex, getArticleContent } from './services/r2'
 
 export default {
     async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
@@ -26,6 +26,15 @@ export default {
         // POST /rewrite — rewrite a specific article by slug
         if (req.method === 'POST' && url.pathname === '/rewrite') {
             return handleRewrite(req, env)
+        }
+
+        // GET /articles/:slug/content — get article markdown content
+        if (req.method === 'GET' && url.pathname.match(/^\/articles\/[^/]+\/content$/)) {
+            const slug = url.pathname.split('/articles/')[1]?.replace(/\/content$/, '')
+            if (!slug) return Response.json({ error: 'Missing slug' }, { status: 400 })
+            const content = await getArticleContent(env, slug)
+            if (!content) return Response.json({ error: 'Not found' }, { status: 404 })
+            return Response.json({ slug, content })
         }
 
         // DELETE /articles/:slug — delete an article and its images
