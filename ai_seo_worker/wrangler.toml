@@ -4,7 +4,7 @@ compatibility_date = "2025-06-01"
 compatibility_flags = ["nodejs_compat"]
 
 [triggers]
-crons = ["0 20 * * *"] # 3AM Vietnam (UTC+7) = 20:00 UTC
+crons = ["0 * * * *"] # mỗi tiếng chạy 1 lần
 
 [[workflows]]
 binding = "SEO_WORKFLOW"

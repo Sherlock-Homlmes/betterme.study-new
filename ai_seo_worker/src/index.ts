@@ -104,13 +104,13 @@ export default {
             return handlePublish(req, env)
         }
 
-            return corsResponse({ error: 'Not found' }, { status: 404 })
+        return corsResponse({ error: 'Not found' }, { status: 404 })
     },
 }
 
 // ─── Workflow ──────────────────────────────────────────────────────────────────
 
-async function triggerWorkflow(env: Env, targetCount = 5): Promise<string> {
+async function triggerWorkflow(env: Env, targetCount = 3): Promise<string> {
     const params: WorkflowParams = {
         triggeredAt: new Date().toISOString(),
         targetCount,
