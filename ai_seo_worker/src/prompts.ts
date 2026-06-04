@@ -222,7 +222,12 @@ AUTHORITATIVENESS (Thẩm quyền):
 - BẮT BUỘC: Mỗi section H2 chứa phương pháp/khái niệm phải có block "Nguồn tham khảo" cuối section
 - Định dạng nguồn: Author, Year. *Title*. Publisher/Journal. (có thể kèm URL)
 - Link tới ít nhất 3-5 nguồn ngoài (outbound links) trong toàn bài: .edu, tạp chí khoa học, sách đã xuất bản
-- Nguồn tham khảo phải bọc trong thẻ <div class="blog-reference"> ... </div> để hiển thị chữ nhỏ
+- Nguồn tham khảo phải bọc trong thẻ <div class="blog-reference"> (có dòng trống trước và sau nội dung) để hiển thị chữ nhỏ. KHÔNG dùng tag <p>. Gộp tất cả nguồn vào 1 đoạn văn liền sau "**Nguồn tham khảo:**". Ví dụ:
+  <div class="blog-reference">
+
+  **Nguồn tham khảo:** Author, Year. *Title*. Publisher. Xem thêm Author2, Year. *Title2*. Journal.
+
+  </div>
 
 TRUSTWORTHINESS (Độ tin cậy):
 - KHÔNG khẳng định gì mà không có bằng chứng. Thay vì "nhiều nghiên cứu chứng minh", ghi rõ "nghiên cứu của [Tên] năm [Năm] trên tạp chí [Tên]"
@@ -246,7 +251,7 @@ Mỗi section H2 (150-250 từ) phải có:
 1. Giới thiệu khái niệm + nguồn gốc (ai tạo, khi nào)
 2. Cách thực hiện (step-by-step HOẶC bullet list)
 3. Ví dụ thực tế HOẶC lưu ý quan trọng
-4. Nguồn tham khảo (bọc trong <div class="blog-reference">...</div>)
+4. Nguồn tham khảo (bọc trong <div class="blog-reference"> với dòng trống trước/sau, KHÔNG dùng <p>)
 
 ═══ PHONG CÁCH ═══
 
@@ -341,7 +346,7 @@ ${r.commonQuestions.map((q) => `- ${q}`).join('\n')}
 Ngữ cảnh người Việt:
 ${r.vietnameseSpecific.map((v) => `- ${v}`).join('\n')}
 
-NGUỒN TRÍCH DẪN (BẮT BUỘC dùng trong bài — chèn vào block <div class="blog-reference"> cuối mỗi section liên quan):
+NGUỒN TRÍCH DẪN (BẮT BUỘC dùng trong bài — gộp vào 1 đoạn văn trong block <div class="blog-reference"> cuối mỗi section liên quan, KHÔNG dùng <p>):
 ${r.authorityData.map((a) => `- ${a}`).join('\n')}
 
 Phát triển mới (2024-2026):
@@ -355,14 +360,22 @@ Mỗi section (150-250 từ) PHẢI có:
 a) Giới thiệu + nguồn gốc phương pháp/khái niệm (ai? khi nào? nghiên cứu nào?)
 b) Step-by-step hoặc hướng dẫn thực hành
 c) Ví dụ thực tế / Lưu ý quan trọng / Lỗi thường gặp (chọn 1-2)
-d) Nguồn tham khảo bọc trong <div class="blog-reference"><p>**Nguồn tham khảo:** Author, Year. *Title*. Publisher.</p></div>
+d) Nguồn tham khảo bọc trong <div class="blog-reference"> (có dòng trống trước và sau nội dung):
+
+<div class="blog-reference">
+
+**Nguồn tham khảo:** Author, Year. *Title*. Publisher. Xem thêm Author2, Year. *Title2*. Journal.
+
+</div>
+
+Lưu ý: KHÔNG dùng tag <p>. Gộp tất cả nguồn vào 1 đoạn văn liền sau "**Nguồn tham khảo:**", phân cách bằng "Xem thêm" hoặc dấu chấm. Có dòng trống giữa <div> và nội dung.
 
 ═══════ E-E-A-T CHECKLIST (tự kiểm tra trước khi nộp) ═══════
 [ ] Mỗi phương pháp có nguồn gốc rõ ràng (tên tác giả, năm)
 [ ] Có ít nhất 3-5 outbound links tới nguồn uy tín (.edu, journal, sách)
 [ ] Có ví dụ thực tế hoặc trải nghiệm cộng đồng trong bài
 [ ] Có phần "Lưu ý" hoặc "Lỗi thường gặp" thể hiện expertise
-[ ] Nguồn tham khảo hiển thị trong block <div class="blog-reference">
+[ ] Nguồn tham khảo hiển thị trong block <div class="blog-reference"> (không dùng <p>, có dòng trống trước/sau)
 [ ] Alt text ảnh mô tả chi tiết nội dung, không chung chung
 [ ] Internal link tới BetterMe features khi phù hợp ngữ cảnh
 [ ] Không có khẳng định không có nguồn hỗ trợ

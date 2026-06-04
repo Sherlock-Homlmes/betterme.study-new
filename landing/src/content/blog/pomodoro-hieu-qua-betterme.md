@@ -23,10 +23,9 @@ Một thành viên trong cộng đồng BetterMe đã chia sẻ rằng trước 
 ![Sơ đồ minh họa phương pháp Pomodoro với các phiên làm việc và nghỉ ngơi xen kẽ, giúp tăng cường tập trung.](https://files.betterme.dev/blog/image/pomodoro-hieu-qua-betterme/section-1.webp)
 
 <div class="blog-reference">
-<p>**Nguồn tham khảo:**</p>
-<p>Cirillo, F. (2018). *The Pomodoro Technique: The Acclaimed Time-Management System That Has Transformed How We Work*. Penguin Random House.</p>
-<p>Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25.</p>
-<p>Base.vn. (2025). *Pomodoro là gì? Phương pháp quản lý thời gian hiệu quả*.</p>
+
+**Nguồn tham khảo:** Cirillo, F. (2018). *The Pomodoro Technique: The Acclaimed Time-Management System That Has Transformed How We Work*. Penguin Random House. Xem thêm Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25.
+
 </div>
 
 ## Hướng dẫn từng bước áp dụng Pomodoro hiệu quả (phiên bản BetterMe)
@@ -39,16 +38,14 @@ Một thành viên trong cộng đồng BetterMe đã chia sẻ rằng trước 
 4.  **Nghỉ giải lao ngắn (5 phút):** Khi chuông báo hết 25 phút, hãy đứng dậy, vươn vai, đi lại, uống nước hoặc làm một việc gì đó thư giãn không liên quan đến công việc. Tránh kiểm tra điện thoại, mạng xã hội để não bộ được phục hồi thực sự.
 5.  **Nghỉ giải lao dài (15-30 phút):** Sau mỗi bốn phiên Pomodoro, hãy tự thưởng cho mình một khoảng nghỉ dài hơn. Đây là thời gian để bạn thư giãn sâu hơn, ăn nhẹ, đi dạo ngắn hoặc tương tác xã hội nhẹ nhàng.
 
-*Lưu ý: Không phải lúc nào 25 phút cũng là tối ưu cho tất cả mọi người hoặc mọi loại công việc. Một người có thể gặp khó khăn khi tập trung đủ 25 phút cho môn Toán, nhưng lại thấy 30 phút là phù hợp cho việc đọc sách tiếng Anh. Việc điều chỉnh thời lượng Pomodoro (ví dụ: 30 phút làm, 7 phút nghỉ) để phù hợp với nhịp độ làm việc và loại nhiệm vụ là hoàn toàn chấp nhận được và khuyến khích.
+***Lưu ý**: Không phải lúc nào 25 phút cũng là tối ưu cho tất cả mọi người hoặc mọi loại công việc. Một người có thể gặp khó khăn khi tập trung đủ 25 phút cho môn Toán, nhưng lại thấy 30 phút là phù hợp cho việc đọc sách tiếng Anh. Việc điều chỉnh thời lượng Pomodoro (ví dụ: 30 phút làm, 7 phút nghỉ) để phù hợp với nhịp độ làm việc và loại nhiệm vụ là hoàn toàn chấp nhận được và khuyến khích.
 
 ![Đồng hồ hẹn giờ Pomodoro trên điện thoại hiển thị 25 phút, bên cạnh là sách vở và bút, thể hiện sự tập trung vào công việc.](https://files.betterme.dev/blog/image/pomodoro-hieu-qua-betterme/section-2.webp)
 
 <div class="blog-reference">
-<p>**Nguồn tham khảo:**</p>
-<p>Wikipedia. (n.d.). *Pomodoro Technique*.</p>
-<p>Todoist. (n.d.). *The Pomodoro Technique — Why it works & how to do it*.</p>
-<p>IDP IELTS. (2024). *Phương pháp Pomodoro là gì? Cách áp dụng hiệu quả*.</p>
-<p>Newport, C. (2016). *Deep Work: Rules for Focused Success in a Distracted World*. Grand Central Publishing.</p>
+
+**Nguồn tham khảo:** Newport, C. (2016). *Deep Work: Rules for Focused Success in a Distracted World*. Grand Central Publishing. Xem thêm hướng dẫn về Pomodoro Technique trên Todoist và Wikipedia.
+
 </div>
 
 ## Tối ưu Pomodoro với Discord Bot: Học nhóm, tạo môi trường không xao nhãng
@@ -62,9 +59,9 @@ Bot không chỉ giúp đếm thời gian mà còn hoạt động như một "ng
 ![Giao diện Discord với bot Pomodoro đang hoạt động trong kênh thoại, hiển thị thông báo bắt đầu phiên làm việc cho nhóm học.](https://files.betterme.dev/blog/image/pomodoro-hieu-qua-betterme/section-3.webp)
 
 <div class="blog-reference">
-<p>**Nguồn tham khảo:**</p>
-<p>Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25.</p>
-<p>The Herald. (2026). *Fact Check: Is the Pomodoro technique actually effective for studying?*</p>
+
+**Nguồn tham khảo:** Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25. Xem thêm phân tích về hiệu quả Pomodoro từ The Herald (2026).
+
 </div>
 
 ## Vượt qua thử thách khi dùng Pomodoro: Kinh nghiệm từ cộng đồng BetterMe
@@ -81,11 +78,9 @@ Một lỗi thường gặp là sử dụng 5 phút nghỉ để lướt mạng 
 ![Một nhóm sinh viên đang thảo luận và học nhóm trong một không gian mở, thể hiện sự tương tác và hỗ trợ lẫn nhau trong học tập.](https://files.betterme.dev/blog/image/pomodoro-hieu-qua-betterme/section-4.webp)
 
 <div class="blog-reference">
-<p>**Nguồn tham khảo:**</p>
-<p>Biwer, F., Wiradhany, W., oude Egbrink, M. G. A., & de Bruin, A. B. H. (2023). *Understanding effort regulation: Comparing 'Pomodoro' breaks and self-regulated breaks*. British Journal of Educational Psychology, 93(S2), 353-367.</p>
-<p>Pomoforge. (2025). *The Science Behind Pomodoro: What Research Actually Says*.</p>
-<p>Zach Highley. (2022). *The Danger of the Pomodoro Method - Why Most People are Using it Wrong*.</p>
-<p>Base.vn. (2025). *Pomodoro là gì? Phương pháp quản lý thời gian hiệu quả*.</p>
+
+**Nguồn tham khảo:** Biwer, F., Wiradhany, W., oude Egbrink, M. G. A., & de Bruin, A. B. H. (2023). *Understanding effort regulation: Comparing 'Pomodoro' breaks and self-regulated breaks*. British Journal of Educational Psychology, 93(S2), 353-367.
+
 </div>
 
 ## Kết hợp Pomodoro với các phương pháp học tập khác để đạt hiệu quả tối đa
@@ -107,10 +102,9 @@ Phương pháp Pomodoro hiệu quả không chỉ là một kỹ thuật quản 
 ![Sơ đồ minh họa các phương pháp học tập như Active Recall, Spaced Repetition, và Deep Work được tích hợp với chu trình Pomodoro.](https://files.betterme.dev/blog/image/pomodoro-hieu-qua-betterme/section-5.webp)
 
 <div class="blog-reference">
-<p>**Nguồn tham khảo:**</p>
-<p>IDP IELTS. (2024). *Phương pháp Pomodoro: cách ứng dụng học tiếng Anh hiệu quả*.</p>
-<p>Newport, C. (2016). *Deep Work: Rules for Focused Success in a Distracted World*. Grand Central Publishing.</p>
-<p>Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25.</p>
+
+**Nguồn tham khảo:** Newport, C. (2016). *Deep Work: Rules for Focused Success in a Distracted World*. Grand Central Publishing. Xem thêm Ogut, E. (2025). *Assessing the efficacy of the Pomodoro technique in enhancing anatomy lesson retention during study sessions: a scoping review*. BMC Medical Education, 25.
+
 </div>
 
 Phương pháp Pomodoro hiệu quả không chỉ là một công cụ quản lý thời gian mà còn là một triết lý giúp bạn rèn luyện sự tập trung và kiểm soát cuộc sống học tập của mình. Hãy bắt đầu ngay hôm nay bằng cách truy cập [pomodoro.betterme.dev](https://pomodoro.betterme.dev) để trải nghiệm phiên Pomodoro đầu tiên, hoặc [tham gia BetterMe](https://discord.gg/betterme) để cùng cộng đồng chia sẻ kinh nghiệm và chinh phục mục tiêu học tập.
