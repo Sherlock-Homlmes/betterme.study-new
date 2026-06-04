@@ -106,30 +106,17 @@ import '../../styles/blog.css'
             }
         }
 
-        ;(function init() {
-            const raw = sessionStorage.getItem('seo_preview')
-            if (!raw) return
-
-            let data: any
-            try { data = JSON.parse(raw) } catch { return }
-
-            const content = data.content || ''
+        function renderContent(content: string) {
             if (!content) return
-
             const { frontmatter: fm, body } = parseFrontmatter(content)
-
             const wordCount = body.split(/\s+/).length
             const readingTime = Math.max(1, Math.ceil(wordCount / 250))
 
-            marked.use({
-                gfm: true,
-                breaks: false,
-            })
+            marked.use({ gfm: true, breaks: false })
 
             const htmlBody = marked.parse(body) as string
             const headings = extractHeadings(htmlBody)
             const tocHtml = renderTOC(headings)
-
             const tags = Array.isArray(fm.tags) ? fm.tags : []
 
             const container = document.getElementById('preview-content')!
@@ -141,7 +128,6 @@ import '../../styles/blog.css'
                         <span>${fm.title || 'Preview'}</span>
                     </nav>
                 </div>
-
                 <header class="blog-post-header">
                     <div class="container">
                         ${tags.length ? `<div class="blog-post-tags">${tags.map((t: string) =>
@@ -165,15 +151,27 @@ import '../../styles/blog.css'
                         ${fm.heroImage ? `<div class="blog-post-banner"><img src="${fm.heroImage}" alt="${fm.title || ''}" /></div>` : ''}
                     </div>
                 </header>
-
                 <div class="blog-post-body">
                     <div class="blog-post-content">${htmlBody}</div>
                     ${tocHtml}
                 </div>
             `
-
             document.title = `${fm.title || 'Preview'} — BetterMe Blog`
+        }
+
+        ;(function init() {
+            const raw = sessionStorage.getItem('seo_preview')
+            if (!raw) return
+            let data: any
+            try { data = JSON.parse(raw) } catch { return }
+            renderContent(data.content || '')
         })()
+
+        window.addEventListener('message', (e) => {
+            if (e.data?.type === 'seo-preview-update') {
+                renderContent(e.data.content || '')
+            }
+        })
     </script>
 </body>
 </html>

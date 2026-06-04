@@ -388,9 +388,9 @@ description: "Meta description 150–160 ký tự, chứa keyword chính, trả 
 pubDate: ${pubDate}
 updatedDate: ${pubDate}
 heroImage: "${heroImagePath}"
-bannerAlt: "[mô tả chi tiết ảnh banner — VD: 10 mẹo học tập hiệu quả giúp tối ưu hóa thời gian - BetterMe Blog]"
+bannerAlt: "[mô tả chi tiết ảnh banner — VD: 10 mẹo học tập hiệu quả giúp tối ưu hóa thời gian - BetterMe Blog]
 author: "Tạ Minh Khôi"
-authorUrl: "https://betterme.dev/about"
+authorUrl: "https://muctim.tuoitre.vn/nam-sinh-gen-z-thanh-lap-cong-dong-ho-tro-hoc-tap-cho-nguoi-tre-64910.htm"
 tags: [tối đa 4 tags, tiếng Việt]
 ---
 
@@ -408,7 +408,7 @@ tags: [tối đa 4 tags, tiếng Việt]
 const STYLE = `A flat indie illustration in risograph style with only 2 colors: dark forest green and sage green on a cream/beige background. Hand-drawn wobbly outlines, no gradients, flat fills. Zine art aesthetic, indie toolkit branding illustration.`
 
 export function buildHeroImagePrompt(title: string, _angle: string): string {
-    return `${STYLE}
+  return `${STYLE}
 
 Scene: A simple, clear visual metaphor for "${title}".
 - One central subject that directly represents the main topic
@@ -419,12 +419,12 @@ Keep it minimal and meaningful. No text other than "Betterme".`
 }
 
 export function buildSectionImagePrompt(
-    _title: string,
-    sectionTitle: string,
-    _sectionIndex: number,
-    _angle: string,
+  _title: string,
+  sectionTitle: string,
+  _sectionIndex: number,
+  _angle: string,
 ): string {
-    return `${STYLE}
+  return `${STYLE}
 
 Scene: A simple illustration of "${sectionTitle}".
 - One clear subject that visually represents this concept
@@ -435,20 +435,20 @@ Keep it minimal and meaningful. No text other than "Betterme".`
 }
 
 export function buildImageGenerationPayload(
-    plan: ArticlePlan,
-    _research: ResearchResult,
+  plan: ArticlePlan,
+  _research: ResearchResult,
 ): ImageGeneration {
-    const heroPrompt = buildHeroImagePrompt(plan.title, plan.angle)
+  const heroPrompt = buildHeroImagePrompt(plan.title, plan.angle)
 
-    const sectionsToIllustrate = plan.outline
-        .map((section, i) => ({
-            sectionTitle: section,
-            prompt: buildSectionImagePrompt(plan.title, section, i, plan.angle),
-            index: i,
-        }))
+  const sectionsToIllustrate = plan.outline
+    .map((section, i) => ({
+      sectionTitle: section,
+      prompt: buildSectionImagePrompt(plan.title, section, i, plan.angle),
+      index: i,
+    }))
 
-    return {
-        hero: heroPrompt,
-        sections: sectionsToIllustrate,
-    }
+  return {
+    hero: heroPrompt,
+    sections: sectionsToIllustrate,
+  }
 }

@@ -96,6 +96,7 @@ export interface WorkflowParams {
 export interface Env {
     SEO_WORKFLOW: Workflow
     CONTENT_BUCKET: R2Bucket
+    LANDING_BUCKET: R2Bucket
     VECTORIZE: VectorizeIndex
     AI: Ai
     GCP_PRIVATE_KEY: string
@@ -104,4 +105,6 @@ export interface Env {
     GCP_REGION: string
     DISCORD_WEBHOOK_URL: string
     INTERNAL_SECRET: string
+    GITHUB_TOKEN: string
+    GITHUB_REPO: string
 }

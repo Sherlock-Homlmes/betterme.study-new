@@ -6,6 +6,7 @@ import {
     getArticlesIndex, updateArticlesIndex, removeArticleFromIndex,
     getArticleContent,
 } from './services/r2'
+import { publishArticle } from './services/publish'
 
 const CORS_HEADERS: Record<string, string> = {
     'Access-Control-Allow-Origin': '*',
@@ -96,6 +97,11 @@ export default {
             const instance = await env.SEO_WORKFLOW.get(id)
             const status = await instance.status()
             return corsResponse(status)
+        }
+
+        // ── POST /publish — publish article to landing ────────────────────────
+        if (req.method === 'POST' && path === '/publish') {
+            return handlePublish(req, env)
         }
 
             return corsResponse({ error: 'Not found' }, { status: 404 })
@@ -274,4 +280,19 @@ async function handleListWorkflows(env: Env): Promise<Response> {
     }
 
     return corsResponse({ workflows: workflows.slice(0, 20) })
+}
+
+// ─── Publish ──────────────────────────────────────────────────────────────────
+
+async function handlePublish(req: Request, env: Env): Promise<Response> {
+    const body = await req.json<{ slug: string }>().catch(() => ({}))
+    if (!body.slug) {
+        return corsResponse({ error: 'Missing "slug" in body' }, { status: 400 })
+    }
+
+    const result = await publishArticle(env, body.slug)
+    if (result.ok) {
+        return corsResponse(result)
+    }
+    return corsResponse(result, { status: 500 })
 }

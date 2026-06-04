@@ -16,15 +16,28 @@ class_name = "SEOContentWorkflow"
 binding = "CONTENT_BUCKET"
 bucket_name = "betterme-content"
 
-# npx wrangler vectorize create betterme-articles --dimensions=1024 --metric=cosine
+# npx wrangler r2 bucket create betterme-landing
+[[r2_buckets]]
+binding = "LANDING_BUCKET"
+bucket_name = "betterme-landing"
+
+# npx wrangler vectorize create betterme-articles --dimensions=768 --metric=cosine
 [[vectorize]]
 binding = "VECTORIZE"
 index_name = "betterme-articles"
-dimensions = 1024
-metric = "cosine"
 
 [ai]
 binding = "AI"
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
 
 # Secrets (set via: npx wrangler secret put <KEY>)
 # GCP_PRIVATE_KEY        - service account private key PEM
@@ -33,3 +46,5 @@ binding = "AI"
 # GCP_REGION             - Vertex AI region (e.g. us-central1)
 # DISCORD_WEBHOOK_URL    - Discord webhook for notifications
 # INTERNAL_SECRET        - secret for manual HTTP trigger
+# GITHUB_TOKEN           - GitHub personal access token (repo scope)
+# GITHUB_REPO            - GitHub repo (e.g. "owner/betterme.study-new")

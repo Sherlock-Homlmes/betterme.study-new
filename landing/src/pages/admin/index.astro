@@ -1,5 +1,11 @@
 ---
 import '../../styles/global.css'
+import { getCollection } from 'astro:content'
+
+const blogPosts = await getCollection('blog')
+const publishedPosts = blogPosts
+    .filter(post => !post.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 ---
 
 <!doctype html>
@@ -61,7 +67,7 @@ import '../../styles/global.css'
         .bar input:focus{border-color:var(--primary)}
 
         .tbl{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-        .row{display:grid;grid-template-columns:1fr 180px 100px 80px 100px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .1s}
+        .row{display:grid;grid-template-columns:1fr 180px 100px 80px 120px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .1s}
         .row:last-child{border-bottom:none}
         .row:hover{background:#fafaf9}
         .row.hd{background:#f4f4f5;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
@@ -99,6 +105,24 @@ import '../../styles/global.css'
         .wf-badge.running{background:#dbeafe;color:#1d4ed8}
         .wf-badge.complete{background:#dcfce7;color:#166534}
         .wf-badge.failed{background:var(--danger-bg);color:var(--danger)}
+
+        /* ─── Editor modal ─── */
+        #m-prev{position:fixed;inset:0;z-index:200;display:none;background:var(--surface)}
+        #m-prev.on{display:flex}
+        .editor-wrap{display:flex;flex-direction:column;width:100%;height:100vh}
+        .editor-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+        .editor-bar h3{font-family:var(--fh);font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+        .editor-bar .slug{font-size:.75rem;color:var(--muted);margin-right:4px}
+        .editor-body{display:flex;flex:1;overflow:hidden}
+        .editor-src{width:50%;display:flex;flex-direction:column;border-right:1px solid var(--border);background:#1e1e2e}
+        .editor-src label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6c7086;padding:8px 12px 4px;background:#1e1e2e}
+        #ed-ta{flex:1;width:100%;border:none;outline:none;resize:none;padding:12px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.82rem;line-height:1.7;background:#1e1e2e;color:#cdd6f4;tab-size:4}
+        #ed-ta::placeholder{color:#585b70}
+        .editor-view{width:50%;overflow:hidden}
+        .editor-view iframe{width:100%;height:100%;border:none}
+        .ed-status{font-size:.72rem;color:var(--muted)}
+        .ed-status.dirty{color:var(--warn)}
+        .ed-status.saved{color:var(--primary)}
     </style>
 </head>
 <body>
@@ -132,6 +156,31 @@ import '../../styles/global.css'
             <div class="row hd"><div>Bài viết</div><div>Keyword</div><div>Ảnh</div><div>Chi phí</div><div style="text-align:right">Thao tác</div></div>
         </div>
         <div id="empty" class="empty hidden"><p>Chưa có bài nào</p><button class="btn btn-p" onclick="openGen()">Generate bài đầu</button></div>
+
+        <!-- ─── Published Blog Posts ─── -->
+        <h2 style="font-family:var(--fh);font-size:1.15rem;margin:32px 0 12px;font-weight:700">Published Blog Posts</h2>
+        <div class="tbl">
+            <div class="row hd"><div>Bài viết</div><div>Tác giả</div><div>Ngày đăng</div><div>Tags</div><div style="text-align:right">Link</div></div>
+            {publishedPosts.length === 0 && <div class="empty" style="padding:32px"><p>Chưa có bài nào được publish</p></div>}
+            {publishedPosts.map(post => (
+                <div class="row">
+                    <div>
+                        <div class="t">{post.data.title}</div>
+                        <div class="s">{post.id}</div>
+                    </div>
+                    <div class="d">{post.data.author || 'BetterMe'}</div>
+                    <div class="d">{post.data.pubDate.toLocaleDateString('vi-VN')}</div>
+                    <div>
+                        {post.data.tags.slice(0, 3).map((tag: string) => (
+                            <span class="kw" style="margin:1px 2px">{tag}</span>
+                        ))}
+                    </div>
+                    <div class="act">
+                        <a class="btn btn-sm" href={`/blog/${post.id}`} target="_blank">👁</a>
+                    </div>
+                </div>
+            ))}
+        </div>
     </div>
 
     <!-- ─── Generate modal ─── -->
@@ -155,10 +204,27 @@ import '../../styles/global.css'
         </div>
     </div>
 
-    <!-- ─── Preview modal ─── -->
-    <div class="overlay" id="m-prev" style="background:#fff">
-        <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);z-index:10"><h3 id="prev-t">Preview</h3><button class="btn btn-sm" onclick="closeM('m-prev')">Đóng</button></div>
-        <iframe id="prev-iframe" src="/admin/preview" style="width:100%;height:100%;border:none;margin-top:48px"></iframe>
+    <!-- ─── Editor modal ─── -->
+    <div id="m-prev">
+        <div class="editor-wrap">
+            <div class="editor-bar">
+                <h3 id="prev-t">Editor</h3>
+                <span class="slug" id="ed-slug"></span>
+                <span class="ed-status" id="ed-status"></span>
+                <button class="btn btn-sm" id="btn-save" onclick="saveEdit()">💾 Save</button>
+                <button class="btn btn-sm btn-p" onclick="publishFromEditor()">🚀 Publish</button>
+                <button class="btn btn-sm" onclick="closeM('m-prev')">✕ Đóng</button>
+            </div>
+            <div class="editor-body">
+                <div class="editor-src">
+                    <label>Markdown</label>
+                    <textarea id="ed-ta" spellcheck="false" placeholder="Loading..."></textarea>
+                </div>
+                <div class="editor-view">
+                    <iframe id="ed-frame" src="/admin/preview"></iframe>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ─── Workflows modal ─── -->
@@ -174,10 +240,13 @@ import '../../styles/global.css'
     <script>
         let articles = []
         let delSlug = null
+        let editorSlug = null
+        let originalContent = ''
         let wUrl = ''
         let wKey = ''
 
         const COOKIE = 'seo_admin'
+        let previewTimer = null
 
         ;(function() {
             const c = getCookie(COOKIE)
@@ -262,7 +331,8 @@ import '../../styles/global.css'
                     <div class="d">${a.imageCount || 0} ảnh</div>
                     <div class="cost">${cost}</div>
                     <div class="act">
-                        <button class="btn btn-sm" onclick="preview('${esc(a.slug)}')">👁</button>
+                        <button class="btn btn-sm" onclick="openEditor('${esc(a.slug)}')">✎</button>
+                        <button class="btn btn-sm" onclick="publish('${esc(a.slug)}')" title="Publish to blog">🚀</button>
                         <button class="btn btn-sm" onclick="regen('${esc(a.slug)}')">↻</button>
                         <button class="btn btn-sm btn-d" onclick="openDel('${esc(a.slug)}','${esc(a.title)}')">✕</button>
                     </div>
@@ -290,6 +360,28 @@ import '../../styles/global.css'
                 else toast('Lỗi: ' + (d.error || '?'), 'err')
             } catch (e) { toast('Lỗi: ' + e.message, 'err') }
             finally { btn.disabled = false; btn.textContent = 'Tạo' }
+        }
+
+        // ─── Publish ───
+        async function publish(slug) {
+            if (!confirm(`Publish "${slug}" to blog? Copy images + commit to GitHub.`)) return
+            toast(`Đang publish "${slug}"...`, 'info')
+            try {
+                const r = await fetch(`${wUrl}/publish`, { method: 'POST', headers: H(), body: JSON.stringify({ slug }) })
+                const d = await r.json()
+                if (d.ok) { toast(`Published "${slug}"!`, 'ok') }
+                else toast('Fail: ' + (d.error || '?'), 'err')
+            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
+        }
+
+        async function publishFromEditor() {
+            if (!editorSlug) return
+            const ta = document.getElementById('ed-ta')
+            if (ta.value !== originalContent) {
+                toast('Phải Save trước khi Publish', 'err')
+                return
+            }
+            await publish(editorSlug)
         }
 
         // ─── Regenerate ───
@@ -325,19 +417,104 @@ import '../../styles/global.css'
             finally { btn.disabled = false; btn.textContent = 'Xóa' }
         }
 
-        // ─── Preview ───
-        async function preview(slug) {
+        // ─── Editor ───
+        function sendToPreview(content) {
+            const frame = document.getElementById('ed-frame')
+            frame.contentWindow.postMessage({ type: 'seo-preview-update', content }, '*')
+        }
+
+        async function openEditor(slug) {
+            editorSlug = slug
+            const ta = document.getElementById('ed-ta')
+            const status = document.getElementById('ed-status')
+            const slugEl = document.getElementById('ed-slug')
+
+            ta.value = ''
+            status.textContent = ''
+            status.className = 'ed-status'
+            slugEl.textContent = slug
             document.getElementById('prev-t').textContent = slug
             document.getElementById('m-prev').classList.add('on')
-            const iframe = document.getElementById('prev-iframe')
+
             try {
                 const r = await fetch(`${wUrl}/articles/${slug}`, { headers: H() })
                 if (!r.ok) throw new Error('HTTP ' + r.status)
                 const d = await r.json()
+                const content = d.content || ''
+                ta.value = content
+                originalContent = content
                 document.getElementById('prev-t').textContent = d.title || slug
-                sessionStorage.setItem('seo_preview', JSON.stringify({ content: d.content || '' }))
-                iframe.src = '/admin/preview'
-            } catch (e) { toast('Lỗi: ' + e.message, 'err') }
+
+                sessionStorage.setItem('seo_preview', JSON.stringify({ content }))
+                const frame = document.getElementById('ed-frame')
+                frame.src = '/admin/preview'
+
+                status.textContent = 'Đã tải ✓'
+                status.className = 'ed-status saved'
+            } catch (e) {
+                toast('Lỗi: ' + e.message, 'err')
+            }
+        }
+
+        document.getElementById('ed-ta').addEventListener('input', function() {
+            clearTimeout(previewTimer)
+            const md = this.value
+            previewTimer = setTimeout(() => {
+                sendToPreview(md)
+                const status = document.getElementById('ed-status')
+                if (md !== originalContent) {
+                    status.textContent = 'Chưa lưu ●'
+                    status.className = 'ed-status dirty'
+                } else {
+                    status.textContent = 'Đã lưu ✓'
+                    status.className = 'ed-status saved'
+                }
+            }, 400)
+        })
+
+        document.getElementById('ed-ta').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault()
+                const s = this.selectionStart
+                const end = this.selectionEnd
+                this.value = this.value.substring(0, s) + '    ' + this.value.substring(end)
+                this.selectionStart = this.selectionEnd = s + 4
+                this.dispatchEvent(new Event('input'))
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault()
+                saveEdit()
+            }
+        })
+
+        async function saveEdit() {
+            if (!editorSlug) return
+            const ta = document.getElementById('ed-ta')
+            const content = ta.value
+            const btn = document.getElementById('btn-save')
+            const status = document.getElementById('ed-status')
+
+            btn.disabled = true; btn.textContent = '⏳...'
+            try {
+                const r = await fetch(`${wUrl}/articles/${editorSlug}`, {
+                    method: 'PATCH',
+                    headers: H(),
+                    body: JSON.stringify({ content }),
+                })
+                const d = await r.json()
+                if (r.ok) {
+                    originalContent = content
+                    status.textContent = 'Đã lưu ✓'
+                    status.className = 'ed-status saved'
+                    toast('Đã lưu', 'ok')
+                } else {
+                    toast('Lỗi: ' + (d.error || '?'), 'err')
+                }
+            } catch (e) {
+                toast('Lỗi: ' + e.message, 'err')
+            } finally {
+                btn.disabled = false; btn.textContent = '💾 Save'
+            }
         }
 
         // ─── Workflows ───
@@ -358,15 +535,16 @@ import '../../styles/global.css'
             } catch (e) { document.getElementById('wf-list').innerHTML = `<p style="color:var(--danger)">${e.message}</p>` }
         }
 
-        function closeM(id) { document.getElementById(id).classList.remove('on'); delSlug = null }
+        function closeM(id) { document.getElementById(id).classList.remove('on'); delSlug = null; editorSlug = null }
         document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on') }))
 
         function toast(msg, type = 'info') { const c = document.getElementById('toasts'); const el = document.createElement('div'); el.className = `toast ${type}`; el.textContent = msg; c.appendChild(el); setTimeout(() => el.remove(), 5000) }
         function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML }
 
         window.doLogin = doLogin; window.logout = logout; window.loadArticles = loadArticles; window.filter = filter
-        window.openGen = openGen; window.doGen = doGen; window.regen = regen; window.openDel = openDel
-        window.preview = preview; window.openWorkflows = openWorkflows; window.closeM = closeM
+        window.openGen = openGen; window.doGen = doGen; window.regen = regen; window.publish = publish; window.openDel = openDel
+        window.openEditor = openEditor; window.saveEdit = saveEdit; window.publishFromEditor = publishFromEditor
+        window.openWorkflows = openWorkflows; window.closeM = closeM
     </script>
 </body>
 </html>
