@@ -11,5 +11,8 @@
         "@cloudflare/workers-types": "^4.20250525.0",
         "typescript": "^5.5.0",
         "wrangler": "^4.97.0"
+    },
+    "dependencies": {
+        "@google/genai": "^2.8.0"
     }
 }

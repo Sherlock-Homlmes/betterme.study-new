@@ -9,6 +9,7 @@ export interface ArticlePlan {
     searchIntent: 'informational' | 'navigational' | 'commercial'
     difficulty: 'low' | 'medium' | 'high'
     feasibilityScore: number
+    competitorsFound?: string[]
     competitorGap: string
     outline: string[]
     targetWordCount: number

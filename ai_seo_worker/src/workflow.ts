@@ -1,6 +1,6 @@
 import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from 'cloudflare:workers'
 import type { Env, WorkflowParams, ArticleResult, ArticlePlan, StrategyResult, ResearchResult } from './types'
-import { callGemini, generateImage, parseJSON } from './vertex'
+import { callGemini, generateImage, parseJSON, STRATEGY_RESPONSE_SCHEMA, RESEARCH_RESPONSE_SCHEMA } from './vertex'
 import { checkSimilarity, upsertArticle } from './services/vectorize'
 import {
     saveArticle, saveImage, deleteArticleImages,
@@ -35,11 +35,12 @@ export class SEOContentWorkflow extends WorkflowEntrypoint<Env, WorkflowParams> 
             )
             const prompt = buildStrategyPrompt(existingTitles)
 
-            console.log('[SEO] Calling Gemini for strategy (with Google Search)...')
+            console.log('[SEO] Calling Gemini for strategy (structured output + Google Search)...')
             const raw = await callGemini(env, prompt, {
                 systemPrompt: STRATEGY_SYSTEM_PROMPT,
                 useSearch: true,
                 temperature: 0.3,
+                responseSchema: STRATEGY_RESPONSE_SCHEMA,
             })
 
             return parseJSON<StrategyResult>(raw)
@@ -122,6 +123,7 @@ export async function processArticle(
             systemPrompt: RESEARCH_SYSTEM_PROMPT,
             useSearch: true,
             temperature: 0.2,
+            responseSchema: RESEARCH_RESPONSE_SCHEMA,
         })
         const research = parseJSON<ResearchResult>(researchRaw)
 

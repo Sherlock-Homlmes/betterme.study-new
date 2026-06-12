@@ -118,10 +118,12 @@ const ogImage = "https://betterme.dev/og-image.webp";
     <link rel="preload" as="image" href="/cinder.webp" fetchpriority="high" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Bỏ qua đến nội dung chính</a>
     <div id="custom-cursor"></div>
+    <div class="noise-overlay"></div>
     <canvas id="canvas-particles"></canvas>
     <Navbar />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <script>
