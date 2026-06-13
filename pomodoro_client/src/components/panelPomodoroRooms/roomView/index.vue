@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, computed, watch, ref } from 'vue';
+import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 import {
   ChevronLeftIcon,
@@ -57,6 +58,7 @@ import Chat from './Chat.vue';
 import ParticipantList from './ParticipantList.vue';
 
 const { t } = useI18n();
+const isMobile = useBreakpoints(breakpointsTailwind).smaller('sm');
 const {
   isConnected,
   isConnecting,
@@ -321,29 +323,48 @@ div(class="flex flex-col h-full")
           | {{ $t('pomodoroRoom.retry_join', { default: 'Retry' }) }}
 
       // Room content
-      ResizablePanelGroup(v-else-if="isConnected" direction="horizontal" class="h-full")
-        // Video grid (main area)
-        ResizablePanel(:default-size="showChat || showParticipantList ? 55 : 100" :min-size="35")
-          VideoGrid(@leave="leaveRoom" @showLeaveDialog="showLeaveConfirmation")
+      template(v-else-if="isConnected")
+        // Desktop: resizable side-by-side panels
+        ResizablePanelGroup(v-if="!isMobile" direction="horizontal" class="h-full")
+          // Video grid (main area)
+          ResizablePanel(:default-size="showChat || showParticipantList ? 55 : 100" :min-size="35")
+            VideoGrid(@leave="leaveRoom" @showLeaveDialog="showLeaveConfirmation")
 
-        ResizableHandle(v-if="showParticipantList || showChat")
+          ResizableHandle(v-if="showParticipantList || showChat")
 
-        // Participant list panel
-        ResizablePanel(v-if="showParticipantList && !showChat" :default-size="45" :min-size="30")
-          ParticipantList
+          // Participant list panel
+          ResizablePanel(v-if="showParticipantList && !showChat" :default-size="45" :min-size="30")
+            ParticipantList
 
-        // Chat panel
-        ResizablePanel(v-if="showChat && !showParticipantList" :default-size="45" :min-size="35")
-          Chat
+          // Chat panel
+          ResizablePanel(v-if="showChat && !showParticipantList" :default-size="45" :min-size="35")
+            Chat
 
-        // Both open: split right side
-        template(v-if="showParticipantList && showChat")
-          ResizablePanelGroup(direction="vertical")
-            ResizablePanel(:default-size="50" :min-size="30")
-              ParticipantList
-            ResizableHandle
-            ResizablePanel(:default-size="50" :min-size="30")
+          // Both open: split right side
+          template(v-if="showParticipantList && showChat")
+            ResizablePanelGroup(direction="vertical")
+              ResizablePanel(:default-size="50" :min-size="30")
+                ParticipantList
+              ResizableHandle
+              ResizablePanel(:default-size="50" :min-size="30")
+                Chat
+
+        // Mobile: VideoGrid full screen, panels slide up as overlay
+        div(v-else class="relative h-full")
+          div(class="h-full")
+            VideoGrid(@leave="leaveRoom" @showLeaveDialog="showLeaveConfirmation")
+          Transition(name="mobile-panel")
+            div(
+              v-if="showChat"
+              class="absolute inset-0 z-10 bg-white dark:bg-gray-900"
+            )
               Chat
+          Transition(name="mobile-panel")
+            div(
+              v-if="showParticipantList && !showChat"
+              class="absolute inset-0 z-10 bg-white dark:bg-gray-900"
+            )
+              ParticipantList
 
   // Leave room dialog (only shown when disconnect button is clicked)
   AlertDialog(v-model:open="showLeaveDialog")
@@ -492,4 +513,9 @@ div(class="flex flex-col h-full")
 .slide-down-leave-active { transition: all 0.3s ease; }
 .slide-down-enter-from { opacity: 0; transform: translateY(-8px); }
 .slide-down-leave-to { opacity: 0; transform: translateY(-8px); }
+
+.mobile-panel-enter-active { transition: transform 0.3s ease, opacity 0.3s ease; }
+.mobile-panel-leave-active { transition: transform 0.25s ease, opacity 0.25s ease; }
+.mobile-panel-enter-from { transform: translateY(100%); opacity: 0; }
+.mobile-panel-leave-to { transform: translateY(100%); opacity: 0; }
 </style>

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { PaperclipIcon, GifIcon, MoodSmileIcon, SendIcon, PlusIcon } from 'vue-tabler-icons';
 import { usePomodoroRoomsStore, type ChatMessage } from '@/stores/pomodoroRooms';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from '@/components/ui/dropdown-menu';
+import GifPicker from './GifPicker.vue';
 
 const store = usePomodoroRoomsStore();
 
@@ -13,7 +14,6 @@ const {
   fileInputRef,
   uploadingFile,
   localParticipant,
-  commonGifs,
   commonReactions,
   sendTextMessage,
   sendFile,
@@ -135,16 +135,8 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
             GifIcon(:size="16")
             span &nbsp GIF
 
-          DropdownMenuSubContent
-            div(class="grid grid-cols-3 gap-2 p-2 w-[200px]")
-              img(
-                v-for="(gif, index) in commonGifs"
-                :key="index"
-                :src="gif"
-                class="w-full h-16 object-cover rounded cursor-pointer hover:opacity-80"
-                @click="sendGif(gif)"
-                alt="GIF"
-              )
+          DropdownMenuSubContent(class="p-0")
+            GifPicker(@select="sendGif")
 
         // Reaction submenu
         DropdownMenuSub

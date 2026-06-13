@@ -336,8 +336,9 @@ div(class="flex flex-col h-full")
             MaximizeIcon(:size="28" class="text-white drop-shadow-lg")
 
   //- ── Controls bar ────────────────────────────────────────────────────────────
-  div(class="flex items-center justify-center gap-3 p-4 flex-shrink-0 border-t border-gray-200 dark:border-gray-700")
-    DeviceSelector
+  div(class="relative flex items-center justify-center gap-3 p-4 flex-shrink-0 border-t border-gray-200 dark:border-gray-700")
+    div(class="absolute left-4")
+      DeviceSelector
 
     //- Microphone — ON: bg-primary white icon, OFF: white bg + primary border + primary icon
     button(
