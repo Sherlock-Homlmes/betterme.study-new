@@ -197,7 +197,7 @@ section(class="h-full overflow-hidden duration-300 ease-in dark:text-gray-50")
     TimerControls(class="mb-8")
   TutorialView(v-if='!isOnboarded')
   DesktopPIPMode(v-if='userSettings.visuals.show_pip_mode && isDesktop && !isPreview')
-  WebPIPMode(v-if='userSettings.visuals.show_pip_mode && isWeb && !isPreview')
+  WebPIPMode(v-if='userSettings.visuals.show_pip_mode && isWeb && !isMobile && !isPreview')
 </template>
 
 <style lang="scss" scoped>

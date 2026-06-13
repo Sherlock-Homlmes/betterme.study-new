@@ -72,6 +72,10 @@ Render timer vào floating window nhỏ của browser. Không cần Tauri, chạ
 ```typescript
 // userSettings
 visuals: {
-  show_pip_mode: true  // có hiện nút PIP không
+  show_pip_mode: false  // default tắt
 }
 ```
+
+- Default là `false` — user phải tự bật trong Settings.
+- Setting bị ẩn hoàn toàn trên mobile (`isMobile`), không thể bật được.
+- `WebPIPMode` cũng có guard `!isMobile` ở `pages/index.vue` để đảm bảo không render dù setting bị set `true` từ nguồn khác.

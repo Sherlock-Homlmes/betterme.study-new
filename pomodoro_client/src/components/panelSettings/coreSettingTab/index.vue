@@ -15,7 +15,7 @@ import { useAuthStore } from "@/stores/auth";
 import { usePlatformStore } from "@/stores/platforms";
 
 const { isAuth, userSettings } = useAuthStore();
-const { isWeb, isDesktop, isExtension } = usePlatformStore();
+const { isWeb, isDesktop, isExtension, isMobile } = usePlatformStore();
 const isWebBase = isWeb.value || isDesktop.value || isExtension.value;
 </script>
 
@@ -30,7 +30,7 @@ div.grid.grid-cols-1.gap-2.py-3.px-4
   Divider
   SettingsItemV2(:type="Control.Check" path="visuals.dark_mode")
   SettingsItemV2(:type="Control.Check" path="visuals.show_progress_bar")
-  SettingsItemV2(:type="Control.Check" path="visuals.show_pip_mode" v-if='isWeb || isDesktop')
+  SettingsItemV2(:type="Control.Check" path="visuals.show_pip_mode" v-if='(isWeb || isDesktop) && !isMobile')
 
   template(v-if="isWebBase && !isAuth")
     Divider
