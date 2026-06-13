@@ -1,4 +1,5 @@
 import type { ArticlePlan, ResearchResult, ImageGeneration } from './types'
+import type { GroundingSource } from './vertex'
 
 // ─── Strategy Agent ───────────────────────────────────────────────────────────
 
@@ -220,12 +221,13 @@ EXPERTISE (Chuyên môn):
 
 AUTHORITATIVENESS (Thẩm quyền):
 - BẮT BUỘC: Mỗi section H2 chứa phương pháp/khái niệm phải có block "Nguồn tham khảo" cuối section
-- Định dạng nguồn: Author, Year. *Title*. Publisher/Journal. (có thể kèm URL)
+- Định dạng nguồn: Author, Year. *Title*. Publisher/Journal. — MỌI nguồn có URL phải là markdown link dạng [Author, Year. Title. Publisher](URL) (text link là tên/tiêu đề nguồn, KHÔNG dùng "click here")
 - Link tới ít nhất 3-5 nguồn ngoài (outbound links) trong toàn bài: .edu, tạp chí khoa học, sách đã xuất bản
+- KHÔNG bịa URL — chỉ gắn link khi có URL thật từ dữ liệu research
 - Nguồn tham khảo phải bọc trong thẻ <div class="blog-reference"> (có dòng trống trước và sau nội dung) để hiển thị chữ nhỏ. KHÔNG dùng tag <p>. Gộp tất cả nguồn vào 1 đoạn văn liền sau "**Nguồn tham khảo:**". Ví dụ:
   <div class="blog-reference">
 
-  **Nguồn tham khảo:** Author, Year. *Title*. Publisher. Xem thêm Author2, Year. *Title2*. Journal.
+  **Nguồn tham khảo:** [Author, Year. *Title*. Publisher](https://...). Xem thêm [Author2, Year. *Title2*. Journal](https://...).
 
   </div>
 
@@ -310,12 +312,18 @@ export function buildWriterPrompt(
   pubDate: string,
   heroImagePath: string,
   sectionImagePaths: string[],
+  groundingSources: GroundingSource[] = [],
 ): string {
   const r = research
 
   const imageList = sectionImagePaths
     .map((p, i) => `  ${i + 1}. ${p} → chèn vào giữa section H2 thứ ${i + 1}`)
     .join('\n')
+
+  // Real, verified source URLs captured from Google Search grounding metadata.
+  const groundingList = groundingSources.length
+    ? groundingSources.map((s, i) => `  ${i + 1}. ${s.url} — ${s.title || '(không có tiêu đề)'}`).join('\n')
+    : '(không có URL thật — chỉ dùng link khi citation kèm sẵn URL hợp lệ)'
 
   const sectionSources = (r as any).sectionSources
     ? (r as any).sectionSources.map((s: any) => `  ${s.section}: ${s.sources?.join('; ') || 'no specific source'}`).join('\n')
@@ -349,6 +357,16 @@ ${r.vietnameseSpecific.map((v) => `- ${v}`).join('\n')}
 NGUỒN TRÍCH DẪN (BẮT BUỘC dùng trong bài — gộp vào 1 đoạn văn trong block <div class="blog-reference"> cuối mỗi section liên quan, KHÔNG dùng <p>):
 ${r.authorityData.map((a) => `- ${a}`).join('\n')}
 
+═══════ NGUỒN URL THẬT TỪ GOOGLE SEARCH ═══════
+Đây là các URL ĐÃ XÁC THỰC — BẮT BUỘC gắn thành markdown link cho mọi nguồn khớp:
+${groundingList}
+
+LUẬT GẮN LINK NGUỒN (QUAN TRỌNG):
+- MỌI citation có URL (từ danh sách trên hoặc kèm sẵn trong dữ liệu) → BẮT BUỘC render thành markdown link.
+- Cú pháp: \`[Tên nguồn / Author, Year](URL)\` — text link phải mô tả được nguồn (tên tác giả + năm, hoặc tiêu đề), KHÔNG dùng "click here", "xem tại đây" đứng riêng.
+- Chỉ dùng URL trong danh sách — KHÔNG bịa link, KHÔNG tự bịa URL. Nếu citation không có URL thật → để dạng text thường.
+- Khi không chắc URL nào khớp citation nào → ưu tiên URL có tiêu đề liên quan nhất, hoặc bỏ qua (thà text thường còn hơn link sai).
+
 Phát triển mới (2024-2026):
 ${r.recentDevelopments.map((d) => `- ${d}`).join('\n')}
 
@@ -364,15 +382,18 @@ d) Nguồn tham khảo bọc trong <div class="blog-reference"> (có dòng trố
 
 <div class="blog-reference">
 
-**Nguồn tham khảo:** Author, Year. *Title*. Publisher. Xem thêm Author2, Year. *Title2*. Journal.
+**Nguồn tham khảo:** [Author, Year. *Title*. Publisher](URL). Xem thêm [Author2, Year. *Title2*. Journal](URL).
 
 </div>
 
-Lưu ý: KHÔNG dùng tag <p>. Gộp tất cả nguồn vào 1 đoạn văn liền sau "**Nguồn tham khảo:**", phân cách bằng "Xem thêm" hoặc dấu chấm. Có dòng trống giữa <div> và nội dung.
+Lưu ý:
+- KHÔNG dùng tag <p>. Gộp tất cả nguồn vào 1 đoạn văn liền sau "**Nguồn tham khảo:**", phân cách bằng "Xem thêm" hoặc dấu chấm. Có dòng trống giữa <div> và nội dung.
+- MỌI nguồn có URL → markdown link \`[text mô tả](URL)\`. Text link phải là tên/tiêu đề nguồn, KHÔNG dùng "link", "here".
+- Nguồn không có URL thật → để text thường, KHÔNG bịa link.
 
 ═══════ E-E-A-T CHECKLIST (tự kiểm tra trước khi nộp) ═══════
 [ ] Mỗi phương pháp có nguồn gốc rõ ràng (tên tác giả, năm)
-[ ] Có ít nhất 3-5 outbound links tới nguồn uy tín (.edu, journal, sách)
+[ ] Có ít nhất 3-5 outbound links tới nguồn uy tín (.edu, journal, sách) — dạng markdown hyperlink [text](URL), KHÔNG phải text trần
 [ ] Có ví dụ thực tế hoặc trải nghiệm cộng đồng trong bài
 [ ] Có phần "Lưu ý" hoặc "Lỗi thường gặp" thể hiện expertise
 [ ] Nguồn tham khảo hiển thị trong block <div class="blog-reference"> (không dùng <p>, có dòng trống trước/sau)

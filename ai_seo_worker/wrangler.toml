@@ -3,8 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2025-06-01"
 compatibility_flags = ["nodejs_compat"]
 
-# [triggers]
-# crons = ["0 */6 * * *"] # mỗi 6 tiếng chạy 1 lần
+[triggers]
+crons = ["0 */6 * * *"] # mỗi 6 tiếng chạy 1 lần
 
 [[workflows]]
 binding = "SEO_WORKFLOW"

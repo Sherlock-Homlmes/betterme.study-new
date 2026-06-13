@@ -7,6 +7,64 @@ const GEMINI_MODEL = 'gemini-2.5-flash'
 const GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image'
 const DEFAULT_REGION = 'us-central1'
 
+// ─── Rate-limit safety: sequential pacing + retry on 429 ──────────────────────
+// Vertex/Google repeatedly returns RESOURCE_EXHAUSTED (429) when calls fire too
+// fast. Everything here runs STRICTLY SEQUENTIAL — no Promise.all, no fan-out —
+// and each call is paced + retried with exponential backoff on rate-limit.
+
+/**
+ * Generous output budget for STRUCTURED (JSON) calls. gemini-2.5-flash is a
+ * thinking model: thinking tokens + visible tokens BOTH come out of
+ * maxOutputTokens. We disable thinking on JSON calls (thinkingBudget: 0) and
+ * keep this budget high so the schema-constrained JSON never gets truncated
+ * mid-string (which produced "Unterminated string in JSON" errors).
+ */
+const STRUCTURED_MAX_TOKENS = 24576
+
+export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
+
+/** Minimum gap between two consecutive Gemini calls within the same isolate. */
+const MIN_CALL_GAP_MS = 4000
+let lastCallAt = 0
+
+async function enforcePace(): Promise<void> {
+    const wait = MIN_CALL_GAP_MS - (Date.now() - lastCallAt)
+    if (wait > 0) await sleep(wait)
+    lastCallAt = Date.now()
+}
+
+function isRateLimitError(err: unknown): boolean {
+    const detail = err instanceof Error ? `${err.message}\n${err.stack ?? ''}` : String(err)
+    return /429|RESOURCE_EXHAUSTED|resource_exhausted|rate.?limit|quota exceeded|too many requests/i.test(detail)
+}
+
+/**
+ * Run a Gemini operation sequentially with retry-on-429.
+ * Backoff: 8s, 16s, 32s, 60s, 60s (+ up to 4s jitter) per attempt.
+ */
+async function callGeminiWithRetry<T>(
+    operation: () => Promise<T>,
+    label: string,
+    maxRetries = 5,
+): Promise<T> {
+    let lastError: unknown
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        await enforcePace()
+        try {
+            return await operation()
+        } catch (err) {
+            lastError = err
+            if (!isRateLimitError(err) || attempt === maxRetries) throw err
+
+            const base = Math.min(60000, 8000 * 2 ** attempt)
+            const delay = base + Math.floor(Math.random() * 4000)
+            console.warn(`[Gemini] ${label}: 429 rate limit — retry ${attempt + 1}/${maxRetries} sau ${Math.round(delay / 1000)}s`)
+            await sleep(delay)
+        }
+    }
+    throw lastError
+}
+
 // ─── JWT / OAuth (kept for Workers — SDK web build has no service-account auth) ─
 
 function b64url(buf: ArrayBuffer): string {
@@ -189,6 +247,11 @@ export const RESEARCH_RESPONSE_SCHEMA = {
 
 // ─── Gemini Text Generation ──────────────────────────────────────────────────
 
+export interface GroundingSource {
+    url: string
+    title: string
+}
+
 export interface GeminiOptions {
     systemPrompt?: string
     useSearch?: boolean
@@ -196,6 +259,12 @@ export interface GeminiOptions {
     maxTokens?: number
     /** SDK-style schema object (uses Type enum) for structured output. */
     responseSchema?: Record<string, unknown>
+    /**
+     * Called with real source URLs extracted from Google Search grounding
+     * metadata (only fires when useSearch is true). Lets the caller pass the
+     * verified URLs downstream so references can be rendered as hyperlinks.
+     */
+    onSources?: (sources: GroundingSource[]) => void
 }
 
 /**
@@ -223,6 +292,36 @@ export async function callGemini(
     return callGeminiSingle(ai, model, prompt, opts)
 }
 
+/**
+ * Detect truncated output. gemini-2.5-flash returns finishReason === 'MAX_TOKENS'
+ * when the response is cut short — for structured JSON this means an incomplete
+ * payload ("Unterminated string in JSON" downstream). Throw a retryable error so
+ * the workflow step / caller can back off and try again.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function assertNotTruncated(response: any, label: string): void {
+    const reason = response?.candidates?.[0]?.finishReason
+    if (reason === 'MAX_TOKENS') {
+        throw new Error(`${label}: response truncated (finishReason=MAX_TOKENS) — increase token budget`)
+    }
+}
+
+/** Pull real (url, title) pairs out of a Gemini googleSearch grounding response. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractGroundingSources(response: any): GroundingSource[] {
+    const chunks = response?.candidates?.[0]?.groundingMetadata?.groundingChunks
+    if (!Array.isArray(chunks)) return []
+    const seen = new Set<string>()
+    const out: GroundingSource[] = []
+    for (const c of chunks) {
+        const url = c?.web?.uri as string | undefined
+        if (!url || seen.has(url)) continue
+        seen.add(url)
+        out.push({ url, title: (c?.web?.title as string) ?? '' })
+    }
+    return out
+}
+
 /** Search-grounded call → raw text, then structure into exact JSON schema. */
 async function callGeminiSearchThenStructure(
     ai: GoogleGenAI,
@@ -232,37 +331,69 @@ async function callGeminiSearchThenStructure(
 ): Promise<string> {
     console.log('[Gemini] Search + Schema → 2-call approach')
 
-    // Step 1: Search call (no schema)
-    const searchResponse = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config: {
-            systemInstruction: opts.systemPrompt,
-            tools: [{ googleSearch: {} }],
-            temperature: opts.temperature ?? 0.7,
-            maxOutputTokens: opts.maxTokens ?? 8192,
-        },
-    })
+    // Step 1: Search call (no schema) — strictly sequential, retried on 429.
+    // thinking disabled: research is extraction, not reasoning — saves the token
+    // budget for the actual search-grounded content.
+    const searchResponse = await callGeminiWithRetry(
+        () => ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction: opts.systemPrompt,
+                tools: [{ googleSearch: {} }],
+                temperature: opts.temperature ?? 0.7,
+                maxOutputTokens: opts.maxTokens ?? STRUCTURED_MAX_TOKENS,
+                thinkingConfig: { thinkingBudget: 0 },
+            },
+        }),
+        'gemini-search',
+    )
+    assertNotTruncated(searchResponse, 'gemini-search')
 
-    // Step 2: Structure the raw research data into exact JSON schema
-    const structureResponse = await ai.models.generateContent({
-        model,
-        contents: [
-            'Dưới đây là dữ liệu research từ Google Search.',
-            'Hãy trích xuất CHÍNH XÁC thành JSON theo schema yêu cầu.',
+    // Capture real source URLs from Google Search grounding metadata so the
+    // writer can render references as clickable links.
+    const sources = extractGroundingSources(searchResponse)
+    if (sources.length) {
+        console.log(`[Gemini] Captured ${sources.length} grounding sources`)
+        opts.onSources?.(sources)
+    }
+
+    // Step 2: Structure the raw research data into exact JSON schema, injecting
+    // the real source URLs so each citation carries a usable link.
+    const sourcesBlock = sources.length
+        ? [
             '',
-            '---RAW DATA---',
-            searchResponse.text ?? '',
-            '---END RAW DATA---',
-        ].join('\n'),
-        config: {
-            systemInstruction: 'Bạn là JSON formatter. Chỉ trả về JSON hợp lệ theo schema, không thêm gì khác.',
-            responseMimeType: 'application/json',
-            responseSchema: opts.responseSchema!,
-            temperature: 0.1,
-            maxOutputTokens: opts.maxTokens ?? 8192,
-        },
-    })
+            '---NGUỒN URL THẬT TỪ GOOGLE SEARCH---',
+            sources.map((s, i) => `${i + 1}. ${s.url} — ${s.title}`).join('\n'),
+            '---HẾT NGUỒN---',
+            'BẮT BUỘC: với mỗi citation trong authorityData và sectionSources, nếu có URL phù hợp trong danh sách trên thì KÈM URL đó vào cuối citation (vd: "Author, Year. Title. Journal. https://...").',
+        ].join('\n')
+        : ''
+
+    const structureResponse = await callGeminiWithRetry(
+        () => ai.models.generateContent({
+            model,
+            contents: [
+                'Dưới đây là dữ liệu research từ Google Search.',
+                'Hãy trích xuất CHÍNH XÁC thành JSON theo schema yêu cầu.',
+                '',
+                '---RAW DATA---',
+                searchResponse.text ?? '',
+                '---END RAW DATA---',
+                sourcesBlock,
+            ].join('\n'),
+            config: {
+                systemInstruction: 'Bạn là JSON formatter. Chỉ trả về JSON hợp lệ theo schema, không thêm gì khác.',
+                responseMimeType: 'application/json',
+                responseSchema: opts.responseSchema!,
+                temperature: 0.1,
+                maxOutputTokens: opts.maxTokens ?? STRUCTURED_MAX_TOKENS,
+                thinkingConfig: { thinkingBudget: 0 },
+            },
+        }),
+        'gemini-structure',
+    )
+    assertNotTruncated(structureResponse, 'gemini-structure')
 
     return structureResponse.text ?? ''
 }
@@ -274,11 +405,18 @@ async function callGeminiSingle(
     prompt: string,
     opts: GeminiOptions,
 ): Promise<string> {
+    const hasSchema = !!opts.responseSchema
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const config: Record<string, any> = {
         temperature: opts.temperature ?? 0.7,
         topP: 0.95,
-        maxOutputTokens: opts.maxTokens ?? 8192,
+        // Structured (JSON) calls need a large budget and NO thinking, otherwise
+        // thinking eats the tokens and the schema-constrained JSON truncates.
+        maxOutputTokens: opts.maxTokens ?? (hasSchema ? STRUCTURED_MAX_TOKENS : 8192),
+    }
+
+    if (hasSchema) {
+        config.thinkingConfig = { thinkingBudget: 0 }
     }
 
     if (opts.systemPrompt) {
@@ -289,30 +427,110 @@ async function callGeminiSingle(
         config.tools = [{ googleSearch: {} }]
     }
 
-    if (opts.responseSchema) {
+    if (hasSchema) {
         config.responseMimeType = 'application/json'
         config.responseSchema = opts.responseSchema
     }
 
-    const response = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config,
-    })
+    const response = await callGeminiWithRetry(
+        () => ai.models.generateContent({
+            model,
+            contents: prompt,
+            config,
+        }),
+        hasSchema ? 'gemini-structured' : 'gemini-generate',
+    )
+    if (hasSchema) assertNotTruncated(response, 'gemini-structured')
 
     return response.text ?? ''
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Strip markdown fences then JSON.parse — safety net for non-structured calls. */
-export function parseJSON<T>(raw: string): T {
-    const clean = raw
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Strip markdown fences (best-effort, only used on non-structured output). */
+function stripFences(raw: string): string {
+    return raw
         .replace(/^```json\s*/m, '')
         .replace(/^```\s*/m, '')
         .replace(/```\s*$/m, '')
         .trim()
-    return JSON.parse(clean) as T
+}
+
+/**
+ * Best-effort repair of JSON that was truncated mid-output (MAX_TOKENS).
+ * Walks the string tracking string/escape state and nesting depth, then at the
+ * cut point closes any open string and unwinds open braces/brackets back to 0.
+ * Returns null if the input already looks complete (so the caller can surface
+ * the real parse error). Repair is intentionally conservative: it may drop the
+ * trailing partial element, but the surviving prefix is guaranteed to parse.
+ */
+function repairTruncatedJSON(s: string): string | null {
+    let inString = false
+    let escape = false
+    const stack: Array<'{' | '['> = []
+    let lastStructuralEnd = -1 // index AFTER the last ','/'}'/']' at depth >= 1
+
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i]
+        if (inString) {
+            if (escape) escape = false
+            else if (ch === '\\') escape = true
+            else if (ch === '"') inString = false
+            continue
+        }
+        if (ch === '"') { inString = true; continue }
+        if (ch === '{' || ch === '[') { stack.push(ch); continue }
+        if (ch === '}' || ch === ']') {
+            if (stack.length) stack.pop()
+            lastStructuralEnd = i + 1
+            continue
+        }
+        if (ch === ',') lastStructuralEnd = i + 1
+    }
+
+    // Already complete — nothing to repair.
+    if (!inString && stack.length === 0) return null
+
+    // Prefer cutting back to the last clean element boundary, then close.
+    const base = lastStructuralEnd > 0 ? s.slice(0, lastStructuralEnd) : s
+    let repaired = inString ? `${base}` : base
+    // Remove a trailing dangling comma so closing braces parse.
+    repaired = repaired.replace(/,\s*$/, '')
+
+    const closers = stack.map((open) => (open === '{' ? '}' : ']'))
+    repaired += closers.join('')
+
+    // Verify the repair actually parses; if not, give up.
+    try {
+        JSON.parse(repaired)
+    } catch {
+        return null
+    }
+    return repaired
+}
+
+/**
+ * Strip markdown fences then JSON.parse. If parsing fails (typically truncated
+ * output from MAX_TOKENS), attempt a truncation repair before giving up — and
+ * always surface the length + tail so the failure is debuggable.
+ */
+export function parseJSON<T>(raw: string): T {
+    const clean = stripFences(raw)
+    try {
+        return JSON.parse(clean) as T
+    } catch (err) {
+        const repaired = repairTruncatedJSON(clean)
+        if (repaired) {
+            console.warn(`[parseJSON] JSON was truncated (len=${clean.length}) — repaired`)
+            return JSON.parse(repaired) as T
+        }
+        throw new Error(
+            `JSON parse failed (len=${clean.length}): ${(err as Error).message}. ` +
+            `tail="${clean.slice(-180)}"`,
+        )
+    }
 }
 
 // ─── Gemini Image Generation ─────────────────────────────────────────────────
@@ -324,13 +542,17 @@ export async function generateImage(
     const { ai } = await getClient(env)
     const model = modelResource(env, GEMINI_IMAGE_MODEL)
 
-    const response = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config: {
-            responseModalities: ['TEXT', 'IMAGE'],
-        },
-    })
+    // Image generation is the most aggressively rate-limited model — retry on 429.
+    const response = await callGeminiWithRetry(
+        () => ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                responseModalities: ['TEXT', 'IMAGE'],
+            },
+        }),
+        'gemini-image',
+    )
 
     const parts = response.candidates?.[0]?.content?.parts
     if (!parts) throw new Error('No parts in image generation response')

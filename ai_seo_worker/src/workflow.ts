@@ -1,6 +1,7 @@
 import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from 'cloudflare:workers'
 import type { Env, WorkflowParams, ArticleResult, ArticlePlan, StrategyResult, ResearchResult } from './types'
-import { callGemini, generateImage, parseJSON, STRATEGY_RESPONSE_SCHEMA, RESEARCH_RESPONSE_SCHEMA } from './vertex'
+import { callGemini, generateImage, parseJSON, sleep, STRATEGY_RESPONSE_SCHEMA, RESEARCH_RESPONSE_SCHEMA } from './vertex'
+import type { GroundingSource } from './vertex'
 import { checkSimilarity, upsertArticle } from './services/vectorize'
 import {
     saveArticle, saveImage, deleteArticleImages,
@@ -119,15 +120,23 @@ export async function processArticle(
 
         // Deep research
         console.log(`[SEO] Researching: ${plan.title}`)
+        const groundingSources: GroundingSource[] = []
         const researchRaw = await callGemini(env, buildResearchPrompt(plan), {
             systemPrompt: RESEARCH_SYSTEM_PROMPT,
             useSearch: true,
             temperature: 0.2,
             responseSchema: RESEARCH_RESPONSE_SCHEMA,
+            onSources: (sources) => {
+                // Keep only the most relevant sources (dedup already done upstream).
+                groundingSources.push(...sources.slice(0, 15))
+            },
         })
         const research = parseJSON<ResearchResult>(researchRaw)
+        console.log(`[SEO] Research done, ${groundingSources.length} source URLs captured`)
 
-        // Generate images — hero + section illustrations (fail entire article if any image fails)
+        // Generate images — hero + section illustrations (fail entire article if any image fails).
+        // Runs STRICTLY SEQUENTIAL with sleeps between calls: image generation is the
+        // most aggressively rate-limited model, back-to-back calls trigger 429 RESOURCE_EXHAUSTED.
         console.log(`[SEO] Generating images for: ${plan.title}`)
         const imagePayload = buildImageGenerationPayload(plan, research)
         const savedImages: { hero?: string; sections: string[] } = { sections: [] }
@@ -138,8 +147,12 @@ export async function processArticle(
         savedImages.hero = heroPath
         console.log(`[SEO] Hero image saved: ${heroPath}`)
 
-        // Section images (one per outline section)
-        for (const section of imagePayload.sections) {
+        // Section images (one per outline section) — pace each call to avoid 429
+        for (let s = 0; s < imagePayload.sections.length; s++) {
+            if (s > 0) {
+                await sleep(8000) // breathe between image generations
+            }
+            const section = imagePayload.sections[s]
             const sectionBytes = await generateImage(env, section.prompt)
             const sectionPath = await saveImage(
                 env,
@@ -150,6 +163,9 @@ export async function processArticle(
             savedImages.sections.push(sectionPath)
             console.log(`[SEO] Section image saved: ${sectionPath}`)
         }
+
+        // Pause before the big writer call so the model recovers its quota.
+        await sleep(10000)
 
         const CDN = 'https://seo-files.betterme.dev'
 
@@ -162,12 +178,14 @@ export async function processArticle(
                 plan, research, pubDate,
                 savedImages.hero ? `${CDN}${savedImages.hero}` : '',
                 savedImages.sections.map((p) => `${CDN}${p}`),
+                groundingSources,
             ),
             {
                 systemPrompt: WRITER_SYSTEM_PROMPT,
                 useSearch: false,
                 temperature: 0.85,
-                maxTokens: 12000,
+                // Thinking model: budget covers reasoning + full 2000-2500 word article.
+                maxTokens: 24576,
             },
         )
 
