@@ -339,7 +339,11 @@
 		"search_placeholder": "Tìm kiếm phòng...",
 		"no_search_results": "Không tìm thấy phòng nào khớp với tìm kiếm của bạn.",
 		"errors": {
-			"join_failed": "Tham gia phòng thất bại"
+			"join_failed": "Tham gia phòng thất bại",
+			"create_failed": "Tạo phòng thất bại",
+			"fetch_failed": "Tải danh sách phòng thất bại",
+			"room_name_required": "Tên phòng không được để trống",
+			"update_failed": "Cập nhật phòng thất bại"
 		},
 		"minutes": "phút",
 		"live_connected": "Đã kết nối trực tiếp",
@@ -368,7 +372,32 @@
 			"days_ago": "{days} ngày trước"
 		},
 		"loading": "Đang tải phòng...",
-		"retry": "Thử lại"
+		"retry": "Thử lại",
+		"cancel": "Hủy",
+		"leave": "Rời",
+		"switch": "Chuyển",
+		"delete_room": "Xóa phòng",
+		"delete_confirm": "Bạn có chắc muốn xóa phòng này không?",
+		"edit_room": "Chỉnh sửa phòng",
+		"leave_room_title": "Rời phòng",
+		"leave_room_description": "Bạn có chắc muốn rời phòng không?",
+		"switch_room_title": "Chuyển phòng",
+		"switch_room_description": "Bạn đang ở trong một phòng. Bạn có muốn chuyển sang phòng này không?",
+		"timer_synced": "Hẹn giờ đã đồng bộ với cài đặt phòng",
+		"your_screen": "Màn hình của bạn",
+		"lobby": {
+			"cam_on": "Camera đang bật",
+			"cam_off": "Camera đang tắt",
+			"cam_error": "Camera không khả dụng",
+			"mic_on": "Mic đang bật",
+			"mic_off": "Mic đang tắt",
+			"join_now": "Tham gia ngay"
+		},
+		"editDialog": {
+			"title": "Chỉnh sửa phòng",
+			"update": "Cập nhật",
+			"updating": "Đang cập nhật..."
+		}
 	},
 	"statistic": {
 		"heading": "Tài khoản",

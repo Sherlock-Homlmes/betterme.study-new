@@ -14,6 +14,9 @@ interface RoomInfo {
   livekit_room_name: string
   limit: number
   num_participants: number
+  pomodoro_settings?: PomodoroSettings
+  created_by?: string
+  created_at?: string
 }
 
 interface ChatMessage {
@@ -50,7 +53,8 @@ interface ChatMessage {
 | `isMicEnabled` | false | Microphone bật/tắt |
 | `isCameraEnabled` | false | Camera bật/tắt |
 | `isSpeakerEnabled` | true | Speaker bật/tắt |
-| `isScreenShareEnabled` | false | Chia sẻ màn hình |
+| `isScreenShareEnabled` | false | Chia sẻ màn hình của local user |
+| `localScreenShareRef` | null | HTMLVideoElement để attach local screen share track |
 
 ### Participants
 | Field | Mô tả |
@@ -58,7 +62,9 @@ interface ChatMessage {
 | `participants` | Danh sách `RemoteParticipant[]` |
 | `localParticipant` | `LocalParticipant` của user hiện tại |
 | `localVideoRef` | HTMLVideoElement cho camera local |
-| `remoteVideoRefs` | Map<identity, HTMLVideoElement> |
+| `localScreenShareRef` | HTMLVideoElement cho screen share local |
+| `remoteVideoRefs` | `Map<string, HTMLVideoElement>` — key là identity (camera) hoặc `screen-share-{identity}` (screen share) |
+| `activeSpeakerIdentities` | `Set<string>` — các identity đang nói |
 
 ### Chat State
 | Field | Mô tả |
@@ -87,7 +93,7 @@ joinRoom(roomInfo):
 
 ### Room Metadata Sync
 
-Khi join room, nếu room có `pomodoro_settings` trong metadata → tự động override `userSettings.value.pomodoro_settings` của user. Điều này đồng bộ timer setting giữa các thành viên trong phòng.
+Khi join room, nếu room có `pomodoro_settings` trong metadata → tự động override `userSettings.value.pomodoro_settings` của user. Đồng bộ timer setting giữa các thành viên trong phòng.
 
 ---
 
@@ -95,91 +101,64 @@ Khi join room, nếu room có `pomodoro_settings` trong metadata → tự độn
 
 | Event | Xử lý |
 |-------|-------|
-| `TrackSubscribed` | `attachTrack()` hoặc `attachScreenShareTrack()` |
+| `TrackSubscribed` | `attachTrack()` hoặc `attachScreenShareTrack()` tùy `publication.source` |
 | `TrackUnsubscribed` | `detachTrack()` / `detachScreenShareTrack()` |
-| `ParticipantConnected` | `updateParticipantsList()` |
-| `ParticipantDisconnected` | Xóa video elements, cleanup refs |
+| `TrackMuted / TrackUnmuted` | `updateParticipantsList()` |
+| `ParticipantConnected` | `updateParticipantsList()` + toast notification |
+| `ParticipantDisconnected` | Xóa video elements, cleanup refs, toast notification |
+| `ActiveSpeakersChanged` | Cập nhật `activeSpeakerIdentities` |
 | `DataReceived` | `handleDataReceived()` → chat hoặc reaction |
 | `Disconnected` | `isConnected = false`, `cleanup()` |
-| `LocalTrackPublished` | Cập nhật `isCameraEnabled`, `isMicEnabled`, v.v. |
+| `LocalTrackPublished` | Cập nhật state + attach track vào local element |
+| `LocalTrackUnpublished` | Cập nhật state + detach track |
 | `MediaDevicesError` | `showError()` với message phù hợp |
+
+### LocalTrackPublished chi tiết
+
+```typescript
+if source === Camera:
+  isCameraEnabled = true
+  attach track → localVideoRef
+
+if source === Microphone:
+  isMicEnabled = true
+
+if source === ScreenShare:
+  isScreenShareEnabled = true
+  attach track → localScreenShareRef   // preview màn hình local
+```
 
 ---
 
 ## Video Track Management
 
-### `attachTrack(track, participantIdentity)`
+### `attachTrack(track, participantIdentity)` — async
 
-1. Tạo `<video>` element nếu chưa có (auto-play, playsInline)
+1. Tạo `<video>` element nếu chưa có (autoplay, playsInline, `id="remote-video-{identity}"`)
 2. `track.attach(videoElement)`
-3. Append vào container DOM `#remote-{identity}`
-4. Lưu vào `remoteVideoRefs` map
+3. `await nextTick()` — chờ Vue render container `#remote-{identity}`
+4. Append vào container DOM `#remote-{identity}`
+5. Lưu vào `remoteVideoRefs` map với key = `identity`
 
-### `attachScreenShareTrack(track, participantIdentity)`
+### `attachScreenShareTrack(track, participantIdentity)` — async
 
-Tương tự nhưng dùng key `screen-share-{identity}` trong map.
+Tương tự nhưng:
+- Key trong map: `screen-share-{identity}`
+- Container DOM: `#screenshare-{identity}` (tách biệt với camera)
+- `await nextTick()` trước khi lookup container để tránh race condition khi join vào phòng đang có sẵn screen share
 
----
-
-## Chat (Data Channel)
-
-Tất cả chat messages được gửi qua **LiveKit Data Channel** (reliable, không qua server riêng):
-
-### Gửi tin nhắn
-
-```typescript
-publishData({ type: 'chat', messageType: 'text', content: '...' })
-// encode → Uint8Array → room.localParticipant.publishData(data, { reliable: true })
-```
-
-### Nhận tin nhắn
-
-```typescript
-handleDataReceived(payload, participant):
-  data = JSON.parse(TextDecoder.decode(payload))
-  if data.type === 'chat' → addChatMessage(...)
-  if data.type === 'reaction' → showFlyingReaction(emoji)
-```
-
-### Loại tin nhắn
-
-| Type | Mô tả |
-|------|-------|
-| `text` | Tin nhắn văn bản thường |
-| `file` | File (encode base64, gửi qua data channel) |
-| `gif` | URL gif từ preset |
-| `reaction` | Emoji reaction (hiệu ứng bay) |
-
-### Preset Reactions & GIFs
-
-```typescript
-commonReactions = ['👍', '❤️', '😂', '😮', '😢', '🎉', '🔥', '👏']
-commonGifs = [6 URL từ giphy.com]
-```
+> **Lý do nextTick**: `TrackSubscribed` có thể fire trước khi Vue render xong tile của participant (đặc biệt khi join room mà người khác đang share màn hình). `nextTick` đảm bảo container tồn tại trước khi append.
 
 ---
 
-## Flying Reactions
+## DOM Container Convention
 
-Khi gửi hoặc nhận reaction:
-```typescript
-flyingReactions.push({ id, emoji, x: random(10-90)%, y: 100 })
-setTimeout(() => splice reaction, 3000)
-```
-CSS animation di chuyển từ bottom (y=100) lên trên.
-
----
-
-## Media Controls
-
-| Action | API |
-|--------|-----|
-| Toggle mic | `localParticipant.setMicrophoneEnabled(bool)` |
-| Toggle camera | `localParticipant.setCameraEnabled(bool)` |
-| Toggle speaker | Set `.muted` trên tất cả remote video elements |
-| Screen share | `localParticipant.setScreenShareEnabled(bool)` |
-| Get devices | `Room.getLocalDevices(kind)` |
-| Switch device | `room.switchActiveDevice(kind, deviceId)` |
+| Loại | Container ID | remoteVideoRefs key |
+|------|-------------|-------------------|
+| Camera remote | `#remote-{identity}` | `identity` |
+| Screen share remote | `#screenshare-{identity}` | `screen-share-{identity}` |
+| Camera local | `ref="localVideoRef"` | — |
+| Screen share local | `ref="localScreenShareRef"` | — |
 
 ---
 
@@ -189,7 +168,9 @@ CSS animation di chuyển từ bottom (y=100) lên trên.
 cleanup():
   livekitRoom.disconnect()
   livekitRoom = null
-  Reset tất cả state: isConnected, isMic, isCam, ...
+  Reset state: isConnected, isMic, isCam, isScreenShare = false
+  localParticipant = null
+  participants = []
   Xóa tất cả video elements
   Clear remoteVideoRefs map
 ```
@@ -200,7 +181,7 @@ cleanup():
 
 ```typescript
 getParticipantAvatar(participant):
-  JSON.parse(participant.metadata)?.avatar_url
+  JSON.parse(participant.metadata)?.avatar_url || custom_avatar_url
 
 getLocalParticipantAvatar():
   userInfo.value?.avatar_url || userInfo.value?.custom_avatar_url
@@ -214,5 +195,3 @@ getLocalParticipantAvatar():
 POST /v2/pomodoro-rooms/join   body: { livekit_room_name }
                                → { token: string }
 ```
-
-Danh sách rooms được fetch riêng (component `listRoomView.vue` gọi `buildApiUrl('/rooms')` hay tương tự).

@@ -168,6 +168,27 @@ class PomodoroRoomCRUD:
             traceback.print_exc()
             raise ServerError(detail="Can not get room now. Try later")
 
+    async def delete(self, livekit_room_name: str, user_id: str) -> None:
+        """Delete a pomodoro room from LiveKit. Only the creator can delete."""
+        try:
+            room = await self.get_room_by_name(livekit_room_name)
+
+            if room["created_by"] != user_id:
+                raise ServerError(detail="You don't have permission to delete this room")
+
+            delete_request = api.DeleteRoomRequest()
+            delete_request.room = livekit_room_name
+            await self.livekit.room.delete_room(delete_request)
+
+        except ServerError as e:
+            raise e
+        except Exception as e:
+            print(f"Error deleting room from LiveKit: {e}")
+            import traceback
+
+            traceback.print_exc()
+            raise ServerError(detail="Can not delete room now. Try later")
+
     async def update(self, livekit_room_name: str, payload, user_id: str) -> Dict[str, Any]:
         """Update a pomodoro room's metadata in LiveKit."""
         try:

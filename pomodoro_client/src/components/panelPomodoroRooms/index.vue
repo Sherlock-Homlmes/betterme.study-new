@@ -12,6 +12,7 @@ import { ButtonImportance } from "@/components/base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
 import LoginTab from "@/components/common/loginTab.vue";
 import ListRoomView from "./listRoomView.vue";
+import PreJoinLobby from "./PreJoinLobby.vue";
 import RoomView from "./roomView/index.vue";
 import {
   AlertDialog,
@@ -30,49 +31,61 @@ const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
 const {leaveRoom} = usePomodoroRoomsStore();
 
-// View state: 'list' or 'room'
-const currentView = ref<'list' | 'room'>('list');
+// View state: 'list', 'lobby', or 'room'
+const currentView = ref<'list' | 'lobby' | 'room'>('list');
 const selectedRoom = ref<any>(null);
+
+// pre-join lobby cam/mic choices
+const lobbyInitialCam = ref(false);
+const lobbyInitialMic = ref(false);
 
 // State for room switching confirmation dialog
 const showSwitchRoomDialog = ref(false);
 const pendingRoom = ref<any>(null);
 
-// Handle room selection
+// Handle room selection → go to lobby first
 const handleSelectRoom = (room: any) => {
-  // Check if user is already in that room
-  if(selectedRoom.value?.livekit_room_name === room.livekit_room_name) currentView.value = 'room';
-  // Check if user is switch room
-  else if (selectedRoom.value) {
-    // Store the pending room and show confirmation dialog
+  // Already in that room → just go back to room view
+  if (selectedRoom.value?.livekit_room_name === room.livekit_room_name) {
+    currentView.value = 'room';
+  } else if (selectedRoom.value) {
+    // Switching room → confirm first
     pendingRoom.value = room;
     showSwitchRoomDialog.value = true;
   } else {
-    // No current room, proceed normally
+    // Fresh join → lobby
     selectedRoom.value = room;
-    currentView.value = 'room';
+    currentView.value = 'lobby';
   }
 };
 
 // Confirm room switching
 const confirmSwitchRoom = () => {
-  // Leave current room first
   leaveRoom();
-
-  // Then select the new room
   selectedRoom.value = pendingRoom.value;
-  currentView.value = 'room';
-
-  // Reset dialog state
+  currentView.value = 'lobby';
   showSwitchRoomDialog.value = false;
   pendingRoom.value = null;
 };
 
-// Handle back to list
+// Lobby: user confirmed cam/mic settings → join for real
+const handleLobbyJoin = (cam: boolean, mic: boolean) => {
+  lobbyInitialCam.value = cam;
+  lobbyInitialMic.value = mic;
+  currentView.value = 'room';
+};
+
+// Handle back to list from lobby
 const handleBackToList = () => {
   currentView.value = 'list';
 };
-const handleLeaveRoom = ()=>{
+
+// Handle back from roomView to lobby (without leaving)
+const handleBackFromRoom = () => {
+  currentView.value = 'list';
+};
+
+const handleLeaveRoom = () => {
   currentView.value = 'list';
   selectedRoom.value = null;
 }
@@ -99,11 +112,18 @@ Panel(
       v-show="currentView === 'list'"
       @select-room="handleSelectRoom"
     )
-    RoomView(
-      v-if="currentView === 'room' || selectedRoom"
-      v-show="currentView === 'room'"
+    PreJoinLobby(
+      v-if="currentView === 'lobby' && selectedRoom"
       :room="selectedRoom"
+      @join="handleLobbyJoin"
       @back="handleBackToList"
+    )
+    RoomView(
+      v-if="currentView === 'room' && selectedRoom"
+      :room="selectedRoom"
+      :initial-cam="lobbyInitialCam"
+      :initial-mic="lobbyInitialMic"
+      @back="handleBackFromRoom"
       @leaveRoom="handleLeaveRoom"
     )
 

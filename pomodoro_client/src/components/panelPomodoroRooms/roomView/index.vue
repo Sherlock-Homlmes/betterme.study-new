@@ -5,7 +5,8 @@ import {
   ChevronLeftIcon,
   MessageCircle2Icon,
   MessageCircle2FilledIcon,
-  PencilIcon
+  PencilIcon,
+  UsersIcon,
 } from 'vue-tabler-icons';
 import { Loading } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ import { api } from '@/utils/betterFetch';
 import { runtimeConfig } from '@/config/runtimeConfig';
 import VideoGrid from './VideoGrid.vue';
 import Chat from './Chat.vue';
+import ParticipantList from './ParticipantList.vue';
 
 const { t } = useI18n();
 const {
@@ -65,12 +67,27 @@ const {
   joinRoom,
   leaveRoom,
   totalParticipants,
-  unreadMessageCount
+  unreadMessageCount,
+  timerSyncedSettings,
+  roomNotifications,
+  toggleCamera,
+  toggleMicrophone,
 } = usePomodoroRoomsStore();
+
+const showTimerSyncBanner = ref(false);
+const showParticipantList = ref(false);
+watch(timerSyncedSettings, (val) => {
+  if (val) {
+    showTimerSyncBanner.value = true;
+    setTimeout(() => { showTimerSyncBanner.value = false; }, 5000);
+  }
+});
 
 // Props
 const props = defineProps<{
   room: RoomInfo;
+  initialCam?: boolean;
+  initialMic?: boolean;
 }>();
 
 // Emit
@@ -180,8 +197,11 @@ const updateRoom = async () => {
 };
 
 // Lifecycle
-onMounted(() => {
-  joinRoom(props.room);
+onMounted(async () => {
+  await joinRoom(props.room);
+  // Apply lobby cam/mic choices after connected
+  if (props.initialCam) await toggleCamera();
+  if (props.initialMic) await toggleMicrophone();
 });
 
 // Watch for room prop changes
@@ -210,18 +230,26 @@ div(class="flex flex-col h-full")
         h2(class="font-semibold text-gray-900 dark:text-gray-100")
           | {{ room.room_name }}
         // Edit button
-        //- ControlButton(
+        ControlButton(
           :aria-label="$t('pomodoroRoom.edit_room', { default: 'Edit room' })"
           default-style
           circle
           :importance="ButtonImportance.Text"
           @click="openEditDialog"
-          )
+        )
           PencilIcon(:size="16")
-      div(
-        class="flex items-center gap-1 px-2 py-1 text-xs rounded-full text-gray-300 bg-gray-600 dark:bg-green-900 dark:text-green-300"
-      )
-        span {{`${totalParticipants}/${room.limit}`}}
+      div(class="flex items-center gap-2")
+        div(
+          class="flex items-center gap-1 px-2 py-1 text-xs rounded-full text-gray-300 bg-gray-600 dark:bg-green-900 dark:text-green-300"
+        )
+          span {{ totalParticipants }}/{{ room.limit }}
+        // Pomodoro settings chip
+        div(
+          v-if="room.pomodoro_settings"
+          class="hidden sm:flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300"
+          :title="'Pomodoro settings synced to this room'"
+        )
+          span ⏱ {{ Math.floor(room.pomodoro_settings.pomodoro_study_time / 60) }}m / {{ Math.floor(room.pomodoro_settings.pomodoro_rest_time / 60) }}m
 
     // Connection status and chat toggle
     div(class="flex items-center")
@@ -236,6 +264,18 @@ div(class="flex flex-col h-full")
         )
         span
           | {{ connectionStatusText }}
+
+      // Toggle participants button
+      ControlButton(
+        class='p-1'
+        :no-padding="true"
+        :aria-label="showParticipantList ? 'Hide participants' : 'Show participants'"
+        default-style
+        circle
+        :importance="showParticipantList ? ButtonImportance.Primary : ButtonImportance.Text"
+        @click="showParticipantList = !showParticipantList"
+      )
+        UsersIcon(:size="20")
 
       // Toggle chat button
       ControlButton(
@@ -255,6 +295,16 @@ div(class="flex flex-col h-full")
         )
           | {{ unreadMessageCount > 99 ? '99+' : unreadMessageCount }}
 
+  // Timer sync notification banner
+  Transition(name="slide-down")
+    div(
+      v-if="showTimerSyncBanner && timerSyncedSettings"
+      class="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-primary-100 dark:bg-primary-900/40 border-b border-primary-200 dark:border-primary-800 text-sm text-primary-800 dark:text-primary-200"
+    )
+      span
+        | ⏱ {{ $t('pomodoroRoom.timer_synced', { study: timerSyncedSettings.study, rest: timerSyncedSettings.rest, default: `Timer synced: ${timerSyncedSettings.study}m study / ${timerSyncedSettings.rest}m rest` }) }}
+      button(@click="showTimerSyncBanner = false" class="ml-2 text-primary-600 hover:text-primary-800 dark:text-primary-400") ✕
+
   // Main content
   div(class="flex-grow flex overflow-hidden")
     // Video and chat container
@@ -272,15 +322,28 @@ div(class="flex flex-col h-full")
 
       // Room content
       ResizablePanelGroup(v-else-if="isConnected" direction="horizontal" class="h-full")
-        // Video grid (left side)
-        ResizablePanel(:default-size="showChat ? 50 : 100" :min-size="35")
+        // Video grid (main area)
+        ResizablePanel(:default-size="showChat || showParticipantList ? 55 : 100" :min-size="35")
           VideoGrid(@leave="leaveRoom" @showLeaveDialog="showLeaveConfirmation")
 
-        ResizableHandle(v-if="showChat")
+        ResizableHandle(v-if="showParticipantList || showChat")
 
-        // Chat panel (right side)
-        ResizablePanel(v-if="showChat" :default-size="50" :min-size="40")
+        // Participant list panel
+        ResizablePanel(v-if="showParticipantList && !showChat" :default-size="45" :min-size="30")
+          ParticipantList
+
+        // Chat panel
+        ResizablePanel(v-if="showChat && !showParticipantList" :default-size="45" :min-size="35")
           Chat
+
+        // Both open: split right side
+        template(v-if="showParticipantList && showChat")
+          ResizablePanelGroup(direction="vertical")
+            ResizablePanel(:default-size="50" :min-size="30")
+              ParticipantList
+            ResizableHandle
+            ResizablePanel(:default-size="50" :min-size="30")
+              Chat
 
   // Leave room dialog (only shown when disconnect button is clicked)
   AlertDialog(v-model:open="showLeaveDialog")
@@ -297,7 +360,7 @@ div(class="flex flex-col h-full")
           | {{ $t('pomodoroRoom.leave', { default: 'Leave' }) }}
 
   // Edit room dialog
-  //- Dialog(v-model:open="showEditDialog")
+  Dialog(v-model:open="showEditDialog")
     form
       DialogContent(class="sm:max-w-[425px]")
         DialogHeader
@@ -325,7 +388,7 @@ div(class="flex flex-col h-full")
             // Study time
             NumberField(
               id="edit-study_time" class="mb-2"
-              v-model.number="editRoomForm.pomodoro_settings.pomodoro_study_time"
+              v-model="editRoomForm.pomodoro_settings.pomodoro_study_time"
               :min="5" :max="180"
             )
               Label(for="edit-study_time")
@@ -339,7 +402,7 @@ div(class="flex flex-col h-full")
             // Rest time
             NumberField(
               id="edit-rest_time" class="mb-2"
-              v-model.number="editRoomForm.pomodoro_settings.pomodoro_rest_time"
+              v-model="editRoomForm.pomodoro_settings.pomodoro_rest_time"
               :min="1" :max="180"
             )
               Label(for="edit-rest_time")
@@ -353,7 +416,7 @@ div(class="flex flex-col h-full")
             // Long rest time
             NumberField(
               id="edit-long_rest_time" class="mb-2"
-              v-model.number="editRoomForm.pomodoro_settings.pomodoro_long_rest_time"
+              v-model="editRoomForm.pomodoro_settings.pomodoro_long_rest_time"
               :min="1" :max="180"
             )
               Label(for="edit-long_rest_time")
@@ -367,7 +430,7 @@ div(class="flex flex-col h-full")
             // Long rest interval
             NumberField(
               id="edit-long_rest_interval"
-              v-model.number="editRoomForm.pomodoro_settings.long_rest_time_interval"
+              v-model="editRoomForm.pomodoro_settings.long_rest_time_interval"
               :min="2" :max="10"
             )
               Label(for="edit-long_rest_interval")
@@ -391,6 +454,17 @@ div(class="flex flex-col h-full")
             Spinner(v-if="updatingRoom")
             |{{ updatingRoom ? $t('pomodoroRoom.editDialog.updating', { default: 'Updating...' }) : $t('pomodoroRoom.editDialog.update', { default: 'Update' }) }}
 
+  // Join/Leave notifications
+  div(class="absolute top-12 right-3 z-20 flex flex-col gap-1.5 pointer-events-none")
+    TransitionGroup(name="notif")
+      div(
+        v-for="notif in roomNotifications"
+        :key="notif.id"
+        class="px-3 py-1.5 rounded-lg text-xs font-medium shadow-md"
+        :class="notif.type === 'join' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'"
+      )
+        | {{ notif.message }}
+
   // Flying reactions overlay
   div(class="fixed inset-0 pointer-events-none overflow-hidden")
     div(
@@ -404,17 +478,18 @@ div(class="flex flex-col h-full")
 
 <style scoped>
 @keyframes fly-up {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100vh) scale(1.5);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
 }
+.animate-fly-up { animation: fly-up 3s ease-out forwards; }
 
-.animate-fly-up {
-  animation: fly-up 3s ease-out forwards;
-}
+.notif-enter-active { transition: all 0.3s ease; }
+.notif-leave-active { transition: all 0.4s ease; }
+.notif-enter-from { opacity: 0; transform: translateX(20px); }
+.notif-leave-to { opacity: 0; transform: translateX(20px); }
+
+.slide-down-enter-active { transition: all 0.3s ease; }
+.slide-down-leave-active { transition: all 0.3s ease; }
+.slide-down-enter-from { opacity: 0; transform: translateY(-8px); }
+.slide-down-leave-to { opacity: 0; transform: translateY(-8px); }
 </style>

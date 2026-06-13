@@ -3,13 +3,14 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useEventSource } from '@vueuse/core';
 import { runtimeConfig } from '@/config/runtimeConfig';
 import { api } from '@/utils/betterFetch';
-import { UsersIcon, PlusIcon, RefreshIcon, VideoIcon, XIcon as CloseIcon, SearchIcon, CircleXIcon } from 'vue-tabler-icons';
+import { UsersIcon, PlusIcon, RefreshIcon, VideoIcon, XIcon as CloseIcon, SearchIcon, CircleXIcon, TrashIcon } from 'vue-tabler-icons';
+import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
 import { Loading } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
 import { ButtonImportance } from "@/components/base/types/button";
 import ControlButton from "@/components/base/uiButton.vue";
-import { usePomodoroRoomsStore } from '@/stores/pomodoroRooms';
+import { usePomodoroRoomsStore, type RoomInfo } from '@/stores/pomodoroRooms';
 import { ButtonGroup } from '@/components/ui/button-group';
 
 import {
@@ -34,28 +35,13 @@ import {
 import { Spinner } from '@/components/ui/spinner'
 
 const { t } = useI18n();
-const {
-  currentRoom,
-} = usePomodoroRoomsStore();
+const { currentRoom } = usePomodoroRoomsStore();
+const { userInfo } = useAuthStore();
 
-// Room data types
-interface PomodoroRoom {
-  room_name: string;
-  livekit_room_name: string;
-  limit: number;
-  num_participants: number;
-  created_by: string;
-  created_at: string;
-  pomodoro_settings?: {
-    pomodoro_study_time: number;
-    pomodoro_rest_time: number;
-    pomodoro_long_rest_time?: number;
-    long_rest_time_interval?: number;
-  };
-}
+const deletingRoom = ref<string | null>(null);
 
 // State
-const rooms = ref<PomodoroRoom[]>([]);
+const rooms = ref<RoomInfo[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const refreshing = ref(false);
@@ -83,6 +69,22 @@ const buildApiUrl = (path: string) => {
 // Build SSE URL
 const buildSSEUrl = (path: string) => {
   return `${runtimeConfig.public.API_URL}/v2${path}`;
+};
+
+// Delete room (only creator)
+const deleteRoom = async (room: RoomInfo, event: Event) => {
+  event.stopPropagation();
+  if (!confirm(t('pomodoroRoom.delete_confirm', { default: 'Delete this room?' }))) return;
+  try {
+    deletingRoom.value = room.livekit_room_name;
+    const response = await api.delete(buildApiUrl(`/${room.livekit_room_name}`));
+    if (!response || !response.ok) throw new Error('Failed to delete room');
+    rooms.value = rooms.value.filter(r => r.livekit_room_name !== room.livekit_room_name);
+  } catch (err: any) {
+    error.value = err.message || 'Failed to delete room';
+  } finally {
+    deletingRoom.value = null;
+  }
 };
 
 // SSE Event Source
@@ -119,7 +121,7 @@ const handleSSEEvent = (event: any, eventData: any) => {
   switch (event) {
     case 'room_created':
       // Add new room to the list
-      const newRoom: PomodoroRoom = {
+      const newRoom: RoomInfo = {
         ...eventData,
         created_at: eventData.created_at || new Date().toISOString(),
       };
@@ -272,10 +274,10 @@ const openCreateModal = () => {
 
 // Emit select room event
 const emit = defineEmits<{
-  selectRoom: [room: PomodoroRoom];
+  selectRoom: [room: RoomInfo];
 }>();
 
-const selectRoom = (room: PomodoroRoom) => {
+const selectRoom = (room: RoomInfo) => {
   emit('selectRoom', room);
 };
 
@@ -385,7 +387,7 @@ div(class="flex flex-col h-full overflow-hidden")
                   @keyup.enter="createRoom"
                 )
               // Limit
-              NumberField(id="limit" :default-value="5" :min="1" :max="10")
+              NumberField(id="limit" v-model="createRoomForm.limit" :default-value="5" :min="1" :max="10")
                 Label(for="limit")
                   | {{ $t('pomodoroRoom.createDialog.limit_label') }}
                   span(class="text-gray-500") &nbsp(1-10)
@@ -500,14 +502,24 @@ div(class="flex flex-col h-full overflow-hidden")
     )
       // Room header
       div(class="flex items-start justify-between mb-2")
-        div(class="flex items-center gap-2")
-          h3(class="font-semibold text-gray-900 dark:text-gray-100")
+        div(class="flex items-center gap-2 flex-1 min-w-0")
+          h3(class="font-semibold text-gray-900 dark:text-gray-100 truncate")
             | {{ room.room_name }}
-        div(
-          class="px-2 py-1 text-xs rounded-full"
-          :class="isRoomFull(room) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'"
-        )
-          | {{ isRoomFull(room) ? $t('pomodoroRoom.full', { default: 'Full' }) : $t('pomodoroRoom.available', { default: 'Available' }) }}
+        div(class="flex items-center gap-2 flex-shrink-0")
+          div(
+            class="px-2 py-1 text-xs rounded-full"
+            :class="isRoomFull(room) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'"
+          )
+            | {{ isRoomFull(room) ? $t('pomodoroRoom.full', { default: 'Full' }) : $t('pomodoroRoom.available', { default: 'Available' }) }}
+          // Delete button — only visible for room creator
+          button(
+            v-if="userInfo && room.created_by === userInfo.id"
+            @click="deleteRoom(room, $event)"
+            :disabled="deletingRoom === room.livekit_room_name"
+            class="p-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded"
+            :title="$t('pomodoroRoom.delete_room', { default: 'Delete room' })"
+          )
+            TrashIcon(:size="14")
 
       // Room info
       div(class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400")

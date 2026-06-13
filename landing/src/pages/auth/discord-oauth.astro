@@ -33,7 +33,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || "";
         }
 
         fetch(
-          `${apiUrl}/api/auth/discord-oauth?code=${encodeURIComponent(code)}`,
+          `${apiUrl}/api/auth/discord-oauth?code=${encodeURIComponent(code)}`
         )
           .then(async (res) => {
             if (!res.ok) {
@@ -41,9 +41,11 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || "";
               return;
             }
             const data = await res.json();
+            console.log("0000000-----------", data);
             if (data?.token) {
               const expires = new Date();
               expires.setDate(expires.getDate() + 30);
+              console.log(data.token);
               document.cookie = `Authorization=${data.token}; expires=${expires.toUTCString()}; path=/; domain=${cookieDomain}; SameSite=Lax`;
               window.location.href = redirectUrl;
             } else {

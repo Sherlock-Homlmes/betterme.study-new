@@ -33,3 +33,7 @@ class JoinRoomResponse(BaseSchema):
 class PatchPomodoroRoomPayload(BaseSchema):
     room_name: str | None = None
     pomodoro_settings: PomodoroSectionSettings | None = None
+
+
+class DeleteRoomResponse(BaseSchema):
+    success: bool

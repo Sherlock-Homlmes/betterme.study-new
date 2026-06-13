@@ -14,6 +14,7 @@ from .schemas import (
     PatchPomodoroRoomPayload,
     JoinRoomPayload,
     JoinRoomResponse,
+    DeleteRoomResponse,
 )
 
 
@@ -77,3 +78,17 @@ async def update_pomodoro_room(
 ) -> dict:
     """Update a pomodoro room's settings. Only the room creator can update."""
     return await p_room_crud.update(room_id, payload, current_user["id"])
+
+
+@router.delete(
+    "/{room_id}",
+    description="delete a pomodoro room",
+    status_code=200,
+)
+async def delete_pomodoro_room(
+    room_id: str,
+    current_user: Users = Depends(auth_handler.auth_wrapper),
+) -> DeleteRoomResponse:
+    """Delete a pomodoro room. Only the room creator can delete."""
+    await p_room_crud.delete(room_id, current_user["id"])
+    return DeleteRoomResponse(success=True)

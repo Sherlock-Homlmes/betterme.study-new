@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { PaperclipIcon, GifIcon, MoodSmileIcon, SendIcon, PlusIcon } from 'vue-tabler-icons';
 import { usePomodoroRoomsStore, type ChatMessage } from '@/stores/pomodoroRooms';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from '@/components/ui/dropdown-menu';
@@ -20,6 +21,19 @@ const {
   sendReaction,
   formatFileSize
 } = store;
+
+const EMOJI_GROUPS = [
+  { label: 'Smileys', emojis: ['😀','😂','😍','🥰','😊','😎','🤔','😅','😭','😡','🥳','😴','🤯','🤩','😱'] },
+  { label: 'Hands', emojis: ['👍','👎','👏','🙌','🤝','🙏','✌️','👋','🤙','💪','👀','🫶'] },
+  { label: 'Objects', emojis: ['🔥','💯','❤️','🎉','✅','⭐','💡','📚','🎯','🚀','💻','☕','🍕','🎵'] },
+];
+
+const showEmojiDropdown = ref(false);
+
+const insertEmoji = (emoji: string) => {
+  newMessage.value += emoji;
+  showEmojiDropdown.value = false;
+};
 
 // Handle file input change
 const handleFileChange = (event: Event) => {
@@ -108,12 +122,12 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
         side="top"
       )
         // Upload file option
-        //- DropdownMenuItem(
+        DropdownMenuItem(
           @click="fileInputRef?.click()"
           :disabled="uploadingFile"
-          )
+        )
           PaperclipIcon(:size="16")
-          span File
+          span &nbsp File
 
         // GIF submenu
         DropdownMenuSub
@@ -148,6 +162,27 @@ div(class="flex flex-col border-l border-gray-200 dark:border-gray-700 bg-white 
                 :title="'Send ' + reaction"
               )
                 | {{ reaction }}
+
+    // Emoji picker
+    DropdownMenu(v-model:open="showEmojiDropdown")
+      DropdownMenuTrigger(as-child)
+        button(
+          class="py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+          :title="'Emoji'"
+        )
+          MoodSmileIcon(:size="24")
+      DropdownMenuContent(align="start" side="top" class="w-72")
+        div(class="p-2 space-y-2")
+          div(v-for="group in EMOJI_GROUPS" :key="group.label")
+            div(class="text-[10px] text-gray-500 mb-1 px-1") {{ group.label }}
+            div(class="flex flex-wrap gap-0.5")
+              button(
+                v-for="emoji in group.emojis"
+                :key="emoji"
+                @click="insertEmoji(emoji)"
+                class="w-8 h-8 flex items-center justify-center text-lg hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-transform hover:scale-125"
+              )
+                | {{ emoji }}
 
     // Message input
     input(

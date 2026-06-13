@@ -30,11 +30,21 @@ export interface ChatMessage {
   reaction?: string;
 }
 
+export interface PomodoroSettings {
+  pomodoro_study_time: number;
+  pomodoro_rest_time: number;
+  pomodoro_long_rest_time: number;
+  long_rest_time_interval: number;
+}
+
 export interface RoomInfo {
   room_name: string;
   livekit_room_name: string;
   limit: number;
   num_participants: number;
+  pomodoro_settings?: PomodoroSettings;
+  created_by?: string;
+  created_at?: string;
 }
 
 export const usePomodoroRoomsStore = createGlobalState(() => {
@@ -53,6 +63,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   const isCameraEnabled = ref(false);
   const isSpeakerEnabled = ref(true);
   const isScreenShareEnabled = ref(false);
+  const localScreenShareRef = ref<HTMLVideoElement | null>(null);
 
   // Participants
   const participants = ref<RemoteParticipant[]>([]);
@@ -89,11 +100,13 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   ];
 
   const currentRoom = ref<RoomInfo | null>(null);
+  const timerSyncedSettings = ref<{ study: number; rest: number } | null>(null);
+  const roomNotifications = ref<Array<{ id: string; message: string; type: 'join' | 'leave' }>>([]);
 
   const buildApiUrl = (path: string) => `${runtimeConfig.public.API_URL}/v2/pomodoro-rooms${path}`;
 
   // Attach track to video element
-  const attachTrack = (track: TrackType, participantIdentity: string) => {
+  const attachTrack = async (track: TrackType, participantIdentity: string) => {
     let videoElement = remoteVideoRefs.value.get(participantIdentity);
     if (!videoElement) {
       videoElement = document.createElement('video');
@@ -104,6 +117,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       remoteVideoRefs.value.set(participantIdentity, videoElement);
     }
     track.attach(videoElement);
+    // Wait for Vue to render the participant's container div
+    await nextTick();
     const container = document.getElementById(`remote-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
       container.innerHTML = '';
@@ -121,7 +136,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     }
   };
 
-  const attachScreenShareTrack = (track: TrackType, participantIdentity: string) => {
+  const attachScreenShareTrack = async (track: TrackType, participantIdentity: string) => {
     const screenShareId = `screen-share-${participantIdentity}`;
     let videoElement = remoteVideoRefs.value.get(screenShareId);
     if (!videoElement) {
@@ -129,11 +144,13 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       videoElement.autoplay = true;
       videoElement.playsInline = true;
       videoElement.className = 'w-full h-full object-cover rounded-lg';
-      videoElement.id = `remote-video-${screenShareId}`;
+      videoElement.id = `screenshare-video-${participantIdentity}`;
       remoteVideoRefs.value.set(screenShareId, videoElement);
     }
     track.attach(videoElement);
-    const container = document.getElementById(`remote-${participantIdentity}`);
+    // Wait for Vue to render the screenshare container div
+    await nextTick();
+    const container = document.getElementById(`screenshare-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
       container.innerHTML = '';
       container.appendChild(videoElement);
@@ -146,7 +163,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     if (videoElement) {
       track.detach(videoElement);
       videoElement.remove();
-      const container = document.getElementById(`remote-${participantIdentity}`);
+      const container = document.getElementById(`screenshare-${participantIdentity}`);
       if (container) container.innerHTML = '';
       remoteVideoRefs.value.delete(screenShareId);
     }
@@ -157,7 +174,11 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     participants.value = Array.from(livekitRoom.value.remoteParticipants.values());
   };
 
-  const updateActiveSpeakers = (_speakers: Participant[]) => { };
+  const activeSpeakerIdentities = ref<Set<string>>(new Set());
+
+  const updateActiveSpeakers = (speakers: Participant[]) => {
+    activeSpeakerIdentities.value = new Set(speakers.map(s => s.identity));
+  };
 
   const scrollToBottom = () => {
     if (messagesContainer.value) {
@@ -236,9 +257,23 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
 
     room.on(RoomEvent.TrackUnmuted, () => updateParticipantsList());
     room.on(RoomEvent.TrackMuted, () => updateParticipantsList());
-    room.on(RoomEvent.ParticipantConnected, () => updateParticipantsList());
+    room.on(RoomEvent.ParticipantConnected, (participant) => {
+      updateParticipantsList();
+      const id = Date.now().toString();
+      roomNotifications.value.push({ id, message: `${participant.name || participant.identity} joined`, type: 'join' });
+      setTimeout(() => {
+        const idx = roomNotifications.value.findIndex(n => n.id === id);
+        if (idx !== -1) roomNotifications.value.splice(idx, 1);
+      }, 4000);
+    });
 
     room.on(RoomEvent.ParticipantDisconnected, (participant) => {
+      const id = Date.now().toString();
+      roomNotifications.value.push({ id, message: `${participant.name || participant.identity} left`, type: 'leave' });
+      setTimeout(() => {
+        const idx = roomNotifications.value.findIndex(n => n.id === id);
+        if (idx !== -1) roomNotifications.value.splice(idx, 1);
+      }, 4000);
       const videoElement = remoteVideoRefs.value.get(participant.identity);
       if (videoElement) {
         videoElement.remove();
@@ -272,6 +307,9 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
         isMicEnabled.value = true;
       } else if (publication.source === Track.Source.ScreenShare) {
         isScreenShareEnabled.value = true;
+        if (localScreenShareRef.value && publication.videoTrack) {
+          publication.videoTrack.attach(localScreenShareRef.value);
+        }
       }
     });
 
@@ -283,6 +321,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
         isMicEnabled.value = false;
       } else if (publication.source === Track.Source.ScreenShare) {
         isScreenShareEnabled.value = false;
+        if (publication.videoTrack) publication.videoTrack.detach();
       }
     });
 
@@ -359,6 +398,10 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
         userSettings.value.pomodoro_settings = {
           ...userSettings.value.pomodoro_settings,
           ...roomMetadata.pomodoro_settings,
+        };
+        timerSyncedSettings.value = {
+          study: Math.floor(roomMetadata.pomodoro_settings.pomodoro_study_time / 60),
+          rest: Math.floor(roomMetadata.pomodoro_settings.pomodoro_rest_time / 60),
         };
       }
     } catch (err: any) {
@@ -592,8 +635,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   });
 
   return {
-    livekitRoom, isConnected, isConnecting, error, token,
-    isMicEnabled, isCameraEnabled, isSpeakerEnabled, isScreenShareEnabled,
+    livekitRoom, isConnected, isConnecting, error, token, timerSyncedSettings, roomNotifications, activeSpeakerIdentities,
+    isMicEnabled, isCameraEnabled, isSpeakerEnabled, isScreenShareEnabled, localScreenShareRef,
     participants, localParticipant, localVideoRef, remoteVideoRefs,
     chatMessages, newMessage, messagesContainer, showChat,
     showEmojiPicker, showGifPicker, showReactionPicker,

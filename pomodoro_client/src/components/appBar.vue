@@ -32,12 +32,12 @@ let appBarButtons = [
 		icon: ChecklistIcon,
 		ariaLabel: 'appbar.todo',
 	},
-	// {
-	// 	key: 'pomodoroRoom',
-	// 	panel: 'pomodoroRoom',
-	// 	icon: VideoIcon,
-	// 	ariaLabel: 'appbar.pomodoroRoom',
-	// },
+	{
+		key: 'pomodoroRoom',
+		panel: 'pomodoroRoom',
+		icon: VideoIcon,
+		ariaLabel: 'appbar.pomodoroRoom',
+	},
 	{
 		key: 'setting',
 		panel: 'settings',

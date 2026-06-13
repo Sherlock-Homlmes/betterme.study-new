@@ -3,7 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import tailwindcss from '@tailwindcss/vite'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { fileURLToPath, URL } from "node:url";
-import { visualizer } from 'rollup-plugin-visualizer'
+// import { visualizer } from 'rollup-plugin-visualizer'
 
 
 // @ts-expect-error process is a nodejs global
@@ -66,12 +66,12 @@ export default defineConfig(async () => ({
       include: './src/i18n/**',
     }),
     asyncCssPlugin(),
-    visualizer({
-      open: true,           // tự mở browser sau build
-      filename: 'dist/stats.html',
-      gzipSize: true,
-      brotliSize: true,
-    })
+    // visualizer({
+    //   open: true,
+    //   filename: 'dist/stats.html',
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // })
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
