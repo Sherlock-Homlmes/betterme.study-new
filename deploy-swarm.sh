@@ -25,6 +25,10 @@ docker stack deploy \
   "$STACK_NAME"
 
 echo ""
+echo "[INFO] Force restart livekit service..."
+docker service update --force "${STACK_NAME}_livekit"
+
+echo ""
 echo "[INFO] Đang chờ services khởi động..."
 sleep 5
 

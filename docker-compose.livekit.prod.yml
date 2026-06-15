@@ -15,6 +15,41 @@ networks:
     attachable: true
 
 services:
+  caddy:
+    image: caddy:2-alpine
+    networks:
+      - livekit-net
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    volumes:
+      - ./Caddyfile.livekit:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   redis:
     image: redis:7-alpine
     networks:
@@ -100,4 +135,8 @@ services:
 
 volumes:
   livekit-redis-data:
+    driver: local
+  caddy-data:
+    driver: local
+  caddy-config:
     driver: local
