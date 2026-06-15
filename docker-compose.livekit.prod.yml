@@ -57,7 +57,7 @@ services:
       # Config dùng 127.0.0.1:6379 cho Redis (xem livekit.prod.swarm.yaml)
       - ./livekit.prod.swarm.yaml:/etc/livekit.yaml:ro
     environment:
-      LIVEKIT_SECRET: "${LIVEKIT_SECRET:-secretsecret}"
+      LIVEKIT_KEYS: "devkey: ${LIVEKIT_SECRET:-secretsecret}"
       REDIS_PASSWORD: "${REDIS_PASSWORD:-password}"
       WEBHOOK_URL: "${WEBHOOK_URL:-http://localhost:8080/api/v2/webhooks/livekit}"
     command: ["--config", "/etc/livekit.yaml"]
