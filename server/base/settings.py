@@ -72,8 +72,8 @@ is_prod_env = settings.ENV == ENVEnum.PROD.value
 app = FastAPI(
     title="betterme.dev API",
     # version="1.0.0",
-    openapi_url="/openapi.json",
-    docs_url="/api/docs",
+    openapi_url=None if is_prod_env else "/openapi.json",
+    docs_url=None if is_prod_env else "/api/docs",
     redoc_url=None,
 )
 origins = [] if is_prod_env else ["*"]

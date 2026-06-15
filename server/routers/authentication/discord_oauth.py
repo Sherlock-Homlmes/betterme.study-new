@@ -1,8 +1,8 @@
 # fastapi
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 
 # discord
-from fastapi_discord import User, DiscordOAuthClient
+from fastapi_discord import DiscordOAuthClient
 
 # default
 import aiohttp
@@ -15,7 +15,6 @@ from all_env import (
     DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET,
     DISCORD_REDIRECT_URL,
-    SELF_URL,
 )
 from models import Users
 from utils.time_modules import vn_now
@@ -37,46 +36,50 @@ async def on_startup():
 
 @router.get("/discord-oauth")
 async def discord_oauth(code: str):
-    # discord oauth and get JWT token
     token, refresh_token = await discord.get_access_token(code)
-    headersList = {"Authorization": f"Bearer {token}"}
     async with aiohttp.ClientSession() as session:
-        res = await session.get(url=f"{SELF_URL}/api/auth/discord/user/self", headers=headersList)
-        try:
-            discord_user = await res.json()
-        except Exception:
-            raise HTTPException(status_code=404, detail="Invalid code")
+        res = await session.get(
+            "https://discord.com/api/v10/users/@me",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        if res.status != 200:
+            raise HTTPException(status_code=400, detail="Invalid Discord code")
+        discord_user = await res.json()
 
-    discord_user["id"] = int(discord_user["id"])
+    if "id" not in discord_user:
+        raise HTTPException(status_code=400, detail="Failed to get Discord user info")
 
-    await Users.find_one(Users.discord_id == discord_user["id"]).upsert(
+    user_id = int(discord_user["id"])
+    username = discord_user["username"]
+    email = discord_user.get("email")
+    locale = discord_user.get("locale", "en-US")
+
+    avatar_hash = discord_user.get("avatar")
+    if avatar_hash:
+        avatar_url = f"https://cdn.discordapp.com/avatars/{user_id}/{avatar_hash}.png"
+    else:
+        discriminator = int(discord_user.get("discriminator") or "0")
+        avatar_url = f"https://cdn.discordapp.com/embed/avatars/{discriminator % 5}.png"
+
+    await Users.find_one(Users.discord_id == user_id).upsert(
         Set(
             {
-                Users.email: discord_user["email"],
+                Users.email: email,
                 Users.last_logged_in_at: vn_now(),
-                Users.name: discord_user["username"],
-                Users.avatar: discord_user["avatar_url"],
+                Users.name: username,
+                Users.avatar: avatar_url,
             }
         ),
         on_insert=Users(
-            email=discord_user["email"],
+            email=email,
             user_type="discord",
-            locale=discord_user["locale"],
-            name=discord_user["username"],
-            avatar=discord_user["avatar_url"],
-            discord_id=discord_user["id"],
+            locale=locale,
+            name=username,
+            avatar=avatar_url,
+            discord_id=user_id,
         ),
     )
-    user = await Users.find_one(Users.discord_id == discord_user["id"])
+    user = await Users.find_one(Users.discord_id == user_id)
 
-    token = auth_handler.encode_token(user.get_info())
-    return {"token": token}
-
-
-@router.get(
-    "/discord/user/self",
-    dependencies=[Depends(discord.requires_authorization)],
-    response_model=User,
-)
-async def get_user(user: User = Depends(discord.user)):
-    return user
+    jwt_token = auth_handler.encode_token(user.get_info())
+    return {"token": jwt_token}
