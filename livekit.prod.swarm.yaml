@@ -1,16 +1,15 @@
 # LiveKit config cho Docker Swarm deployment
-# Dùng 127.0.0.1 thay vì hostname 'redis' vì cả hai service đều dùng network_mode: host
+# network_mode: host bị Swarm bỏ qua — cả hai service chạy trên overlay network
+# nên dùng service name 'redis' thay vì 127.0.0.1
 #
 # QUAN TRỌNG: File này KHÔNG hỗ trợ ${ENV_VAR} substitution.
 # - API keys được set qua env var LIVEKIT_KEYS trong docker-compose (không dùng section 'keys' ở đây)
-# - Redis password được set qua env var REDIS_PASSWORD trong docker-compose
 # - Webhook URL cần sửa trực tiếp ở đây
 
 port: 7880
 
 redis:
-  address: 127.0.0.1:6379
-  # password set qua env REDIS_PASSWORD trong compose, không đặt ở đây
+  address: redis:6379
 
 rtc:
   port_range_start: 50000

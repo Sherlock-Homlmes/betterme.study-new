@@ -16,9 +16,8 @@ services:
     network_mode: host
     command: >
       redis-server
-      --bind 127.0.0.1
+      --bind 0.0.0.0
       --port 6379
-      --requirepass "${REDIS_PASSWORD:-password}"
       --appendonly yes
       --appendfsync everysec
       --maxmemory 512mb
@@ -58,7 +57,6 @@ services:
       - ./livekit.prod.swarm.yaml:/etc/livekit.yaml:ro
     environment:
       LIVEKIT_KEYS: "devkey: ${LIVEKIT_SECRET:-secretsecret}"
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-password}"
       WEBHOOK_URL: "${WEBHOOK_URL:-http://localhost:8080/api/v2/webhooks/livekit}"
     command: ["--config", "/etc/livekit.yaml"]
     restart: unless-stopped
