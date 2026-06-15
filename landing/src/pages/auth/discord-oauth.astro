@@ -41,7 +41,6 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || "";
               return;
             }
             const data = await res.json();
-            console.log("0000000-----------", data);
             if (data?.token) {
               const expires = new Date();
               expires.setDate(expires.getDate() + 30);
