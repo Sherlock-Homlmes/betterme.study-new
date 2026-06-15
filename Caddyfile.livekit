@@ -1,0 +1,3 @@
+livekit.betterme.dev {
+	reverse_proxy livekit:7880
+}
