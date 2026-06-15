@@ -43,6 +43,15 @@ const lobbyInitialMic = ref(false);
 const showSwitchRoomDialog = ref(false);
 const pendingRoom = ref<any>(null);
 
+// Handle newly created room → skip lobby, join directly
+const handleCreateRoom = (room: any) => {
+  leaveRoom();
+  selectedRoom.value = room;
+  lobbyInitialCam.value = false;
+  lobbyInitialMic.value = false;
+  currentView.value = 'room';
+};
+
 // Handle room selection → go to lobby first
 const handleSelectRoom = (room: any) => {
   // Already in that room → just go back to room view
@@ -111,6 +120,7 @@ Panel(
     ListRoomView(
       v-show="currentView === 'list'"
       @select-room="handleSelectRoom"
+      @create-room="handleCreateRoom"
     )
     PreJoinLobby(
       v-if="currentView === 'lobby' && selectedRoom"

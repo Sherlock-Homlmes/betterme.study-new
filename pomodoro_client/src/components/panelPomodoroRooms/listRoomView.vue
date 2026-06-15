@@ -243,7 +243,8 @@ const createRoom = async () => {
     resetCreateForm();
     showCreateModal.value = false;
 
-    selectRoom(createdRoom);
+    // Skip lobby for newly created room — join directly so the room isn't auto-deleted before user enters
+    emit('createRoom', createdRoom);
   } catch (err: any) {
     error.value = err.message || t('pomodoroRoom.errors.create_failed', { default: 'Failed to create room' });
     console.error('Error creating room:', err);
@@ -275,6 +276,7 @@ const openCreateModal = () => {
 // Emit select room event
 const emit = defineEmits<{
   selectRoom: [room: RoomInfo];
+  createRoom: [room: RoomInfo];
 }>();
 
 const selectRoom = (room: RoomInfo) => {
