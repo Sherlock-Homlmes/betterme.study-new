@@ -206,7 +206,7 @@ keys:
 webhook:
   api_key: "devkey"
   urls:
-    - "http://server:8080/api/v2/webhooks/livekit"
+    - "https://api.betterme.study/api/v2/webhooks/livekit"
 # Signal Relay
 # since v1.4.0, a more reliable, psrpc based signal relay is available
 # this gives us the ability to reliably proxy messages between a signal server and RTC node
