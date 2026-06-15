@@ -76,7 +76,7 @@ class PomodoroRoomCRUD:
             # Create the CreateRoomRequest with proper parameters
             create_request = api.CreateRoomRequest()
             create_request.name = livekit_room_name
-            create_request.empty_timeout = 1200  # Auto delete after 20s of being empty
+            create_request.empty_timeout = 30  # Auto delete after 30s of being empty
             create_request.max_participants = payload.limit
             create_request.metadata = json.dumps(metadata)
 
