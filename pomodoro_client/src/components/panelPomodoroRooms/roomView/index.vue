@@ -200,15 +200,19 @@ const updateRoom = async () => {
 
 // Lifecycle
 onMounted(async () => {
+  // Already connected to this room (user navigated back then re-entered) → skip re-join
+  if (isConnected.value && currentRoom.value?.livekit_room_name === props.room.livekit_room_name) {
+    return;
+  }
   await joinRoom(props.room);
   // Apply lobby cam/mic choices after connected
   if (props.initialCam) await toggleCamera();
   if (props.initialMic) await toggleMicrophone();
 });
 
-// Watch for room prop changes
+// Watch for room prop changes (guards against re-joining same room)
 watch(() => props.room, (newRoom) => {
-  if (newRoom) {
+  if (newRoom && !(isConnected.value && currentRoom.value?.livekit_room_name === newRoom.livekit_room_name)) {
     joinRoom(newRoom);
   }
 }, { deep: true });
@@ -375,7 +379,7 @@ div(class="flex flex-col h-full")
       AlertDialogDescription
         | {{ $t('pomodoroRoom.leave_room_description', { default: 'Are you sure you want to leave this room? Your session will be ended.' }) }}
       AlertDialogFooter
-        AlertDialogCancel
+        AlertDialogCancel(@click="showLeaveDialog = false")
           | {{ $t('pomodoroRoom.cancel', { default: 'Cancel' }) }}
         AlertDialogAction(@click="confirmLeaveRoom")
           | {{ $t('pomodoroRoom.leave', { default: 'Leave' }) }}
