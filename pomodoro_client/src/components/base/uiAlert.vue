@@ -1,8 +1,10 @@
 <script setup lang='ts'>
-import { getCurrentInstance } from "vue";
+import { storeToRefs } from "pinia";
 import { useErrorStore } from "@/stores/common";
 
-const { content, visible, close } = useErrorStore();
+const errorStore = useErrorStore();
+const { content, visible } = storeToRefs(errorStore);
+const { close } = errorStore;
 </script>
 
 <template lang="pug">

@@ -88,8 +88,6 @@ div.grid-cols-1.py-3.px-4(ref="audioTabRef")
 
   SettingsItemV2(:type="Control.Check" path="visuals.enable_music_when_visit_site")
   SettingsItemV2(:type="Control.Check" path="visuals.enable_adaptive_ticking")
-  template(v-if="isWebBase")
-    SettingsItemV2(:type="Control.Check" path="visuals.enable_audio")
   //- template(v-if="isMobile")
     SettingsItem(:type="Control.Check" path="mobile.notifications.sectionOver")
     SettingsItem(:type="Control.Check" path="mobile.notifications.persistent")

@@ -93,7 +93,7 @@ const props = defineProps({
 const { isAuth } = useAuthStore();
 const openPanels = useOpenPanels();
 const mobileSettingsStore = useMobileSettings();
-const closePanel = () => openPanels.value[props.panelName] = false
+const closePanel = () => { (openPanels as Record<string, boolean>)[props.panelName] = false; }
 
 const { width: windowWidth } = useWindowSize()
 const isMobile = computed(() => windowWidth.value < 768)

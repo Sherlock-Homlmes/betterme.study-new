@@ -1,5 +1,6 @@
 import { runtimeConfig } from "@/config/runtimeConfig";
-import { createGlobalState, useLocalStorage } from "@vueuse/core";
+import { useLocalStorage } from "@vueuse/core";
+import { defineStore } from "pinia";
 import isEmpty from "lodash/isEmpty";
 import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
@@ -20,10 +21,6 @@ export interface Task {
     status: TaskStatus
     index: number
     section?: string
-    // necessary: string
-    // difficult: number
-    // deadline: datetime.datetime
-    // task_category_ids: string[]
 }
 
 export enum TaskMoveDirection {
@@ -31,7 +28,7 @@ export enum TaskMoveDirection {
 	down = -1,
 }
 
-export const useTaskStore = createGlobalState(() => {
+export const useTaskStore = defineStore('tasks', () => {
 	const TASK_API_URL = `${runtimeConfig.public.API_URL}/v2/tasks`;
 	const { isAuth } = useAuthStore();
 	const { showError } = useErrorStore();
@@ -39,8 +36,6 @@ export const useTaskStore = createGlobalState(() => {
 	// state
 	const tasks = useLocalStorage<Task[]>("tasks", []);
 	const enableTodoListTask = useLocalStorage("enableTodoListTask", true);
-
-	// getters
 
 	// actions
 	const getTaskList = async () => {
@@ -83,7 +78,7 @@ export const useTaskStore = createGlobalState(() => {
 		}
 	};
 
-	const patchTask = async (taskId: number, change = {}) => {
+	const patchTask = async (taskId: number, change: Record<string, unknown> = {}) => {
 		if (!isAuth.value) return;
 		if (isEmpty(change)) return;
 		const response = await api.patch(`${TASK_API_URL}/${taskId}`, change);
@@ -113,11 +108,11 @@ export const useTaskStore = createGlobalState(() => {
 		const oldIndex = tasks.value.indexOf(task);
 		if (oldIndex < 0 || newIndex >= tasks.value.length) return;
 
-		const swapProp = (obj1: any, obj2: any, prop: string) => {
+		const swapProp = <T extends Record<string, unknown>>(obj1: T, obj2: T, prop: keyof T): void => {
 			if (!(prop in obj1) || !(prop in obj2)) return;
 			[obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
 		};
-		swapProp(tasks.value[oldIndex], tasks.value[newIndex], "index");
+		swapProp(tasks.value[oldIndex] as Record<string, unknown>, tasks.value[newIndex] as Record<string, unknown>, "index");
 		tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0]);
 	};
 
@@ -125,7 +120,6 @@ export const useTaskStore = createGlobalState(() => {
 		// state
 		tasks,
 		enableTodoListTask,
-		// getters
 		// actions
 		getTaskList,
 		postTask,

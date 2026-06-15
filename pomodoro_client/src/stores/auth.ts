@@ -1,17 +1,12 @@
 import { computed, ref, watch } from "vue";
 import { runtimeConfig } from "@/config/runtimeConfig";
-import {
-	StorageSerializers,
-	createGlobalState,
-	useStorage,
-} from "@vueuse/core";
+import { StorageSerializers, createGlobalState, useStorage, useDark } from "@vueuse/core";
 import cloneDeep from "lodash/cloneDeep";
 import isEmpty from "lodash/isEmpty";
 import timerPresets from "@/assets/settings/timerPresets";
 import ChangeTracker from "@/utils/changeTracker";
 import {useErrorStore} from "./common";
 import {api} from "@/utils/betterFetch";
-import { useDark } from '@vueuse/core';
 
 const changeTracker = new ChangeTracker();
 export const defaultSettings = {

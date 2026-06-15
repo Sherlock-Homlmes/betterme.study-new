@@ -1,7 +1,7 @@
 import { ref } from "vue";
-import { createGlobalState } from "@vueuse/core";
+import { defineStore } from "pinia";
 
-export const useErrorStore = createGlobalState(() => {
+export const useErrorStore = defineStore('error', () => {
 	const content = ref("");
 	const visible = ref(false);
 

@@ -13,6 +13,11 @@ const getLivekit = async () => {
   return _livekit;
 };
 
+const MAX_CHAT_MESSAGES = 200;
+
+const getErrMsg = (err: unknown): string =>
+  err instanceof Error ? err.message : String(err);
+
 // Chat message types
 export type MessageType = 'text' | 'file' | 'gif' | 'reaction';
 
@@ -117,7 +122,6 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       remoteVideoRefs.value.set(participantIdentity, videoElement);
     }
     track.attach(videoElement);
-    // Wait for Vue to render the participant's container div
     await nextTick();
     const container = document.getElementById(`remote-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
@@ -148,7 +152,6 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       remoteVideoRefs.value.set(screenShareId, videoElement);
     }
     track.attach(videoElement);
-    // Wait for Vue to render the screenshare container div
     await nextTick();
     const container = document.getElementById(`screenshare-${participantIdentity}`);
     if (container && !container.contains(videoElement)) {
@@ -188,6 +191,10 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
 
   const addChatMessage = (message: ChatMessage) => {
     chatMessages.value.push(message);
+    // Cap messages to prevent unbounded memory growth
+    if (chatMessages.value.length > MAX_CHAT_MESSAGES) {
+      chatMessages.value.splice(0, chatMessages.value.length - MAX_CHAT_MESSAGES);
+    }
     if (!showChat.value && message.sender !== localParticipant.value?.identity) {
       unreadMessageCount.value++;
     }
@@ -223,8 +230,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       } else if (data.type === 'reaction') {
         showFlyingReaction(data.emoji);
       }
-    } catch (err) {
-      console.error('Error handling data:', err);
+    } catch {
+      // Silently ignore malformed data packets
     }
   };
 
@@ -326,7 +333,6 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     });
 
     room.on(RoomEvent.MediaDevicesError, (err) => {
-      console.error('Media devices error:', err);
       const failure = MediaDeviceFailure.getFailure(err);
       if (err) {
         if (err.message?.includes('camera')) isCameraEnabled.value = false;
@@ -345,7 +351,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     });
   };
 
-  const publishData = async (data: any) => {
+  const publishData = async (data: Record<string, unknown>) => {
     if (!livekitRoom.value) return;
     const message = JSON.stringify(data);
     await livekitRoom.value.localParticipant.publishData(
@@ -355,6 +361,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   };
 
   const joinRoom = async (room: RoomInfo) => {
+    // Prevent double-connect race condition
+    if (isConnecting.value || isConnected.value) return;
     try {
       isConnecting.value = true;
       error.value = null;
@@ -404,9 +412,10 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
           rest: Math.floor(roomMetadata.pomodoro_settings.pomodoro_rest_time / 60),
         };
       }
-    } catch (err: any) {
-      error.value = err.message || 'Failed to join room';
-      console.error('Error joining room:', err);
+    } catch (err: unknown) {
+      const msg = getErrMsg(err);
+      error.value = msg;
+      showError(`Failed to join room: ${msg}`);
     } finally {
       isConnecting.value = false;
     }
@@ -418,8 +427,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       const newState = !isMicEnabled.value;
       await localParticipant.value.setMicrophoneEnabled(newState);
       isMicEnabled.value = newState;
-    } catch (err: any) {
-      console.error('Error toggling microphone:', err);
+    } catch (err: unknown) {
+      showError(`Microphone error: ${getErrMsg(err)}`);
     }
   };
 
@@ -438,8 +447,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
           }
         }, 100);
       }
-    } catch (err: any) {
-      console.error('Error toggling camera:', err);
+    } catch (err: unknown) {
+      showError(`Camera error: ${getErrMsg(err)}`);
     }
   };
 
@@ -466,8 +475,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
           }
         }, 100);
       }
-    } catch (err: any) {
-      console.error('Error enabling camera and microphone:', err);
+    } catch (err: unknown) {
+      showError(`Failed to enable camera and microphone: ${getErrMsg(err)}`);
     }
   };
 
@@ -477,8 +486,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       const newState = !isScreenShareEnabled.value;
       await localParticipant.value.setScreenShareEnabled(newState);
       isScreenShareEnabled.value = newState;
-    } catch (err: any) {
-      console.error('Error toggling screen share:', err);
+    } catch (err: unknown) {
+      showError(`Screen share error: ${getErrMsg(err)}`);
     }
   };
 
@@ -486,8 +495,7 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     try {
       const { Room } = await getLivekit();
       return await Room.getLocalDevices(kind);
-    } catch (err) {
-      console.error(`Error getting ${kind} devices:`, err);
+    } catch {
       return [];
     }
   };
@@ -496,8 +504,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
     if (!livekitRoom.value) return;
     try {
       await livekitRoom.value.switchActiveDevice(kind, deviceId);
-    } catch (err) {
-      console.error(`Error switching ${kind} device:`, err);
+    } catch (err: unknown) {
+      showError(`Failed to switch ${kind} device: ${getErrMsg(err)}`);
     }
   };
 
@@ -539,8 +547,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
         uploadingFile.value = false;
       };
       reader.readAsDataURL(file);
-    } catch (err) {
-      console.error('Error sending file:', err);
+    } catch (err: unknown) {
+      showError(`Failed to send file: ${getErrMsg(err)}`);
       uploadingFile.value = false;
     }
   };
@@ -584,6 +592,14 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
       const container = document.getElementById(`remote-${participant.identity}`);
       if (container) container.innerHTML = '';
     }
+    // Clear in-memory state on leave
+    chatMessages.value = [];
+    roomNotifications.value = [];
+    flyingReactions.value = [];
+    currentRoom.value = null;
+    timerSyncedSettings.value = null;
+    unreadMessageCount.value = 0;
+    lastReadMessageIndex.value = -1;
   };
 
   const getParticipantAvatar = (participant: RemoteParticipant) => {
@@ -592,8 +608,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
         const metadata = JSON.parse(participant.metadata);
         return metadata.avatar_url || metadata.custom_avatar_url;
       }
-    } catch (err) {
-      console.error('Error parsing participant metadata:', err);
+    } catch {
+      // Metadata may not be valid JSON
     }
     return null;
   };
@@ -601,8 +617,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   const getRoomMetadata = () => {
     try {
       if (livekitRoom.value?.metadata) return JSON.parse(livekitRoom.value.metadata);
-    } catch (err) {
-      console.error('Error parsing room metadata:', err);
+    } catch {
+      // Metadata may not be valid JSON
     }
     return null;
   };
@@ -610,8 +626,8 @@ export const usePomodoroRoomsStore = createGlobalState(() => {
   const getParticipantMetadata = (participant: RemoteParticipant | LocalParticipant) => {
     try {
       if (participant.metadata) return JSON.parse(participant.metadata);
-    } catch (err) {
-      console.error('Error parsing participant metadata:', err);
+    } catch {
+      // Metadata may not be valid JSON
     }
     return null;
   };

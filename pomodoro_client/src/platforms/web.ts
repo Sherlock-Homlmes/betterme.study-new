@@ -1,8 +1,9 @@
-import { reactive, computed, onMounted, watch } from "vue";
+import { reactive, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEventListener } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 
 import { useSettings } from "@/stores/settings";
-// import { useNotifications } from "@/stores/notifications";
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { EventType, useEvents } from "@/stores/events";
 
@@ -13,9 +14,10 @@ interface SoundSettings {
 
 export function useWeb() {
 	const settingsStore = useSettings();
-	const { timerState, getSchedule } = usePomodoroStore();
-	// const notificationsStore = useNotifications();
-	const {events, recordEvent} = useEvents();
+	const { getSchedule } = usePomodoroStore();
+	const eventsStore = useEvents();
+	const { lastEvent } = storeToRefs(eventsStore);
+	const { recordEvent } = eventsStore;
 	const i18n = useI18n();
 
 	const state = reactive({
@@ -27,88 +29,26 @@ export function useWeb() {
 		},
 	});
 
-	const lastEvent = computed(() => {
-		const lastEventArray = events.value.slice(-1);
-		return lastEventArray.length > 0 ? lastEventArray[0] : null;
-	});
-
 	watch(lastEvent, (newValue) => {
 		if (newValue !== null && newValue._event === EventType.TIMER_FINISH) {
 			showNotification(getSchedule.value[1].type);
 		}
 	});
 
-	// eventsStore.$subscribe(() => {
-	// 	if (
-	// 		eventsStore.lastEvent !== null &&
-	// 		eventsStore.lastEvent._event === EventType.NOTIFICATIONS_ENABLED &&
-	// 		window.Notification &&
-	// 		window.Notification.permission === "default"
-	// 	) {
-	// 		window.Notification.requestPermission().then(
-	// 			(newNotificationPermission) => {
-	// 				settingsStore.$patch({
-	// 					permissions: {
-	// 						notifications: newNotificationPermission === "granted",
-	// 					},
-	// 				});
-	// 			},
-	// 		);
-	// 	}
-	// });
-
 	onMounted(() => {
-		// // sound set watcher
-		// this.storeUnwatch.soundSet = this.$store.watch(
-		//   state => state.settings.audio.soundSet,
-		//   (newValue) => {
-		//     // load new sound set
-		//     this.loadSoundSet(newValue)
-		//   }
-		// )
-
-		// this.storeUnwatch.timerState = this.$store.watch(
-		//   state => state.schedule.timerState,
-		//   (newValue) => {
-		//     // update volume of sounds
-		//     if (newValue === 1) {
-		//       this.loadSoundSet(this.$store.state.settings.audio.soundSet)
-		//     }
-		//   }
-		// )
-
-		// Register app started notification
 		recordEvent(EventType.APP_STARTED);
 
-		// check if timer is already running
-		if (timerState.value === 1) {
-			loadSoundSet();
-		}
-
-		// Check Visibility and register in store
+		// Track visibility state for adaptive ticking; useEventListener auto-removes on unmount
 		if (window && window.document && "hidden" in window.document) {
-			window.document.addEventListener(
-				"visibilitychange",
-				() => {
-					settingsStore.registerNewHidden(window.document.hidden);
-				},
-				false,
-			);
-
-			// Commit this information immediately to make sure it's up to date
+			useEventListener(document, "visibilitychange", () => {
+				settingsStore.registerNewHidden(window.document.hidden);
+			});
 			settingsStore.registerNewHidden(window.document.hidden);
 		} else {
 			settingsStore.registerNewHidden(false);
 		}
-
-		// Check permissions
-		// notificationsStore.updateEnabled();
 	});
 
-	/**
-	 * Load a sound set into memory
-	 * @param {String} setName Name of the sound set to load
-	 */
 	const loadSoundSet = (setName = settingsStore.audio.soundSet) => {
 		if (state.currentSoundSet === setName) {
 			return;
@@ -130,31 +70,25 @@ export function useWeb() {
 			}
 
 			state.currentSoundSet = setName;
-		} catch (err) {
-			// console.warn(err)
+		} catch {
+			// Sound loading failure is non-critical
 		}
 	};
 
-	/**
-	 * Play the specified sound
-	 * @param {String} key The key of the sound. Valid values are `work`, `pause` and `longpause`.
-	 */
 	const playSound = (key: keyof typeof state.sounds) => {
-		// load sound set if not already loaded
 		if (!state.currentSoundSet) {
 			loadSoundSet();
 		}
 
-		if (state.sounds[key] !== null && settingsStore.permissions.audio) {
+		if (state.sounds[key] !== null) {
 			state.sounds[key]!.source.volume = settingsStore.audio.volume; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 			state.sounds[key]?.source.play();
 		}
 	};
 
-	const showNotification = (nextState: keyof typeof state.sounds) => {
-		playSound(nextState);
+	const showNotification = (nextState: string) => {
+		playSound(nextState as keyof typeof state.sounds);
 
-		// TODO Firefox does not support actions
 		if (
 			window.Notification.permission !== "granted" ||
 			settingsStore.permissions.notifications !== true
@@ -170,14 +104,17 @@ export function useWeb() {
 		}
 
 		try {
-			const options: NotificationOptions = {
+			interface ExtendedNotificationOptions extends NotificationOptions {
+				actions?: { action: string; title: string }[];
+			}
+			const options: ExtendedNotificationOptions = {
 				tag: "FocusTide-SectionNotify",
 				body: i18n.t("notification." + nextState + ".body"),
+				actions: notificationActions,
 			};
-			(options as any).actions = notificationActions;
 			new Notification(i18n.t("notification." + nextState + ".title"), options);
-		} catch (err) {
-			console.warn(err);
+		} catch {
+			// Notification API may not be supported (e.g. Firefox actions)
 		}
 	};
 }

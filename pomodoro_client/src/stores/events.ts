@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
-import { createGlobalState } from "@vueuse/core";
+import { defineStore } from "pinia";
 
-export const useEvents = createGlobalState(() => {
+export const useEvents = defineStore('events', () => {
 	const events = ref<Event[]>([]);
 	const maxEventsToKeep = ref<number>(200);
 

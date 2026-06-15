@@ -1,8 +1,8 @@
-import {computed } from "vue";
-import { createGlobalState } from "@vueuse/core";
+import { computed } from "vue";
+import { defineStore } from "pinia";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
-export const usePlatformStore = createGlobalState(() => {
+export const usePlatformStore = defineStore('platform', () => {
     const isWeb = computed(() => runtimeConfig.public.PLATFORM === "web");
     const isMobile = computed(() => runtimeConfig.public.PLATFORM === "mobile");
     const isExtension = computed(() => runtimeConfig.public.PLATFORM === "extension");

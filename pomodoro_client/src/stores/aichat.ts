@@ -5,6 +5,17 @@ import {useErrorStore} from "./common";
 import { api } from "@/utils/betterFetch";
 import { runtimeConfig } from "@/config/runtimeConfig";
 
+interface ChatEntry {
+	id?: string;
+	content: string;
+	sender: 'bot' | 'user';
+}
+
+interface Channel {
+	id: string;
+	history?: ChatEntry[];
+}
+
 export const useAIChatStore = createGlobalState(() => {
 	const API_URL = runtimeConfig.public.API_URL;
 	const { showError } = useErrorStore();
@@ -14,17 +25,11 @@ export const useAIChatStore = createGlobalState(() => {
 		"selectedChannelId",
 		null,
 	);
-	const channels = useLocalStorage<any[]>("AIChatChannels", []);
+	const channels = useLocalStorage<Channel[]>("AIChatChannels", []);
 	const channelIds = computed(() =>
 		channels.value.map((channel) => channel.id),
 	);
-	const history = computed<
-		{
-			id?: string;
-			content: string;
-			sender: "bot" | "user";
-		}[]
-	>({
+	const history = computed<ChatEntry[]>({
 		get() {
 			const channelInfo = channels.value.find(
 				(channel) => channel.id === selectedChannelId.value,
@@ -101,7 +106,7 @@ export const useAIChatStore = createGlobalState(() => {
 		if (!selectedChannelId.value) {
 			await createChannel();
 			if (!selectedChannelId.value) {
-				console.error("Failed to create channel");
+				showError("Failed to create channel");
 				return;
 			}
 		}

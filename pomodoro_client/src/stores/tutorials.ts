@@ -1,7 +1,7 @@
 import {ref, computed} from "vue";
-import { createGlobalState } from "@vueuse/core";
+import { defineStore } from "pinia";
 
-export const useTutorialStore = createGlobalState(()=>{
+export const useTutorialStore = defineStore('tutorials', () => {
 	const openTutorials=ref<string[]>([]);
 	const isTutorialOpen = computed(() => {
 		return (tutorialId: string) => openTutorials.value.indexOf(tutorialId) === 0;
