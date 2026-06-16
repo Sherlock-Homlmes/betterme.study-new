@@ -538,7 +538,7 @@ function initPets() {
 
     const capyPet = new BoundedPet(
       "capybara",
-      "/capybara.png",
+      "/capybara.webp",
       0.6,
       ".pomo-section",
       (parent, container) => {

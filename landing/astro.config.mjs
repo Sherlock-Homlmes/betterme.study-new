@@ -106,6 +106,17 @@ export default defineConfig({
     }),
     sitemap({
       filter: (page) => !page.includes('/auth/') && !page.includes('/admin/') && !page.includes('/api/'),
+      serialize(item) {
+        item.lastmod = new Date().toISOString();
+        if (item.url === 'https://betterme.dev/') {
+          item.changefreq = 'daily';
+          item.priority = 1.0;
+        } else {
+          item.changefreq = 'weekly';
+          item.priority = 0.7;
+        }
+        return item;
+      },
     }),
   ],
 });
