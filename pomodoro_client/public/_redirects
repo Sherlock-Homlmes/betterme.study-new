@@ -1,14 +1,13 @@
-# Cloudflare Pages redirects/rewrites. First match wins. Real files
-# (/assets, /img, /sitemap.xml ...) and the root `/` index.html are served
-# BEFORE these rules.
+# Cloudflare Pages SPA fallback.
 #
-# NEVER add `/  /en  301` here: the SPA is served at the root `/`, so a
-# root->/en redirect collides with root serving and produces an infinite
-# redirect loop (ERR_TOO_MANY_REDIRECTS). Locale is handled client-side.
-
-# Locale routes -> serve the SPA shell with 200 (URL preserved, app boots).
-/en   /index.html   200
-/vi   /index.html   200
-
-# Everything else that is not a real file -> real 404 (kills soft-404).
-/*    /404.html     404
+# Serve the app shell for any path that is not a real static file. Real files
+# (/assets, /img, /sitemap.xml, /robots.txt ...) are served before this rule.
+#
+# DO NOT rewrite explicit paths to `/index.html` (e.g. `/en  /index.html  200`).
+# Cloudflare Pages normalizes `/index.html` to `/` with a 308, so such a rule
+# turns `/en` into `/en -> 308 -> /`. That broke the canonical/hreflang URLs and
+# fed the ERR_TOO_MANY_REDIRECTS loop inside the betterme.dev iframe.
+#
+# The splat below rewrites (serves index.html content, URL preserved, status 200)
+# and does NOT trigger that normalization, so /en and /vi return 200.
+/*    /index.html   200

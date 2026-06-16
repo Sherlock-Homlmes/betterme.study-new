@@ -5,8 +5,13 @@ import DesktopPIPView from '@/pages/DesktopPIPView.vue';
 
 const routes: RouteRecordRaw[] = [
   {
+    // Render the app at the root instead of redirecting to /en. The redirect
+    // collided with the edge rule (/en -> / 308) inside the betterme.dev iframe
+    // and caused an ERR_TOO_MANY_REDIRECTS loop. Non-preview visitors are moved
+    // to the locale URL (/en, /vi) by the language watcher in pages/index.vue.
     path: '/',
-    redirect: (to) => ({ path: '/en', query: to.query, hash: to.hash })
+    name: 'home',
+    component: Index,
   },
   {
     path: '/en',

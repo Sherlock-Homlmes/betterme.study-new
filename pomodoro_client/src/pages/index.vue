@@ -186,10 +186,15 @@ onBeforeMount(async () => {
 	if (isAuth.value) await getCurrentUserSetting();
 	loading.value = false;
 });
-  // language
+  // language -> keep the URL in sync with the chosen locale (/en, /vi).
+  // Skip in preview/iframe mode: the embed loads `/?preview=true`, and forcing a
+  // route change to /en collides with the edge rule that 308-redirects /en -> /,
+  // producing an ERR_TOO_MANY_REDIRECTS loop inside the iframe. Locale still
+  // applies via i18n/userSettings without needing to change the URL.
 watch(
   () => userSettings.value?.language,
   (newValue) => {
+    if (isPreview) return
     router.replace({ name: `home-${newValue}`, query: route.query, hash: route.hash })
   },
   {immediate: true}
