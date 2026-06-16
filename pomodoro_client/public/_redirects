@@ -1,0 +1,19 @@
+# Cloudflare Pages redirects/rewrites. First match wins; existing static files
+# (/assets, /img, /fonts, /sitemap.xml, /robots.txt, /llms.txt ...) are served
+# before these rules, so they are untouched.
+
+# Root -> default locale
+/             /en           301
+
+# Trailing-slash canonicalization
+/en/          /en           301
+/vi/          /vi           301
+/pip-view/    /pip-view     301
+
+# Known SPA routes -> serve app shell with 200 (URL unchanged)
+/en           /index.html   200
+/vi           /index.html   200
+/pip-view     /index.html   200
+
+# Everything else -> real 404 (kills soft-404 / index bloat)
+/*            /404.html     404
