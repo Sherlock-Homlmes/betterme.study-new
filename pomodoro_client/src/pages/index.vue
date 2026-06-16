@@ -100,6 +100,13 @@ const headData = computed(()=>{
     'en': 'en-US',
     'vi': 'vi-VI',
   }
+  const ogLocaleMapper = {
+    'en': 'en_US',
+    'vi': 'vi_VN',
+  }
+  const baseUrl = 'https://pomodoro.betterme.dev'
+  const pageUrl = `${baseUrl}/${locale.value}`
+  const ogImage = `${baseUrl}/img/OgImage.png`
   return {
     htmlAttrs: {
       lang: htmlLangMapper[locale.value],
@@ -109,18 +116,25 @@ const headData = computed(()=>{
       { name: 'description', content: t('meta.description') },
       { name: 'keywords', content: t('meta.keywords') },
 
-      // Open Graph cho Facebook/Zalo
+      // Open Graph (Facebook/Zalo)
+      { property: 'og:type', content: 'website' },
+      { property: 'og:site_name', content: 'BetterMe' },
+      { property: 'og:locale', content: ogLocaleMapper[locale.value] },
       { property: 'og:title', content: t('meta.title') },
       { property: 'og:description', content: t('meta.description') },
+      { property: 'og:url', content: pageUrl },
+      { property: 'og:image', content: ogImage },
 
       // Twitter Card
+      { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: t('meta.title') },
-      { name: 'twitter:description', content: t('meta.description') }
+      { name: 'twitter:description', content: t('meta.description') },
+      { name: 'twitter:image', content: ogImage }
     ],
     link: [
       {
         rel: 'canonical',
-        href: `https://pomodoro.betterme.dev/${locale.value}`
+        href: pageUrl
       },
     ],
     script: [
@@ -128,12 +142,27 @@ const headData = computed(()=>{
         type: 'application/ld+json',
         innerHTML: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
+          "@type": "WebApplication",
+          "@id": `${pageUrl}/#webapplication`,
           name: t('meta.title'),
           description: t('meta.description'),
-          url: `https://pomodoro.betterme.dev/${locale.value}`,
-          applicationCategory: 'UtilitiesApplication',
-          operatingSystem: 'Web Browser',
+          url: pageUrl,
+          image: ogImage,
+          applicationCategory: 'ProductivityApplication',
+          operatingSystem: 'All',
+          browserRequirements: 'Requires HTML5/CSS3',
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD"
+          },
+          author: {
+            "@type": "EducationalOrganization",
+            name: "BetterMe Community",
+            url: "https://betterme.dev",
+            logo: "https://betterme.dev/favicon.svg",
+            sameAs: ["https://discord.gg/betterme"]
+          },
           inLanguage: locale.value
         })
       }

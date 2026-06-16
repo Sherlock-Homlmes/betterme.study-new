@@ -9,6 +9,16 @@ import { fileURLToPath, URL } from "node:url";
 const host = process.env.TAURI_DEV_HOST;
 const allowedHosts = null;
 
+// Security headers applied by the dev server and `vite preview` (prod static serving).
+// The production edge (Cloudflare) should mirror these. frame-ancestors stays permissive
+// for *.betterme.dev so the timer can be embedded by the parent site.
+const securityHeaders = {
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Content-Security-Policy': "frame-ancestors 'self' https://*.betterme.dev",
+};
+
 function asyncCssPlugin(): Plugin {
   return {
     name: 'async-css',
@@ -76,7 +86,11 @@ export default defineConfig(async () => ({
   // 1. prevent Vite from obscuring rust errors
   clearScreen: false,
   // 2. tauri expects a fixed port, fail if that port is not available
+  preview: {
+    headers: securityHeaders,
+  },
   server: {
+    headers: securityHeaders,
     port: 1420,
     strictPort: true,
     host: host || false,

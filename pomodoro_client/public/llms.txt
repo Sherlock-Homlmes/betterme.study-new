@@ -1,0 +1,20 @@
+# BetterMe Pomodoro Timer
+
+> A free, ad-free Pomodoro and productivity timer built for studying and deep work. Use the Pomodoro technique to split work into focused intervals with short breaks, track sessions, and stay focused across all devices. No sign-up, no ads.
+
+## About
+- Name: BetterMe Pomodoro Timer
+- Publisher: BetterMe Study (https://betterme.dev)
+- Price: Free (no ads)
+- Platforms: Web, Desktop, browser extension
+- Languages: English, Tiếng Việt (Vietnamese)
+
+## Key features
+- Pomodoro focus timer with customizable work/break intervals
+- Distraction-free, ad-free interface
+- Session tracking and schedules
+- Works across web, desktop, and mobile
+
+## Primary pages
+- [English app](https://pomodoro.betterme.dev/en): Pomodoro Timer & Study Tools (English)
+- [Vietnamese app](https://pomodoro.betterme.dev/vi): Đồng hồ Pomodoro & Công cụ Học tập (Tiếng Việt)

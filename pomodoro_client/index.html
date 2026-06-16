@@ -16,16 +16,25 @@
     content="betterme, pomodoro, pomodoro app, pomodoro timer, productivity timer, tomato timer, focus timer, pomodoro clock, productivity tool, free, no ads">
 
   <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Betterme Pomodoro Timer">
   <meta name="twitter:description"
     content="Boost your focus with Betterme: The free, ad-free productivity timer and Pomodoro tool designed for work and study. Works seamlessly on all platforms.">
-  <meta name="twitter:image" content="/img/ogImage.png">
+  <meta name="twitter:image" content="https://pomodoro.betterme.dev/img/OgImage.png">
 
   <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BetterMe">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="vi_VN">
   <meta property="og:title" content="Betterme Pomodoro Timer">
-  <meta property="og:image" content="/img/ogImage.png">
-  <meta property="og:image:url" content="/img/ogImage.png">
-  <meta property="og:url" content="https://pomodoro.betterme.dev">
+  <meta property="og:description"
+    content="Boost your focus with Betterme: The free, ad-free productivity timer and Pomodoro tool designed for work and study. Works seamlessly on all platforms.">
+  <meta property="og:image" content="https://pomodoro.betterme.dev/img/OgImage.png">
+  <meta property="og:image:url" content="https://pomodoro.betterme.dev/img/OgImage.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="1280">
+  <meta property="og:url" content="https://pomodoro.betterme.dev/en">
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.svg">
@@ -41,7 +50,7 @@
       "@id": "https://pomodoro.betterme.dev/en/#webapplication",
       "name": "BetterMe Pomodoro Timer",
       "url": "https://pomodoro.betterme.dev/en",
-      "image": "https://pomodoro.betterme.dev/img/ogImage.png",
+      "image": "https://pomodoro.betterme.dev/img/OgImage.png",
       "description": "Boost your productivity with BetterMe Pomodoro Timer. A free, ad-free focus clock designed for study and work.",
       "applicationCategory": "ProductivityApplication",
       "operatingSystem": "All",
@@ -52,9 +61,11 @@
         "priceCurrency": "USD"
       },
       "author": {
-        "@type": "Organization",
-        "name": "BetterMe Study",
-        "url": "https://betterme.dev"
+        "@type": "EducationalOrganization",
+        "name": "BetterMe Community",
+        "url": "https://betterme.dev",
+        "logo": "https://betterme.dev/favicon.svg",
+        "sameAs": ["https://discord.gg/betterme"]
       },
       "inLanguage": "en"
     }
@@ -63,6 +74,22 @@
 
 <body>
   <div id="app"></div>
+  <!-- Static fallback for non-JS crawlers & AI search engines (ChatGPT, Perplexity, etc.) -->
+  <noscript>
+    <main>
+      <h1>BetterMe Pomodoro Timer &amp; Online Study Tools</h1>
+      <p>
+        BetterMe Pomodoro is a free, ad-free productivity and focus timer built for studying and
+        deep work. Use the Pomodoro technique to break work into focused intervals with short
+        breaks, track your sessions, and stay productive across all your devices &mdash; no
+        sign-up and no ads required.
+      </p>
+      <p>Available languages:
+        <a href="https://pomodoro.betterme.dev/en">English</a> ·
+        <a href="https://pomodoro.betterme.dev/vi">Ti&#7871;ng Vi&#7879;t</a>
+      </p>
+    </main>
+  </noscript>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

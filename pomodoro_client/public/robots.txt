@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap: http://pomodoro.betterme.dev/sitemap.xml
+Sitemap: https://pomodoro.betterme.dev/sitemap.xml
