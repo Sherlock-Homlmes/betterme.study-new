@@ -1,7 +1,6 @@
 import { reactive, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEventListener } from "@vueuse/core";
-import { storeToRefs } from "pinia";
 
 import { useSettings } from "@/stores/settings";
 import { usePomodoroStore } from "@/stores/pomodoros";
@@ -15,9 +14,7 @@ interface SoundSettings {
 export function useWeb() {
 	const settingsStore = useSettings();
 	const { getSchedule } = usePomodoroStore();
-	const eventsStore = useEvents();
-	const { lastEvent } = storeToRefs(eventsStore);
-	const { recordEvent } = eventsStore;
+	const { lastEvent, recordEvent } = useEvents();
 	const i18n = useI18n();
 
 	const state = reactive({
@@ -57,6 +54,15 @@ export function useWeb() {
 		try {
 			for (const key in state.sounds) {
 				const soundKey = key as keyof typeof state.sounds;
+
+				// Release the previous Audio element so it isn't orphaned in
+				// memory / holding a decoded buffer after a sound-set change.
+				const previous = state.sounds[soundKey];
+				if (previous?.source) {
+					previous.source.pause();
+					previous.source.src = "";
+				}
+
 				const newSound = {
 					source: new Audio(`/audio/${setName}/${key}.mp3`),
 					ready: false,

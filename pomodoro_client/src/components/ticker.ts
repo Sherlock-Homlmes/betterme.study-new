@@ -1,4 +1,4 @@
-import { reactive, computed, watch, nextTick } from "vue";
+import { reactive, computed, watch, nextTick, onScopeDispose, getCurrentScope } from "vue";
 
 import { TimerState, usePomodoroStore } from "@/stores/pomodoros";
 import { SectionEndAction, useSettings } from "@/stores/settings";
@@ -195,4 +195,32 @@ export function useTicker() {
 			resetTimer();
 		}
 	};
+
+	// Resync immediately when the tab becomes visible again: browsers throttle
+	// setTimeout while hidden, so a section-end event could otherwise be delayed
+	// until the next throttled tick. The timer math itself is timestamp-based
+	// and stays accurate regardless.
+	const onVisibilityChange = () => {
+		if (
+			typeof document !== "undefined" &&
+			document.visibilityState === "visible" &&
+			timerState.value === TimerState.RUNNING
+		) {
+			timerTick({});
+		}
+	};
+	if (typeof document !== "undefined") {
+		document.addEventListener("visibilitychange", onVisibilityChange);
+	}
+
+	// Clean up the scheduled tick + listener when the owning scope is disposed
+	// (component unmount), so the timer can't keep running detached.
+	if (getCurrentScope()) {
+		onScopeDispose(() => {
+			clearTickHandle();
+			if (typeof document !== "undefined") {
+				document.removeEventListener("visibilitychange", onVisibilityChange);
+			}
+		});
+	}
 }

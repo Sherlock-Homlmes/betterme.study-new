@@ -1,11 +1,15 @@
 <script setup lang="ts"> // eslint-disable-line vue/multi-word-component-names
-import SettingsPanel from '@/components/panelSettings/index.vue'
-import AIChatPanel from '@/components/panelAIChat/index.vue'
-import TaskPanel from '@/components/panelTask/index.vue'
-import PomodoroRoomPanel from '@/components/panelPomodoroRooms/index.vue'
+import { defineAsyncComponent } from 'vue'
 import { useOpenPanels } from '@/stores/openpanels'
 import { usePomodoroStore } from "@/stores/pomodoros";
 import { useSettings } from '@/stores/settings'
+
+// Panels are lazy-loaded so heavy deps (livekit, @unovis/d3, marked) only
+// ship in the chunk of the panel the user actually opens.
+const SettingsPanel = defineAsyncComponent(() => import('@/components/panelSettings/index.vue'))
+const AIChatPanel = defineAsyncComponent(() => import('@/components/panelAIChat/index.vue'))
+const TaskPanel = defineAsyncComponent(() => import('@/components/panelTask/index.vue'))
+const PomodoroRoomPanel = defineAsyncComponent(() => import('@/components/panelPomodoroRooms/index.vue'))
 
 const openPanels = useOpenPanels()
 const { timerState } = usePomodoroStore()

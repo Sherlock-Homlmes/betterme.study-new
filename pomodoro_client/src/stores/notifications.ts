@@ -1,4 +1,5 @@
-import { defineStore } from "pinia";
+import { reactive } from "vue";
+import { createGlobalState } from "@vueuse/core";
 
 export enum NotificationPermission {
 	Default,
@@ -7,33 +8,36 @@ export enum NotificationPermission {
 	NotSupported,
 }
 
-export const useNotifications = defineStore("notifications", {
-	state: () => ({
+export const useNotifications = createGlobalState(() => {
+	const state = reactive<{ enabled: NotificationPermission }>({
 		enabled: NotificationPermission.Default,
-	}),
+	});
 
-	actions: {
-		updateEnabled(manualValue?: NotificationPermission) {
-			if (manualValue !== undefined) {
-				this.enabled = manualValue;
-				return;
-			}
+	const updateEnabled = (manualValue?: NotificationPermission) => {
+		if (manualValue !== undefined) {
+			state.enabled = manualValue;
+			return;
+		}
 
-			if (typeof window !== "undefined" && window.Notification) {
-				const permissions = window.Notification.permission;
-				switch (permissions) {
-					case "default":
-						this.enabled = NotificationPermission.Default;
-						break;
-					case "granted":
-						this.enabled = NotificationPermission.Granted;
-						break;
-					default:
-						this.enabled = NotificationPermission.Denied;
-				}
-			} else {
-				this.enabled = NotificationPermission.NotSupported;
+		if (typeof window !== "undefined" && window.Notification) {
+			const permissions = window.Notification.permission;
+			switch (permissions) {
+				case "default":
+					state.enabled = NotificationPermission.Default;
+					break;
+				case "granted":
+					state.enabled = NotificationPermission.Granted;
+					break;
+				default:
+					state.enabled = NotificationPermission.Denied;
 			}
-		},
-	},
+		} else {
+			state.enabled = NotificationPermission.NotSupported;
+		}
+	};
+
+	return { ...state, updateEnabled } as {
+		enabled: NotificationPermission;
+		updateEnabled: (manualValue?: NotificationPermission) => void;
+	};
 });

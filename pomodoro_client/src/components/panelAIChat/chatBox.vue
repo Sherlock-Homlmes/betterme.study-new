@@ -57,6 +57,7 @@ import { LoaderIcon, TrashIcon, SendIcon, UploadIcon } from "vue-tabler-icons";
 import { useAuthStore } from "../../stores/auth"; // Changed to relative path
 import { useAIChatStore } from "../../stores/aichat"; // Changed to relative path
 import { marked } from "marked"; // Changed to relative path
+import DOMPurify from "dompurify";
 import { useOpenPanels } from "../../stores/openpanels"; // Changed to relative path
 import { watchOnce, watchArray, refDebounced } from "@vueuse/core";
 
@@ -141,10 +142,10 @@ watchArray(
 // performance improve
 // TODO: add pagination to chat history
 
-// Convert markdown to html
+// Convert markdown to html and sanitize before rendering (v-html) to prevent XSS.
 const messageContent = (markdown: string) => {
 	if (!markdown) return "";
-	return marked(markdown);
+	return DOMPurify.sanitize(marked.parse(markdown, { async: false }) as string);
 };
 
 // Handle when panel open

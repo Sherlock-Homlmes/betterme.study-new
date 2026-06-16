@@ -1,24 +1,26 @@
 import { ref } from "vue";
-import { defineStore } from "pinia";
+import { createGlobalState } from "@vueuse/core";
 
-export const useErrorStore = defineStore('error', () => {
+export const useErrorStore = createGlobalState(() => {
 	const content = ref("");
 	const visible = ref(false);
-
-	const showError = (message: string, showTime: number = 10000) => {
-		content.value = message;
-		visible.value = true;
-		if (showTime) setTimeout(close, showTime);
-	};
+	let closeTimer: ReturnType<typeof setTimeout> | undefined;
 
 	const close = () => {
 		visible.value = false;
 		content.value = "";
+		if (closeTimer) {
+			clearTimeout(closeTimer);
+			closeTimer = undefined;
+		}
 	};
-	return {
-		content,
-		visible,
-		showError,
-		close,
+
+	const showError = (message: string, showTime: number = 10000) => {
+		content.value = message;
+		visible.value = true;
+		if (closeTimer) clearTimeout(closeTimer);
+		if (showTime) closeTimer = setTimeout(close, showTime);
 	};
+
+	return { content, visible, showError, close };
 });

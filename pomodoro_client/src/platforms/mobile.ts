@@ -51,9 +51,10 @@ export function useMobile() {
 
 			switch (msg.type) {
 				case FlutterMessageType.setPadding:
-					mobileSettingsStore.$patch({
-						padding: msg.payload as { top: number; bottom: number },
-					});
+					mobileSettingsStore.padding = msg.payload as {
+						top: number;
+						bottom: number;
+					};
 
 					break;
 			}

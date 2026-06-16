@@ -40,7 +40,7 @@ export const useAIChatStore = createGlobalState(() => {
 			const channelInfo = channels.value.find(
 				(channel) => channel.id === selectedChannelId.value,
 			);
-			channelInfo.history = newVal;
+			if (channelInfo) channelInfo.history = newVal;
 		},
 	});
 	const newMessage = ref("");
@@ -68,7 +68,7 @@ export const useAIChatStore = createGlobalState(() => {
 			return;
 		}
 		const emptyChannel = channels.value.find(
-			(channel) => channel.history?.length <= 1,
+			(channel) => (channel.history?.length ?? 0) <= 1,
 		);
 		if (emptyChannel) {
 			selectedChannelId.value = emptyChannel.id;
@@ -162,7 +162,7 @@ export const useAIChatStore = createGlobalState(() => {
 		const channelInfo = channels.value.find(
 			(channel) => channel.id === newSelectedChannelId,
 		);
-		if (channelInfo) history.value = channelInfo.history;
+		if (channelInfo) history.value = channelInfo.history ?? [];
 		else await getHistory();
 		scrollToBottom();
 	});

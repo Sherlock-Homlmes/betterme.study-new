@@ -30,29 +30,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  NumberField,
-  NumberFieldContent,
-  NumberFieldDecrement,
-  NumberFieldIncrement,
-  NumberFieldInput,
-} from '@/components/ui/number-field';
-import { Spinner } from '@/components/ui/spinner';
 import { usePomodoroRoomsStore, type RoomInfo } from '@/stores/pomodoroRooms';
-import { api } from '@/utils/betterFetch';
-import { runtimeConfig } from '@/config/runtimeConfig';
+import EditRoomDialog from './EditRoomDialog.vue';
 import VideoGrid from './VideoGrid.vue';
 import Chat from './Chat.vue';
 import ParticipantList from './ParticipantList.vue';
@@ -103,24 +82,6 @@ const showLeaveDialog = ref(false);
 
 // State for edit room dialog
 const showEditDialog = ref(false);
-const updatingRoom = ref(false);
-const updateError = ref<string | null>(null);
-
-// Edit room form
-const editRoomForm = ref({
-  room_name: '',
-  pomodoro_settings: {
-    pomodoro_study_time: 25,
-    pomodoro_rest_time: 5,
-    pomodoro_long_rest_time: 20,
-    long_rest_time_interval: 3,
-  },
-});
-
-// Build API URL
-const buildApiUrl = (path: string) => {
-  return `${runtimeConfig.public.API_URL}/v2/pomodoro-rooms${path}`;
-};
 
 // Computed properties
 const connectionStatusText = computed(() => {
@@ -144,58 +105,6 @@ const confirmLeaveRoom = () => {
   showLeaveDialog.value = false;
   leaveRoom();
   emit('leaveRoom');
-};
-
-// Open edit dialog and populate form with current room data
-const openEditDialog = () => {
-  editRoomForm.value = {
-    room_name: props.room.room_name,
-    pomodoro_settings: {
-      pomodoro_study_time: Math.floor((props.room.pomodoro_settings?.pomodoro_study_time || 25 * 60) / 60),
-      pomodoro_rest_time: Math.floor((props.room.pomodoro_settings?.pomodoro_rest_time || 5 * 60) / 60),
-      pomodoro_long_rest_time: Math.floor((props.room.pomodoro_settings?.pomodoro_long_rest_time || 20 * 60) / 60),
-      long_rest_time_interval: props.room.pomodoro_settings?.long_rest_time_interval || 3,
-    },
-  };
-  updateError.value = null;
-  showEditDialog.value = true;
-};
-
-// Update room
-const updateRoom = async () => {
-  if (!editRoomForm.value.room_name.trim()) {
-    updateError.value = t('pomodoroRoom.errors.room_name_required', { default: 'Room name is required' });
-    return;
-  }
-
-  try {
-    updatingRoom.value = true;
-    updateError.value = null;
-
-    const response = await api.patch(buildApiUrl(`/${props.room.livekit_room_name}`), {
-      room_name: editRoomForm.value.room_name.trim(),
-      pomodoro_settings: {
-        pomodoro_study_time: editRoomForm.value.pomodoro_settings.pomodoro_study_time * 60,
-        pomodoro_rest_time: editRoomForm.value.pomodoro_settings.pomodoro_rest_time * 60,
-        pomodoro_long_rest_time: editRoomForm.value.pomodoro_settings.pomodoro_long_rest_time * 60,
-        long_rest_time_interval: editRoomForm.value.pomodoro_settings.long_rest_time_interval,
-      },
-    });
-
-    if (!response || !response.ok) {
-      throw new Error(`HTTP error! status: ${response?.status || 'unknown'}`);
-    }
-
-    const updatedRoom = await response.json();
-
-    // Close dialog and emit update event
-    showEditDialog.value = false;
-  } catch (err: any) {
-    updateError.value = err.message || t('pomodoroRoom.errors.update_failed', { default: 'Failed to update room' });
-    console.error('Error updating room:', err);
-  } finally {
-    updatingRoom.value = false;
-  }
 };
 
 // Lifecycle
@@ -241,7 +150,7 @@ div(class="flex flex-col h-full")
           default-style
           circle
           :importance="ButtonImportance.Text"
-          @click="openEditDialog"
+          @click="showEditDialog = true"
         )
           PencilIcon(:size="16")
       div(class="flex items-center gap-2")
@@ -385,99 +294,7 @@ div(class="flex flex-col h-full")
           | {{ $t('pomodoroRoom.leave', { default: 'Leave' }) }}
 
   // Edit room dialog
-  Dialog(v-model:open="showEditDialog")
-    form
-      DialogContent(class="sm:max-w-[425px]")
-        DialogHeader
-          DialogTitle {{ $t('pomodoroRoom.editDialog.title', { default: 'Edit Room' }) }}
-        div(class="grid gap-4")
-          // Error message
-          div(v-if="updateError" class="text-red-500 dark:text-red-400 text-sm")
-            | {{ updateError }}
-          // Room name
-          div(class="grid gap-3")
-            Label(for="edit-room-name")
-              | {{ $t('pomodoroRoom.createDialog.room_name_label', { default: 'Room name' }) }}
-              span(class="text-red-500") *
-            Input(
-              id="edit-room-name" name="room name"
-              v-model="editRoomForm.room_name"
-              :placeholder="$t('pomodoroRoom.createDialog.room_name_placeholder', { default: 'Enter room name' })"
-              @keyup.enter="updateRoom"
-            )
-
-          // Pomodoro settings
-          div(class="border-t border-gray-200 dark:border-gray-700 pt-4")
-            h4(class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3")
-              | {{ $t('pomodoroRoom.createDialog.pomodoro_settings_label', { default: 'Pomodoro Settings' }) }}
-            // Study time
-            NumberField(
-              id="edit-study_time" class="mb-2"
-              v-model="editRoomForm.pomodoro_settings.pomodoro_study_time"
-              :min="5" :max="180"
-            )
-              Label(for="edit-study_time")
-                | {{ $t('pomodoroRoom.createDialog.study_time_label', { default: 'Study time' }) }}
-                span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-              NumberFieldContent
-                NumberFieldDecrement
-                NumberFieldInput
-                NumberFieldIncrement
-
-            // Rest time
-            NumberField(
-              id="edit-rest_time" class="mb-2"
-              v-model="editRoomForm.pomodoro_settings.pomodoro_rest_time"
-              :min="1" :max="180"
-            )
-              Label(for="edit-rest_time")
-                | {{ $t('pomodoroRoom.createDialog.rest_time_label', { default: 'Rest time' }) }}
-                span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-              NumberFieldContent
-                NumberFieldDecrement
-                NumberFieldInput
-                NumberFieldIncrement
-
-            // Long rest time
-            NumberField(
-              id="edit-long_rest_time" class="mb-2"
-              v-model="editRoomForm.pomodoro_settings.pomodoro_long_rest_time"
-              :min="1" :max="180"
-            )
-              Label(for="edit-long_rest_time")
-                | {{ $t('pomodoroRoom.createDialog.long_rest_time_label', { default: 'Long rest time' }) }}
-                span(class="text-gray-500") &nbsp({{ $t('pomodoroRoom.minutes', { default: 'minutes' }) }})
-              NumberFieldContent
-                NumberFieldDecrement
-                NumberFieldInput
-                NumberFieldIncrement
-
-            // Long rest interval
-            NumberField(
-              id="edit-long_rest_interval"
-              v-model="editRoomForm.pomodoro_settings.long_rest_time_interval"
-              :min="2" :max="10"
-            )
-              Label(for="edit-long_rest_interval")
-                |{{ $t('pomodoroRoom.createDialog.long_rest_interval_label', { default: 'Long rest interval' }) }}
-                span(class="text-gray-500") &nbsp(2-10)
-              NumberFieldContent
-                NumberFieldDecrement
-                NumberFieldInput
-                NumberFieldIncrement
-        DialogFooter
-          DialogClose(as-child)
-            Button(
-              variant="outline"
-              :disabled="updatingRoom"
-            ) {{ $t('pomodoroRoom.createDialog.cancel', { default: 'Cancel' }) }}
-          Button(
-            type="submit"
-            :disabled="updatingRoom || !editRoomForm.room_name.trim()"
-            @click='updateRoom'
-          )
-            Spinner(v-if="updatingRoom")
-            |{{ updatingRoom ? $t('pomodoroRoom.editDialog.updating', { default: 'Updating...' }) : $t('pomodoroRoom.editDialog.update', { default: 'Update' }) }}
+  EditRoomDialog(v-model:open="showEditDialog" :room="room")
 
   // Join/Leave notifications
   div(class="absolute top-12 right-3 z-20 flex flex-col gap-1.5 pointer-events-none")

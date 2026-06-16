@@ -43,18 +43,22 @@ export default defineConfig(async () => ({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-livekit': ['livekit-client'],
-          'vendor-d3': [
-            'd3-axis', 'd3-array', 'd3-color', 'd3-format',
-            'd3-interpolate', 'd3-scale', 'd3-selection',
-            'd3-time', 'd3-transition', 'd3-time-format',
-            'd3-shape', 'd3-path'
-          ],
-          'vendor-vue': ['vue', 'vue-router', 'pinia'],
-          'vendor-reka': ['reka-ui'],
-          'vendor-vueuse': ['@vueuse/core'],
-        }
+        // Function form: groups by resolved module path, so it does NOT require
+        // the packages (e.g. d3-* pulled in transitively by @unovis) to be
+        // direct dependencies.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (id.includes('livekit-client')) return 'vendor-livekit'
+          if (id.includes('@unovis') || id.includes('/d3-') || id.includes('\\d3-')) return 'vendor-d3'
+          if (id.includes('reka-ui')) return 'vendor-reka'
+          if (id.includes('@vueuse')) return 'vendor-vueuse'
+          if (
+            id.includes('vue-router') ||
+            id.includes('vue-i18n') ||
+            id.includes('@intlify') ||
+            /[\\/]node_modules[\\/]vue[\\/]/.test(id)
+          ) return 'vendor-vue'
+        },
       }
     }
   },

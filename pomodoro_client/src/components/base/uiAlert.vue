@@ -1,10 +1,7 @@
 <script setup lang='ts'>
-import { storeToRefs } from "pinia";
 import { useErrorStore } from "@/stores/common";
 
-const errorStore = useErrorStore();
-const { content, visible } = storeToRefs(errorStore);
-const { close } = errorStore;
+const { content, visible, close } = useErrorStore();
 </script>
 
 <template lang="pug">

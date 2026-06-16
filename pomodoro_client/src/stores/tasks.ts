@@ -1,6 +1,5 @@
 import { runtimeConfig } from "@/config/runtimeConfig";
-import { useLocalStorage } from "@vueuse/core";
-import { defineStore } from "pinia";
+import { createGlobalState, useLocalStorage } from "@vueuse/core";
 import isEmpty from "lodash/isEmpty";
 import { api } from "@/utils/betterFetch";
 import { useAuthStore } from "./auth";
@@ -28,7 +27,7 @@ export enum TaskMoveDirection {
 	down = -1,
 }
 
-export const useTaskStore = defineStore('tasks', () => {
+export const useTaskStore = createGlobalState(() => {
 	const TASK_API_URL = `${runtimeConfig.public.API_URL}/v2/tasks`;
 	const { isAuth } = useAuthStore();
 	const { showError } = useErrorStore();
@@ -112,7 +111,7 @@ export const useTaskStore = defineStore('tasks', () => {
 			if (!(prop in obj1) || !(prop in obj2)) return;
 			[obj1[prop], obj2[prop]] = [obj2[prop], obj1[prop]];
 		};
-		swapProp(tasks.value[oldIndex] as Record<string, unknown>, tasks.value[newIndex] as Record<string, unknown>, "index");
+		swapProp(tasks.value[oldIndex] as unknown as Record<string, unknown>, tasks.value[newIndex] as unknown as Record<string, unknown>, "index");
 		tasks.value.splice(newIndex, 0, tasks.value.splice(oldIndex, 1)[0]);
 	};
 

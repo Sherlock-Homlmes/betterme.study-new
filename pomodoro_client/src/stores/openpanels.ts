@@ -1,12 +1,17 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import { reactive } from "vue";
+import { createGlobalState } from "@vueuse/core";
 
-export const useOpenPanels = defineStore('openpanels', () => {
-	const music = ref(false);
-	const ai = ref(false);
-	const settings = ref(false);
-	const todo = ref(false);
-	const statistic = ref(false);
-	const pomodoroRoom = ref(false);
-	return { music, ai, settings, todo, statistic, pomodoroRoom };
-});
+/**
+ * Which side panels are open. Accessed by dot in templates and assigned
+ * directly (`openPanels.todo = false`), so it is a reactive object.
+ */
+export const useOpenPanels = createGlobalState(() =>
+	reactive({
+		music: false,
+		ai: false,
+		settings: false,
+		todo: false,
+		statistic: false,
+		pomodoroRoom: false,
+	}),
+);
