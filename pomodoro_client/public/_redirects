@@ -1,19 +1,11 @@
-# Cloudflare Pages redirects/rewrites. First match wins; existing static files
-# (/assets, /img, /fonts, /sitemap.xml, /robots.txt, /llms.txt ...) are served
-# before these rules, so they are untouched.
+# Cloudflare Pages redirects.
+#
+# IMPORTANT: do NOT add `/  /en  301` here. The SPA is served at the root `/`,
+# and an existing edge rule already redirects /en, /vi, /pip-view -> / (308).
+# A `/ -> /en` rule collides with that and creates an infinite 301<->308 loop.
+#
+# Real files (/assets, /img, /sitemap.xml ...) and the edge-routed locale paths
+# are resolved before this rule, so only genuinely-unknown paths fall through.
 
-# Root -> default locale
-/             /en           301
-
-# Trailing-slash canonicalization
-/en/          /en           301
-/vi/          /vi           301
-/pip-view/    /pip-view     301
-
-# Known SPA routes -> serve app shell with 200 (URL unchanged)
-/en           /index.html   200
-/vi           /index.html   200
-/pip-view     /index.html   200
-
-# Everything else -> real 404 (kills soft-404 / index bloat)
-/*            /404.html     404
+# Unknown paths -> real 404 (kills soft-404 / index bloat).
+/*    /404.html   404
